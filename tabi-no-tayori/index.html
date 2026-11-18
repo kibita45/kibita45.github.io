@@ -1021,14 +1021,14 @@
         gap: 12px;
       }
       .hn-top {
-        -webkit-box-flex: 55; -webkit-flex: 55 1 0; flex: 55 1 0;
+        -webkit-box-flex: 58; -webkit-flex: 58 1 0; flex: 58 1 0;
         min-height: 0;
         display: grid;
         grid-template-columns: minmax(0, 58fr) minmax(0, 42fr);
         gap: 12px;
       }
       .hn-bottom {
-        -webkit-box-flex: 45; -webkit-flex: 45 1 0; flex: 45 1 0;
+        -webkit-box-flex: 42; -webkit-flex: 42 1 0; flex: 42 1 0;
         min-height: 0;
         display: grid;
         grid-template-columns: minmax(0, 72fr) minmax(0, 28fr);
@@ -1171,31 +1171,31 @@
       .p-icon svg { width: 18px; height: 18px; }
 
       /* 上段右：いまの翠 */
-      .now-panel { padding-top: 10px; padding-bottom: 10px; }
+      .now-panel { padding: 7px 14px 8px; }
       .now-head {
         display: -webkit-box; display: -webkit-flex; display: flex;
         -webkit-flex-wrap: wrap; flex-wrap: wrap;
         -webkit-box-align: baseline; -webkit-align-items: baseline; align-items: baseline;
         gap: 2px 10px;
         border-bottom: 1px dashed var(--line);
-        padding-bottom: 4px;
+        padding-bottom: 3px;
         -webkit-flex-shrink: 0; flex-shrink: 0;
       }
-      .now-head .nh-date { font-size: 19px; font-weight: 700; color: var(--teal-deep); }
+      .now-head .nh-date { font-size: 18px; font-weight: 700; color: var(--teal-deep); }
       .now-head .nh-item { font-size: 14px; color: var(--ink-soft); white-space: nowrap; }
       .now-head .nh-item b { color: var(--ink); font-size: 15.5px; }
       .now-mid {
         display: -webkit-box; display: -webkit-flex; display: flex;
-        gap: 14px;
+        gap: 12px;
         -webkit-box-align: stretch; -webkit-align-items: stretch; align-items: stretch;
-        margin-top: 6px;
+        margin-top: 4px;
         /* 固定高さに潰さず、中身の高さで決まる通常の流れにする（潰れると吹き出し・ステータスが下の予定に被る） */
         -webkit-box-flex: 0; -webkit-flex: 0 0 auto; flex: 0 0 auto;
       }
       .now-face {
         -webkit-flex-shrink: 0; flex-shrink: 0;
         display: block;
-        width: 88px; height: 88px;
+        width: 76px; height: 76px;
         -webkit-align-self: center; align-self: center;
         object-fit: cover;
         object-position: 50% 28%;
@@ -1225,7 +1225,7 @@
         -webkit-align-self: stretch; align-self: stretch;
         display: -webkit-box; display: -webkit-flex; display: flex;
         -webkit-box-align: center; -webkit-align-items: center; align-items: center;
-        padding: 10px 16px;
+        padding: 7px 14px;
       }
       .think-bubble::before {
         /* 顔アイコンの方を向く、角を落とした柔らかい三角のしっぽ */
@@ -1239,7 +1239,7 @@
         background: var(--paper-soft);
         -webkit-transform: rotate(45deg); transform: rotate(45deg);
       }
-      .think-bubble p { font-size: 15px; line-height: 1.65; }
+      .think-bubble p { font-size: 15px; line-height: 1.55; }
       .now-status-box {
         -webkit-flex-shrink: 0; flex-shrink: 0;
         width: 208px;
@@ -1247,68 +1247,68 @@
         border-radius: 12px;
         background: var(--g1-bg);
         box-shadow: var(--card-shadow);
-        padding: 6px 12px 7px;
+        padding: 4px 11px 5px;
         display: -webkit-box; display: -webkit-flex; display: flex;
         -webkit-box-orient: vertical; -webkit-box-direction: normal; -webkit-flex-direction: column; flex-direction: column;
         /* 上から通常の流れで積む（中央寄せだと中身が箱より高いときに上下へはみ出す） */
         -webkit-justify-content: flex-start; justify-content: flex-start;
         -webkit-align-self: flex-start; align-self: flex-start;
       }
-      .now-status-box .ss-balance-val { font-size: 22px; }
-      .ss-tent-row { margin-top: 1px; }
+      .now-status-box .ss-balance-val { font-size: 20px; }
+      .ss-tent-row { margin-top: 0; }
       .now-status-box .ss-gauges {
         -webkit-box-orient: vertical; -webkit-box-direction: normal; -webkit-flex-direction: column; flex-direction: column;
-        gap: 2px;
-        margin-top: 3px; padding-top: 4px;
+        gap: 1px;
+        margin-top: 2px; padding-top: 3px;
       }
-      .now-status-box .ss-gauge { line-height: 1.35; }
+      .now-status-box .ss-gauge { line-height: 1.3; }
       .now-status-box .ss-gauge { margin-right: 0; }
       .now-status-box .ss-gauge .g-name { width: 32px; margin-right: 2px; }
       .now-status-box .ss-gauge .g-bar { -webkit-box-flex: 1; -webkit-flex: 1 1 auto; flex: 1 1 auto; width: auto; }
       .now-plans {
         display: -webkit-box; display: -webkit-flex; display: flex;
-        gap: 18px;
+        gap: 16px;
         /* 上の段が伸びたらその分だけ下がる通常の流れ。余った高さはこの上の余白が吸収する */
         margin-top: auto;
         border-top: 1px dashed var(--line);
-        padding-top: 5px;
+        padding-top: 4px;
         -webkit-flex-shrink: 0; flex-shrink: 0;
       }
       .plan-col { -webkit-box-flex: 1; -webkit-flex: 1 1 0; flex: 1 1 0; min-width: 0; }
       .plan-col.today { -webkit-box-flex: 0.94; -webkit-flex: 0.94 1 0; flex: 0.94 1 0; }
       .plan-col h3 {
-        margin: 0 0 2px;
-        font-size: 13.5px; font-weight: 700;
+        margin: 0 0 1px;
+        font-size: 13px; font-weight: 700;
         color: var(--teal-deep);
         letter-spacing: 0.06em;
       }
-      .plan-col p { margin: 0; font-size: 14.5px; line-height: 1.55; }
+      .plan-col p { margin: 0; font-size: 14px; line-height: 1.5; }
 
       /* ステータスパネル内：小さな立ち絵＋自己紹介＋目的3つ（小さな並び） */
       .sp-intro {
         display: -webkit-box; display: -webkit-flex; display: flex;
         -webkit-box-align: center; -webkit-align-items: center; align-items: center;
-        gap: 12px;
-        margin-top: 8px;
+        gap: 10px;
+        margin-top: 5px;
         border-top: 1px dashed var(--line);
-        padding-top: 8px;
+        padding-top: 5px;
         -webkit-flex-shrink: 0; flex-shrink: 0;
       }
-      .sp-standing { -webkit-flex-shrink: 0; flex-shrink: 0; height: 74px; }
+      .sp-standing { -webkit-flex-shrink: 0; flex-shrink: 0; height: 58px; }
       .sp-standing-img { display: block; height: 100%; width: auto; }
       .sp-intro-text {
         margin: 0;
         -webkit-box-flex: 1; -webkit-flex: 1 1 auto; flex: 1 1 auto;
         min-width: 110px;
-        font-size: 14px; font-weight: 700; line-height: 1.65;
+        font-size: 13.5px; font-weight: 700; line-height: 1.5;
       }
       .sp-purposes { -webkit-flex-shrink: 0; flex-shrink: 0; margin-left: auto; }
-      .sp-purposes ol.purposes2-list li { padding: 2px 0; font-size: 13.5px; }
-      .sp-purposes .p-icon { width: 21px; height: 21px; margin-right: 7px; }
-      .sp-purposes .p-icon svg { width: 13px; height: 13px; }
+      .sp-purposes ol.purposes2-list li { padding: 1px 0; font-size: 13px; line-height: 1.4; }
+      .sp-purposes .p-icon { width: 19px; height: 19px; margin-right: 6px; }
+      .sp-purposes .p-icon svg { width: 12px; height: 12px; }
       /* 現在地とひとことを少し目に入りやすく */
-      .now-head .nh-place b { font-size: 17px; color: var(--teal-deep); }
-      .think-bubble p { font-size: 15.5px; }
+      .now-head .nh-place b { font-size: 16px; color: var(--teal-deep); }
+      .think-bubble p { font-size: 15px; }
 
       /* 下段：ルート／ログ／レシート */
       .route-panel .map-frame img { object-position: 50% 50%; }
