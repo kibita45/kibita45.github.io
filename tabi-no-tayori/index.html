@@ -1604,8 +1604,9 @@
       /* レシートの説明行：書式統一の対象外（レシートの世界観のまま小さく） */
       .receipt-paper .r-desc { font-size: var(--fs-caption); }
 
-      /* 右列・下：自己紹介（右＝ブロックの高さほぼいっぱいの大きな立ち絵／左の列＝上に3つの目的、
-         その下に吹き出し。ブロック全体の高さは従来のままにする） */
+      /* 右列・下：自己紹介（左の列＝上に自己紹介の吹き出し、その下に3つの目的を間を空けずに積む／
+         右＝小さめの自然な大きさの立ち絵。ブロック全体の高さは中身にちょうどまで低くし、
+         低くなった分は右列の上の地図が受け取る） */
       .intro2-panel {
         -webkit-box-orient: vertical; -webkit-box-direction: normal; -webkit-flex-direction: column; flex-direction: column;
         -webkit-justify-content: flex-start; justify-content: flex-start;
@@ -1615,27 +1616,28 @@
       }
       .intro2-lower {
         -webkit-flex-shrink: 0; flex-shrink: 0;
-        height: 310px;
+        height: auto;
         width: 100%;
         min-height: 0; min-width: 0;
         display: -webkit-box; display: -webkit-flex; display: flex;
         -webkit-box-orient: horizontal; -webkit-box-direction: normal; -webkit-flex-direction: row; flex-direction: row;
         gap: 14px;
       }
-      /* 左の列：上から目的（見出し＋3つを自然な行間で詰める）、その下に吹き出し */
+      /* 左の列：上から吹き出し、その下に目的（見出し＋3つを自然な行間で詰める） */
       .intro2-left {
         -webkit-box-flex: 1; -webkit-flex: 1 1 auto; flex: 1 1 auto;
         min-width: 0; min-height: 0;
         display: -webkit-box; display: -webkit-flex; display: flex;
         -webkit-box-orient: vertical; -webkit-box-direction: normal; -webkit-flex-direction: column; flex-direction: column;
       }
-      /* 吹き出し：左の列の下に置き、形と大きさを保つ。しっぽは右向きで横の立ち絵を指す */
+      /* 吹き出し：左の列の先頭に置き、形と大きさを保つ。
+         しっぽは右向きで横の立ち絵を指す */
       .intro2-bubble {
         position: relative;
         z-index: 2;
         -webkit-flex-shrink: 0; flex-shrink: 0;
         width: 100%;
-        margin-top: auto;
+        margin-top: 0;
         border-radius: 22px;
         padding: 9px 15px;
       }
@@ -1651,12 +1653,13 @@
         -webkit-transform: rotate(45deg); transform: rotate(45deg);
       }
       .intro2-bubble p { font-size: 14px; line-height: 1.55; font-weight: 700; }
-      /* 左の列・上：3つの目的（緑系の線アイコン付き）。各項目は1行に収め、見出しの下へ自然な行間で詰める */
+      /* 左の列・下：3つの目的（緑系の線アイコン付き）。吹き出しのすぐ下に置く。
+         各項目は1行に収め、見出しの下へ自然な行間で詰める */
       .intro2-purposes {
         -webkit-flex-shrink: 0; flex-shrink: 0;
         width: 100%;
         min-width: 0;
-        margin-top: 0;
+        margin-top: 10px;
         padding-bottom: 0;
         display: -webkit-box; display: -webkit-flex; display: flex;
         -webkit-box-orient: vertical; -webkit-box-direction: normal; -webkit-flex-direction: column; flex-direction: column;
@@ -1712,10 +1715,13 @@
         color: var(--teal-deep);
       }
       .ip-icon svg { width: 18px; height: 18px; }
+      /* 立ち絵：小さめの自然な大きさで下端に立てる。高さを決め打ちにするのは、
+         画像の実寸（高さ100%の解決）が行の高さを押し戻してブロックが縮まないのを防ぐため。
+         ブロックの高さは左の列（吹き出し＋目的）の積んだ高さで決まる */
       .intro2-fig {
         -webkit-flex-shrink: 0; flex-shrink: 0;
         -webkit-align-self: flex-end; align-self: flex-end;
-        height: 100%;
+        height: 192px;
         min-height: 0;
         display: -webkit-box; display: -webkit-flex; display: flex;
       }
@@ -1908,7 +1914,7 @@
         .intro2-left { height: auto; }
         .intro2-fig { height: 220px; }
         .intro2-img { max-width: 136px; }
-        .intro2-bubble { position: relative; left: auto; right: auto; bottom: auto; width: 100%; margin-top: 12px; }
+        .intro2-bubble { position: relative; left: auto; right: auto; bottom: auto; width: 100%; margin-top: 0; }
         .intro2-bubble::before { right: -9px; top: 50%; bottom: auto; margin-top: -9px; }
         .intro2-bubble p { font-size: 13.5px; }
         .intro2-purpose-head { font-size: 13.5px; }
@@ -2289,6 +2295,9 @@
             <section class="hn-panel intro2-panel" aria-label="翠の自己紹介">
               <div class="intro2-lower">
                 <div class="intro2-left">
+                <div class="bubble intro2-bubble">
+                  <p>カワセミモチーフのAI、翠（すい）です。Murmureを出発して、日本を旅しています。</p>
+                </div>
                 <div class="intro2-purposes">
                   <h3 class="intro2-purpose-head"><span class="iph-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18.5 8.8 8l3.4 5 2.3-3 6.5 8.5Z"/></svg></span>この旅の3つの目的</h3>
                   <ol class="intro2-purpose-list">
@@ -2296,9 +2305,6 @@
                     <li><span class="ip-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5.6" r="2.7"/><path d="M12 8.3v2.1"/><path d="M9.3 10.4h5.4l1.1 4.8H8.2l1.1-4.8Z"/><path d="M7.8 15.2v2h8.4v-2"/><path d="M5.4 20h13.2"/></svg></span><span>道の駅スタンプを集める</span></li>
                     <li><span class="ip-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><ellipse cx="8" cy="15.5" rx="3" ry="4.4" transform="rotate(-14 8 15.5)"/><circle cx="4.9" cy="9.7" r="1.15"/><circle cx="7.6" cy="8.7" r="1.25"/><circle cx="10.4" cy="9.4" r="1.1"/><ellipse cx="16.4" cy="10" rx="3" ry="4.4" transform="rotate(-14 16.4 10)"/><circle cx="13.3" cy="4.2" r="1.15"/><circle cx="16" cy="3.2" r="1.25"/><circle cx="18.8" cy="3.9" r="1.1"/></svg></span><span>楽しそうな道を選んで歩く</span></li>
                   </ol>
-                </div>
-                <div class="bubble intro2-bubble">
-                  <p>カワセミモチーフのAI、翠（すい）です。Murmureを出発して、日本を旅しています。</p>
                 </div>
                 </div>
                 <div class="intro2-fig">
