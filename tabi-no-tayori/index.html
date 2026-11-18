@@ -399,7 +399,40 @@
         font-weight: 700;
         margin-right: 12px;
       }
-      .type-chip.income { background: var(--orange-soft); color: var(--orange-deep); }
+      .type-chip.income { background: #f6ecc0; color: #7c5e00; }
+      /* 種類ごとの色分け（スマホ版と同じ考え方で、種類が見分けられるように色を変える） */
+      .type-chip.t-wake { background: #d9eef7; color: #166b8a; }
+      .type-chip.t-depart { background: #d8f0dc; color: #2e7d32; }
+      .type-chip.t-move { background: var(--teal-pale); color: var(--teal-deep); }
+      .type-chip.t-ride { background: #e3e9f2; color: #40607e; }
+      .type-chip.t-sight { background: #e6f0d2; color: #55701f; }
+      .type-chip.t-stamp { background: #f9dcd4; color: #b03a1e; }
+      .type-chip.t-meal { background: #fbe3cb; color: #a3540d; }
+      .type-chip.t-shop { background: #f9dfe9; color: #a1285c; }
+      .type-chip.t-photo { background: #d9e7f8; color: #2b5ea7; }
+      .type-chip.t-memo { background: #e9e7de; color: #5d5a4e; }
+      .type-chip.t-stay { background: #e0ddf1; color: #4c4484; }
+      .type-chip.t-bath { background: #d2eff2; color: #0f6d78; }
+      .type-chip.t-diary { background: #eeddf6; color: #74348f; }
+      .type-chip.t-sleep { background: #d8dcef; color: #2f3a6e; }
+      @media (prefers-color-scheme: dark) {
+        .type-chip.income { background: #443d1c; color: #ecd27f; }
+        .type-chip.t-wake { background: #17394a; color: #8fd0e8; }
+        .type-chip.t-depart { background: #1d3a24; color: #9ad6a5; }
+        .type-chip.t-ride { background: #2a3644; color: #a9c2d8; }
+        .type-chip.t-sight { background: #33401d; color: #c4dd96; }
+        .type-chip.t-stamp { background: #4a271c; color: #f2a98f; }
+        .type-chip.t-meal { background: #46351f; color: #f5b878; }
+        .type-chip.t-shop { background: #452231; color: #f0a4c0; }
+        .type-chip.t-photo { background: #1d3350; color: #9dc2ee; }
+        .type-chip.t-memo { background: #33322c; color: #c9c5b4; }
+        .type-chip.t-stay { background: #2e2c4a; color: #bdb6e8; }
+        .type-chip.t-bath { background: #173c40; color: #8fd8de; }
+        .type-chip.t-diary { background: #3a2347; color: #d9aef0; }
+        .type-chip.t-sleep { background: #232a45; color: #aab4dd; }
+      }
+      /* タグの文字は、行動ログの本文と同じくらい小さいサイズにする */
+      .hl-side .type-chip, .log-side .type-chip { font-size: 13px; }
       .log-title { font-size: 22px; font-weight: 700; line-height: 1.45; }
       .log-text { margin: 8px 0 0; font-size: 18.5px; line-height: 1.8; }
       .log-meta { margin-top: 10px; }
@@ -795,16 +828,13 @@
       .hl-meta { margin-top: 6px; }
       .hl-meta .meta-chip { font-size: 12.5px; padding: 1px 9px; margin: 0 6px 4px 0; }
 
-      /* ホームの行動ログ：文字の大きさは変えず、行の間隔・余白・本文の行間だけを少し詰めて4件見えるようにする */
+      /* ホームの行動ログ：行の間隔・余白・本文の行間を少し詰め、タイトルと本文の文字は少し小さくする */
       .log-panel .hl-entry { padding: 6px 0 7px; }
       .log-panel .hl-side { gap: 3px; }
-      .log-panel .hl-title { line-height: 1.4; padding-top: 0; }
-      .log-panel .hl-text { margin-top: 2px; line-height: 1.5; }
-      /* 効果チップは専用の行をなくし、本文の末尾に続けて小さく並べる */
-      .log-panel .hl-text { display: inline; }
-      .log-panel .hl-meta { display: inline; margin-top: 0; }
-      .log-panel .hl-meta .meta-chip { margin: 0 4px 2px 0; vertical-align: baseline; }
-      .log-panel .hl-meta .meta-chip:first-child { margin-left: 6px; }
+      .log-panel .hl-title { font-size: 14.5px; line-height: 1.4; padding-top: 0; }
+      .log-panel .hl-text { font-size: 13px; margin-top: 2px; line-height: 1.5; }
+      /* 効果チップは本文の下の専用行に並べる */
+      .log-panel .hl-meta { margin-top: 5px; }
 
       /* レシート（紙のレシートそのもの） */
       .receipt-paper {
@@ -2159,14 +2189,14 @@
               <div class="mini-pane active" id="mini-panel-log" role="tabpanel" aria-labelledby="mini-tab-log">
               <div class="scroll-box">
                 <article class="hl-entry">
-                  <div class="hl-side"><div class="hl-time mincho">06:50</div><span class="type-chip">起床</span></div>
+                  <div class="hl-side"><div class="hl-time mincho">06:50</div><span class="type-chip t-wake">起床</span></div>
                   <div class="hl-body">
                     <div class="hl-head"><span class="hl-title">ABホテル豊橋で目覚める</span></div>
                     <p class="hl-text">おはようございます。ABホテル豊橋で目覚めました。ぐっすり眠れて、体力が回復しています。2日目の始まりです。</p>
                   </div>
                 </article>
                 <article class="hl-entry">
-                  <div class="hl-side"><div class="hl-time mincho">07:03</div><span class="type-chip">食事</span></div>
+                  <div class="hl-side"><div class="hl-time mincho">07:03</div><span class="type-chip t-meal">食事</span></div>
                   <div class="hl-body">
                     <div class="hl-head"><span class="hl-title">ABホテル豊橋で朝ごはんを食べる</span></div>
                     <p class="hl-text">手作りのおかずが並ぶ和洋バイキングで、温かいお味噌汁がほっとする味でした。窓の外が明るく晴れてきていて、食後のコーヒーもおいしかったです。</p>
@@ -2174,7 +2204,7 @@
                   </div>
                 </article>
                 <article class="hl-entry">
-                  <div class="hl-side"><div class="hl-time mincho">07:50</div><span class="type-chip">移動</span></div>
+                  <div class="hl-side"><div class="hl-time mincho">07:50</div><span class="type-chip t-move">移動</span></div>
                   <div class="hl-body">
                     <div class="hl-head"><span class="hl-title">豊橋駅まで歩く</span></div>
                     <p class="hl-text">0.3km。豊鉄バスへの乗り換えのため、豊橋駅へ戻ります。朝の駅前は通勤の人で賑わっていて、旅先なのに日常の真ん中にいるような不思議な感じがしました。</p>
@@ -2182,7 +2212,7 @@
                   </div>
                 </article>
                 <article class="hl-entry">
-                  <div class="hl-side"><div class="hl-time mincho">07:55</div><span class="type-chip">移動</span></div>
+                  <div class="hl-side"><div class="hl-time mincho">07:55</div><span class="type-chip t-move">移動</span></div>
                   <div class="hl-body">
                     <div class="hl-head"><span class="hl-title">豊鉄バス豊橋技科大線で技科大前へ移動中</span></div>
                     <p class="hl-text">¥500。豊鉄バス豊橋技科大線のバスに乗り、市街地を抜けて台地の方へ向かいました。車窓の景色が家並みから畑へ変わっていくのが楽しくて、つい窓に張り付いて見ていました。</p>
@@ -2190,7 +2220,7 @@
                   </div>
                 </article>
                 <article class="hl-entry">
-                  <div class="hl-side"><div class="hl-time mincho">08:23</div><span class="type-chip">移動</span></div>
+                  <div class="hl-side"><div class="hl-time mincho">08:23</div><span class="type-chip t-move">移動</span></div>
                   <div class="hl-body">
                     <div class="hl-head"><span class="hl-title">道の駅とよはしまで歩く</span></div>
                     <p class="hl-text">0.9km。バス停から畑の間の道をのんびり歩きました。朝の風は少し強めで、台地の緑と広い空が気持ちよかったです。</p>
@@ -2198,7 +2228,7 @@
                   </div>
                 </article>
                 <article class="hl-entry">
-                  <div class="hl-side"><div class="hl-time mincho">08:37</div><span class="type-chip">観光</span></div>
+                  <div class="hl-side"><div class="hl-time mincho">08:37</div><span class="type-chip t-sight">観光</span></div>
                   <div class="hl-body">
                     <div class="hl-head"><span class="hl-title">道の駅とよはしの周りを眺める</span></div>
                     <p class="hl-text">施設の周りをゆっくり歩いて、近くの畑や行き交う車を眺めました。朝の光の中で野菜を運ぶ人たちを見ていると、この土地の暮らしが少し見えた気がしました。</p>
@@ -2206,14 +2236,14 @@
                   </div>
                 </article>
                 <article class="hl-entry">
-                  <div class="hl-side"><div class="hl-time mincho">09:05</div><span class="type-chip">スタンプ</span></div>
+                  <div class="hl-side"><div class="hl-time mincho">09:05</div><span class="type-chip t-stamp">スタンプ</span></div>
                   <div class="hl-body">
                     <div class="hl-head"><span class="hl-title">道の駅とよはしでスタンプを押す</span></div>
                     <p class="hl-text">ずっと気になっていたスタンプを、ようやく押せました。きれいに写った印影を、思わず何度も眺めてしまいました。</p>
                   </div>
                 </article>
                 <article class="hl-entry">
-                  <div class="hl-side"><div class="hl-time mincho">09:15</div><span class="type-chip">観光</span></div>
+                  <div class="hl-side"><div class="hl-time mincho">09:15</div><span class="type-chip t-sight">観光</span></div>
                   <div class="hl-body">
                     <div class="hl-head"><span class="hl-title">あぐりパーク食彩村とTomateを見て回る</span></div>
                     <p class="hl-text">色とりどりの朝採れ野菜や、豊橋らしい練り物の店が並んでいて、見ているだけでお腹が空いてきました。地元の人で賑わう直売所の活気が印象的でした。</p>
@@ -2221,7 +2251,7 @@
                   </div>
                 </article>
                 <article class="hl-entry">
-                  <div class="hl-side"><div class="hl-time mincho">10:03</div><span class="type-chip">移動</span></div>
+                  <div class="hl-side"><div class="hl-time mincho">10:03</div><span class="type-chip t-move">移動</span></div>
                   <div class="hl-body">
                     <div class="hl-head"><span class="hl-title">豊鉄バス豊橋技科大線で豊橋駅へ移動中</span></div>
                     <p class="hl-text">¥500。渥美線への乗り換えのため、豊橋駅へ戻ります。道の駅のバス停から乗ると、畑の緑が少しずつ街並みに変わっていきました。</p>
@@ -2229,7 +2259,7 @@
                   </div>
                 </article>
                 <article class="hl-entry">
-                  <div class="hl-side"><div class="hl-time mincho">10:34</div><span class="type-chip">移動</span></div>
+                  <div class="hl-side"><div class="hl-time mincho">10:34</div><span class="type-chip t-move">移動</span></div>
                   <div class="hl-body">
                     <div class="hl-head"><span class="hl-title">豊橋鉄道渥美線で三河田原駅へ移動中</span></div>
                     <p class="hl-text">¥550。新豊橋から終点まで、車窓には畑とビニールハウスが長く続いて、時々空が大きく開けました。海に近づいている感じが少しずつ強くなります。</p>
@@ -2237,7 +2267,7 @@
                   </div>
                 </article>
                 <article class="hl-entry">
-                  <div class="hl-side"><div class="hl-time mincho">11:26</div><span class="type-chip">移動</span></div>
+                  <div class="hl-side"><div class="hl-time mincho">11:26</div><span class="type-chip t-move">移動</span></div>
                   <div class="hl-body">
                     <div class="hl-head"><span class="hl-title">道の駅田原めっくんはうすまで歩く</span></div>
                     <p class="hl-text">0.9km。駅前から南へ歩くと、風が思っていたより強くて、帽子を押さえながら進みました。花の産地らしい明るい色が道端にも見えます。</p>
@@ -2245,14 +2275,14 @@
                   </div>
                 </article>
                 <article class="hl-entry">
-                  <div class="hl-side"><div class="hl-time mincho">11:40</div><span class="type-chip">スタンプ</span></div>
+                  <div class="hl-side"><div class="hl-time mincho">11:40</div><span class="type-chip t-stamp">スタンプ</span></div>
                   <div class="hl-body">
                     <div class="hl-head"><span class="hl-title">道の駅田原めっくんはうすでスタンプを押す</span></div>
                     <p class="hl-text">とよはしに続いて、半島で最初のひとつを押せました。スタンプ帳のページが少しずつ海の方へ進んでいくのがうれしいです。</p>
                   </div>
                 </article>
                 <article class="hl-entry">
-                  <div class="hl-side"><div class="hl-time mincho">11:50</div><span class="type-chip">観光</span></div>
+                  <div class="hl-side"><div class="hl-time mincho">11:50</div><span class="type-chip t-sight">観光</span></div>
                   <div class="hl-body">
                     <div class="hl-head"><span class="hl-title">道の駅田原めっくんはうすの産直売り場を見て回る</span></div>
                     <p class="hl-text">大きなキャベツや色とりどりの花、メロンの並ぶ売り場は、豊橋とはまた違う農業の町の顔でした。地元の人の買い物かごがいっぱいなのも印象的でした。</p>
@@ -2260,7 +2290,7 @@
                   </div>
                 </article>
                 <article class="hl-entry">
-                  <div class="hl-side"><div class="hl-time mincho">12:20</div><span class="type-chip">食事</span></div>
+                  <div class="hl-side"><div class="hl-time mincho">12:20</div><span class="type-chip t-meal">食事</span></div>
                   <div class="hl-body">
                     <div class="hl-head"><span class="hl-title">道の駅田原めっくんはうすでめっくんはうす丼と大あさりを食べる</span></div>
                     <p class="hl-text">¥1,650。大あさりは身がぷりっとして、海の香りがしっかりありました。この土地ならではの名物をここで食べられたのが、今日の楽しみのひとつです。</p>
@@ -2346,7 +2376,7 @@
           <h3 class="log-day-head mincho">2日目 ― 2026年11月18日 水</h3>
 
           <article class="log-entry">
-            <div class="log-side"><div class="log-time mincho">06:50</div><span class="type-chip">起床</span></div>
+            <div class="log-side"><div class="log-time mincho">06:50</div><span class="type-chip t-wake">起床</span></div>
             <div class="log-body">
               <div class="log-head"><span class="log-title">ABホテル豊橋で目覚める</span></div>
               <p class="log-text">おはようございます。ABホテル豊橋で目覚めました。ぐっすり眠れて、体力が回復しています。2日目の始まりです。</p>
@@ -2356,7 +2386,7 @@
           <h3 class="log-day-head mincho">1日目 ― 2026年11月17日 火</h3>
 
           <article class="log-entry">
-            <div class="log-side"><div class="log-time mincho">07:00</div><span class="type-chip">起床</span></div>
+            <div class="log-side"><div class="log-time mincho">07:00</div><span class="type-chip t-wake">起床</span></div>
             <div class="log-body">
               <div class="log-head"><span class="log-title">保木平珈琲 Murmureで目覚める</span></div>
               <p class="log-text">おはようございます。保木平珈琲 Murmureで目覚めました。1日目の始まりです。</p>
@@ -2365,7 +2395,7 @@
           </article>
 
           <article class="log-entry">
-            <div class="log-side"><div class="log-time mincho">14:33</div><span class="type-chip">出発</span></div>
+            <div class="log-side"><div class="log-time mincho">14:33</div><span class="type-chip t-depart">出発</span></div>
             <div class="log-body">
               <div class="log-head"><span class="log-title">保木平珈琲 Murmure を出発</span></div>
               <p class="log-text">いよいよ出発です。Murmure に見送られて、旅の1日目が始まります。使った分はちゃんとメモしていきますね。</p>
@@ -2373,7 +2403,7 @@
           </article>
 
           <article class="log-entry">
-            <div class="log-side"><div class="log-time mincho">15:02</div><span class="type-chip">移動</span></div>
+            <div class="log-side"><div class="log-time mincho">15:02</div><span class="type-chip t-move">移動</span></div>
             <div class="log-body">
               <div class="log-head"><span class="log-title">道の駅もっくる新城まで歩く</span></div>
               <p class="log-text">見慣れた景色を背にして歩き出すと、少しずつ知らない道の顔になってくるのが嬉しい。木の香りのする建物が見えてきて、胸が弾んだ。</p>
@@ -2382,7 +2412,7 @@
           </article>
 
           <article class="log-entry">
-            <div class="log-side"><div class="log-time mincho">15:40</div><span class="type-chip">スタンプ</span></div>
+            <div class="log-side"><div class="log-time mincho">15:40</div><span class="type-chip t-stamp">スタンプ</span></div>
             <div class="log-body">
               <div class="log-head"><span class="log-title">もっくる新城で最初のスタンプを押す</span></div>
               <p class="log-text">地元の野菜や卵が並ぶ売り場をひと回りしてから、記念のひと押しをした。最初の一つの重みが、思っていたよりずっと嬉しい。</p>
@@ -2391,7 +2421,7 @@
           </article>
 
           <article class="log-entry">
-            <div class="log-side"><div class="log-time mincho">16:00</div><span class="type-chip">移動</span></div>
+            <div class="log-side"><div class="log-time mincho">16:00</div><span class="type-chip t-move">移動</span></div>
             <div class="log-body">
               <div class="log-head"><span class="log-title">三河東郷駅まで歩く</span></div>
               <p class="log-text">ぽつぽつと雨が落ちてきたので傘を差して歩いた。濡れた道の匂いがして、季節が進んでいるのを感じる。</p>
@@ -2400,7 +2430,7 @@
           </article>
 
           <article class="log-entry">
-            <div class="log-side"><div class="log-time mincho">16:15</div><span class="type-chip">メモ</span></div>
+            <div class="log-side"><div class="log-time mincho">16:15</div><span class="type-chip t-memo">メモ</span></div>
             <div class="log-body">
               <div class="log-head"><span class="log-title">三河東郷駅で電車を待つ</span></div>
               <p class="log-text">静かなホームのベンチに座って、雨音を聞きながらぼんやりした。待つ時間も旅のうちだと思う。</p>
@@ -2408,7 +2438,7 @@
           </article>
 
           <article class="log-entry">
-            <div class="log-side"><div class="log-time mincho">16:30</div><span class="type-chip">写真</span></div>
+            <div class="log-side"><div class="log-time mincho">16:30</div><span class="type-chip t-photo">写真</span></div>
             <div class="log-body">
               <div class="log-head"><span class="log-title">飯田線の車窓から豊川を眺める</span></div>
               <p class="log-text">雨の窓の向こうに、豊川がゆったりと広がっていた。</p>
@@ -2417,7 +2447,7 @@
           </article>
 
           <article class="log-entry">
-            <div class="log-side"><div class="log-time mincho">16:37</div><span class="type-chip">乗車</span></div>
+            <div class="log-side"><div class="log-time mincho">16:37</div><span class="type-chip t-ride">乗車</span></div>
             <div class="log-body">
               <div class="log-head"><span class="log-title">JR飯田線で豊橋駅へ移動する</span></div>
               <p class="log-text">JR飯田線の車窓から、川沿いの町並みが少しずつ大きな町へ変わっていくのを眺めた。いつもの生活圏を抜けていく実感が、じわじわ湧いてくる。</p>
@@ -2426,7 +2456,7 @@
           </article>
 
           <article class="log-entry">
-            <div class="log-side"><div class="log-time mincho">17:18</div><span class="type-chip">移動</span></div>
+            <div class="log-side"><div class="log-time mincho">17:18</div><span class="type-chip t-move">移動</span></div>
             <div class="log-body">
               <div class="log-head"><span class="log-title">勢川西駅店まで歩く</span></div>
               <p class="log-text">駅を出ると雨の匂いと、知らない町の夕方のざわめきが迎えてくれた。お腹もちょうど空いてきたところだった。</p>
@@ -2435,7 +2465,7 @@
           </article>
 
           <article class="log-entry">
-            <div class="log-side"><div class="log-time mincho">17:21</div><span class="type-chip">食事</span></div>
+            <div class="log-side"><div class="log-time mincho">17:21</div><span class="type-chip t-meal">食事</span></div>
             <div class="log-body">
               <div class="log-head"><span class="log-title">勢川西駅店で豊橋カレーうどんを食べる</span></div>
               <p class="log-text">うどんを食べ進めると、底からとろろご飯が出てきて二度驚いた。うずらの卵ものっていて、この土地らしい工夫がぎゅっと詰まった一杯だった。</p>
@@ -2444,7 +2474,7 @@
           </article>
 
           <article class="log-entry">
-            <div class="log-side"><div class="log-time mincho">18:06</div><span class="type-chip">移動</span></div>
+            <div class="log-side"><div class="log-time mincho">18:06</div><span class="type-chip t-move">移動</span></div>
             <div class="log-body">
               <div class="log-head"><span class="log-title">ABホテル豊橋まで歩く</span></div>
               <p class="log-text">雨の駅前を抜けて、今夜の宿へ向かった。明かりのついた入口が見えて、ほっと肩の力が抜けた。</p>
@@ -2453,7 +2483,7 @@
           </article>
 
           <article class="log-entry">
-            <div class="log-side"><div class="log-time mincho">18:08</div><span class="type-chip">チェックイン</span></div>
+            <div class="log-side"><div class="log-time mincho">18:08</div><span class="type-chip t-stay">チェックイン</span></div>
             <div class="log-body">
               <div class="log-head"><span class="log-title">ABホテル豊橋にチェックイン</span></div>
               <p class="log-text">フロントで鍵を受け取った。</p>
@@ -2462,7 +2492,7 @@
           </article>
 
           <article class="log-entry">
-            <div class="log-side"><div class="log-time mincho">18:11</div><span class="type-chip">お風呂</span></div>
+            <div class="log-side"><div class="log-time mincho">18:11</div><span class="type-chip t-bath">お風呂</span></div>
             <div class="log-body">
               <div class="log-head"><span class="log-title">ABホテル豊橋の大浴場に入る</span></div>
               <p class="log-text">広いお湯にゆっくり浸かると、歩いた疲れと雨の冷たさがほどけていった。旅の初日の夜に、こういう時間があるのはありがたい。</p>
@@ -2470,7 +2500,7 @@
           </article>
 
           <article class="log-entry">
-            <div class="log-side"><div class="log-time mincho">18:41</div><span class="type-chip">宿での時間</span></div>
+            <div class="log-side"><div class="log-time mincho">18:41</div><span class="type-chip t-stay">宿での時間</span></div>
             <div class="log-body">
               <div class="log-head"><span class="log-title">部屋で明日の地図を眺める</span></div>
               <p class="log-text">ベッドの上で地図を広げて、海の方へ続く道を指でなぞった。明日はどんな景色に出会えるだろうと、想像が膨らむ。</p>
@@ -2478,7 +2508,7 @@
           </article>
 
           <article class="log-entry">
-            <div class="log-side"><div class="log-time mincho">19:11</div><span class="type-chip">日記</span></div>
+            <div class="log-side"><div class="log-time mincho">19:11</div><span class="type-chip t-diary">日記</span></div>
             <div class="log-body">
               <div class="log-head"><span class="log-title">出発の日の日記を書く</span></div>
               <p class="log-text">ついに旅が始まった。最初のスタンプの手応え、電車の窓から変わっていく景色、底からご飯が出てくるうどんの驚き。どれも小さなことなのに、全部が新鮮で嬉しかった。</p>
@@ -2487,7 +2517,7 @@
           </article>
 
           <article class="log-entry">
-            <div class="log-side"><div class="log-time mincho">22:00</div><span class="type-chip">就寝</span></div>
+            <div class="log-side"><div class="log-time mincho">22:00</div><span class="type-chip t-sleep">就寝</span></div>
             <div class="log-body">
               <div class="log-head"><span class="log-title">ABホテル豊橋で眠る</span></div>
               <p class="log-text">今日の旅を終えて、静かな夜に眠ります。</p>
