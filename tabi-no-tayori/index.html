@@ -1558,10 +1558,16 @@
         -webkit-box-orient: horizontal; -webkit-box-direction: normal; -webkit-flex-direction: row; flex-direction: row;
         gap: 10px;
       }
-      /* 丸くふっくらした吹き出し：ブロックの一番上、しっぽは下の立ち絵の方へ */
+      /* 丸くふっくらした吹き出し：立ち絵の頭のすぐ上に来る位置まで下げて配置し、しっぽは下の立ち絵の方へ。
+         立ち絵は高さが幅（max-width 112px）から決まるため、頭の位置はパネル下端からの距離でほぼ一定。
+         そのため吹き出しは下端基準で置き、頭の少し上にしっぽが届くようにする */
       .intro2-bubble {
+        position: absolute;
+        left: 14px; right: 14px;
+        bottom: 190px;
+        z-index: 2;
         -webkit-flex-shrink: 0; flex-shrink: 0;
-        width: 100%;
+        width: auto;
         margin-top: 0;
         border-radius: 26px;
         padding: 10px 14px;
@@ -1823,6 +1829,7 @@
         .route-panel .map-frame { min-height: 220px; }
         .intro2-fig { height: 190px; }
         .intro2-img { max-width: 104px; }
+        .intro2-bubble { position: relative; left: auto; right: auto; bottom: auto; width: 100%; }
         .intro2-bubble::before { right: 46px; }
         .intro2-bubble p { font-size: 13.5px; }
         .intro2-purpose-head { font-size: 13.5px; }
