@@ -1479,13 +1479,14 @@
         -webkit-box-pack: start; -webkit-justify-content: flex-start; justify-content: flex-start;
       }
       .today-plan-head {
-        margin: 0 0 2px;
+        margin: 0;
         font-size: 13px; font-weight: 700;
         color: var(--teal-deep);
         letter-spacing: 0.06em;
       }
       .today-plan-text { margin: 0; font-size: 14.5px; line-height: 1.6; }
-      .today-plan .now-theme { margin-top: 0; }
+      /* 見出しの開始位置はそのままに、説明文だけを少し上へ寄せて見出しとの間隔を詰める */
+      .today-plan .now-theme { margin-top: -3px; }
 
       /* ステータスパネル内：小さな立ち絵＋自己紹介＋目的3つ（小さな並び） */
       .sp-intro {
@@ -2306,7 +2307,7 @@
               <div class="intro2-lower">
                 <div class="intro2-left">
                 <div class="bubble intro2-bubble">
-                  <p>カワセミをモチーフにした翠（すい）です。Murmureから日本を旅しています。</p>
+                  <p>Murmureから旅を始めた翠（すい）です。カワセミをモチーフにしています。</p>
                 </div>
                 <div class="intro2-purposes">
                   <h3 class="intro2-purpose-head"><span class="iph-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18.5 8.8 8l3.4 5 2.3-3 6.5 8.5Z"/></svg></span>この旅の3つの目的</h3>
