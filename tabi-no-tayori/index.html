@@ -482,35 +482,98 @@
       .route-total .fact-val { font-size: 26px; font-weight: 700; color: var(--teal-deep); }
       .route-ahead-card { margin-top: 22px; }
 
-      /* スタンプ帳 */
-      .stamp-count { font-size: 22px; margin: 0 0 18px; }
-      .stamp-count .num { font-size: 34px; font-weight: 700; color: var(--orange); }
-      .stamp-card {
+      /* スタンプ帳：県ごとにまとめ、県の見出しの下に場所名と日付を並べる。
+         文字の大きさは他のタブ（ログなど）の書式の階段に揃える */
+      .stamp-count { margin: 0 0 16px; }
+      .stamp-count .num { font-size: var(--fs-num-lg); font-weight: 700; color: var(--orange); }
+      .stamp-list-card { padding: 4px 22px; max-width: 680px; }
+      .stamp-row {
         display: -webkit-box; display: -webkit-flex; display: flex;
         -webkit-box-align: center; -webkit-align-items: center; align-items: center;
-        max-width: 680px;
+        padding: 11px 0;
+        border-bottom: 1px dashed var(--line);
       }
-      .stamp-no {
+      .stamp-row:last-child { border-bottom: none; }
+      .stamp-badge {
         -webkit-flex-shrink: 0; flex-shrink: 0;
-        width: 92px; height: 92px;
-        border: 3px solid var(--teal);
+        width: 38px; height: 38px;
+        border: 2px solid var(--teal);
         border-radius: 50%;
         color: var(--teal-deep);
+        font-size: var(--fs-num-sm);
         text-align: center;
-        margin-right: 24px;
+        line-height: 35px;
+        margin-right: 15px;
       }
-      .stamp-no .no-label { display: block; font-size: 14px; margin-top: 16px; letter-spacing: 0.1em; }
-      .stamp-no .no-num { display: block; font-size: 34px; font-weight: 700; line-height: 1.1; }
-      .stamp-info .stamp-name { font-size: 26px; font-weight: 700; margin: 0 0 4px; }
-      .stamp-info .stamp-meta { color: var(--ink-soft); font-size: 18px; margin: 0; }
+      .stamp-info .stamp-name { margin: 0 0 2px; }
+      .stamp-info .stamp-meta { color: var(--ink-soft); margin: 0; }
 
-      /* アルバム：初期表示はサムネイルの格子状一覧（横4枚）。
-         写真が増えても同じ格子に並び続ける。写真を選ぶと拡大表示に切り替わり、
-         「一覧に戻る」で格子に戻る。並び順は古い順 */
+      /* 旅のしくみ */
+      .about-card p { margin: 0 0 14px; line-height: 1.85; }
+      .about-sub {
+        font-family: var(--font-mincho);
+        font-size: var(--fs-h-md);
+        font-weight: 700;
+        color: var(--teal-deep);
+        margin: 22px 0 8px;
+      }
+      .about-card .about-sub:first-of-type { margin-top: 18px; }
+      ol.about-purposes { list-style: none; margin: 0 0 14px; padding: 0; }
+      ol.about-purposes li {
+        position: relative;
+        padding: 4px 0 4px 34px;
+        font-weight: 700;
+        line-height: 1.6;
+      }
+      ol.about-purposes .pnum {
+        position: absolute; left: 0; top: 4px;
+        width: 24px; height: 24px;
+        border-radius: 50%;
+        border: 2px solid var(--orange);
+        color: var(--orange-deep);
+        background: var(--paper-soft);
+        font-size: 13.5px; font-weight: 700;
+        line-height: 21px;
+        text-align: center;
+      }
+      ul.about-guide { list-style: none; margin: 0; padding: 0; }
+      ul.about-guide li {
+        padding: 7px 0;
+        border-bottom: 1px dashed var(--line);
+      }
+      ul.about-guide li:last-child { border-bottom: none; }
+      ul.about-guide .guide-name {
+        display: inline-block;
+        width: 96px;
+        font-weight: 700;
+        color: var(--teal-deep);
+      }
+
+      /* アルバム：初期表示はサムネイルの格子状一覧。
+         一覧は「1画面に12枚（4列×3行）」が基準で、枠の大きさは12枚が
+         1画面に収まる大きさに揃える（行の高さを画面の高さから決め、
+         枠の幅も写真の3:4がその高さに収まる幅にする）。
+         12枚を超えた分は、一覧の中をスクロールして見る。
+         写真を選ぶと拡大表示に切り替わり、「一覧に戻る」で格子に戻る。並び順は古い順 */
       .album-grid {
         display: grid;
         grid-template-columns: repeat(4, minmax(0, 1fr));
         gap: 16px;
+        /* 1行の高さ：画面の高さからタブ帯・上下の余白などを引いた見える範囲を3等分 */
+        grid-auto-rows: calc((100vh - 152px) / 3);
+        grid-auto-rows: calc((100dvh - 152px) / 3);
+        /* 見える範囲は3行分まで。それを超えたら一覧の中でスクロール */
+        max-height: calc(100vh - 120px);
+        max-height: calc(100dvh - 120px);
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        /* 枠の幅は行の高さから逆算する（写真3:4＋見出し等の分）。
+           画面が狭くて入りきらないときは幅いっぱいにする */
+        width: calc(100vh - 220px);
+        width: calc(100dvh - 220px);
+        max-width: 100%;
+        margin: 0 auto;
+        padding: 2px 6px 2px 2px;
       }
       .album-grid[hidden] { display: none; }
       /* 各サムネイルは写真＋見出しの枠を全部同じ大きさにする。
@@ -571,8 +634,14 @@
       .album-detail-meta { display: block; margin-top: 4px; color: var(--ink-soft); }
 
       @media (max-width: 760px) {
-        /* スマホでは格子を2列にして、横スクロールなしで並べる */
-        .album-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+        /* スマホでは格子を2列にして、横スクロールなしで並べる。
+           行の高さは中身に合わせ、一覧の中だけスクロールする */
+        .album-grid {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+          gap: 12px;
+          grid-auto-rows: auto;
+          width: auto;
+        }
         .album-detail-figure { max-width: 100%; }
       }
 
@@ -1880,7 +1949,7 @@
       .now-head .nh-day, .now-head .nh-tent { font-size: var(--fs-num-md); font-weight: 600; }
 
       /* 数字：明朝セミボールド＋等幅数字、大きさは役割の階段で */
-      .balance, .stamp-no .no-num, .stamp-count .num {
+      .balance {
         font-family: var(--font-mincho);
         font-size: var(--fs-num-xl);
         font-weight: 600;
@@ -1945,7 +2014,7 @@
       }
       .type-chip, .gband .gtitle { letter-spacing: 0.03em; }
       /* ラベル（通常の太さ） */
-      .status-label, .status-fact .fact-label, .ss-label, .stamp-no .no-label {
+      .status-label, .status-fact .fact-label, .ss-label {
         font-size: var(--fs-label);
         font-weight: 400;
       }
@@ -2091,8 +2160,6 @@
         .log-time { width: auto; font-size: 20px; }
         .log-title { font-size: 20px; }
         .route-place { font-size: 20px; }
-        .stamp-card { display: block; }
-        .stamp-no { margin: 0 0 16px; }
         .item-card { width: 100%; }
         .home2 { display: block; }
         .g-status { margin-bottom: 16px; }
@@ -2115,7 +2182,7 @@
         .now-place-name, .now-place { font-size: 24px; }
         .log-title, .hl-title, .item-name, .route-place, .album-detail-title,
         .stamp-info .stamp-name, .receipt-paper .r-head .r-shop { font-size: 17px; }
-        .balance, .stamp-no .no-num, .stamp-count .num { font-size: 32px; }
+        .balance { font-size: 32px; }
         .log-time, .gauge-val, .tent-life .tent-num, .status-fact .fact-val,
         .route-total .fact-val, .route-card .route-total .fact-val,
         .route-map-figure figcaption .fact-val, .ss-balance-val,
@@ -2504,8 +2571,8 @@
         <button type="button" role="tab" id="tab-route" aria-controls="panel-route" aria-selected="false"><span class="tab-main">ルート</span></button>
         <button type="button" role="tab" id="tab-stamp" aria-controls="panel-stamp" aria-selected="false"><span class="tab-main">スタンプ帳</span></button>
         <button type="button" role="tab" id="tab-album" aria-controls="panel-album" aria-selected="false"><span class="tab-main">アルバム</span></button>
-        <button type="button" role="tab" id="tab-items" aria-controls="panel-items" aria-selected="false"><span class="tab-main">持ち物</span></button>
         <button type="button" role="tab" id="tab-souvenir" aria-controls="panel-souvenir" aria-selected="false"><span class="tab-main">お土産</span></button>
+        <button type="button" role="tab" id="tab-about" aria-controls="panel-about" aria-selected="false"><span class="tab-main">旅のしくみ</span></button>
       </nav>
       <div class="tab-meta"><span class="tab-date">11月18日 水2日目</span><span class="tab-updated">最終更新 17:29</span></div>
     </div>
@@ -3295,44 +3362,35 @@
       <!-- スタンプ帳 -->
       <section class="panel" id="panel-stamp" role="tabpanel" aria-labelledby="tab-stamp">
         <p class="stamp-count">集まったスタンプ <span class="num mincho">4</span> 個</p>
-        <div class="card stamp-card">
-          <div class="stamp-no mincho">
-            <span class="no-label">No.</span>
-            <span class="no-num">1</span>
+        <h2 class="section mincho"><span class="rule"></span>愛知県</h2>
+        <div class="card stamp-list-card">
+          <div class="stamp-row">
+            <span class="stamp-badge num">1</span>
+            <div class="stamp-info">
+              <p class="stamp-name">道の駅もっくる新城</p>
+              <p class="stamp-meta">1日目 ・ 2026年11月17日</p>
+            </div>
           </div>
-          <div class="stamp-info">
-            <p class="stamp-name">道の駅もっくる新城</p>
-            <p class="stamp-meta">愛知県 ・ 1日目 ・ 2026年11月17日</p>
+          <div class="stamp-row">
+            <span class="stamp-badge num">2</span>
+            <div class="stamp-info">
+              <p class="stamp-name">道の駅とよはし</p>
+              <p class="stamp-meta">2日目 ・ 2026年11月18日</p>
+            </div>
           </div>
-        </div>
-        <div class="card stamp-card" style="margin-top:16px">
-          <div class="stamp-no mincho">
-            <span class="no-label">No.</span>
-            <span class="no-num">2</span>
+          <div class="stamp-row">
+            <span class="stamp-badge num">3</span>
+            <div class="stamp-info">
+              <p class="stamp-name">道の駅田原めっくんはうす</p>
+              <p class="stamp-meta">2日目 ・ 2026年11月18日</p>
+            </div>
           </div>
-          <div class="stamp-info">
-            <p class="stamp-name">道の駅とよはし</p>
-            <p class="stamp-meta">愛知県 ・ 2日目 ・ 2026年11月18日</p>
-          </div>
-        </div>
-        <div class="card stamp-card" style="margin-top:16px">
-          <div class="stamp-no mincho">
-            <span class="no-label">No.</span>
-            <span class="no-num">3</span>
-          </div>
-          <div class="stamp-info">
-            <p class="stamp-name">道の駅田原めっくんはうす</p>
-            <p class="stamp-meta">愛知県 ・ 2日目 ・ 2026年11月18日</p>
-          </div>
-        </div>
-        <div class="card stamp-card" style="margin-top:16px">
-          <div class="stamp-no mincho">
-            <span class="no-label">No.</span>
-            <span class="no-num">4</span>
-          </div>
-          <div class="stamp-info">
-            <p class="stamp-name">道の駅あかばねロコステーション</p>
-            <p class="stamp-meta">愛知県 ・ 2日目 ・ 2026年11月18日</p>
+          <div class="stamp-row">
+            <span class="stamp-badge num">4</span>
+            <div class="stamp-info">
+              <p class="stamp-name">道の駅あかばねロコステーション</p>
+              <p class="stamp-meta">2日目 ・ 2026年11月18日</p>
+            </div>
           </div>
         </div>
       </section>
@@ -3363,48 +3421,6 @@
         </div>
       </section>
 
-      <!-- 持ち物 -->
-      <section class="panel" id="panel-items" role="tabpanel" aria-labelledby="tab-items">
-        <div class="items-grid">
-          <div class="item-card">
-            <div class="card">
-              <div class="item-head">
-                <span class="item-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="var(--teal-deep)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4 L22 20 H2 Z"/><path d="M12 4 V20"/></svg></span>
-                <span class="item-name mincho">テント</span>
-              </div>
-              <p class="item-desc">寝袋と合わせると、宿代0円でテント泊ができる。雨のテント泊は気力が余分に減る</p>
-            </div>
-          </div>
-          <div class="item-card">
-            <div class="card">
-              <div class="item-head">
-                <span class="item-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="var(--teal-deep)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="3.5" width="10" height="17" rx="5"/><path d="M7 9 H17 M7 14.5 H17"/></svg></span>
-                <span class="item-name mincho">寝袋</span>
-              </div>
-              <p class="item-desc">テント泊ができるようになる（テントとセットの一部）</p>
-            </div>
-          </div>
-          <div class="item-card">
-            <div class="card">
-              <div class="item-head">
-                <span class="item-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="var(--teal-deep)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 a9 9 0 0 1 9 9 H3 a9 9 0 0 1 9 -9 Z"/><path d="M12 12 V19 a2.5 2.5 0 0 0 5 0"/></svg></span>
-                <span class="item-name mincho">折りたたみ傘</span>
-              </div>
-              <p class="item-desc">雨の日でも外に出られる。雨の日の歩行は体力と気力が少し余分に減る</p>
-            </div>
-          </div>
-          <div class="item-card">
-            <div class="card">
-              <div class="item-head">
-                <span class="item-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="var(--teal-deep)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8.5 7 L10.5 4 H13.5 L15.5 7"/><circle cx="12" cy="13.5" r="3.5"/></svg></span>
-                <span class="item-name mincho">カメラ</span>
-              </div>
-              <p class="item-desc">景色のいい場所で自撮りを撮ってログに残せる</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
       <!-- お土産 -->
       <section class="panel" id="panel-souvenir" role="tabpanel" aria-labelledby="tab-souvenir">
         <div class="card souvenir">
@@ -3413,11 +3429,38 @@
         </div>
       </section>
 
+      <!-- 旅のしくみ -->
+      <section class="panel" id="panel-about" role="tabpanel" aria-labelledby="tab-about">
+        <div class="card about-card">
+          <h2 class="section mincho"><span class="rule"></span>旅のしくみ</h2>
+          <p>翠（すい）は、保木平珈琲 Murmureを出発して、日本を旅しています。この画面では、その旅の様子をお届けしています。</p>
+          <h3 class="about-sub">旅の目的は3つ</h3>
+          <ol class="about-purposes">
+            <li><span class="pnum num">1</span>観光地や美しい風景を写真に残す（1日1枚）</li>
+            <li><span class="pnum num">2</span>道の駅のスタンプを集める</li>
+            <li><span class="pnum num">3</span>旧街道や古い道筋を辿る</li>
+          </ol>
+          <h3 class="about-sub">1日の進み方</h3>
+          <p>朝にその日の行き先を決め、歩いたり、その土地らしい乗り物に乗ったりしながら進みます。夜は宿やテントに泊まります。</p>
+          <h3 class="about-sub">旅のお金</h3>
+          <p>旅のお金は、日当と、Murmureのお手伝いでもらっています。ホームのレシートに出てくる「日当」と「Murmureのお手伝い」が、その収入です。</p>
+          <h3 class="about-sub">この画面の見方</h3>
+          <ul class="about-guide">
+            <li><span class="guide-name">ホーム</span>今の様子</li>
+            <li><span class="guide-name">ログ</span>日々の記録</li>
+            <li><span class="guide-name">ルート</span>通った道</li>
+            <li><span class="guide-name">スタンプ帳</span>集めたスタンプ</li>
+            <li><span class="guide-name">アルバム</span>旅の写真</li>
+            <li><span class="guide-name">お土産</span>Murmureへのお土産</li>
+          </ul>
+        </div>
+      </section>
+
     </div>
 
     <script>
       (function () {
-        var ids = ['top', 'log', 'route', 'stamp', 'album', 'items', 'souvenir'];
+        var ids = ['top', 'log', 'route', 'stamp', 'album', 'souvenir', 'about'];
         var tabs = [];
         for (var j = 0; j < ids.length; j++) {
           tabs.push({
