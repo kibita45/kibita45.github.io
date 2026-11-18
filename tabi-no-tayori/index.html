@@ -1127,6 +1127,7 @@
         gap: 2px 16px;
         border-bottom: 1px dashed var(--line);
         padding-bottom: 7px;
+        -webkit-flex-shrink: 0; flex-shrink: 0;
       }
       .now-head .nh-date { font-size: 19px; font-weight: 700; color: var(--teal-deep); }
       .now-head .nh-item { font-size: 14px; color: var(--ink-soft); white-space: nowrap; }
@@ -1135,14 +1136,14 @@
         display: -webkit-box; display: -webkit-flex; display: flex;
         gap: 14px;
         -webkit-box-align: stretch; -webkit-align-items: stretch; align-items: stretch;
-        margin-top: 10px;
-        -webkit-box-flex: 1; -webkit-flex: 1 1 auto; flex: 1 1 auto;
-        min-height: 0;
+        margin-top: 9px;
+        /* 固定高さに潰さず、中身の高さで決まる通常の流れにする（潰れると吹き出し・ステータスが下の予定に被る） */
+        -webkit-box-flex: 0; -webkit-flex: 0 0 auto; flex: 0 0 auto;
       }
       .now-face {
         -webkit-flex-shrink: 0; flex-shrink: 0;
         display: block;
-        width: 106px; height: 106px;
+        width: 94px; height: 94px;
         -webkit-align-self: center; align-self: center;
         object-fit: cover;
         object-position: 50% 28%;
@@ -1165,9 +1166,11 @@
       }
       .think-bubble {
         margin-top: 0;
+        /* 段の高さいっぱいに伸ばすだけにし、本文は通常の流れで置く（中央寄せの flex だと潰れたときに文字がはみ出す） */
         -webkit-box-flex: 1; -webkit-flex: 1 1 auto; flex: 1 1 auto;
         display: -webkit-box; display: -webkit-flex; display: flex;
         -webkit-box-align: center; -webkit-align-items: center; align-items: center;
+        padding: 10px 14px;
       }
       .think-bubble::before {
         top: 50%; left: -10px;
@@ -1178,24 +1181,26 @@
         border-bottom: 9px solid transparent;
         border-right: 10px solid var(--teal-pale);
       }
-      .think-bubble p { font-size: 16px; line-height: 1.75; }
+      .think-bubble p { font-size: 15px; line-height: 1.7; }
       .now-status-box {
         -webkit-flex-shrink: 0; flex-shrink: 0;
-        width: 218px;
+        width: 208px;
         border: 1px solid var(--line);
         border-radius: 12px;
         background: var(--paper);
-        padding: 9px 13px 10px;
+        padding: 8px 12px 9px;
         display: -webkit-box; display: -webkit-flex; display: flex;
         -webkit-box-orient: vertical; -webkit-box-direction: normal; -webkit-flex-direction: column; flex-direction: column;
-        -webkit-justify-content: center; justify-content: center;
+        /* 上から通常の流れで積む（中央寄せだと中身が箱より高いときに上下へはみ出す） */
+        -webkit-justify-content: flex-start; justify-content: flex-start;
+        -webkit-align-self: flex-start; align-self: flex-start;
       }
-      .now-status-box .ss-balance-val { font-size: 23px; }
-      .ss-tent-row { margin-top: 2px; }
+      .now-status-box .ss-balance-val { font-size: 22px; }
+      .ss-tent-row { margin-top: 1px; }
       .now-status-box .ss-gauges {
         -webkit-box-orient: vertical; -webkit-box-direction: normal; -webkit-flex-direction: column; flex-direction: column;
-        gap: 5px;
-        margin-top: 7px; padding-top: 8px;
+        gap: 4px;
+        margin-top: 6px; padding-top: 7px;
       }
       .now-status-box .ss-gauge { margin-right: 0; }
       .now-status-box .ss-gauge .g-name { width: 32px; margin-right: 2px; }
@@ -1203,7 +1208,8 @@
       .now-plans {
         display: -webkit-box; display: -webkit-flex; display: flex;
         gap: 18px;
-        margin-top: 10px;
+        /* 上の段が伸びたらその分だけ下がる通常の流れ。余った高さはこの上の余白が吸収する */
+        margin-top: auto;
         border-top: 1px dashed var(--line);
         padding-top: 8px;
         -webkit-flex-shrink: 0; flex-shrink: 0;
@@ -1216,7 +1222,7 @@
         color: var(--teal-deep);
         letter-spacing: 0.06em;
       }
-      .plan-col p { margin: 0; font-size: 15px; line-height: 1.65; }
+      .plan-col p { margin: 0; font-size: 14.5px; line-height: 1.6; }
 
       /* 下段：ルート／ログ／レシート */
       .route-panel .map-frame img { object-position: 50% 50%; }
