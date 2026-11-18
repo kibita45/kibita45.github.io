@@ -795,6 +795,17 @@
       .hl-meta { margin-top: 6px; }
       .hl-meta .meta-chip { font-size: 12.5px; padding: 1px 9px; margin: 0 6px 4px 0; }
 
+      /* ホームの行動ログ：文字の大きさは変えず、行の間隔・余白・本文の行間だけを少し詰めて4件見えるようにする */
+      .log-panel .hl-entry { padding: 6px 0 7px; }
+      .log-panel .hl-side { gap: 3px; }
+      .log-panel .hl-title { line-height: 1.4; padding-top: 0; }
+      .log-panel .hl-text { margin-top: 2px; line-height: 1.5; }
+      /* 効果チップは専用の行をなくし、本文の末尾に続けて小さく並べる */
+      .log-panel .hl-text { display: inline; }
+      .log-panel .hl-meta { display: inline; margin-top: 0; }
+      .log-panel .hl-meta .meta-chip { margin: 0 4px 2px 0; vertical-align: baseline; }
+      .log-panel .hl-meta .meta-chip:first-child { margin-left: 6px; }
+
       /* レシート（紙のレシートそのもの） */
       .receipt-paper {
         position: relative;
