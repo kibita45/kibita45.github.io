@@ -2206,10 +2206,20 @@
         .log-nav-btn { padding: 4px 8px 5px; font-size: 12px; }
       }
 
-      /* ===== ルートタブ・全ルートタブ：左に正方形の地図、右にその日の一覧 =====
-         日付移動バーはログタブと共通の .log-nav の作りをそのまま使う。
-         地図は正方形の画像をそのままの形で置き、2カラム全体が
+      /* ===== ルートタブ：左に正方形の地図、右にその日の一覧 =====
+         パネル上部の切り替え（ミニタブと同じ体裁）で「その日／これまで」を入れ替え、
+         地図と右側の内容が丸ごと切り替わる。「その日」は日付移動バー
+         （ログタブと共通の .log-nav の作り）で日ごとに遡り、「これまで」は
+         旅全体の地図と経由地・日ごとの距離を出す（日付移動バーは出さない）。
+         地図は正方形の画像をそのままの形で置き、どちらの表示も2カラム全体が
          iPadの表示領域（1080×810）にスクロールなしで収まる大きさにする */
+      .route-viewbar {
+        display: -webkit-box; display: -webkit-flex; display: flex;
+        -webkit-box-align: center; -webkit-align-items: center; align-items: center;
+        gap: 6px;
+        margin-bottom: 14px;
+      }
+      .route-view[hidden] { display: none; }
       .route-day[hidden] { display: none; }
       .route-two {
         display: grid;
@@ -2275,7 +2285,7 @@
         line-height: 1.4;
       }
       .route-stop-name { font-size: 16.5px; font-weight: 700; line-height: 1.5; }
-      /* 全ルートタブ右側：経由地の流れと日ごとの距離 */
+      /* 「これまで」表示の右側：経由地の流れと日ごとの距離 */
       .route-side-stack {
         display: -webkit-box; display: -webkit-flex; display: flex;
         -webkit-box-orient: vertical; -webkit-box-direction: normal; -webkit-flex-direction: column; flex-direction: column;
@@ -2366,7 +2376,6 @@
         <button type="button" role="tab" id="tab-top" aria-controls="panel-top" aria-selected="true"><span class="tab-main">ホーム</span></button>
         <button type="button" role="tab" id="tab-log" aria-controls="panel-log" aria-selected="false"><span class="tab-main">ログ</span></button>
         <button type="button" role="tab" id="tab-route" aria-controls="panel-route" aria-selected="false"><span class="tab-main">ルート</span></button>
-        <button type="button" role="tab" id="tab-route-all" aria-controls="panel-route-all" aria-selected="false"><span class="tab-main">全ルート</span></button>
         <button type="button" role="tab" id="tab-stamp" aria-controls="panel-stamp" aria-selected="false"><span class="tab-main">スタンプ帳</span></button>
         <button type="button" role="tab" id="tab-album" aria-controls="panel-album" aria-selected="false"><span class="tab-main">アルバム</span></button>
         <button type="button" role="tab" id="tab-items" aria-controls="panel-items" aria-selected="false"><span class="tab-main">持ち物</span></button>
@@ -3068,6 +3077,12 @@
 
       <!-- ルート -->
       <section class="panel" id="panel-route" role="tabpanel" aria-labelledby="tab-route">
+        <div class="route-viewbar" role="tablist" aria-label="ルートの表示切り替え">
+          <button type="button" class="mini-tab" role="tab" id="route-view-day-btn" aria-controls="route-view-day-pane" aria-selected="true">その日</button>
+          <button type="button" class="mini-tab" role="tab" id="route-view-all-btn" aria-controls="route-view-all-pane" aria-selected="false">これまで</button>
+        </div>
+
+        <div class="route-view" id="route-view-day-pane" role="tabpanel" aria-labelledby="route-view-day-btn">
         <div class="log-nav" aria-label="ルートの日付移動">
           <div class="log-nav-row">
             <button type="button" class="log-nav-btn" id="route-prev-day">‹ 前の日</button>
@@ -3124,10 +3139,9 @@
           <p id="route-empty-text">この月のルートはまだありません。</p>
           <button type="button" class="log-nav-btn" id="route-back-latest">最新のルートへ戻る</button>
         </div>
-      </section>
+        </div>
 
-      <!-- 全ルート -->
-      <section class="panel" id="panel-route-all" role="tabpanel" aria-labelledby="tab-route-all">
+        <div class="route-view" id="route-view-all-pane" role="tabpanel" aria-labelledby="route-view-all-btn" hidden>
         <div class="route-two">
           <div class="route-map-card">
             <h2 class="section mincho route-map-title"><span><span class="h-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="var(--teal-deep)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21 C12 21 5.2 14.6 5.2 9.6 a6.8 6.8 0 1 1 13.6 0 C18.8 14.6 12 21 12 21 Z"/><circle cx="12" cy="9.6" r="2.5"/></svg></span>旅全体のルート</span><span class="route-map-dist">合計 82.1km</span></h2>
@@ -3154,6 +3168,7 @@
               <div class="route-day-dist total"><span>合計</span><span class="dist-num">82.1km</span></div>
             </div>
           </div>
+        </div>
         </div>
       </section>
 
@@ -3267,7 +3282,7 @@
 
     <script>
       (function () {
-        var ids = ['top', 'log', 'route', 'route-all', 'stamp', 'album', 'items', 'souvenir'];
+        var ids = ['top', 'log', 'route', 'stamp', 'album', 'items', 'souvenir'];
         var tabs = [];
         for (var j = 0; j < ids.length; j++) {
           tabs.push({
@@ -3447,6 +3462,35 @@
         });
         btnBackLatest.addEventListener('click', function () { showLogDay(logDays.length - 1); });
         if (logDays.length) { showLogDay(logDays.length - 1); }
+
+        /* ルートタブ内の表示切り替え（その日／これまで）。ミニタブと同じ作りで、
+           地図と右側の内容を丸ごと入れ替える。日付移動バーは「その日」側の中に
+           入っているので、「これまで」のときは出ない。
+           ルートタブを開いたときの初期表示は「その日」にする */
+        var routeViewBtns = [
+          document.getElementById('route-view-day-btn'),
+          document.getElementById('route-view-all-btn')
+        ];
+        var routeViewPanes = [
+          document.getElementById('route-view-day-pane'),
+          document.getElementById('route-view-all-pane')
+        ];
+        function showRouteView(index) {
+          for (var v = 0; v < routeViewBtns.length; v++) {
+            var von = v === index;
+            routeViewBtns[v].setAttribute('aria-selected', von ? 'true' : 'false');
+            if (von) { routeViewPanes[v].removeAttribute('hidden'); }
+            else { routeViewPanes[v].setAttribute('hidden', ''); }
+          }
+        }
+        for (var rv = 0; rv < routeViewBtns.length; rv++) {
+          (function (idx) {
+            routeViewBtns[idx].addEventListener('click', function () { showRouteView(idx); });
+          })(rv);
+        }
+        /* ルートタブを開くたびに「その日」から始める（タブの選択処理とは別の控え） */
+        tabs[2].btn.addEventListener('click', function () { showRouteView(0); });
+        showRouteView(0);
 
         /* ルートタブ：日付の移動はログタブとまったく同じ作り・動き。
            日付移動バー（.log-nav の共通部品）で日を切り替えると、
