@@ -1415,6 +1415,50 @@
       .gauges-only .ss-gauge .g-name { width: 34px; margin-right: 2px; }
       .gauges-only .ss-gauge .g-bar { -webkit-box-flex: 1; -webkit-flex: 1 1 auto; flex: 1 1 auto; width: auto; }
 
+      /* ステータス組み替え：ひとこと吹き出し（全幅・横長）／その下にゲージと今日の予定を横並び */
+      .status-lower {
+        margin-top: auto;
+        -webkit-flex-shrink: 0; flex-shrink: 0;
+        display: -webkit-box; display: -webkit-flex; display: flex;
+        -webkit-box-orient: vertical; -webkit-box-direction: normal; -webkit-flex-direction: column; flex-direction: column;
+        gap: 9px;
+      }
+      .status-lower .hitokoto-bubble {
+        width: 100%;
+        margin-top: 0;
+        -webkit-flex-shrink: 0; flex-shrink: 0;
+        display: -webkit-box; display: -webkit-flex; display: flex;
+        -webkit-box-align: center; -webkit-align-items: center; align-items: center;
+        padding: 7px 16px;
+      }
+      .status-plan-row {
+        display: -webkit-box; display: -webkit-flex; display: flex;
+        -webkit-box-align: stretch; -webkit-align-items: stretch; align-items: stretch;
+        gap: 18px;
+        -webkit-flex-shrink: 0; flex-shrink: 0;
+      }
+      .status-plan-row .gauges-only {
+        width: 172px;
+        -webkit-align-self: stretch; align-self: stretch;
+      }
+      .status-plan-row .gauges-only .ss-gauges { gap: 7px; }
+      .today-plan {
+        -webkit-box-flex: 1; -webkit-flex: 1 1 auto; flex: 1 1 auto;
+        min-width: 0;
+        border-left: 1px dashed var(--line);
+        padding-left: 16px;
+        display: -webkit-box; display: -webkit-flex; display: flex;
+        -webkit-box-orient: vertical; -webkit-box-direction: normal; -webkit-flex-direction: column; flex-direction: column;
+        -webkit-justify-content: center; justify-content: center;
+      }
+      .today-plan-head {
+        margin: 0 0 2px;
+        font-size: 13px; font-weight: 700;
+        color: var(--teal-deep);
+        letter-spacing: 0.06em;
+      }
+      .today-plan-text { margin: 0; font-size: 14.5px; line-height: 1.6; }
+
       /* ステータスパネル内：小さな立ち絵＋自己紹介＋目的3つ（小さな並び） */
       .sp-intro {
         display: -webkit-box; display: -webkit-flex; display: flex;
@@ -1822,6 +1866,9 @@
         .now-face { margin-bottom: 10px; }
         .hitokoto-row { display: block; }
         .gauges-only { width: auto; margin-top: 10px; padding: 2px 2px 0; }
+        .status-plan-row { display: block; }
+        .status-plan-row .gauges-only { width: auto; margin-top: 0; }
+        .today-plan { margin-top: 10px; border-left: none; border-top: 1px dashed var(--line); padding-left: 0; padding-top: 8px; }
         .now-status-box { width: auto; margin-top: 12px; }
         .now-plans { display: block; }
         .plan-col { margin-bottom: 10px; }
@@ -2017,15 +2064,21 @@
                   <p class="now-theme">道の駅とよはしでスタンプを押して、渥美半島を海の方へ進む日</p>
                 </div>
               </div>
-              <div class="hitokoto-row">
+              <div class="status-lower">
                 <div class="bubble hitokoto-bubble">
                   <p>田原に着くと、風の強さと産直売り場の明るい色で、半島に入ったんだなあって実感が湧いてきました。大きなあさりの海の味も、この土地らしくて好きです。</p>
                 </div>
-                <div class="now-status-box gauges-only">
-                  <div class="ss-gauges num">
-                    <span class="ss-gauge"><span class="g-name">体力</span><span class="g-bar"><span class="g-fill" style="display:block;width:67%"></span></span><span class="g-val mincho">67</span></span>
-                    <span class="ss-gauge"><span class="g-name">気力</span><span class="g-bar"><span class="g-fill" style="display:block;width:89%"></span></span><span class="g-val mincho">89</span></span>
-                    <span class="ss-gauge"><span class="g-name">清潔</span><span class="g-bar"><span class="g-fill" style="display:block;width:78%"></span></span><span class="g-val mincho">78</span></span>
+                <div class="status-plan-row">
+                  <div class="now-status-box gauges-only">
+                    <div class="ss-gauges num">
+                      <span class="ss-gauge"><span class="g-name">体力</span><span class="g-bar"><span class="g-fill" style="display:block;width:67%"></span></span><span class="g-val mincho">67</span></span>
+                      <span class="ss-gauge"><span class="g-name">気力</span><span class="g-bar"><span class="g-fill" style="display:block;width:89%"></span></span><span class="g-val mincho">89</span></span>
+                      <span class="ss-gauge"><span class="g-name">清潔</span><span class="g-bar"><span class="g-fill" style="display:block;width:78%"></span></span><span class="g-val mincho">78</span></span>
+                    </div>
+                  </div>
+                  <div class="today-plan">
+                    <h3 class="today-plan-head">今日の予定</h3>
+                    <p class="today-plan-text">道の駅とよはしと、田原めっくんはうすでスタンプを狙います。今夜はABホテル田原の予定です。</p>
                   </div>
                 </div>
               </div>
