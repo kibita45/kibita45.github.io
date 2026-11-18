@@ -2076,6 +2076,135 @@
         .mini-tab { font-size: 13px; }
         nav.tabs button .tab-main { font-size: 11px; }
       }
+
+      /* ===== ログタブ：日付移動バー ===== */
+      .log-nav {
+        background: var(--paper-soft);
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        box-shadow: var(--card-shadow);
+        padding: 10px 16px;
+        margin-bottom: 16px;
+      }
+      /* 日付移動バーは1行だけ：前の日ボタン／中央の日付表示／次の日ボタン。
+         別の月への移動は、中央の日付を選ぶ操作（日付入力）の中で行う */
+      .log-nav-row {
+        display: -webkit-box; display: -webkit-flex; display: flex;
+        -webkit-box-align: center; -webkit-align-items: center; align-items: center;
+        -webkit-box-pack: justify; -webkit-justify-content: space-between; justify-content: space-between;
+        gap: 10px;
+        -webkit-flex-wrap: nowrap; flex-wrap: nowrap;
+      }
+      .log-nav-btn {
+        -webkit-flex-shrink: 0; flex-shrink: 0;
+        font-family: inherit;
+        font-size: 13.5px;
+        font-weight: 700;
+        line-height: 1.3;
+        color: var(--teal-deep);
+        background: var(--paper);
+        border: 1.5px solid var(--teal);
+        border-radius: 999px;
+        padding: 5px 16px 6px;
+        cursor: pointer;
+        white-space: nowrap;
+      }
+      .log-nav-btn:hover { background: var(--teal-pale); }
+      .log-nav-btn:disabled { opacity: 0.38; cursor: default; }
+      .log-nav-btn:disabled:hover { background: var(--paper); }
+      .log-nav-btn:focus-visible { outline: 3px solid var(--orange); outline-offset: 2px; }
+      /* 中央：日付の表示だけを置く。表示全体が日付入力になっており、
+         押すと月と日を選べるピッカーが開く（入力自体は表示に重ねて透明にする） */
+      .log-nav-current {
+        position: relative;
+        -webkit-box-flex: 1; -webkit-flex: 1 1 auto; flex: 1 1 auto;
+        text-align: center;
+        min-width: 0;
+        border-radius: 8px;
+        cursor: pointer;
+      }
+      .log-nav-current:focus-within { outline: 3px solid var(--orange); outline-offset: 2px; }
+      .log-date-line {
+        display: -webkit-box; display: -webkit-flex; display: flex;
+        -webkit-box-align: center; -webkit-align-items: center; align-items: center;
+        -webkit-box-pack: center; -webkit-justify-content: center; justify-content: center;
+      }
+      .log-nav-date { font-size: 20px; font-weight: 700; color: var(--teal-deep); line-height: 1.35; white-space: nowrap; }
+      .log-date-caret { -webkit-flex-shrink: 0; flex-shrink: 0; font-size: 11px; color: var(--teal); margin-left: 5px; }
+      .log-nav-day { display: block; font-size: 12.5px; color: var(--ink-soft); line-height: 1.4; }
+      .log-nav-current input[type="date"] {
+        position: absolute;
+        left: 0; top: 0;
+        width: 100%; height: 100%;
+        margin: 0; padding: 0;
+        border: none;
+        opacity: 0;
+        cursor: pointer;
+        font-size: 16px; /* iOSでフォーカス時に画面が拡大しないように */
+      }
+      .log-day[hidden] { display: none; }
+      .log-empty {
+        background: var(--paper-soft);
+        border: 1px dashed var(--line);
+        border-radius: 12px;
+        padding: 28px 20px;
+        text-align: center;
+      }
+      .log-empty p { margin: 0 0 14px; font-size: 14px; color: var(--ink-soft); }
+
+      /* ===== ログタブ：ホームの行動ログと同じ、つながった1つのリスト =====
+         1件ごとのカードにはせず、その日のログ全体を1つの面にまとめ、
+         行はホームの .hl-entry と同じ作り（左に時刻と種類タグ、タイトル、
+         本文、効果チップの行）にして、件と件の間は点線で区切る。
+         文字の大きさは従来のログタブのまま変えない。 */
+      #panel-log .log-day {
+        background: var(--paper-soft);
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        box-shadow: var(--card-shadow);
+        padding: 8px 18px 10px;
+      }
+      #panel-log .log-entry {
+        display: -webkit-box; display: -webkit-flex; display: flex;
+        -webkit-box-align: start; -webkit-align-items: flex-start; align-items: flex-start;
+        background: transparent;
+        border: none;
+        border-bottom: 1px dashed var(--line);
+        border-radius: 0;
+        box-shadow: none;
+        padding: 6px 0 7px;
+        margin-bottom: 0;
+      }
+      #panel-log .log-entry:last-child { border-bottom: none; }
+      /* 左列の作りはホームと同じ（時刻の下に種類タグ）。幅はログタブ側の長いタグ（チェックイン等）が収まるよう従来の86pxを保つ */
+      #panel-log .log-side { width: 86px; gap: 3px; padding-top: 0; }
+      #panel-log .log-time { font-size: 18px; }
+      #panel-log .log-title { font-size: 14.5px; font-weight: 700; line-height: 1.4; }
+      #panel-log .log-text { font-size: 13px; line-height: 1.5; margin-top: 2px; }
+      #panel-log .type-chip { font-size: 12px; font-weight: 400; padding: 1px 9px; }
+      #panel-log .meta-chip { font-size: 12px; padding: 1px 9px; margin: 0 6px 4px 0; }
+      #panel-log .log-meta { margin-top: 5px; }
+
+      @media (max-width: 760px) {
+        /* スマホでも日付移動バーは1行のまま：ボタンを少し小さくし、日付を中央に残す */
+        .log-nav { padding: 9px 10px; }
+        .log-nav-row { -webkit-flex-wrap: nowrap; flex-wrap: nowrap; gap: 8px; }
+        .log-nav-date { font-size: 16px; }
+        .log-nav-day { font-size: 11.5px; }
+        .log-nav-btn { padding: 5px 10px 6px; font-size: 12.5px; }
+        .log-date-caret { font-size: 10px; margin-left: 3px; }
+        /* スマホでもホームの行動ログと同じく、左列（時刻＋種類タグ）と本文の横並びを保つ */
+        #panel-log .log-day { padding: 6px 14px 8px; }
+        #panel-log .log-entry { display: -webkit-box; display: -webkit-flex; display: flex; padding: 6px 0 7px; margin-bottom: 0; }
+        #panel-log .log-side { width: 86px; margin-bottom: 0; }
+        #panel-log .log-title { font-size: 14.5px; }
+        #panel-log .log-text { font-size: 13px; }
+      }
+      /* 狭い幅でも日付移動バーが1行に収まるよう、日付とボタンをもう一段だけ小さくする */
+      @media (max-width: 400px) {
+        .log-nav-date { font-size: 14.5px; }
+        .log-nav-btn { padding: 4px 8px 5px; font-size: 12px; }
+      }
     </style>
   </head>
   <body class="lock">
@@ -2372,9 +2501,20 @@
 
       <!-- ログ（詳細版） -->
       <section class="panel" id="panel-log" role="tabpanel" aria-labelledby="tab-log">
+        <div class="log-nav" aria-label="ログの日付移動">
+          <div class="log-nav-row">
+            <button type="button" class="log-nav-btn" id="log-prev-day">‹ 前の日</button>
+            <div class="log-nav-current">
+              <span class="log-date-line"><span class="log-nav-date mincho" id="log-current-date" aria-live="polite">2026年11月18日（水）</span><span class="log-date-caret" aria-hidden="true">▾</span></span>
+              <span class="log-nav-day" id="log-current-day">2日目</span>
+              <input type="date" id="log-date-input" value="2026-11-18" aria-label="表示する日を選ぶ（月と日を選べます）" />
+            </div>
+            <button type="button" class="log-nav-btn" id="log-next-day">次の日 ›</button>
+          </div>
+        </div>
         <div class="log-list">
 
-          <h3 class="log-day-head mincho">2日目 ― 2026年11月18日 水</h3>
+          <div class="log-day" data-date="2026-11-18" data-day-label="2日目">
 
           <article class="log-entry">
             <div class="log-side"><div class="log-time mincho">06:50</div><span class="type-chip t-wake">起床</span></div>
@@ -2384,7 +2524,9 @@
             </div>
           </article>
 
-          <h3 class="log-day-head mincho">1日目 ― 2026年11月17日 火</h3>
+          </div>
+
+          <div class="log-day" data-date="2026-11-17" data-day-label="1日目" hidden>
 
           <article class="log-entry">
             <div class="log-side"><div class="log-time mincho">07:00</div><span class="type-chip t-wake">起床</span></div>
@@ -2540,6 +2682,13 @@
               <div class="log-meta"><span class="meta-chip money-in num">+13,000円 <span class="bal">／ 残高 39,190円</span></span></div>
             </div>
           </article>
+
+          </div>
+
+          <div class="log-empty" id="log-empty" hidden>
+            <p id="log-empty-text">この月のログはまだありません。</p>
+            <button type="button" class="log-nav-btn" id="log-back-latest">最新のログへ戻る</button>
+          </div>
 
         </div>
       </section>
@@ -2709,6 +2858,117 @@
             }
           }
         });
+
+        /* ログタブ：日付の移動は1行バーだけ（前の日・次の日／中央の日付を選ぶ）。
+           中央の日付表示が日付入力になっており、月と日を選ぶ操作の中で
+           別の月へも移動できる。月専用の前後ボタンは置かない。
+           表示できるのはページ内にある日（2026-11-17と2026-11-18）だけ。
+           ログのある月でログのない日を選んだときは、その月にいちばん近いログの日へ移る。
+           ログのない月を選んだときは、その旨を表示して最新のログへ戻れるようにする */
+        var logDayEls = document.querySelectorAll('#panel-log .log-day');
+        var logDays = [];
+        for (var d = 0; d < logDayEls.length; d++) {
+          logDays.push({ el: logDayEls[d], date: logDayEls[d].getAttribute('data-date'), label: logDayEls[d].getAttribute('data-day-label') || '' });
+        }
+        logDays.sort(function (a, b) { return a.date < b.date ? -1 : 1; });
+        var logDateEl = document.getElementById('log-current-date');
+        var logDayLabelEl = document.getElementById('log-current-day');
+        var logDateInput = document.getElementById('log-date-input');
+        var logEmptyEl = document.getElementById('log-empty');
+        var logEmptyText = document.getElementById('log-empty-text');
+        var btnPrevDay = document.getElementById('log-prev-day');
+        var btnNextDay = document.getElementById('log-next-day');
+        var btnBackLatest = document.getElementById('log-back-latest');
+        var WEEKDAYS = ['日', '月', '火', '水', '木', '金', '土'];
+        var curLogIndex = logDays.length - 1; /* 初期表示は最新の日 */
+        var emptyMonth = null; /* ログのない月を表示しているときの 'YYYY-MM' */
+
+        function dateLabel(dateStr) {
+          var p = dateStr.split('-');
+          var dt = new Date(+p[0], +p[1] - 1, +p[2]);
+          return (+p[0]) + '年' + (+p[1]) + '月' + (+p[2]) + '日（' + WEEKDAYS[dt.getDay()] + '）';
+        }
+        function monthLabel(ym) {
+          var p = ym.split('-');
+          return (+p[0]) + '年' + (+p[1]) + '月';
+        }
+        function updateLogNav() {
+          var i, hasPrev, hasNext;
+          if (emptyMonth) {
+            hasPrev = false; hasNext = false;
+            for (i = 0; i < logDays.length; i++) {
+              if (logDays[i].date.slice(0, 7) < emptyMonth) { hasPrev = true; }
+              if (logDays[i].date.slice(0, 7) > emptyMonth) { hasNext = true; }
+            }
+            btnPrevDay.disabled = !hasPrev;
+            btnNextDay.disabled = !hasNext;
+          } else {
+            btnPrevDay.disabled = curLogIndex <= 0;
+            btnNextDay.disabled = curLogIndex >= logDays.length - 1;
+          }
+        }
+        function showLogDay(index) {
+          if (index < 0 || index >= logDays.length) { return; }
+          emptyMonth = null;
+          curLogIndex = index;
+          for (var i = 0; i < logDays.length; i++) {
+            if (i === index) { logDays[i].el.removeAttribute('hidden'); }
+            else { logDays[i].el.setAttribute('hidden', ''); }
+          }
+          logEmptyEl.setAttribute('hidden', '');
+          logDateEl.textContent = dateLabel(logDays[index].date);
+          logDayLabelEl.textContent = logDays[index].label;
+          logDateInput.value = logDays[index].date;
+          updateLogNav();
+        }
+        function showLogEmpty(ym, pickedDate) {
+          emptyMonth = ym;
+          for (var i = 0; i < logDays.length; i++) { logDays[i].el.setAttribute('hidden', ''); }
+          logEmptyEl.removeAttribute('hidden');
+          logEmptyText.textContent = monthLabel(ym) + 'のログはまだありません。';
+          logDateEl.textContent = monthLabel(ym);
+          logDayLabelEl.textContent = 'ログはありません';
+          if (pickedDate) { logDateInput.value = pickedDate; }
+          updateLogNav();
+        }
+        function goToDate(dateStr) {
+          var i, best = -1, bestDiff = null, diff;
+          for (i = 0; i < logDays.length; i++) {
+            if (logDays[i].date === dateStr) { showLogDay(i); return; }
+          }
+          /* 同じ月にログがある日を選んだ場合は、その月にいちばん近いログの日へ */
+          for (i = 0; i < logDays.length; i++) {
+            if (logDays[i].date.slice(0, 7) === dateStr.slice(0, 7)) {
+              diff = Math.abs((+logDays[i].date.slice(8, 10)) - (+dateStr.slice(8, 10)));
+              if (bestDiff === null || diff < bestDiff) { bestDiff = diff; best = i; }
+            }
+          }
+          if (best >= 0) { showLogDay(best); return; }
+          showLogEmpty(dateStr.slice(0, 7), dateStr);
+        }
+        btnPrevDay.addEventListener('click', function () {
+          if (emptyMonth) {
+            for (var i = logDays.length - 1; i >= 0; i--) {
+              if (logDays[i].date.slice(0, 7) < emptyMonth) { showLogDay(i); return; }
+            }
+          } else { showLogDay(curLogIndex - 1); }
+        });
+        btnNextDay.addEventListener('click', function () {
+          if (emptyMonth) {
+            for (var i = 0; i < logDays.length; i++) {
+              if (logDays[i].date.slice(0, 7) > emptyMonth) { showLogDay(i); return; }
+            }
+          } else { showLogDay(curLogIndex + 1); }
+        });
+        /* 中央の日付表示を押したら、月と日を選べるピッカーを開く */
+        logDateInput.addEventListener('click', function () {
+          try { if (logDateInput.showPicker) { logDateInput.showPicker(); } } catch (e) {}
+        });
+        logDateInput.addEventListener('change', function () {
+          if (logDateInput.value) { goToDate(logDateInput.value); }
+        });
+        btnBackLatest.addEventListener('click', function () { showLogDay(logDays.length - 1); });
+        if (logDays.length) { showLogDay(logDays.length - 1); }
       })();
     </script>
   </body>
