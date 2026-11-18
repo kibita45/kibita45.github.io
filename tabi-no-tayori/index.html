@@ -32,6 +32,9 @@
         --mountain-2: rgba(14, 122, 109, 0.16);
         --g1-bg: #edf5f0;
         --g2-bg: #fbf1de;
+        /* 増減の数字のうっすら色分け（プラス＝ティール／マイナス＝オレンジ） */
+        --delta-plus: #4da396;
+        --delta-minus: #e09a5f;
         /* 書式の物差し：書体とサイズの階段（全パネル共通） */
         --font-mincho: "Hiragino Mincho ProN", "Hiragino Mincho Pro", "YuMincho", "Yu Mincho", "MS PMincho", serif;
         --font-gothic: "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Yu Gothic", "Noto Sans JP", sans-serif;
@@ -69,6 +72,8 @@
           --mountain-2: rgba(61, 191, 169, 0.13);
           --g1-bg: #1d2f2a;
           --g2-bg: #33291a;
+          --delta-plus: #7cc9bb;
+          --delta-minus: #f0b183;
         }
       }
 
@@ -558,6 +563,9 @@
       }
       .about-gauge p { margin: 0 0 6px; }
       .about-gauge p:last-child { margin-bottom: 0; }
+      /* 増減を表す数字だけのうっすら色分け（範囲・条件の数字には付けない） */
+      .d-plus { color: var(--delta-plus); }
+      .d-minus { color: var(--delta-minus); }
 
       /* アルバム：初期表示はサムネイルの格子状一覧。
          一覧は「1画面に12枚（4列×3行）」が基準で、枠の大きさは12枚が
@@ -3443,52 +3451,43 @@
       <section class="panel" id="panel-about" role="tabpanel" aria-labelledby="tab-about">
         <div class="card about-card">
           <h2 class="section mincho"><span class="rule"></span>旅のしくみ</h2>
-          <p>翠（すい）は、保木平珈琲 Murmureを出発して、日本を旅しています。この画面では、その旅の様子をお届けしています。</p>
+          <p>翠は保木平珈琲 Murmureを出発して、日本を旅しています。</p>
           <h3 class="about-sub">旅の目的は3つ</h3>
           <ol class="about-purposes">
-            <li><span class="pnum num">1</span>観光地や美しい風景を写真に残す（1日1枚）</li>
+            <li><span class="pnum num">1</span>観光地や美しい風景を写真に残す（<span class="num">1</span>日<span class="num">1</span>枚）</li>
             <li><span class="pnum num">2</span>道の駅のスタンプを集める</li>
             <li><span class="pnum num">3</span>旧街道や古い道筋を辿る</li>
           </ol>
-          <h3 class="about-sub">1日の進み方</h3>
-          <p>朝にその日の行き先を決め、歩いたり、その土地らしい乗り物に乗ったりしながら進みます。夜は宿やテントに泊まります。</p>
-          <h3 class="about-sub">旅のお金</h3>
-          <p>旅のお金は、日当と、Murmureのお手伝いでもらっています。ホームのレシートに出てくる「日当」と「Murmureのお手伝い」が、その収入です。</p>
           <h3 class="about-sub">体力・気力・清潔のルール</h3>
-          <p>ホームに表示される3つのゲージは、旅の行動に合わせて、こういう仕組みで増えたり減ったりします。</p>
+          <p>ホームに表示される<span class="num">3</span>つのゲージは旅の行動に合わせて増減します。</p>
           <div class="about-gauge">
-            <p class="gauge-title">体力（0〜100）</p>
-            <p>・就寝 → 100に回復</p>
-            <p>・歩行 −8/km（雨の中 −10/km）</p>
-            <p>・観光 −6/h</p>
-            <p>・乗車 −3/h</p>
-            <p>・昼のカフェ +5</p>
-            <p>・体力が少ないうちは歩くと気力も減る。0になると、足りない分は気力から引かれる</p>
+            <p class="gauge-title">体力</p>
+            <p><span class="num">1</span>日にどれだけ動けるかを表します。寝ると<span class="num d-plus">100</span>まで回復します。</p>
+            <p>・歩行 <span class="num d-minus">−8</span>/km（雨の中 <span class="num d-minus">−10</span>/km）</p>
+            <p>・観光 <span class="num d-minus">−6</span>/h</p>
+            <p>・乗車 <span class="num d-minus">−3</span>/h</p>
+            <p>・カフェ <span class="num d-plus">+5</span></p>
+            <p>体力<span class="num">30</span>以下での歩行は普段より気力が低下します。体力<span class="num">0</span>での行動は体力のかわりに気力を消費します。</p>
           </div>
           <div class="about-gauge">
-            <p class="gauge-title">気力（最大100）</p>
-            <p>・起きている間 −1/h</p>
-            <p>・宿に泊まる +（宿代による、最大+25）</p>
-            <p>・お風呂 +3／温泉 +10／映画 +5／バーのお酒 +3／贅沢な食事 +1／昼のカフェ +1</p>
-            <p>・テント泊 1〜2泊目 +5、3泊目 ±0、4泊目 −5、5泊目から −10。雨のテント泊は一律−10</p>
-            <p>・20以下になると普通の回復が効かない → 翌朝は寝直し（10:30起き、気力80まで回復）</p>
+            <p class="gauge-title">気力</p>
+            <p>旅の疲れ具合を表します。疲れが溜まるほど減り、よく休んだり楽しいことがあると回復します。</p>
+            <p>・起きている間 <span class="num d-minus">−1</span>/h</p>
+            <p>・宿に泊まる +（宿代÷<span class="num">1000</span>×<span class="num">1.5</span>、最大<span class="num d-plus">+25</span>）</p>
+            <p>・テント泊 <span class="num">1～2</span>泊目 <span class="num d-plus">+5</span></p>
+            <p><span class="num">3</span>泊目以降気力変化が<span class="num d-minus">5</span>ずつ下がり、最大<span class="num d-minus">-10</span>まで減少します。（雨天<span class="num d-minus">−10</span>）</p>
+            <p>・<span class="num">20</span>以下になると翌朝は寝坊します。（<span class="num">10:30</span>起き、気力<span class="num d-plus">80</span>まで回復）</p>
+            <p>贅沢な食事 <span class="num d-plus">+1</span>／カフェ <span class="num d-plus">+1</span>／お風呂 <span class="num d-plus">+3</span>／お酒 <span class="num d-plus">+3</span>／映画 <span class="num d-plus">+5</span>／温泉 <span class="num d-plus">+10</span></p>
           </div>
           <div class="about-gauge">
-            <p class="gauge-title">清潔（0〜100）</p>
-            <p>・−20/日</p>
-            <p>・歩行 −1/km</p>
-            <p>・お風呂 → 100に戻る</p>
-            <p>・朝の判定で気力が減る（60以下 −5、40以下 −10、20以下 −20）</p>
+            <p class="gauge-title">清潔</p>
+            <p>体の汚れ具合を表します。汚れが溜まるほど減り、入浴すると<span class="num d-plus">100</span>まで回復します。</p>
+            <p>・<span class="num d-minus">−20</span>/日</p>
+            <p>・歩行 <span class="num d-minus">−1</span>/km</p>
+            <p>・清潔度が下がると朝に気力が低下します。（<span class="num">60</span>以下 <span class="num d-minus">−5</span>、<span class="num">40</span>以下 <span class="num d-minus">−10</span>、<span class="num">20</span>以下 <span class="num d-minus">−20</span>）</p>
           </div>
-          <h3 class="about-sub">この画面の見方</h3>
-          <ul class="about-guide">
-            <li><span class="guide-name">ホーム</span>今の様子</li>
-            <li><span class="guide-name">ログ</span>日々の記録</li>
-            <li><span class="guide-name">ルート</span>通った道</li>
-            <li><span class="guide-name">スタンプ帳</span>集めたスタンプ</li>
-            <li><span class="guide-name">アルバム</span>旅の写真</li>
-            <li><span class="guide-name">お土産</span>Murmureへのお土産</li>
-          </ul>
+          <h3 class="about-sub">旅のお金</h3>
+          <p>日当（<span class="num">3000</span>円）と、Murmureのお手伝いでもらうお金が旅の資金です。</p>
         </div>
       </section>
 
