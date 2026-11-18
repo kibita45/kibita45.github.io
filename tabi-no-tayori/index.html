@@ -1173,9 +1173,9 @@
 
       /* 上段左：ステータス（枠だけ少し目立たせる） */
       .now-panel {
-        padding: 11px 15px 10px;
+        padding: 10px 15px 9px;
         border: 2px solid var(--teal);
-        /* 中身を上下に均等へ配り、予定だけが下に張り付いて中ほどが空く形にしない */
+        /* 中身を上下に均等へ配って詰める（予定だけが下に張り付いて中ほどが空く形にしない） */
         -webkit-justify-content: space-between; justify-content: space-between;
       }
       .now-head {
@@ -1273,16 +1273,14 @@
       .now-status-box .ss-gauge .g-name { width: 32px; margin-right: 2px; }
       .now-status-box .ss-gauge .g-bar { -webkit-box-flex: 1; -webkit-flex: 1 1 auto; flex: 1 1 auto; width: auto; }
       .now-plans {
-        display: -webkit-box; display: -webkit-flex; display: flex;
-        gap: 16px;
-        /* 余った高さはパネル側の均等配分が吸収するので、ここは詰めた間隔でよい */
-        margin-top: 4px;
+        display: block;
+        /* 今後の予定だけを幅いっぱいに置く。余った高さはパネル側の均等配分が吸収する */
+        margin-top: 2px;
         border-top: 1px dashed var(--line);
-        padding-top: 4px;
+        padding-top: 5px;
         -webkit-flex-shrink: 0; flex-shrink: 0;
       }
-      .plan-col { -webkit-box-flex: 1; -webkit-flex: 1 1 0; flex: 1 1 0; min-width: 0; }
-      .plan-col.today { -webkit-box-flex: 0.94; -webkit-flex: 0.94 1 0; flex: 0.94 1 0; }
+      .plan-col { min-width: 0; }
       .plan-col h3 {
         margin: 0 0 1px;
         font-size: 13px; font-weight: 700;
@@ -1302,27 +1300,27 @@
       .now-head .nh-weather svg { display: block; width: 27px; height: 27px; }
       .now-place-name {
         font-size: 31px; font-weight: 700; line-height: 1.35;
-        margin-top: 5px;
+        margin-top: 3px;
         -webkit-flex-shrink: 0; flex-shrink: 0;
       }
       .now-face-row {
         display: -webkit-box; display: -webkit-flex; display: flex;
         -webkit-box-align: center; -webkit-align-items: center; align-items: center;
         gap: 12px;
-        margin-top: 7px;
+        margin-top: 5px;
         -webkit-flex-shrink: 0; flex-shrink: 0;
       }
       .now-face-text { -webkit-box-flex: 1; -webkit-flex: 1 1 auto; flex: 1 1 auto; min-width: 0; }
       .now-face-text .now-status { margin-top: 0; font-size: 15.5px; }
       .now-theme { margin: 5px 0 0; font-size: 16.5px; font-weight: 700; line-height: 1.55; }
-      .hitokoto-bubble { margin-top: 11px; padding: 9px 15px; -webkit-flex-shrink: 0; flex-shrink: 0; }
+      .hitokoto-bubble { margin-top: 7px; padding: 9px 15px; -webkit-flex-shrink: 0; flex-shrink: 0; }
       .hitokoto-bubble::before { left: 48px; }
       .hitokoto-bubble p { font-size: 15.5px; line-height: 1.65; }
       .gauges-only {
         width: auto;
         -webkit-align-self: stretch; align-self: stretch;
-        margin-top: 11px;
-        padding: 9px 14px 10px;
+        margin-top: 7px;
+        padding: 8px 14px 9px;
       }
       .gauges-only .ss-gauges {
         -webkit-box-orient: horizontal; -webkit-box-direction: normal; -webkit-flex-direction: row; flex-direction: row;
@@ -1622,10 +1620,6 @@
                 </div>
               </div>
               <div class="now-plans">
-                <div class="plan-col today">
-                  <h3>今日の予定</h3>
-                  <p>道の駅とよはしでスタンプを押して、渥美半島を海の方へ進む日</p>
-                </div>
                 <div class="plan-col ahead">
                   <h3>今後の予定</h3>
                   <p>まずは海の方へ向かいます。道の駅をひとつずつ辿って、伊良湖の方まで行くつもりです。次のお宿は田原の予定です。</p>
