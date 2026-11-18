@@ -1081,6 +1081,7 @@
       }
       /* 左列：ステータスは中身の高さにちょうど、行動ログが残り全部を使う */
       .hn-col .now-panel { -webkit-flex-shrink: 0; flex-shrink: 0; }
+      /* ログは残りの高さを全部使う：ステータスパネルが低くなった分だけ、列全体の高さを変えずにログが縦に広がる */
       .hn-col .log-panel { -webkit-box-flex: 1; -webkit-flex: 1 1 auto; flex: 1 1 auto; min-height: 0; }
       /* 右列：紹介は中身の高さにちょうど、地図が残り全部を使う */
       .hn-col .route-panel { -webkit-box-flex: 1; -webkit-flex: 1 1 auto; flex: 1 1 auto; min-height: 0; }
@@ -1368,7 +1369,8 @@
         /* 吹き出しは3行程度を想定した高さで安定させる */
         min-height: 86px;
         display: -webkit-box; display: -webkit-flex; display: flex;
-        -webkit-box-align: center; -webkit-align-items: center; align-items: center;
+        /* 中央寄せにしない：ひとことが短くても長くても、文字は吹き出しの上端から始まるよう固定する */
+        -webkit-box-align: start; -webkit-align-items: flex-start; align-items: flex-start;
       }
       .now-face-text .hitokoto-bubble::before {
         top: 50%; left: -9px;
@@ -1450,15 +1452,21 @@
       }
       .status-plan-row {
         display: -webkit-box; display: -webkit-flex; display: flex;
-        -webkit-box-align: stretch; -webkit-align-items: stretch; align-items: stretch;
+        /* 左右とも上詰め：ゲージも予定も、行の高さや文の長さで開始位置がずれないようにする */
+        -webkit-box-align: start; -webkit-align-items: flex-start; align-items: flex-start;
         gap: 18px;
         -webkit-flex-shrink: 0; flex-shrink: 0;
       }
       .status-plan-row .gauges-only {
         width: 172px;
-        -webkit-align-self: stretch; align-self: stretch;
+        -webkit-align-self: flex-start; align-self: flex-start;
+        /* 上下のパディングをなくし、「体力」の文字が予定の見出しと同じ高さから始まるようにする。
+           詰めた分だけステータスパネルが低くなり、その分は左列下のログパネルが広がる */
+        padding: 0 2px;
+        -webkit-box-pack: start; -webkit-justify-content: flex-start; justify-content: flex-start;
       }
-      .status-plan-row .gauges-only .ss-gauges { gap: 7px; }
+      /* ゲージの行間隔を少し詰める（3行で計6px低くなる） */
+      .status-plan-row .gauges-only .ss-gauges { gap: 4px; }
       .today-plan {
         -webkit-box-flex: 1; -webkit-flex: 1 1 auto; flex: 1 1 auto;
         min-width: 0;
@@ -1466,7 +1474,9 @@
         padding-left: 16px;
         display: -webkit-box; display: -webkit-flex; display: flex;
         -webkit-box-orient: vertical; -webkit-box-direction: normal; -webkit-flex-direction: column; flex-direction: column;
-        -webkit-justify-content: center; justify-content: center;
+        /* 中央寄せにしない：見出しは「体力」と同じ高さから、説明文はその真下（「気力」の行あたり）から
+           常に始まるよう上詰めにし、文の長さが変わっても開始位置を固定する */
+        -webkit-box-pack: start; -webkit-justify-content: flex-start; justify-content: flex-start;
       }
       .today-plan-head {
         margin: 0 0 2px;
