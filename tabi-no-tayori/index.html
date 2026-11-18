@@ -1517,20 +1517,34 @@
       }
       .log-day-head:first-child { margin-top: 0; }
 
-      /* レシート：ログパネル内のタブの中に、紙そのものをブロックとして置く */
-      #mini-panel-receipt .receipt-paper {
-        margin: 10px 3px 12px;
-        /* 紙の端に文字が寄らないよう、内側の余白を広めに取る */
-        padding: 16px 24px 18px;
+      /* お金：ログパネル内のタブの中に、行動ログと同じ書式のリストで置く */
+      .money-summary {
+        margin-top: 2px;
+        border-top: 2px solid var(--line);
+        padding: 10px 2px 4px;
       }
-      #mini-panel-receipt .receipt-paper .r-head {
-        padding-bottom: 10px;
-        margin-bottom: 8px;
+      .money-summary-row {
+        display: -webkit-box; display: -webkit-flex; display: flex;
+        -webkit-box-pack: justify; -webkit-justify-content: space-between; justify-content: space-between;
+        -webkit-box-align: baseline; -webkit-align-items: baseline; align-items: baseline;
+        padding: 4px 0;
+        font-size: var(--fs-body-sm);
       }
-      #mini-panel-receipt .receipt-paper .r-row { padding: 6px 2px; }
-      #mini-panel-receipt .receipt-paper .r-row.r-sep-row { margin-top: 6px; padding-top: 10px; }
-      #mini-panel-receipt .receipt-paper .r-row.grand { margin-top: 8px; padding-top: 11px; }
-      #mini-panel-receipt .receipt-paper .r-foot { margin-top: 12px; padding-top: 10px; }
+      .money-summary-row .ms-label { font-weight: 700; }
+      .money-summary-row .ms-amt {
+        font-size: var(--fs-num-md);
+        font-weight: 600;
+        color: var(--orange-deep);
+        white-space: nowrap;
+        margin-left: 12px;
+      }
+      .money-summary-row.grand {
+        border-top: 1px dashed var(--line);
+        margin-top: 6px;
+        padding-top: 9px;
+        font-size: var(--fs-body);
+      }
+      .money-summary-row.grand .ms-amt { font-size: var(--fs-num-lg); }
 
       /* 下段右：自己紹介（右端に立ち絵、その横に紹介文） */
       .intro2-panel {
@@ -1941,11 +1955,11 @@
           <!-- 下段：行動ログ（タブ）／自己紹介 -->
           <div class="hn-bottom">
             <section class="hn-panel log-panel">
-              <div class="log-tabbar" role="tablist" aria-label="今後の予定・行動ログ・レシートの切り替え">
+              <div class="log-tabbar" role="tablist" aria-label="今後の予定・行動ログ・お金の切り替え">
                 <span class="h-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="var(--teal-deep)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6.5 H20 M9 12 H20 M9 17.5 H20"/><circle cx="4.8" cy="6.5" r="1.3" fill="var(--teal-deep)"/><circle cx="4.8" cy="12" r="1.3" fill="var(--teal-deep)"/><circle cx="4.8" cy="17.5" r="1.3" fill="var(--teal-deep)"/></svg></span>
                 <button type="button" class="mini-tab" role="tab" id="mini-tab-plan" aria-controls="mini-panel-plan" aria-selected="false">今後の予定</button>
                 <button type="button" class="mini-tab" role="tab" id="mini-tab-log" aria-controls="mini-panel-log" aria-selected="true">行動ログ</button>
-                <button type="button" class="mini-tab" role="tab" id="mini-tab-receipt" aria-controls="mini-panel-receipt" aria-selected="false">レシート</button>
+                <button type="button" class="mini-tab" role="tab" id="mini-tab-receipt" aria-controls="mini-panel-receipt" aria-selected="false">お金</button>
               </div>
               <div class="mini-pane" id="mini-panel-plan" role="tabpanel" aria-labelledby="mini-tab-plan" hidden>
                 <div class="scroll-box">
@@ -2067,14 +2081,49 @@
               </div>
               <div class="mini-pane" id="mini-panel-receipt" role="tabpanel" aria-labelledby="mini-tab-receipt" hidden>
               <div class="scroll-box">
-                <div class="receipt-paper num">
-                  <div class="r-row"><span>07:03 朝ごはん</span><span class="r-amt">¥0</span></div>
-                  <div class="r-row"><span>07:55 豊鉄バス</span><span class="r-amt out">¥500</span></div>
-                  <div class="r-row"><span>10:03 豊鉄バス</span><span class="r-amt out">¥500</span></div>
-                  <div class="r-row"><span>10:34 豊橋鉄道渥美線</span><span class="r-amt out">¥550</span></div>
-                  <div class="r-row"><span>12:20 めっくんはうす丼と大あさり</span><span class="r-amt out">¥1,650</span></div>
-                  <div class="r-row r-sep-row"><span>今日の支出合計</span><span class="r-amt out">¥3,200</span></div>
-                  <div class="r-row grand"><span>残高</span><span class="r-amt">¥35,990</span></div>
+                <article class="hl-entry">
+                  <div class="hl-side"><div class="hl-time mincho">07:03</div><span class="type-chip">食事</span></div>
+                  <div class="hl-body">
+                    <div class="hl-head"><span class="hl-title">ABホテル豊橋で朝ごはんを食べる</span></div>
+                    <p class="hl-text">手作りのおかずが並ぶ和洋バイキングで、温かいお味噌汁がほっとする味でした。窓の外が明るく晴れてきていて、食後のコーヒーもおいしかったです。</p>
+                    <div class="hl-meta"><span class="meta-chip num">0円</span></div>
+                  </div>
+                </article>
+                <article class="hl-entry">
+                  <div class="hl-side"><div class="hl-time mincho">07:55</div><span class="type-chip">移動</span></div>
+                  <div class="hl-body">
+                    <div class="hl-head"><span class="hl-title">豊鉄バス豊橋技科大線で技科大前へ移動中</span></div>
+                    <p class="hl-text">¥500。豊鉄バス豊橋技科大線のバスに乗り、市街地を抜けて台地の方へ向かいました。車窓の景色が家並みから畑へ変わっていくのが楽しくて、つい窓に張り付いて見ていました。</p>
+                    <div class="hl-meta"><span class="meta-chip money-out num">−500円 <span class="bal">／ 残高 38,690円</span></span></div>
+                  </div>
+                </article>
+                <article class="hl-entry">
+                  <div class="hl-side"><div class="hl-time mincho">10:03</div><span class="type-chip">移動</span></div>
+                  <div class="hl-body">
+                    <div class="hl-head"><span class="hl-title">豊鉄バス豊橋技科大線で豊橋駅へ移動中</span></div>
+                    <p class="hl-text">¥500。渥美線への乗り換えのため、豊橋駅へ戻ります。道の駅のバス停から乗ると、畑の緑が少しずつ街並みに変わっていきました。</p>
+                    <div class="hl-meta"><span class="meta-chip money-out num">−500円 <span class="bal">／ 残高 38,190円</span></span></div>
+                  </div>
+                </article>
+                <article class="hl-entry">
+                  <div class="hl-side"><div class="hl-time mincho">10:34</div><span class="type-chip">移動</span></div>
+                  <div class="hl-body">
+                    <div class="hl-head"><span class="hl-title">豊橋鉄道渥美線で三河田原駅へ移動中</span></div>
+                    <p class="hl-text">¥550。新豊橋から終点まで、車窓には畑とビニールハウスが長く続いて、時々空が大きく開けました。海に近づいている感じが少しずつ強くなります。</p>
+                    <div class="hl-meta"><span class="meta-chip money-out num">−550円 <span class="bal">／ 残高 37,640円</span></span></div>
+                  </div>
+                </article>
+                <article class="hl-entry">
+                  <div class="hl-side"><div class="hl-time mincho">12:20</div><span class="type-chip">食事</span></div>
+                  <div class="hl-body">
+                    <div class="hl-head"><span class="hl-title">道の駅田原めっくんはうすでめっくんはうす丼と大あさりを食べる</span></div>
+                    <p class="hl-text">¥1,650。大あさりは身がぷりっとして、海の香りがしっかりありました。この土地ならではの名物をここで食べられたのが、今日の楽しみのひとつです。</p>
+                    <div class="hl-meta"><span class="meta-chip money-out num">−1,650円 <span class="bal">／ 残高 35,990円</span></span></div>
+                  </div>
+                </article>
+                <div class="money-summary">
+                  <div class="money-summary-row"><span class="ms-label">今日の支出合計</span><span class="ms-amt num mincho">¥3,200</span></div>
+                  <div class="money-summary-row grand"><span class="ms-label">残高</span><span class="ms-amt num mincho">¥35,990</span></div>
                 </div>
               </div>
               </div>
@@ -2384,13 +2433,13 @@
           })(k);
         }
 
-        /* 下段左パネル内の小さなタブ（今後の予定／行動ログ／レシート）。初期表示は行動ログ */
+        /* 下段左パネル内の小さなタブ（今後の予定／行動ログ／お金）。初期表示は行動ログ */
         var miniTabs = [
           { btn: document.getElementById('mini-tab-plan'), pane: document.getElementById('mini-panel-plan') },
           { btn: document.getElementById('mini-tab-log'), pane: document.getElementById('mini-panel-log') },
           { btn: document.getElementById('mini-tab-receipt'), pane: document.getElementById('mini-panel-receipt') }
         ];
-        /* 行動ログとレシートは、一番下（最新の行・残高の行）が見える状態にする */
+        /* 行動ログとお金は、一番下（最新の行・残高の行）が見える状態にする */
         function scrollPaneToBottom(pane) {
           if (!pane) { return; }
           var box = pane.querySelector('.scroll-box');
@@ -2411,7 +2460,7 @@
             if (on) { miniTabs[i].pane.removeAttribute('hidden'); }
             else { miniTabs[i].pane.setAttribute('hidden', ''); }
           }
-          /* 予定のタブは先頭から読むものなので、対象は行動ログとレシートだけ */
+          /* 予定のタブは先頭から読むものなので、対象は行動ログとお金だけ */
           if (index === 1 || index === 2) { scrollPaneToBottomSoon(miniTabs[index].pane); }
         }
         for (var m = 0; m < miniTabs.length; m++) {
