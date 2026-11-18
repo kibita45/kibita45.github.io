@@ -1011,7 +1011,7 @@
 
       /* ===== ホーム：上段2パネル＋下段3パネル ===== */
       body.lock .mountains { height: 88px; }
-      body.lock .wrap { padding-bottom: 62px; }
+      body.lock .wrap { padding-bottom: 8px; }
       body.lock footer.note { font-size: 11.5px; margin-top: 13px; }
       .home-new {
         -webkit-box-flex: 1; -webkit-flex: 1 1 auto; flex: 1 1 auto;
@@ -1021,14 +1021,14 @@
         gap: 12px;
       }
       .hn-top {
-        -webkit-box-flex: 58; -webkit-flex: 58 1 0; flex: 58 1 0;
+        -webkit-box-flex: 46; -webkit-flex: 46 1 0; flex: 46 1 0;
         min-height: 0;
         display: grid;
         grid-template-columns: minmax(0, 58fr) minmax(0, 42fr);
         gap: 12px;
       }
       .hn-bottom {
-        -webkit-box-flex: 42; -webkit-flex: 42 1 0; flex: 42 1 0;
+        -webkit-box-flex: 54; -webkit-flex: 54 1 0; flex: 54 1 0;
         min-height: 0;
         display: grid;
         grid-template-columns: minmax(0, 72fr) minmax(0, 28fr);
@@ -1405,6 +1405,53 @@
         -webkit-box-align: center; -webkit-align-items: center; align-items: center;
         line-height: 1.4;
       }
+      /* 下段左パネル内の小さなタブ（今後の予定／行動ログ） */
+      .log-tabbar {
+        display: -webkit-box; display: -webkit-flex; display: flex;
+        -webkit-box-align: center; -webkit-align-items: center; align-items: center;
+        gap: 6px;
+        -webkit-flex-shrink: 0; flex-shrink: 0;
+        margin-bottom: 8px;
+        padding-bottom: 8px;
+        border-bottom: 1px solid var(--line);
+      }
+      .log-tabbar .h-icon { margin-right: 2px; }
+      .mini-tab {
+        font-family: inherit;
+        font-size: 14px;
+        font-weight: 700;
+        line-height: 1.3;
+        letter-spacing: 0.02em;
+        color: var(--teal-deep);
+        background: var(--paper);
+        border: 1.5px solid var(--line);
+        border-radius: 999px;
+        padding: 4px 15px 5px;
+        cursor: pointer;
+        white-space: nowrap;
+      }
+      .mini-tab[aria-selected="true"] {
+        background: var(--teal);
+        border-color: var(--teal);
+        color: #fff;
+      }
+      .mini-tab:focus-visible {
+        outline: 3px solid var(--orange);
+        outline-offset: 2px;
+      }
+      .mini-pane { display: none; }
+      .mini-pane.active {
+        display: -webkit-box; display: -webkit-flex; display: flex;
+        -webkit-box-orient: vertical; -webkit-box-direction: normal; -webkit-flex-direction: column; flex-direction: column;
+        -webkit-box-flex: 1; -webkit-flex: 1 1 auto; flex: 1 1 auto;
+        min-height: 0;
+      }
+      .mini-pane .plan-text {
+        margin: 0;
+        padding: 4px 2px 0;
+        font-size: 16px;
+        line-height: 1.85;
+      }
       .route-panel .route-head-dist {
         font-size: 15px; font-weight: 700;
         color: var(--teal-deep);
@@ -1464,6 +1511,7 @@
 
       @media (max-width: 760px) {
         .home-new { display: block; }
+        .mini-pane.active { display: block; }
         .hn-top, .hn-bottom { display: block; }
         .hn-panel { margin-bottom: 14px; }
         .sp-intro { -webkit-flex-wrap: wrap; flex-wrap: wrap; }
@@ -1641,12 +1689,6 @@
                   </div>
                 </div>
               </div>
-              <div class="now-plans">
-                <div class="plan-col ahead">
-                  <h3>今後の予定</h3>
-                  <p>まずは海の方へ向かいます。道の駅をひとつずつ辿って、伊良湖の方まで行くつもりです。次のお宿は田原の予定です。</p>
-                </div>
-              </div>
             </section>
 
             <!-- ルート地図 -->
@@ -1661,7 +1703,17 @@
           <!-- 下段：今日の行動ログ／レシート -->
           <div class="hn-bottom">
             <section class="hn-panel log-panel">
-              <h2 class="section mincho"><span class="h-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="var(--teal-deep)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6.5 H20 M9 12 H20 M9 17.5 H20"/><circle cx="4.8" cy="6.5" r="1.3" fill="var(--teal-deep)"/><circle cx="4.8" cy="12" r="1.3" fill="var(--teal-deep)"/><circle cx="4.8" cy="17.5" r="1.3" fill="var(--teal-deep)"/></svg></span>行動ログ</h2>
+              <div class="log-tabbar" role="tablist" aria-label="行動ログと今後の予定の切り替え">
+                <span class="h-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="var(--teal-deep)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6.5 H20 M9 12 H20 M9 17.5 H20"/><circle cx="4.8" cy="6.5" r="1.3" fill="var(--teal-deep)"/><circle cx="4.8" cy="12" r="1.3" fill="var(--teal-deep)"/><circle cx="4.8" cy="17.5" r="1.3" fill="var(--teal-deep)"/></svg></span>
+                <button type="button" class="mini-tab" role="tab" id="mini-tab-plan" aria-controls="mini-panel-plan" aria-selected="false">今後の予定</button>
+                <button type="button" class="mini-tab" role="tab" id="mini-tab-log" aria-controls="mini-panel-log" aria-selected="true">行動ログ</button>
+              </div>
+              <div class="mini-pane" id="mini-panel-plan" role="tabpanel" aria-labelledby="mini-tab-plan" hidden>
+                <div class="scroll-box">
+                  <p class="plan-text">まずは海の方へ向かいます。道の駅をひとつずつ辿って、伊良湖の方まで行くつもりです。次のお宿は田原の予定です。</p>
+                </div>
+              </div>
+              <div class="mini-pane active" id="mini-panel-log" role="tabpanel" aria-labelledby="mini-tab-log">
               <div class="scroll-box">
                 <article class="hl-entry">
                   <div class="hl-time mincho">06:50</div>
@@ -1772,6 +1824,7 @@
                     <div class="hl-meta"><span class="meta-chip num">気力 −0.7</span><span class="meta-chip num">残高 35,990円</span></div>
                   </div>
                 </article>
+              </div>
               </div>
               <span class="leaf-deco" aria-hidden="true"><svg viewBox="0 0 64 44" fill="none"><path d="M6 40 C22 34 42 22 58 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M16 33 C10 32 6 27 5 20 C12 21 16 26 16 33 Z" fill="currentColor" opacity=".45"/><path d="M29 26 C23 24 20 19 19 12 C26 13 29 19 29 26 Z" fill="currentColor" opacity=".45"/><path d="M42 18 C36 15 34 10 34 3 C41 5 43 11 42 18 Z" fill="currentColor" opacity=".45"/><path d="M30 27 C31 21 35 17 41 16 C40 23 36 27 30 27 Z" fill="currentColor" opacity=".3"/><path d="M43 19 C45 13 49 10 55 9 C53 16 49 19 43 19 Z" fill="currentColor" opacity=".3"/></svg></span>
             </section>
@@ -2063,7 +2116,6 @@
         </div>
       </section>
 
-      <footer class="note">※このページは、AIの翠が綴る仮想の旅の記録です。</footer>
     </div>
 
     <script>
@@ -2089,6 +2141,26 @@
           (function (idx) {
             tabs[idx].btn.addEventListener('click', function () { select(idx); });
           })(k);
+        }
+
+        /* 下段左パネル内の小さなタブ（今後の予定／行動ログ）。初期表示は行動ログ */
+        var miniTabs = [
+          { btn: document.getElementById('mini-tab-plan'), pane: document.getElementById('mini-panel-plan') },
+          { btn: document.getElementById('mini-tab-log'), pane: document.getElementById('mini-panel-log') }
+        ];
+        function selectMini(index) {
+          for (var i = 0; i < miniTabs.length; i++) {
+            var on = i === index;
+            miniTabs[i].btn.setAttribute('aria-selected', on ? 'true' : 'false');
+            miniTabs[i].pane.className = on ? 'mini-pane active' : 'mini-pane';
+            if (on) { miniTabs[i].pane.removeAttribute('hidden'); }
+            else { miniTabs[i].pane.setAttribute('hidden', ''); }
+          }
+        }
+        for (var m = 0; m < miniTabs.length; m++) {
+          (function (idx) {
+            miniTabs[idx].btn.addEventListener('click', function () { selectMini(idx); });
+          })(m);
         }
       })();
     </script>
