@@ -5,10 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
 
   <!-- =========================================================================
-    保木平珈琲 Murmure｜展示用iPad Webアプリ「多肉の育て方」ホーム画面（4パネル背景反映済み）
+    保木平珈琲 Murmure｜展示用iPad Webアプリ「多肉の育て方」トップ画面（正式採用版）
     - 基準キャンバス: 1080 × 786 px（iPad第9世代横向き・ステータスバー考慮・自動縮小対応）
-    - お日様グループ 3パネル比率: 44% : 28% : 28%
-    - お日様グループ3パネル＋木もれ日グループ1パネルの計4枚の背景イラストをBase64埋め込み済み
+    - 主な仕様：
+      ・左エリア：お日様グループ（44:28:28の3パネル）＋木もれ日グループ（横長1パネル）※各専門ページへ遷移予定
+      ・右カラム（幅286px）：今月のビジュアル＆ひとこと（12ヶ月自動切替）、メニュー3導線、道の駅スタンプ旅カード
+      ・バランスシミュレーター（simulator.html）への遷移は右側のシミュレーターボタンのみ
+      ・Muse連携用ID（#travelOpenBtn / #travelLocation）を維持
   ========================================================================= -->
 
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -20,17 +23,19 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Shippori+Mincho:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=Shippori+Mincho:wght@400;500;600;700&family=Zen+Maru+Gothic:wght@500;700&display=swap" rel="stylesheet" />
 
   <style>
     :root {
       --bg-paper: #f6f0e4;
-      --ink-main: #3b2d23;
-      --ink-sub: #665547;
+      --ink-main: #35271e;
+      --ink-sub: #544336;
       --line-soft: #ddd0ba;
       --line-accent: #c7b494;
-      --sun-color: #d9822b;
-      --shade-color: #7c9466;
+      --sun-color: #c97a29;
+      --sun-soft: rgba(201, 122, 41, 0.12);
+      --shade-color: #698154;
+      --shade-soft: rgba(105, 129, 84, 0.13);
       --accent-green: #6b7f55;
       --accent-sos: #b4533c;
       --shadow-soft: 0 4px 14px rgba(72, 54, 38, 0.08);
@@ -54,28 +59,32 @@
     }
 
     .viewport-wrapper {
+      position: fixed;
+      inset: 0;
       width: 100vw;
       height: 100vh;
       height: 100dvh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
       overflow: hidden;
     }
 
     .canvas {
+      position: absolute;
+      top: 50%;
+      left: 50%;
       width: 1080px;
       height: 786px;
+      min-width: 1080px;
+      min-height: 786px;
       background:
         radial-gradient(circle at 12% 10%, rgba(255, 255, 255, 0.65), transparent 40%),
         radial-gradient(circle at 88% 92%, rgba(226, 210, 184, 0.35), transparent 45%),
         var(--bg-paper);
-      position: relative;
       transform-origin: center center;
-      padding: 20px 24px 22px;
+      transform: translate(-50%, -50%) scale(1);
+      padding: 15px 20px 16px;
       display: grid;
-      grid-template-columns: 1fr 276px;
-      gap: 20px;
+      grid-template-columns: 1fr 286px;
+      gap: 15px;
       box-shadow: 0 12px 36px rgba(59, 45, 35, 0.14);
       overflow: hidden;
     }
@@ -94,7 +103,7 @@
     .left-area {
       display: flex;
       flex-direction: column;
-      gap: 14px;
+      gap: 11px;
       min-width: 0;
       position: relative;
       z-index: 1;
@@ -102,140 +111,215 @@
 
     .site-header {
       display: flex;
-      align-items: center;
-      gap: 18px;
-      padding: 4px 8px 6px;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 5px;
+      padding: 1px 6px 2px;
     }
 
-    .brand-block {
-      text-align: center;
-      line-height: 1.1;
+    .beginner-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 3px 10px 3px 8px;
+      border-radius: 6px;
+      background: #fbf6ea;
+      border: 1px solid #d5c4a6;
+      color: #465b34;
+      font-size: 12.5px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      line-height: 1.2;
+      white-space: nowrap;
+      box-shadow: 0 2px 5px rgba(64, 48, 34, 0.08);
+    }
+
+    .wakaba-svg {
+      width: 13px;
+      height: 13px;
+      display: block;
       flex-shrink: 0;
     }
 
-    .brand-name {
-      font-family: "Cormorant Garamond", Georgia, serif;
-      font-style: italic;
-      font-size: 27px;
-      font-weight: 600;
-      letter-spacing: 0.04em;
-      color: var(--ink-main);
-    }
-
-    .brand-sub {
-      font-size: 9px;
-      letter-spacing: 0.18em;
-      color: var(--ink-sub);
-      border-top: 1px solid var(--line-accent);
-      padding-top: 3px;
-      margin-top: 2px;
+    .header-main-row {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      width: 100%;
     }
 
     .main-title {
       font-size: 36px;
-      font-weight: 600;
-      letter-spacing: 0.08em;
+      font-weight: 700;
+      letter-spacing: 0.07em;
       line-height: 1.1;
       flex-shrink: 0;
     }
 
     .header-divider {
       width: 1px;
-      height: 36px;
+      height: 38px;
       background: var(--line-accent);
       flex-shrink: 0;
     }
 
     .lead-copy {
-      font-size: 12.5px;
-      line-height: 1.65;
+      font-size: 14.5px;
+      font-weight: 500;
+      line-height: 1.5;
       color: var(--ink-sub);
+      letter-spacing: 0.02em;
     }
 
     .group-section {
-      background: rgba(255, 252, 245, 0.56);
+      background: rgba(255, 252, 245, 0.62);
       border: 1px solid var(--line-soft);
       border-radius: 18px;
-      padding: 13px 16px 15px;
+      padding: 0 13px 12px;
       box-shadow: var(--shadow-soft);
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 9px;
+      overflow: hidden;
     }
 
     .group-sun {
       flex: 1 1 auto;
       min-height: 0;
+      border-top: 3px solid rgba(201, 122, 41, 0.55);
     }
 
     .group-shade {
-      height: 214px;
+      height: 222px;
       flex-shrink: 0;
+      border-top: 3px solid rgba(105, 129, 84, 0.55);
     }
 
     .group-heading {
+      margin: 0 -13px;
+      padding: 7px 14px 6px;
       display: flex;
-      align-items: baseline;
-      gap: 12px;
-      padding-left: 2px;
+      align-items: center;
+      gap: 10px;
+      border-bottom: 1px solid rgba(199, 180, 148, 0.5);
     }
 
-    .group-icon {
-      font-size: 20px;
-      line-height: 1;
+    .group-sun .group-heading {
+      background: linear-gradient(90deg, rgba(235, 206, 168, 0.28) 0%, rgba(252, 247, 237, 0.72) 55%, rgba(255, 252, 245, 0.55) 100%);
+    }
+
+    .group-shade .group-heading {
+      background: linear-gradient(90deg, rgba(188, 207, 170, 0.28) 0%, rgba(250, 247, 238, 0.72) 55%, rgba(255, 252, 245, 0.55) 100%);
+    }
+
+    .group-icon-badge {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .group-sun .group-icon-badge {
+      background: var(--sun-soft);
+      border: 1px solid rgba(201, 122, 41, 0.35);
+      color: var(--sun-color);
+    }
+
+    .group-shade .group-icon-badge {
+      background: var(--shade-soft);
+      border: 1px solid rgba(105, 129, 84, 0.35);
+      color: var(--shade-color);
+    }
+
+    .group-icon-svg {
+      width: 18px;
+      height: 18px;
+      display: block;
+    }
+
+    .group-title-wrap {
+      display: flex;
+      align-items: center;
+      gap: 10px;
     }
 
     .group-title {
-      font-size: 21px;
-      font-weight: 600;
+      font-size: 22px;
+      font-weight: 700;
       letter-spacing: 0.06em;
+      color: var(--ink-main);
+      line-height: 1.15;
     }
+
+    .group-en {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-style: italic;
+      font-size: 16px;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      line-height: 1;
+      transform: translateY(0.5px);
+    }
+
+    .group-sun .group-en { color: rgba(184, 108, 34, 0.85); }
+    .group-shade .group-en { color: rgba(92, 118, 72, 0.88); }
 
     .group-desc {
-      font-size: 12.5px;
+      margin-left: auto;
+      font-size: 14px;
+      font-weight: 500;
       color: var(--ink-sub);
-      letter-spacing: 0.04em;
+      letter-spacing: 0.03em;
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
 
-    /* お日様グループ：横並び3パネル（44% : 28% : 28%） */
+    .group-desc::before {
+      content: "";
+      width: 16px;
+      height: 1px;
+      background: var(--line-accent);
+      display: inline-block;
+    }
+
     .sun-grid {
       flex: 1;
       min-height: 0;
       display: grid;
       grid-template-columns: 44fr 28fr 28fr;
-      gap: 12px;
+      gap: 10px;
     }
 
-    /* パネル共通：全面背景画像＋文字オーバーレイ構造 */
     .panel-card {
       position: relative;
       background: linear-gradient(180deg, #fdfaf2 0%, #f4ead8 100%);
       border: 1px solid var(--line-soft);
       border-radius: 14px;
-      padding: 15px 14px 12px;
+      padding: 13px 12px 12px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
       overflow: hidden;
       cursor: pointer;
-      transition: transform 0.16s ease, box-shadow 0.16s ease;
+      transition: transform 0.14s ease, box-shadow 0.14s ease;
     }
 
-    .panel-card:active {
-      transform: scale(0.985);
-    }
+    .panel-card:active { transform: scale(0.985); }
 
     .panel-card.is-main {
       border-color: #d0ba96;
       box-shadow: 0 4px 14px rgba(154, 118, 72, 0.12);
-      padding: 16px 18px 13px;
+      padding: 14px 14px 12px;
     }
 
     .panel-card.is-sub {
       background: linear-gradient(180deg, #faf6ec 0%, #f2e8d6 100%);
     }
 
-    /* 全面背景画像レイヤー */
     .panel-bg {
       position: absolute;
       inset: 0;
@@ -252,105 +336,95 @@
       display: block;
     }
 
-    /* 未配置パネルのイラスト配置ガイド */
-    .panel-bg-guide {
-      position: absolute;
-      inset: 0;
-      background:
-        radial-gradient(ellipse 85% 58% at 62% 84%, rgba(168, 184, 138, 0.24) 0%, rgba(196, 174, 138, 0.14) 55%, transparent 78%);
-      display: flex;
-      align-items: flex-end;
-      justify-content: flex-end;
-      padding: 0 12px 54px;
-    }
-
-    .panel-bg-guide span {
-      font-size: 10px;
-      color: #9b8870;
-      background: rgba(255, 252, 245, 0.72);
-      border: 1px dashed rgba(173, 152, 122, 0.5);
-      border-radius: 6px;
-      padding: 3px 7px;
-      text-align: right;
-      line-height: 1.4;
-    }
-
-    /* オーバーレイテキスト */
     .panel-text {
       position: relative;
       z-index: 2;
     }
 
     .panel-title {
-      font-weight: 600;
-      line-height: 1.35;
-      letter-spacing: 0.03em;
+      font-weight: 700;
+      line-height: 1.3;
+      letter-spacing: 0.02em;
       display: inline-block;
       padding-bottom: 5px;
-      border-bottom: 2px solid rgba(152, 173, 124, 0.55);
-      margin-bottom: 8px;
-      text-shadow: 0 1px 6px rgba(252, 248, 239, 0.9);
+      border-bottom: 2px solid rgba(152, 173, 124, 0.72);
+      margin-bottom: 7px;
+      text-shadow:
+        0 0 3px rgba(252, 248, 239, 1),
+        0 0 3px rgba(252, 248, 239, 1),
+        -1px -1px 2px rgba(252, 248, 239, 0.96),
+        1px -1px 2px rgba(252, 248, 239, 0.96),
+        -1px 1px 2px rgba(252, 248, 239, 0.96),
+        1px 1px 2px rgba(252, 248, 239, 0.96),
+        0 0 8px rgba(252, 248, 239, 0.98),
+        0 0 14px rgba(252, 248, 239, 0.92);
     }
 
-    .panel-card.is-main .panel-title {
-      font-size: 20px;
-    }
-
-    .panel-card.is-sub .panel-title {
-      font-size: 16.5px;
-    }
+    .panel-card.is-main .panel-title { font-size: 23px; }
+    .panel-card.is-sub .panel-title { font-size: 19px; }
 
     .panel-copy {
-      font-size: 11.5px;
-      line-height: 1.65;
+      font-size: 13.5px;
+      font-weight: 500;
+      line-height: 1.5;
       color: var(--ink-main);
-      text-shadow: 0 1px 6px rgba(252, 248, 239, 0.95);
+      text-shadow:
+        0 0 4px rgba(252, 248, 239, 0.98),
+        0 1px 8px rgba(252, 248, 239, 0.95);
     }
 
-    .panel-card.is-main .panel-copy {
-      font-size: 12.5px;
-    }
+    .panel-card.is-main .panel-copy { font-size: 14.5px; }
 
-    /* 下部「例」ボックス（全パネル共通・半透明オーバーレイ） */
-    .example-box {
+    .panel-bottom {
       position: relative;
       z-index: 2;
-      width: fit-content;
-      max-width: 100%;
-      background: rgba(255, 252, 245, 0.86);
-      -webkit-backdrop-filter: blur(4px);
-      backdrop-filter: blur(4px);
-      border: 1px solid rgba(205, 190, 166, 0.75);
-      border-radius: 10px;
-      padding: 6px 9px;
+      width: 100%;
+    }
+
+    .panel-cta-btn {
+      width: 100%;
       display: flex;
-      align-items: flex-start;
-      gap: 6px;
-      font-size: 10.5px;
-      line-height: 1.45;
-      color: var(--ink-main);
-      box-shadow: 0 2px 8px rgba(60, 45, 30, 0.08);
-    }
-
-    .panel-card.is-main .example-box {
-      font-size: 9.8px;
-      padding: 6px 8px;
-      gap: 5px;
-      white-space: nowrap;
-    }
-
-    .example-badge {
-      background: #8f7e6a;
-      color: #fff;
-      font-size: 9.5px;
-      line-height: 1.3;
-      padding: 1px 6px;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      padding: 7px 12px 6.5px 14px;
       border-radius: 999px;
-      flex-shrink: 0;
-      margin-top: 1px;
+      background: #b86119;
+      border: 2px solid #fffdf8;
+      color: #ffffff;
+      font-family: "Zen Maru Gothic", sans-serif;
+      font-size: 13.2px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      line-height: 1.15;
+      white-space: nowrap;
+      box-shadow:
+        0 3px 0 #8a460e,
+        0 5px 12px rgba(58, 36, 16, 0.28);
+      transition: transform 0.12s ease;
     }
 
-    /* 木もれ日グループ：横長1パネル（全面背景＋左テキストオーバーレイ） */
+    .panel-card:active .panel-cta-btn,
+    .shade-card:active .panel-cta-btn {
+      transform: translateY(1.5px);
+    }
+
+    .cta-arrow-circle {
+      width: 19px;
+      height: 19px;
+      border-radius: 50%;
+      background: #ffffff;
+      color: #b86119;
+      font-size: 14px;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 1;
+      padding-left: 1px;
+      flex-shrink: 0;
+    }
+
     .shade-card {
       position: relative;
       flex: 1;
@@ -358,12 +432,15 @@
       background: linear-gradient(90deg, #f6efe0 0%, #f3e7cf 55%, #efe0c2 100%);
       border: 1px solid var(--line-soft);
       border-radius: 14px;
-      padding: 12px 18px;
+      padding: 12px 15px 12px;
       overflow: hidden;
       cursor: pointer;
       display: flex;
       align-items: stretch;
+      transition: transform 0.14s ease, box-shadow 0.14s ease;
     }
+
+    .shade-card:active { transform: scale(0.985); }
 
     .shade-card .panel-bg-img {
       width: 100%;
@@ -372,124 +449,149 @@
       object-position: right center;
     }
 
-
-
-    .shade-bg-guide {
-      position: absolute;
-      inset: 0;
-      background:
-        radial-gradient(ellipse 52% 95% at 78% 62%, rgba(140, 168, 114, 0.24) 0%, rgba(186, 166, 134, 0.12) 60%, transparent 80%);
-      display: flex;
-      align-items: center;
-      justify-content: flex-end;
-      padding-right: 22px;
-    }
-
-    .shade-bg-guide span {
-      font-size: 10.5px;
-      color: #8f7e68;
-      background: rgba(255, 252, 245, 0.74);
-      border: 1px dashed rgba(173, 152, 122, 0.5);
-      border-radius: 6px;
-      padding: 5px 10px;
-      text-align: center;
-      line-height: 1.5;
-    }
-
     .shade-overlay {
       position: relative;
       z-index: 2;
-      width: 58%;
+      width: 62%;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      gap: 8px;
+      align-items: flex-start;
+      gap: 6px;
     }
 
     .shade-top {
       display: flex;
+      flex-direction: column;
       align-items: flex-start;
-      gap: 14px;
+      gap: 4px;
     }
 
     .shade-title {
-      font-size: 20px;
-      font-weight: 600;
-      line-height: 1.35;
-      border-bottom: 2px solid rgba(152, 173, 124, 0.55);
+      font-size: 22px;
+      font-weight: 700;
+      line-height: 1.25;
+      letter-spacing: 0.02em;
+      display: inline-block;
+      border-bottom: 2px solid rgba(152, 173, 124, 0.72);
       padding-bottom: 4px;
-      flex-shrink: 0;
-      text-shadow: 0 1px 6px rgba(252, 248, 239, 0.9);
+      text-shadow:
+        0 0 3px rgba(252, 248, 239, 1),
+        0 0 3px rgba(252, 248, 239, 1),
+        -1px -1px 2px rgba(252, 248, 239, 0.96),
+        1px -1px 2px rgba(252, 248, 239, 0.96),
+        -1px 1px 2px rgba(252, 248, 239, 0.96),
+        1px 1px 2px rgba(252, 248, 239, 0.96),
+        0 0 8px rgba(252, 248, 239, 0.98),
+        0 0 14px rgba(252, 248, 239, 0.92);
     }
 
     .shade-copy {
-      font-size: 12px;
-      line-height: 1.65;
+      font-size: 14.5px;
+      font-weight: 500;
+      line-height: 1.46;
       color: var(--ink-main);
-      padding-top: 2px;
-      text-shadow: 0 1px 6px rgba(252, 248, 239, 0.95);
+      text-shadow:
+        0 0 4px rgba(252, 248, 239, 0.98),
+        0 1px 8px rgba(252, 248, 239, 0.95);
     }
 
-    /* ================= 右カラム（縦1列） ================= */
+    .shade-card .panel-cta-btn {
+      width: auto;
+      min-width: 176px;
+      background: #4d6b38;
+      box-shadow:
+        0 3px 0 #354d25,
+        0 5px 12px rgba(36, 54, 24, 0.28);
+      padding: 7px 14px 6.5px 18px;
+    }
+
+    .shade-card .cta-arrow-circle { color: #4d6b38; }
+
+    /* ================= 右カラム（幅286px） ================= */
     .right-column {
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 10px;
       position: relative;
       z-index: 1;
       min-height: 0;
     }
 
+    .monthly-wrap {
+      flex: 1 1 auto;
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+    }
+
     .monthly-card {
       position: relative;
-      height: 248px;
+      flex: 1 1 auto;
+      min-height: 146px;
       border-radius: 16px;
       background: linear-gradient(180deg, #efe4d1 0%, #e4d4bc 100%);
       border: 1px solid var(--line-soft);
       box-shadow: var(--shadow-soft);
       overflow: hidden;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #8a7760;
-      font-size: 11.5px;
-      text-align: center;
-      padding: 14px;
-      flex-shrink: 0;
+    }
+
+    .monthly-visual-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center 42%;
+      display: block;
     }
 
     .month-tag {
       position: absolute;
-      top: 12px;
-      left: 14px;
-      background: #f9f3e6;
-      border: 1px solid #d2be9e;
-      border-radius: 10px;
-      padding: 5px 12px;
-      text-align: center;
-      box-shadow: 0 3px 8px rgba(60, 45, 30, 0.12);
-      transform: rotate(-4deg);
+      top: 10px;
+      left: 10px;
+      z-index: 2;
+      background: rgba(252, 248, 239, 0.94);
+      -webkit-backdrop-filter: blur(4px);
+      backdrop-filter: blur(4px);
+      border: 1px solid #d5c4a6;
+      border-radius: 999px;
+      padding: 5px 13px 5px 12px;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      box-shadow: 0 3px 10px rgba(60, 45, 30, 0.1);
     }
 
-    .month-tag strong {
-      display: block;
-      font-size: 21px;
-      line-height: 1.1;
+    .month-tag-jp {
+      font-size: 15.5px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
       color: var(--ink-main);
+      line-height: 1;
     }
 
-    .month-tag span {
-      font-family: "Cormorant Garamond", serif;
-      font-size: 11px;
-      color: var(--ink-sub);
+    .month-tag-sep {
+      width: 1px;
+      height: 12px;
+      background: #c7b494;
+      flex-shrink: 0;
+    }
+
+    .month-tag-en {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-style: italic;
+      font-size: 14.5px;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      color: #7d674d;
+      line-height: 1;
     }
 
     .torn-note {
       background: #fbf6ea;
       border: 1px solid #dfd2bc;
-      border-radius: 6px;
-      padding: 12px 14px;
-      margin-top: -22px;
+      border-radius: 8px;
+      padding: 8px 12px 8.5px;
+      margin-top: -12px;
       position: relative;
       z-index: 2;
       box-shadow: 0 4px 12px rgba(64, 48, 34, 0.1);
@@ -497,165 +599,322 @@
     }
 
     .torn-note-title {
-      font-size: 13px;
-      font-weight: 600;
+      font-size: 13.5px;
+      font-weight: 700;
       color: #7d4a2d;
-      margin-bottom: 6px;
+      margin-bottom: 3px;
       display: flex;
       align-items: center;
       gap: 6px;
+      letter-spacing: 0.04em;
+    }
+
+    .torn-note-icon {
+      width: 14px;
+      height: 14px;
+      color: #a65c37;
+      flex-shrink: 0;
+      display: block;
     }
 
     .torn-note-body {
-      font-size: 11.5px;
-      line-height: 1.72;
+      font-size: 12.5px;
+      font-weight: 500;
+      line-height: 1.48;
       color: var(--ink-main);
     }
 
     .action-buttons {
       display: flex;
       flex-direction: column;
-      gap: 9px;
+      gap: 7.5px;
       flex-shrink: 0;
     }
 
-    .menu-btn {
+    .menu-card-btn {
       width: 100%;
-      background: #fdfaf3;
-      border: 1px solid var(--line-soft);
-      border-radius: 999px;
-      padding: 11px 16px;
+      background: #ffffff;
+      border: 1.5px solid #d4c3a7;
+      border-bottom: 3.5px solid #bfa987;
+      border-radius: 14px;
+      padding: 8px 11px 7.5px;
       display: flex;
       align-items: center;
       justify-content: space-between;
+      gap: 8px;
       font-family: inherit;
-      font-size: 14.5px;
-      font-weight: 600;
       color: var(--ink-main);
-      box-shadow: var(--shadow-soft);
+      box-shadow: 0 3px 9px rgba(72, 54, 38, 0.1);
       cursor: pointer;
+      text-align: left;
+      transition: transform 0.13s ease, border-bottom-width 0.13s ease, box-shadow 0.13s ease;
     }
 
-    .menu-btn-left {
+    .menu-card-btn:active {
+      transform: translateY(2px);
+      border-bottom-width: 1.5px;
+      box-shadow: 0 1px 4px rgba(72, 54, 38, 0.08);
+    }
+
+    .menu-card-left {
       display: flex;
       align-items: center;
       gap: 10px;
+      min-width: 0;
     }
 
-    .sos-pill {
-      background: var(--accent-sos);
-      color: #fff;
-      font-size: 10px;
+    .menu-icon-circle {
+      width: 32px;
+      height: 32px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .menu-icon-circle.is-rule {
+      background: rgba(105, 129, 84, 0.14);
+      border: 1px solid rgba(105, 129, 84, 0.3);
+      color: var(--shade-color);
+    }
+
+    .menu-icon-circle.is-sim {
+      background: rgba(201, 122, 41, 0.14);
+      border: 1px solid rgba(201, 122, 41, 0.3);
+      color: var(--sun-color);
+    }
+
+    .menu-icon-circle.is-sos {
+      background: rgba(180, 83, 60, 0.14);
+      border: 1px solid rgba(180, 83, 60, 0.32);
+      color: var(--accent-sos);
+    }
+
+    .menu-icon-svg {
+      width: 16px;
+      height: 16px;
+      display: block;
+    }
+
+    .sos-badge-mini {
       font-family: sans-serif;
+      font-size: 10.5px;
       font-weight: 700;
-      padding: 2px 7px;
-      border-radius: 6px;
-      letter-spacing: 0.05em;
+      letter-spacing: 0.04em;
+      color: var(--accent-sos);
+    }
+
+    .menu-card-text {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5px;
+      min-width: 0;
+    }
+
+    .menu-card-title {
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      line-height: 1.2;
+      color: var(--ink-main);
+    }
+
+    .menu-card-sub {
+      font-size: 11.8px;
+      font-weight: 500;
+      color: var(--ink-sub);
+      line-height: 1.28;
+      letter-spacing: 0.01em;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     .menu-btn-arrow {
-      color: var(--ink-sub);
-      font-size: 14px;
+      width: 23px;
+      height: 23px;
+      border-radius: 50%;
+      background: #f0e6d5;
+      color: #6b5744;
+      font-size: 15px;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      padding-left: 1px;
     }
 
-    .travel-box {
-      flex: 1;
-      min-height: 0;
-      border-top: 1px dashed var(--line-accent);
-      padding-top: 12px;
+    .menu-card-btn[data-action="rules"] .menu-btn-arrow { background: #e8efe2; color: #4e693a; }
+    .menu-card-btn[data-action="simulator"] .menu-btn-arrow { background: #f8ebdb; color: #a66019; }
+    .menu-card-btn[data-action="sos"] .menu-btn-arrow { background: #f8e4df; color: #a3432c; }
+
+    /* ================= 右下：たにく丸の道の駅スタンプ旅カード ================= */
+    .journey-cover {
+      flex: 0 0 178px;
+      position: relative;
       display: flex;
       flex-direction: column;
-      justify-content: center;
-      gap: 10px;
+      align-items: flex-start;
+      justify-content: space-between;
+      padding: 13px 13px 11px;
+      overflow: hidden;
+      background: #f8ead1 url("images/travel_card_bg.jpg") center / cover no-repeat;
+      border: 1.5px solid #d4c3a7;
+      border-radius: 14px;
+      box-shadow: var(--shadow-soft);
+      color: #423521;
+      text-decoration: none;
+      cursor: pointer;
+      transition: transform 0.14s ease;
     }
 
-    .travel-inner {
-      background: rgba(252, 248, 239, 0.78);
-      border: 1px solid var(--line-soft);
-      border-radius: 14px;
-      padding: 12px 14px;
+    .journey-cover:active {
+      transform: scale(0.985);
+    }
+
+    .journey-heading {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      text-align: left;
+    }
+
+    /* 枠なし・アイコンなしの丸ゴシック表示 */
+    .journey-by {
+      display: block;
+      margin-bottom: 4px;
+      font-family: "Zen Maru Gothic", sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      line-height: 1.2;
+      color: #5b4736;
+    }
+
+    .journey-title {
+      font-family: "Shippori Mincho", serif;
+      font-size: 24px;
+      font-weight: 700;
+      line-height: 1.22;
+      letter-spacing: 0.035em;
+      color: #423521;
+    }
+
+    .journey-bottom {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 10px;
-      height: 100%;
+      gap: 6px;
+      width: 100%;
     }
 
-    .travel-text {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    .travel-status {
-      font-size: 13px;
-      font-weight: 600;
-      line-height: 1.5;
-    }
-
-    .travel-btn {
+    /* 現在地：丸いピル型＋線画ピンアイコン＋「いま」強弱つき */
+    .journey-location {
       display: inline-flex;
       align-items: center;
-      gap: 6px;
-      background: var(--accent-green);
-      color: #fff;
-      border: none;
+      gap: 4.5px;
+      padding: 4.5px 11px 4.5px 8px;
+      background: rgba(255, 251, 242, 0.95);
+      border: 1px solid #d5c4a6;
       border-radius: 999px;
-      padding: 7px 13px;
-      font-family: inherit;
-      font-size: 12px;
-      cursor: pointer;
-      width: fit-content;
+      font-family: "Zen Maru Gothic", sans-serif;
+      font-size: 12.2px;
+      font-weight: 700;
+      line-height: 1.2;
+      color: #3d2f24;
+      box-shadow: 0 2px 6px rgba(66, 53, 33, 0.1);
+      min-width: 0;
+      max-width: calc(100% - 34px);
     }
 
-    .travel-char-slot {
-      width: 68px;
-      height: 82px;
-      border: 1px dashed rgba(173, 152, 122, 0.5);
-      border-radius: 10px;
-      background: rgba(255, 255, 255, 0.45);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 10px;
-      color: #9b8870;
-      text-align: center;
+    .journey-pin-svg {
+      width: 13px;
+      height: 13px;
+      color: #5d7545;
       flex-shrink: 0;
+      display: block;
+    }
+
+    .journey-loc-label {
+      font-size: 10.5px;
+      font-weight: 700;
+      color: #846f56;
+      flex-shrink: 0;
+    }
+
+    #travelLocation {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .journey-arrow {
+      display: grid;
+      place-items: center;
+      width: 27px;
+      height: 27px;
+      border-radius: 50%;
+      background: rgba(255, 251, 242, 0.96);
+      border: 1px solid #d5c4a6;
+      color: #4b633c;
+      font: 700 20px/1 Georgia, serif;
+      padding-left: 1px;
+      flex-shrink: 0;
+      box-shadow: 0 2px 5px rgba(66, 53, 33, 0.12);
     }
   </style>
 </head>
 <body>
   <div class="viewport-wrapper">
     <main class="canvas" id="appCanvas">
-      <!-- 左側メインエリア -->
       <div class="left-area">
         <header class="site-header">
-          <div class="brand-block">
-            <div class="brand-name">Murmure</div>
-            <div class="brand-sub">SUCCULENT GUIDE</div>
+          <span class="beginner-tag">
+            <svg class="wakaba-svg" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M12 6.5 L4.5 2.8 L4.5 14.5 L12 20.5 Z" fill="#d9ad4c" stroke="#9e7a2e" stroke-width="1.2" stroke-linejoin="round" />
+              <path d="M12 6.5 L19.5 2.8 L19.5 14.5 L12 20.5 Z" fill="#6b8453" stroke="#4d6239" stroke-width="1.2" stroke-linejoin="round" />
+            </svg>
+            <span>初心者さんへ</span>
+          </span>
+
+          <div class="header-main-row">
+            <h1 class="main-title">多肉の育て方</h1>
+            <div class="header-divider"></div>
+            <p class="lead-copy">
+              環境や品種で育て方はさまざま。<br />
+              まずは迷わないための、基本の目安です。
+            </p>
           </div>
-          <h1 class="main-title">多肉の育て方</h1>
-          <div class="header-divider"></div>
-          <p class="lead-copy">
-            暮らしの中で、<br />
-            多肉と長く付き合うための<br />
-            育て方のガイドです。
-          </p>
         </header>
 
-        <!-- 左側上段：お日様グループ（44% : 28% : 28%） -->
         <section class="group-section group-sun" aria-label="お日様グループ">
           <div class="group-heading">
-            <span class="group-icon" style="color: var(--sun-color);">☀</span>
-            <h2 class="group-title">お日様グループ</h2>
+            <span class="group-icon-badge" aria-hidden="true">
+              <svg class="group-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="4.2" />
+                <line x1="12" y1="2.2" x2="12" y2="4.6" />
+                <line x1="12" y1="19.4" x2="12" y2="21.8" />
+                <line x1="2.2" y1="12" x2="4.6" y2="12" />
+                <line x1="19.4" y1="12" x2="21.8" y2="12" />
+                <line x1="5.07" y1="5.07" x2="6.77" y2="6.77" />
+                <line x1="17.23" y1="17.23" x2="18.93" y2="18.93" />
+                <line x1="18.93" y1="5.07" x2="17.23" y2="6.77" />
+                <line x1="6.77" y1="17.23" x2="5.07" y2="18.93" />
+              </svg>
+            </span>
+            <div class="group-title-wrap">
+              <h2 class="group-title">お日様グループ</h2>
+              <span class="group-en">Sunlight</span>
+            </div>
             <span class="group-desc">明るい場所が好きな多肉たち</span>
           </div>
 
           <div class="sun-grid">
-            <!-- ① メイン（44%）：1枚目背景イラスト埋め込み済み -->
-            <article class="panel-card is-main" data-panel="sun-main">
+            <article class="panel-card is-main" role="button" tabindex="0" data-panel="sun-main">
               <div class="panel-bg">
-                <img class="panel-bg-img" src="images/sun_main_bg.jpg" alt="春と秋に元気なタイプ（エケベリア・セダム・グラプトペタルム）" />
+                <img class="panel-bg-img" src="images/sun_main_bg.jpg" alt="" />
               </div>
               <div class="panel-text">
                 <h3 class="panel-title">春と秋に<br />元気なタイプ</h3>
@@ -664,16 +923,17 @@
                   真夏と真冬は少しひかえめに。
                 </p>
               </div>
-              <div class="example-box">
-                <span class="example-badge">例</span>
-                <span>エケベリア・セダム・グラプトペタルム など</span>
+              <div class="panel-bottom">
+                <span class="panel-cta-btn">
+                  <span>くわしく見る</span>
+                  <span class="cta-arrow-circle" aria-hidden="true">›</span>
+                </span>
               </div>
             </article>
 
-            <!-- ② サブ（28%） -->
-            <article class="panel-card is-sub" data-panel="sun-cool">
+            <article class="panel-card is-sub" role="button" tabindex="0" data-panel="sun-cool">
               <div class="panel-bg">
-                <img class="panel-bg-img" src="images/sun_cool_bg.jpg" alt="涼しい季節に元気なタイプ（アエオニウム）" />
+                <img class="panel-bg-img" src="images/sun_cool_bg.jpg" alt="" />
               </div>
               <div class="panel-text">
                 <h3 class="panel-title">涼しい季節に<br />元気なタイプ</h3>
@@ -682,16 +942,17 @@
                   暑い夏はほぼお休み。
                 </p>
               </div>
-              <div class="example-box">
-                <span class="example-badge">例</span>
-                <span>アエオニウム など</span>
+              <div class="panel-bottom">
+                <span class="panel-cta-btn">
+                  <span>くわしく見る</span>
+                  <span class="cta-arrow-circle" aria-hidden="true">›</span>
+                </span>
               </div>
             </article>
 
-            <!-- ③ サブ（28%） -->
-            <article class="panel-card is-sub" data-panel="sun-warm">
+            <article class="panel-card is-sub" role="button" tabindex="0" data-panel="sun-warm">
               <div class="panel-bg">
-                <img class="panel-bg-img" src="images/sun_warm_bg.jpg" alt="寒さが苦手なタイプ（カランコエ）" />
+                <img class="panel-bg-img" src="images/sun_warm_bg.jpg" alt="" />
               </div>
               <div class="panel-text">
                 <h3 class="panel-title">寒さが<br />苦手なタイプ</h3>
@@ -700,103 +961,194 @@
                   冬の寒さから守ってあげる。
                 </p>
               </div>
-              <div class="example-box">
-                <span class="example-badge">例</span>
-                <span>カランコエ など</span>
+              <div class="panel-bottom">
+                <span class="panel-cta-btn">
+                  <span>くわしく見る</span>
+                  <span class="cta-arrow-circle" aria-hidden="true">›</span>
+                </span>
               </div>
             </article>
           </div>
         </section>
 
-        <!-- 左側下段：木もれ日グループ（横長1パネル） -->
         <section class="group-section group-shade" aria-label="木もれ日グループ">
           <div class="group-heading">
-            <span class="group-icon" style="color: var(--shade-color);">🌲</span>
-            <h2 class="group-title">木もれ日グループ</h2>
+            <span class="group-icon-badge" aria-hidden="true">
+              <svg class="group-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M19 5c-5.5.4-10.2 3.2-12.5 8.5-.7 1.6-1 3.3-1 5 1.7 0 3.4-.3 5-1 5.3-2.3 8.1-7 8.5-12.5Z" />
+                <path d="M5.5 18.5c2.8-2.8 6.2-5.8 10.5-9.2" />
+                <circle cx="7.2" cy="6.8" r="1" fill="currentColor" stroke="none" opacity="0.7" />
+                <circle cx="10.8" cy="4.8" r="0.8" fill="currentColor" stroke="none" opacity="0.55" />
+              </svg>
+            </span>
+            <div class="group-title-wrap">
+              <h2 class="group-title">木もれ日グループ</h2>
+              <span class="group-en">Soft Light</span>
+            </div>
             <span class="group-desc">やさしい光が好きな多肉たち</span>
           </div>
 
-          <article class="shade-card" data-panel="shade-main">
+          <article class="shade-card" role="button" tabindex="0" data-panel="shade-main">
             <div class="panel-bg">
-              <img class="panel-bg-img" src="images/shade_main_bg.jpg" alt="やさしい光が好きなタイプ（ハオルチア・ハオルチオプシス・ガステリア）" />
+              <img class="panel-bg-img" src="images/shade_main_bg.jpg" alt="" />
             </div>
             <div class="shade-overlay">
               <div class="shade-top">
-                <h3 class="shade-title">やさしい光が<br />好きなタイプ</h3>
+                <h3 class="shade-title">やさしい光が好きなタイプ</h3>
                 <p class="shade-copy">
                   直射日光は避けて、<br />
                   明るい窓辺などで育てます。
                 </p>
               </div>
-              <div class="example-box">
-                <span class="example-badge">例</span>
-                <span>ハオルチア・ハオルチオプシス<br />ガステリア など</span>
-              </div>
+              <span class="panel-cta-btn">
+                <span>くわしく見る</span>
+                <span class="cta-arrow-circle" aria-hidden="true">›</span>
+              </span>
             </div>
           </article>
         </section>
       </div>
 
-      <!-- 右側カラム（縦1列） -->
       <aside class="right-column">
-        <div class="monthly-card">
-          <div class="month-tag">
-            <strong>11月</strong>
-            <span>November</span>
+        <div class="monthly-wrap">
+          <div class="monthly-card">
+            <img class="monthly-visual-img" id="monthlyVisualImg" src="images/monthly_11.jpg" alt="" />
+            <div class="month-tag">
+              <span class="month-tag-jp" id="monthTagJp">11月</span>
+              <span class="month-tag-sep" aria-hidden="true"></span>
+              <span class="month-tag-en" id="monthTagEn">November</span>
+            </div>
           </div>
-          <div>今月のビジュアル<br />（たにく丸・3Dクレイ）</div>
-        </div>
 
-        <div class="torn-note">
-          <div class="torn-note-title">🍁 今月のひとこと</div>
-          <p class="torn-note-body">
-            朝晩の冷え込みが強くなってきました。水やりは暖かい日の午前中に。屋外の多肉は、霜や強い寒さから守ってあげましょう。
-          </p>
+          <div class="torn-note">
+            <div class="torn-note-title">
+              <svg class="torn-note-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M12 21V9" />
+                <path d="M12 13C7.5 13 5 9.8 5 6.5c3.2 0 5.8 1.5 7 4.5 1.2-3 3.8-4.5 7-4.5 0 3.3-2.5 6.5-7 6.5Z" />
+              </svg>
+              <span>今月のひとこと</span>
+            </div>
+            <p class="torn-note-body" id="monthlyNoteBody">
+              朝晩の冷え込みが強くなってきました。水やりは暖かい日の午前中に。霜や強い寒さから守ってあげましょう。
+            </p>
+          </div>
         </div>
 
         <div class="action-buttons">
-          <button class="menu-btn" type="button">
-            <span class="menu-btn-left">
-              <span>🌱</span>
-              <span>基本の3ルール</span>
+          <button class="menu-card-btn" type="button" data-action="rules">
+            <span class="menu-card-left">
+              <span class="menu-icon-circle is-rule" aria-hidden="true">
+                <svg class="menu-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 20v-8" />
+                  <path d="M12 12c0-4.2-3.2-6.5-7-6.5 0 3.8 2.3 6.5 7 6.5Z" />
+                  <path d="M12 14c0-3.8 2.8-6 6.5-6 0 3.5-2 6-6.5 6Z" />
+                </svg>
+              </span>
+              <span class="menu-card-text">
+                <span class="menu-card-title">基本の3ルール</span>
+                <span class="menu-card-sub">光・風・水のキホンを知る</span>
+              </span>
             </span>
-            <span class="menu-btn-arrow">›</span>
+            <span class="menu-btn-arrow" aria-hidden="true">›</span>
           </button>
-          <button class="menu-btn" type="button">
-            <span class="menu-btn-left">
-              <span class="sos-pill">SOS</span>
-              <span>困ったときのSOS</span>
+
+          <button class="menu-card-btn" type="button" data-action="simulator">
+            <span class="menu-card-left">
+              <span class="menu-icon-circle is-sim" aria-hidden="true">
+                <svg class="menu-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="4" y1="7" x2="20" y2="7" />
+                  <circle cx="9" cy="7" r="2" fill="#ffffff" />
+                  <line x1="4" y1="12" x2="20" y2="12" />
+                  <circle cx="15" cy="12" r="2" fill="#ffffff" />
+                  <line x1="4" y1="17" x2="20" y2="17" />
+                  <circle cx="11" cy="17" r="2" fill="#ffffff" />
+                </svg>
+              </span>
+              <span class="menu-card-text">
+                <span class="menu-card-title">バランスシミュレーター</span>
+                <span class="menu-card-sub">光・風・水で多肉の反応を試す</span>
+              </span>
             </span>
-            <span class="menu-btn-arrow">›</span>
+            <span class="menu-btn-arrow" aria-hidden="true">›</span>
+          </button>
+
+          <button class="menu-card-btn" type="button" data-action="sos">
+            <span class="menu-card-left">
+              <span class="menu-icon-circle is-sos" aria-hidden="true">
+                <span class="sos-badge-mini">SOS</span>
+              </span>
+              <span class="menu-card-text">
+                <span class="menu-card-title">困ったときのSOS</span>
+                <span class="menu-card-sub">シワシワ・徒長・ジュレ対策</span>
+              </span>
+            </span>
+            <span class="menu-btn-arrow" aria-hidden="true">›</span>
           </button>
         </div>
 
-        <div class="travel-box">
-          <div class="travel-inner">
-            <div class="travel-text">
-              <div class="travel-status">いま『道の駅』を<br />旅してるよ！</div>
-              <button class="travel-btn" type="button">旅の様子を見る ›</button>
-            </div>
-            <div class="travel-char-slot">
-              たにく丸<br />（旅枠）
-            </div>
-          </div>
-        </div>
+        <a class="journey-cover" href="#journey" id="travelOpenBtn">
+          <span class="journey-heading">
+            <span class="journey-by">たにく丸の</span>
+            <span class="journey-title">道の駅<br />スタンプ旅</span>
+          </span>
+          <span class="journey-bottom">
+            <span class="journey-location">
+              <svg class="journey-pin-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M12 21s-6-5.2-6-10.2a6 6 0 1 1 12 0C18 15.8 12 21 12 21Z" />
+                <circle cx="12" cy="10.5" r="2.2" />
+              </svg>
+              <span class="journey-loc-label">いま</span>
+              <span id="travelLocation">道の駅とよはし</span>
+            </span>
+            <span class="journey-arrow" aria-hidden="true">›</span>
+          </span>
+        </a>
       </aside>
     </main>
   </div>
 
   <script>
+    const MONTHLY_DATA = {
+      1: { jp: "1月", en: "January", img: "images/monthly_01.jpg", note: "寒さの本番です。水やりは控えめに、暖かい日の昼間に少しだけ。凍らない明るい場所で冬越しをしましょう。" },
+      2: { jp: "2月", en: "February", img: "images/monthly_02.jpg", note: "一年でいちばん寒い時期。まだ水やりは控えめで大丈夫です。晴れた日は窓辺でたっぷり光を当ててあげて。" },
+      3: { jp: "3月", en: "March", img: "images/monthly_03.jpg", note: "春の気配とともに目覚める季節。暖かい日から少しずつ水やりを再開し、外のやわらかな光に慣らしましょう。" },
+      4: { jp: "4月", en: "April", img: "images/monthly_04.jpg", note: "ぐんぐん育つ気持ちのよい季節。鉢が軽くなったらたっぷり水やりをして、風通しのよい場所で育てましょう。" },
+      5: { jp: "5月", en: "May", img: "images/monthly_05.jpg", note: "成長のピークですが、日差しが急に強くなる日も。梅雨に向けて、今のうちから風通しを意識しておくと安心です。" },
+      6: { jp: "6月", en: "June", img: "images/monthly_06.jpg", note: "梅雨のジメジメは多肉の苦手なもの。長雨を避け、水やりを控えめにして、とにかく風通しをいちばん大切に。" },
+      7: { jp: "7月", en: "July", img: "images/monthly_07.jpg", note: "強い直射日光と蒸れに注意が必要な時期。涼しい夕方に少しだけ水やりをして、風通しのよい半日陰で守って。" },
+      8: { jp: "8月", en: "August", img: "images/monthly_08.jpg", note: "真夏の暑さで多くの多肉はひと休み。無理に水をあげすぎず、強い日差しを避けて涼しく過ごさせてあげましょう。" },
+      9: { jp: "9月", en: "September", img: "images/monthly_09.jpg", note: "残暑が落ち着くころから、少しずつ秋の成長がスタート。朝晩が涼しくなってきたら、水やりも徐々に増やして。" },
+      10: { jp: "10月", en: "October", img: "images/monthly_10.jpg", note: "多肉がいちばん元気で美しくなる季節。お日様と風をたっぷり浴びると、葉の先から少しずつ紅葉が始まります。" },
+      11: { jp: "11月", en: "November", img: "images/monthly_11.jpg", note: "朝晩の冷え込みが強くなってきました。水やりは暖かい日の午前中に。霜や強い寒さから守ってあげましょう。" },
+      12: { jp: "12月", en: "December", img: "images/monthly_12.jpg", note: "紅葉がいちばん深まる季節です。水やりを控えめにして、寒さに弱い種類は早めにお部屋の中へ移動してあげて。" }
+    };
+
+    function applyMonth() {
+      const params = new URLSearchParams(window.location.search);
+      const qMonth = parseInt(params.get("month"), 10);
+      const month = (qMonth >= 1 && qMonth <= 12) ? qMonth : (new Date().getMonth() + 1);
+      const data = MONTHLY_DATA[month] || MONTHLY_DATA[11];
+      document.getElementById("monthlyVisualImg").src = data.img;
+      document.getElementById("monthTagJp").textContent = data.jp;
+      document.getElementById("monthTagEn").textContent = data.en;
+      document.getElementById("monthlyNoteBody").textContent = data.note;
+    }
+
+    document.querySelectorAll('[data-action="simulator"]').forEach((btn) => {
+      btn.addEventListener("click", () => {
+        window.location.href = "simulator.html";
+      });
+    });
+
     function fitCanvas() {
       const canvas = document.getElementById("appCanvas");
-      const baseW = 1080;
-      const baseH = 786;
-      const scale = Math.min(window.innerWidth / baseW, window.innerHeight / baseH);
-      canvas.style.transform = `scale(${scale})`;
+      const scale = Math.min(window.innerWidth / 1080, window.innerHeight / 786);
+      canvas.style.transform = `translate(-50%, -50%) scale(${scale})`;
     }
 
     window.addEventListener("resize", fitCanvas);
     window.addEventListener("orientationchange", fitCanvas);
+    applyMonth();
     fitCanvas();
   </script>
 </body>
