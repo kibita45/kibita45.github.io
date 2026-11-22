@@ -1,0 +1,10 @@
+{
+  "background_color": "#f6f0e4",
+  "display": "standalone",
+  "name": "Murmure｜多肉の育て方",
+  "orientation": "landscape",
+  "scope": "./",
+  "short_name": "多肉の育て方",
+  "start_url": "./index.html",
+  "theme_color": "#f6f0e4"
+}
