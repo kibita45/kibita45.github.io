@@ -5,13 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
 
   <!-- =========================================================================
-    保木平珈琲 Murmure｜展示用iPad Webアプリ「多肉の育て方」トップ画面（正式採用版）
-    - 基準キャンバス: 1080 × 786 px（iPad第9世代横向き・ステータスバー考慮・自動縮小対応）
-    - 主な仕様：
-      ・左エリア：お日様グループ（44:28:28の3パネル）＋木もれ日グループ（横長1パネル）※各専門ページへ遷移予定
-      ・右カラム（幅286px）：今月のビジュアル＆ひとこと（12ヶ月自動切替）、メニュー3導線、道の駅スタンプ旅カード
-      ・バランスシミュレーター（simulator.html）への遷移は右側のシミュレーターボタンのみ
-      ・Muse連携用ID（#travelOpenBtn / #travelLocation）を維持
+    保木平珈琲 Murmure｜展示用iPad Webアプリ「多肉の育て方」トップ画面（整理・明朝タイトル確定版）
+    - 左上：ヘッダー（「多肉の育て方」のみ）＋「🔰 多肉育成シミュレーター」＋高さ・大きさを揃えた1行説明
+    - 初心者さんへタグ・ヘッダーのリード文・グループ横の細かい説明を削除してスッキリ整理
+    - 右上：コラム（今月のひとこと）＋ たにく丸の道の駅スタンプ旅
+    - 下段全幅：どのタイプにも共通の3大ガイド（基本の3ルール／土・鉢・肥料のキホン／困ったときのSOS）
+    - 基準キャンバス: 1080 × 786 px（iPad横向き・スクロールなし・自動スケール対応）
+    - Muse連携用ID（#travelOpenBtn / #travelLocation）を維持
   ========================================================================= -->
 
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -29,17 +29,32 @@
   <style>
     :root {
       --bg-paper: #f6f0e4;
-      --ink-main: #35271e;
-      --ink-sub: #544336;
-      --line-soft: #ddd0ba;
+      --card-paper: #fffdf8;
+      --ink-main: #2d1f16;
+      --ink-sub: #544437;
+      --ink-muted: #7d6e5d;
+      --line-soft: #dfd0b6;
+      --line-card: #e3d6c2;
       --line-accent: #c7b494;
       --sun-color: #c97a29;
       --sun-soft: rgba(201, 122, 41, 0.12);
       --shade-color: #698154;
       --shade-soft: rgba(105, 129, 84, 0.13);
-      --accent-green: #6b7f55;
+      --soil-color: #8c6239;
+      --soil-soft: rgba(140, 98, 57, 0.13);
       --accent-sos: #b4533c;
-      --shadow-soft: 0 4px 14px rgba(72, 54, 38, 0.08);
+      --shadow-soft: 0 2px 10px rgba(72, 54, 38, 0.055);
+      /* 4タイプカラー（sim.html と完全統一：エケベリア系ピンク・カランコエ系オレンジ） */
+      --tag-1: #b8566d;
+      --tag-1-dark: #8a394c;
+      --tag-2: #3d7699;
+      --tag-2-dark: #285470;
+      --tag-3: #c86d25;
+      --tag-3-dark: #944b12;
+      --tag-4: #4d6b38;
+      --tag-4-dark: #354d25;
+      --font-serif: "Shippori Mincho", "Hiragino Mincho ProN", "Yu Mincho", serif;
+      --font-ui: "Zen Maru Gothic", "Hiragino Maru Gothic ProN", sans-serif;
     }
 
     * {
@@ -47,7 +62,13 @@
       margin: 0;
       padding: 0;
       -webkit-tap-highlight-color: transparent;
+      -webkit-user-select: none;
       user-select: none;
+      -webkit-touch-callout: none;
+    }
+
+    button, [role="button"], a {
+      touch-action: manipulation;
     }
 
     html, body {
@@ -55,7 +76,7 @@
       height: 100%;
       overflow: hidden;
       background: #e9dfd0;
-      font-family: "Shippori Mincho", "Hiragino Mincho ProN", "Yu Mincho", serif;
+      font-family: var(--font-serif);
       color: var(--ink-main);
     }
 
@@ -66,26 +87,23 @@
       height: 100vh;
       height: 100dvh;
       overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     .canvas {
-      position: absolute;
-      top: 50%;
-      left: 50%;
+      position: relative;
       width: 1080px;
       height: 786px;
       min-width: 1080px;
       min-height: 786px;
-      background:
-        radial-gradient(circle at 12% 10%, rgba(255, 255, 255, 0.65), transparent 40%),
-        radial-gradient(circle at 88% 92%, rgba(226, 210, 184, 0.35), transparent 45%),
-        var(--bg-paper);
+      background: linear-gradient(135deg, #f9f5e9, #f2ead9);
       transform-origin: center center;
-      transform: translate(-50%, -50%) scale(1);
       padding: 15px 20px 16px;
-      display: grid;
-      grid-template-columns: 1fr 286px;
-      gap: 15px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
       box-shadow: 0 12px 36px rgba(59, 45, 35, 0.14);
       overflow: hidden;
     }
@@ -97,125 +115,124 @@
       pointer-events: none;
       background-image: radial-gradient(rgba(110, 88, 66, 0.045) 1px, transparent 0);
       background-size: 16px 16px;
-      opacity: 0.7;
+      opacity: 0.75;
     }
 
-    /* ================= 左メイン領域 ================= */
+    /* ================= 上段：左（シミュレーター）＋ 右（コラム＆旅） ================= */
+    .top-split {
+      position: relative;
+      z-index: 1;
+      flex: 1 1 auto;
+      min-height: 0;
+      display: grid;
+      grid-template-columns: 1fr 296px;
+      gap: 18px;
+    }
+
+    /* ================= 左上：ヘッダー＋シミュレーター4パネル ================= */
     .left-area {
       display: flex;
       flex-direction: column;
-      gap: 11px;
+      gap: 10px;
       min-width: 0;
-      position: relative;
-      z-index: 1;
+      min-height: 0;
     }
 
     .site-header {
       display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 5px;
-      padding: 1px 6px 2px;
+      align-items: center;
+      padding: 0 2px;
+      flex-shrink: 0;
     }
 
-    .beginner-tag {
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      padding: 3px 10px 3px 8px;
-      border-radius: 6px;
-      background: #fbf6ea;
-      border: 1px solid #d5c4a6;
-      color: #465b34;
-      font-size: 12.5px;
+    .main-title {
+      font-family: var(--font-serif);
+      font-size: 33px;
       font-weight: 700;
       letter-spacing: 0.06em;
+      line-height: 1.05;
+      flex-shrink: 0;
+    }
+
+    /* シミュレーター見出し（初心者マーク＋タイトル＋高さと大きさを揃えた1行説明） */
+    .sim-section-head {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 2px 2px 0;
+      flex-shrink: 0;
+    }
+
+    .sim-section-title {
+      font-family: var(--font-ui);
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--ink-main);
+      letter-spacing: 0.03em;
       line-height: 1.2;
-      white-space: nowrap;
-      box-shadow: 0 2px 5px rgba(64, 48, 34, 0.08);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      flex-shrink: 0;
     }
 
     .wakaba-svg {
-      width: 13px;
-      height: 13px;
+      width: 17px;
+      height: 17px;
       display: block;
       flex-shrink: 0;
     }
 
-    .header-main-row {
-      display: flex;
-      align-items: center;
-      gap: 18px;
-      width: 100%;
-    }
-
-    .main-title {
-      font-size: 36px;
-      font-weight: 700;
-      letter-spacing: 0.07em;
-      line-height: 1.1;
-      flex-shrink: 0;
-    }
-
-    .header-divider {
-      width: 1px;
-      height: 38px;
-      background: var(--line-accent);
-      flex-shrink: 0;
-    }
-
-    .lead-copy {
-      font-size: 14.5px;
+    .sim-section-sub {
+      font-family: var(--font-ui);
+      font-size: 15px;
       font-weight: 500;
-      line-height: 1.5;
+      line-height: 1.2;
       color: var(--ink-sub);
-      letter-spacing: 0.02em;
+      letter-spacing: 0.01em;
+      white-space: nowrap;
     }
 
+    /* グループ領域（外箱なし・控えめなサブラベル） */
     .group-section {
-      background: rgba(255, 252, 245, 0.62);
-      border: 1px solid var(--line-soft);
-      border-radius: 18px;
-      padding: 0 13px 12px;
-      box-shadow: var(--shadow-soft);
       display: flex;
       flex-direction: column;
-      gap: 9px;
-      overflow: hidden;
+      gap: 6px;
+      min-height: 0;
     }
 
     .group-sun {
       flex: 1 1 auto;
       min-height: 0;
-      border-top: 3px solid rgba(201, 122, 41, 0.55);
     }
 
     .group-shade {
-      height: 222px;
+      height: 176px;
       flex-shrink: 0;
-      border-top: 3px solid rgba(105, 129, 84, 0.55);
+      margin-top: 2px;
     }
 
     .group-heading {
-      margin: 0 -13px;
-      padding: 7px 14px 6px;
+      padding: 0 2px;
       display: flex;
       align-items: center;
-      gap: 10px;
-      border-bottom: 1px solid rgba(199, 180, 148, 0.5);
+      gap: 6px;
+      flex-shrink: 0;
     }
 
-    .group-sun .group-heading {
-      background: linear-gradient(90deg, rgba(235, 206, 168, 0.28) 0%, rgba(252, 247, 237, 0.72) 55%, rgba(255, 252, 245, 0.55) 100%);
+    .group-heading::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      margin-left: 4px;
     }
 
-    .group-shade .group-heading {
-      background: linear-gradient(90deg, rgba(188, 207, 170, 0.28) 0%, rgba(250, 247, 238, 0.72) 55%, rgba(255, 252, 245, 0.55) 100%);
-    }
+    .group-sun .group-heading::after { background: rgba(201, 122, 41, 0.28); }
+    .group-shade .group-heading::after { background: rgba(105, 129, 84, 0.3); }
 
     .group-icon-badge {
-      width: 30px;
-      height: 30px;
+      width: 20px;
+      height: 20px;
       border-radius: 50%;
       display: flex;
       align-items: center;
@@ -223,102 +240,66 @@
       flex-shrink: 0;
     }
 
-    .group-sun .group-icon-badge {
-      background: var(--sun-soft);
-      border: 1px solid rgba(201, 122, 41, 0.35);
-      color: var(--sun-color);
-    }
+    .group-sun .group-icon-badge { background: var(--sun-soft); color: var(--sun-color); }
+    .group-shade .group-icon-badge { background: var(--shade-soft); color: var(--shade-color); }
 
-    .group-shade .group-icon-badge {
-      background: var(--shade-soft);
-      border: 1px solid rgba(105, 129, 84, 0.35);
-      color: var(--shade-color);
-    }
-
-    .group-icon-svg {
-      width: 18px;
-      height: 18px;
-      display: block;
-    }
-
-    .group-title-wrap {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
+    .group-icon-svg { width: 13px; height: 13px; display: block; }
 
     .group-title {
-      font-size: 22px;
+      font-family: var(--font-ui);
+      font-size: 13px;
       font-weight: 700;
-      letter-spacing: 0.06em;
-      color: var(--ink-main);
-      line-height: 1.15;
+      letter-spacing: 0.04em;
+      line-height: 1.2;
+      flex-shrink: 0;
     }
 
-    .group-en {
-      font-family: "Cormorant Garamond", Georgia, serif;
-      font-style: italic;
-      font-size: 16px;
-      font-weight: 600;
-      letter-spacing: 0.05em;
-      line-height: 1;
-      transform: translateY(0.5px);
-    }
-
-    .group-sun .group-en { color: rgba(184, 108, 34, 0.85); }
-    .group-shade .group-en { color: rgba(92, 118, 72, 0.88); }
-
-    .group-desc {
-      margin-left: auto;
-      font-size: 14px;
-      font-weight: 500;
-      color: var(--ink-sub);
-      letter-spacing: 0.03em;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .group-desc::before {
-      content: "";
-      width: 16px;
-      height: 1px;
-      background: var(--line-accent);
-      display: inline-block;
-    }
+    .group-sun .group-title { color: #9c5718; }
+    .group-shade .group-title { color: #476335; }
 
     .sun-grid {
       flex: 1;
       min-height: 0;
       display: grid;
-      grid-template-columns: 44fr 28fr 28fr;
-      gap: 10px;
+      grid-template-columns: 40fr 30fr 30fr;
+      gap: 12px;
     }
 
+    /* ================= 4タイプカード本体 ================= */
     .panel-card {
       position: relative;
       background: linear-gradient(180deg, #fdfaf2 0%, #f4ead8 100%);
       border: 1px solid var(--line-soft);
-      border-radius: 14px;
-      padding: 13px 12px 12px;
+      border-radius: 12px;
+      padding: 12px 12px 10px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
       overflow: hidden;
       cursor: pointer;
+      box-shadow: var(--shadow-soft);
       transition: transform 0.14s ease, box-shadow 0.14s ease;
     }
 
-    .panel-card:active { transform: scale(0.985); }
-
-    .panel-card.is-main {
-      border-color: #d0ba96;
-      box-shadow: 0 4px 14px rgba(154, 118, 72, 0.12);
-      padding: 14px 14px 12px;
+    .panel-card::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      background: linear-gradient(
+        180deg,
+        rgba(250, 245, 235, 0.78) 0%,
+        rgba(250, 245, 235, 0.36) 24%,
+        rgba(250, 245, 235, 0) 40%
+      );
     }
 
-    .panel-card.is-sub {
-      background: linear-gradient(180deg, #faf6ec 0%, #f2e8d6 100%);
+    .panel-card:active { transform: scale(0.988); }
+
+    .panel-card.is-main {
+      border-color: #d6c2a0;
+      padding: 12px 14px 10px;
     }
 
     .panel-bg {
@@ -342,44 +323,56 @@
       z-index: 2;
     }
 
+    [data-panel="sun-main"] { --type-color: var(--tag-1); --type-color-dark: var(--tag-1-dark); }
+    [data-panel="sun-cool"] { --type-color: var(--tag-2); --type-color-dark: var(--tag-2-dark); }
+    [data-panel="sun-warm"] { --type-color: var(--tag-3); --type-color-dark: var(--tag-3-dark); }
+    [data-panel="shade-main"] { --type-color: var(--tag-4); --type-color-dark: var(--tag-4-dark); }
+
     .panel-title {
+      font-family: var(--font-serif);
       font-weight: 700;
-      line-height: 1.3;
+      line-height: 1.24;
       letter-spacing: 0.02em;
+      color: var(--ink-main);
       display: inline-block;
-      padding-bottom: 5px;
-      border-bottom: 2px solid rgba(152, 173, 124, 0.72);
-      margin-bottom: 7px;
-      text-shadow:
-        0 0 3px rgba(252, 248, 239, 1),
-        0 0 3px rgba(252, 248, 239, 1),
-        -1px -1px 2px rgba(252, 248, 239, 0.96),
-        1px -1px 2px rgba(252, 248, 239, 0.96),
-        -1px 1px 2px rgba(252, 248, 239, 0.96),
-        1px 1px 2px rgba(252, 248, 239, 0.96),
-        0 0 8px rgba(252, 248, 239, 0.98),
-        0 0 14px rgba(252, 248, 239, 0.92);
+      padding-bottom: 4px;
+      border-bottom: 2.5px solid var(--type-color);
+      text-shadow: 0 1px 6px rgba(255, 252, 245, 0.9);
     }
 
     .panel-card.is-main .panel-title { font-size: 23px; }
     .panel-card.is-sub .panel-title { font-size: 19px; }
 
-    .panel-copy {
-      font-size: 13.5px;
-      font-weight: 500;
-      line-height: 1.5;
-      color: var(--ink-main);
-      text-shadow:
-        0 0 4px rgba(252, 248, 239, 0.98),
-        0 1px 8px rgba(252, 248, 239, 0.95);
-    }
-
-    .panel-card.is-main .panel-copy { font-size: 14.5px; }
-
     .panel-bottom {
       position: relative;
       z-index: 2;
       width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 6px;
+    }
+
+    .panel-species-line {
+      display: inline-block;
+      max-width: 100%;
+      padding: 2.5px 9px;
+      border-radius: 999px;
+      background: rgba(255, 253, 248, 0.92);
+      border: 1px solid rgba(199, 180, 148, 0.6);
+      font-family: var(--font-ui);
+      font-size: 11.6px;
+      font-weight: 700;
+      color: var(--ink-sub);
+      line-height: 1.22;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .panel-card.is-main .panel-species-line {
+      font-size: 12.2px;
+      padding: 2.5px 11px;
     }
 
     .panel-cta-btn {
@@ -387,35 +380,34 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 7px;
-      padding: 7px 12px 6.5px 14px;
-      border-radius: 999px;
-      background: #b86119;
-      border: 2px solid #fffdf8;
+      gap: 6px;
+      padding: 6.5px 10px 6px 12px;
+      border-radius: 9px;
+      background: var(--type-color);
+      border: 1px solid var(--type-color-dark);
+      border-bottom: 2.5px solid var(--type-color-dark);
       color: #ffffff;
-      font-family: "Zen Maru Gothic", sans-serif;
-      font-size: 13.2px;
+      font-family: var(--font-ui);
+      font-size: 13.8px;
       font-weight: 700;
       letter-spacing: 0.04em;
       line-height: 1.15;
       white-space: nowrap;
-      box-shadow:
-        0 3px 0 #8a460e,
-        0 5px 12px rgba(58, 36, 16, 0.28);
-      transition: transform 0.12s ease;
+      box-shadow: 0 3px 8px rgba(58, 36, 16, 0.18);
+      transition: filter 0.12s ease;
     }
 
     .panel-card:active .panel-cta-btn,
     .shade-card:active .panel-cta-btn {
-      transform: translateY(1.5px);
+      filter: brightness(0.95);
     }
 
     .cta-arrow-circle {
-      width: 19px;
-      height: 19px;
+      width: 18px;
+      height: 18px;
       border-radius: 50%;
-      background: #ffffff;
-      color: #b86119;
+      background: rgba(255, 255, 255, 0.94);
+      color: var(--type-color);
       font-size: 14px;
       font-weight: 700;
       display: inline-flex;
@@ -426,22 +418,38 @@
       flex-shrink: 0;
     }
 
+    /* 木もれ日パネル（横長） */
     .shade-card {
       position: relative;
       flex: 1;
       min-height: 0;
       background: linear-gradient(90deg, #f6efe0 0%, #f3e7cf 55%, #efe0c2 100%);
       border: 1px solid var(--line-soft);
-      border-radius: 14px;
-      padding: 12px 15px 12px;
+      border-radius: 12px;
+      padding: 12px 15px 11px;
       overflow: hidden;
       cursor: pointer;
       display: flex;
       align-items: stretch;
-      transition: transform 0.14s ease, box-shadow 0.14s ease;
+      box-shadow: var(--shadow-soft);
+      transition: transform 0.14s ease;
     }
 
-    .shade-card:active { transform: scale(0.985); }
+    .shade-card::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      background: linear-gradient(
+        90deg,
+        rgba(248, 243, 232, 0.84) 0%,
+        rgba(248, 243, 232, 0.45) 28%,
+        rgba(248, 243, 232, 0) 48%
+      );
+    }
+
+    .shade-card:active { transform: scale(0.988); }
 
     .shade-card .panel-bg-img {
       width: 100%;
@@ -453,7 +461,7 @@
     .shade-overlay {
       position: relative;
       z-index: 2;
-      width: 62%;
+      width: 58%;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
@@ -461,61 +469,37 @@
       gap: 6px;
     }
 
-    .shade-top {
+    .shade-title {
+      font-family: var(--font-serif);
+      font-size: 22.5px;
+      font-weight: 700;
+      line-height: 1.2;
+      letter-spacing: 0.02em;
+      color: var(--ink-main);
+      display: inline-block;
+      border-bottom: 2.5px solid var(--type-color);
+      padding-bottom: 3px;
+      text-shadow: 0 1px 6px rgba(255, 252, 245, 0.9);
+    }
+
+    .shade-bottom {
       display: flex;
       flex-direction: column;
       align-items: flex-start;
-      gap: 4px;
-    }
-
-    .shade-title {
-      font-size: 22px;
-      font-weight: 700;
-      line-height: 1.25;
-      letter-spacing: 0.02em;
-      display: inline-block;
-      border-bottom: 2px solid rgba(152, 173, 124, 0.72);
-      padding-bottom: 4px;
-      text-shadow:
-        0 0 3px rgba(252, 248, 239, 1),
-        0 0 3px rgba(252, 248, 239, 1),
-        -1px -1px 2px rgba(252, 248, 239, 0.96),
-        1px -1px 2px rgba(252, 248, 239, 0.96),
-        -1px 1px 2px rgba(252, 248, 239, 0.96),
-        1px 1px 2px rgba(252, 248, 239, 0.96),
-        0 0 8px rgba(252, 248, 239, 0.98),
-        0 0 14px rgba(252, 248, 239, 0.92);
-    }
-
-    .shade-copy {
-      font-size: 14.5px;
-      font-weight: 500;
-      line-height: 1.46;
-      color: var(--ink-main);
-      text-shadow:
-        0 0 4px rgba(252, 248, 239, 0.98),
-        0 1px 8px rgba(252, 248, 239, 0.95);
+      gap: 6px;
     }
 
     .shade-card .panel-cta-btn {
       width: auto;
-      min-width: 176px;
-      background: #4d6b38;
-      box-shadow:
-        0 3px 0 #354d25,
-        0 5px 12px rgba(36, 54, 24, 0.28);
-      padding: 7px 14px 6.5px 18px;
+      min-width: 180px;
+      padding: 6.5px 14px 6px 18px;
     }
 
-    .shade-card .cta-arrow-circle { color: #4d6b38; }
-
-    /* ================= 右カラム（幅286px） ================= */
+    /* ================= 右上：コラム（今月のひとこと）＋ たにく丸の旅 ================= */
     .right-column {
       display: flex;
       flex-direction: column;
-      gap: 10px;
-      position: relative;
-      z-index: 1;
+      gap: 12px;
       min-height: 0;
     }
 
@@ -524,16 +508,18 @@
       min-height: 0;
       display: flex;
       flex-direction: column;
+      background: var(--card-paper);
+      border: 1px solid var(--line-soft);
+      border-radius: 12px;
+      box-shadow: var(--shadow-soft);
+      overflow: hidden;
     }
 
     .monthly-card {
       position: relative;
       flex: 1 1 auto;
-      min-height: 146px;
-      border-radius: 16px;
+      min-height: 160px;
       background: linear-gradient(180deg, #efe4d1 0%, #e4d4bc 100%);
-      border: 1px solid var(--line-soft);
-      box-shadow: var(--shadow-soft);
       overflow: hidden;
     }
 
@@ -547,10 +533,10 @@
 
     .month-tag {
       position: absolute;
-      top: 10px;
-      left: 10px;
+      top: 9px;
+      left: 9px;
       z-index: 2;
-      background: rgba(252, 248, 239, 0.94);
+      background: rgba(255, 253, 248, 0.94);
       -webkit-backdrop-filter: blur(4px);
       backdrop-filter: blur(4px);
       border: 1px solid #d5c4a6;
@@ -559,11 +545,12 @@
       display: inline-flex;
       align-items: center;
       gap: 7px;
-      box-shadow: 0 3px 10px rgba(60, 45, 30, 0.1);
+      box-shadow: 0 2px 6px rgba(60, 45, 30, 0.08);
     }
 
     .month-tag-jp {
-      font-size: 15.5px;
+      font-family: var(--font-serif);
+      font-size: 16.5px;
       font-weight: 700;
       letter-spacing: 0.04em;
       color: var(--ink-main);
@@ -580,200 +567,69 @@
     .month-tag-en {
       font-family: "Cormorant Garamond", Georgia, serif;
       font-style: italic;
-      font-size: 14.5px;
+      font-size: 15.5px;
       font-weight: 600;
       letter-spacing: 0.05em;
-      color: #7d674d;
+      color: #6f5940;
       line-height: 1;
     }
 
     .torn-note {
-      background: #fbf6ea;
-      border: 1px solid #dfd2bc;
-      border-radius: 8px;
-      padding: 8px 12px 8.5px;
-      margin-top: -12px;
-      position: relative;
-      z-index: 2;
-      box-shadow: 0 4px 12px rgba(64, 48, 34, 0.1);
+      background: var(--card-paper);
+      border-top: 1px solid #ebe1cf;
+      padding: 10px 13px 11px;
       flex-shrink: 0;
     }
 
     .torn-note-title {
+      font-family: var(--font-ui);
       font-size: 13.5px;
       font-weight: 700;
-      color: #7d4a2d;
-      margin-bottom: 3px;
+      color: #744225;
+      margin-bottom: 4px;
       display: flex;
       align-items: center;
-      gap: 6px;
-      letter-spacing: 0.04em;
+      gap: 5px;
+      letter-spacing: 0.03em;
     }
 
     .torn-note-icon {
-      width: 14px;
-      height: 14px;
+      width: 14.5px;
+      height: 14.5px;
       color: #a65c37;
       flex-shrink: 0;
       display: block;
     }
 
     .torn-note-body {
-      font-size: 12.5px;
+      font-family: var(--font-ui);
+      font-size: 13px;
       font-weight: 500;
-      line-height: 1.48;
+      line-height: 1.52;
       color: var(--ink-main);
     }
 
-    .action-buttons {
-      display: flex;
-      flex-direction: column;
-      gap: 7.5px;
-      flex-shrink: 0;
-    }
-
-    .menu-card-btn {
-      width: 100%;
-      background: #ffffff;
-      border: 1.5px solid #d4c3a7;
-      border-bottom: 3.5px solid #bfa987;
-      border-radius: 14px;
-      padding: 8px 11px 7.5px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 8px;
-      font-family: inherit;
-      color: var(--ink-main);
-      box-shadow: 0 3px 9px rgba(72, 54, 38, 0.1);
-      cursor: pointer;
-      text-align: left;
-      transition: transform 0.13s ease, border-bottom-width 0.13s ease, box-shadow 0.13s ease;
-    }
-
-    .menu-card-btn:active {
-      transform: translateY(2px);
-      border-bottom-width: 1.5px;
-      box-shadow: 0 1px 4px rgba(72, 54, 38, 0.08);
-    }
-
-    .menu-card-left {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      min-width: 0;
-    }
-
-    .menu-icon-circle {
-      width: 32px;
-      height: 32px;
-      border-radius: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-    }
-
-    .menu-icon-circle.is-rule {
-      background: rgba(105, 129, 84, 0.14);
-      border: 1px solid rgba(105, 129, 84, 0.3);
-      color: var(--shade-color);
-    }
-
-    .menu-icon-circle.is-sim {
-      background: rgba(201, 122, 41, 0.14);
-      border: 1px solid rgba(201, 122, 41, 0.3);
-      color: var(--sun-color);
-    }
-
-    .menu-icon-circle.is-sos {
-      background: rgba(180, 83, 60, 0.14);
-      border: 1px solid rgba(180, 83, 60, 0.32);
-      color: var(--accent-sos);
-    }
-
-    .menu-icon-svg {
-      width: 16px;
-      height: 16px;
-      display: block;
-    }
-
-    .sos-badge-mini {
-      font-family: sans-serif;
-      font-size: 10.5px;
-      font-weight: 700;
-      letter-spacing: 0.04em;
-      color: var(--accent-sos);
-    }
-
-    .menu-card-text {
-      display: flex;
-      flex-direction: column;
-      gap: 1.5px;
-      min-width: 0;
-    }
-
-    .menu-card-title {
-      font-size: 15px;
-      font-weight: 700;
-      letter-spacing: 0.03em;
-      line-height: 1.2;
-      color: var(--ink-main);
-    }
-
-    .menu-card-sub {
-      font-size: 11.8px;
-      font-weight: 500;
-      color: var(--ink-sub);
-      line-height: 1.28;
-      letter-spacing: 0.01em;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .menu-btn-arrow {
-      width: 23px;
-      height: 23px;
-      border-radius: 50%;
-      background: #f0e6d5;
-      color: #6b5744;
-      font-size: 15px;
-      font-weight: 700;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-      padding-left: 1px;
-    }
-
-    .menu-card-btn[data-action="rules"] .menu-btn-arrow { background: #e8efe2; color: #4e693a; }
-    .menu-card-btn[data-action="simulator"] .menu-btn-arrow { background: #f8ebdb; color: #a66019; }
-    .menu-card-btn[data-action="sos"] .menu-btn-arrow { background: #f8e4df; color: #a3432c; }
-
-    /* ================= 右下：たにく丸の道の駅スタンプ旅カード ================= */
+    /* たにく丸の道の駅スタンプ旅カード */
     .journey-cover {
-      flex: 0 0 178px;
+      flex: 0 0 176px;
       position: relative;
       display: flex;
       flex-direction: column;
       align-items: flex-start;
       justify-content: space-between;
-      padding: 13px 13px 11px;
+      padding: 15px 13px 11px;
       overflow: hidden;
       background: #f8ead1 url("images/travel_card_bg.jpg") center / cover no-repeat;
-      border: 1.5px solid #d4c3a7;
-      border-radius: 14px;
+      border: 1px solid var(--line-soft);
+      border-radius: 12px;
       box-shadow: var(--shadow-soft);
-      color: #423521;
+      color: #3a2d1b;
       text-decoration: none;
       cursor: pointer;
       transition: transform 0.14s ease;
     }
 
-    .journey-cover:active {
-      transform: scale(0.985);
-    }
+    .journey-cover:active { transform: scale(0.988); }
 
     .journey-heading {
       display: flex;
@@ -782,25 +638,26 @@
       text-align: left;
     }
 
-    /* 枠なし・アイコンなしの丸ゴシック表示 */
     .journey-by {
-      display: block;
-      margin-bottom: 4px;
-      font-family: "Zen Maru Gothic", sans-serif;
-      font-size: 13px;
+      display: inline-block;
+      padding-bottom: 2px;
+      margin-bottom: 2px;
+      border-bottom: 2px solid rgba(138, 162, 108, 0.78);
+      font-family: var(--font-ui);
+      font-size: 12.8px;
       font-weight: 700;
-      letter-spacing: 0.06em;
-      line-height: 1.2;
-      color: #5b4736;
+      letter-spacing: 0.08em;
+      line-height: 1.05;
+      color: #4f3c2c;
     }
 
     .journey-title {
-      font-family: "Shippori Mincho", serif;
-      font-size: 24px;
+      font-family: var(--font-serif);
+      font-size: 23.5px;
       font-weight: 700;
-      line-height: 1.22;
-      letter-spacing: 0.035em;
-      color: #423521;
+      line-height: 1.18;
+      letter-spacing: 0.03em;
+      color: #3a2d1b;
     }
 
     .journey-bottom {
@@ -811,37 +668,36 @@
       width: 100%;
     }
 
-    /* 現在地：丸いピル型＋線画ピンアイコン＋「いま」強弱つき */
     .journey-location {
       display: inline-flex;
       align-items: center;
-      gap: 4.5px;
-      padding: 4.5px 11px 4.5px 8px;
-      background: rgba(255, 251, 242, 0.95);
+      gap: 5px;
+      padding: 4.5px 11px 4.5px 9px;
+      background: rgba(255, 253, 248, 0.94);
       border: 1px solid #d5c4a6;
       border-radius: 999px;
-      font-family: "Zen Maru Gothic", sans-serif;
-      font-size: 12.2px;
+      font-family: var(--font-ui);
+      font-size: 12.8px;
       font-weight: 700;
       line-height: 1.2;
-      color: #3d2f24;
-      box-shadow: 0 2px 6px rgba(66, 53, 33, 0.1);
+      color: #32251a;
+      box-shadow: 0 1px 4px rgba(66, 53, 33, 0.08);
       min-width: 0;
       max-width: calc(100% - 34px);
     }
 
     .journey-pin-svg {
-      width: 13px;
-      height: 13px;
-      color: #5d7545;
+      width: 13.5px;
+      height: 13.5px;
+      color: #4e693a;
       flex-shrink: 0;
       display: block;
     }
 
     .journey-loc-label {
-      font-size: 10.5px;
+      font-size: 11px;
       font-weight: 700;
-      color: #846f56;
+      color: #776149;
       flex-shrink: 0;
     }
 
@@ -857,254 +713,418 @@
       width: 27px;
       height: 27px;
       border-radius: 50%;
-      background: rgba(255, 251, 242, 0.96);
+      background: rgba(255, 253, 248, 0.94);
       border: 1px solid #d5c4a6;
-      color: #4b633c;
-      font: 700 20px/1 Georgia, serif;
+      color: #425b32;
+      font: 700 19px/1 Georgia, serif;
       padding-left: 1px;
       flex-shrink: 0;
-      box-shadow: 0 2px 5px rgba(66, 53, 33, 0.12);
+      box-shadow: 0 1px 4px rgba(66, 53, 33, 0.1);
+    }
+
+    /* ================= 下段全幅：共通3大ガイド（基本の3ルール / 土・鉢・肥料 / SOS） ================= */
+    .bottom-guides {
+      position: relative;
+      z-index: 1;
+      flex: 0 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+    }
+
+    .guides-heading {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 0 2px;
+      font-family: var(--font-ui);
+      font-size: 12.8px;
+      font-weight: 700;
+      color: var(--ink-muted);
+      letter-spacing: 0.04em;
+    }
+
+    .guides-heading::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: rgba(199, 180, 148, 0.55);
+    }
+
+    .guides-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+
+    .guide-card-btn {
+      width: 100%;
+      background: var(--card-paper);
+      border: 1px solid var(--line-soft);
+      border-bottom: 2.5px solid #d4c3a7;
+      border-radius: 12px;
+      padding: 14px 16px 13px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      font-family: var(--font-ui);
+      color: var(--ink-main);
+      box-shadow: var(--shadow-soft);
+      cursor: pointer;
+      text-align: left;
+      transition: transform 0.12s ease, background-color 0.12s ease;
+    }
+
+    .guide-card-btn:active {
+      transform: scale(0.988);
+      background: #f5efe3;
+    }
+
+    .guide-card-left {
+      display: flex;
+      align-items: center;
+      gap: 13px;
+      min-width: 0;
+    }
+
+    .guide-icon-circle {
+      width: 46px;
+      height: 46px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .guide-icon-circle.is-rule {
+      background: var(--shade-soft);
+      border: 1px solid rgba(105, 129, 84, 0.3);
+      color: var(--shade-color);
+    }
+
+    .guide-icon-circle.is-soil {
+      background: var(--soil-soft);
+      border: 1px solid rgba(140, 98, 57, 0.3);
+      color: var(--soil-color);
+    }
+
+    .guide-icon-circle.is-sos {
+      background: rgba(180, 83, 60, 0.12);
+      border: 1px solid rgba(180, 83, 60, 0.3);
+      color: var(--accent-sos);
+    }
+
+    .guide-icon-svg {
+      width: 24px;
+      height: 24px;
+      display: block;
+    }
+
+    .sos-badge-lg {
+      font-family: sans-serif;
+      font-size: 14px;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      color: var(--accent-sos);
+    }
+
+    .guide-card-text {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      min-width: 0;
+    }
+
+    .guide-card-title {
+      font-family: var(--font-serif);
+      font-size: 19px;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      line-height: 1.2;
+      color: var(--ink-main);
+    }
+
+    .guide-card-sub {
+      font-family: var(--font-ui);
+      font-size: 12.6px;
+      font-weight: 500;
+      color: var(--ink-sub);
+      line-height: 1.3;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .guide-btn-arrow {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      font-size: 18px;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      padding-left: 1px;
+    }
+
+    .guide-card-btn[data-action="rules"] .guide-btn-arrow { background: #e8efe2; color: #4e693a; }
+    .guide-card-btn[data-action="soil"] .guide-btn-arrow { background: #f3eae0; color: #754e28; }
+    .guide-card-btn[data-action="sos"] .guide-btn-arrow { background: #f8e4df; color: #a3432c; }
+
+    /* 準備中トースト */
+    .toast-notice {
+      position: absolute;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(10px);
+      background: rgba(45, 31, 22, 0.92);
+      color: #fffaf0;
+      padding: 10px 22px;
+      border-radius: 999px;
+      font-family: var(--font-ui);
+      font-size: 14.5px;
+      font-weight: 700;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s ease, transform 0.2s ease;
+      z-index: 30;
+      white-space: nowrap;
+      box-shadow: 0 6px 18px rgba(30, 20, 14, 0.28);
+    }
+
+    .toast-notice.is-show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
     }
   </style>
 </head>
 <body>
   <div class="viewport-wrapper">
     <main class="canvas" id="appCanvas">
-      <div class="left-area">
-        <header class="site-header">
-          <span class="beginner-tag">
-            <svg class="wakaba-svg" viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M12 6.5 L4.5 2.8 L4.5 14.5 L12 20.5 Z" fill="#d9ad4c" stroke="#9e7a2e" stroke-width="1.2" stroke-linejoin="round" />
-              <path d="M12 6.5 L19.5 2.8 L19.5 14.5 L12 20.5 Z" fill="#6b8453" stroke="#4d6239" stroke-width="1.2" stroke-linejoin="round" />
-            </svg>
-            <span>初心者さんへ</span>
-          </span>
 
-          <div class="header-main-row">
+      <!-- 上段：左（シミュレーター）＋ 右（コラム＆旅） -->
+      <div class="top-split">
+        <div class="left-area">
+          <header class="site-header">
             <h1 class="main-title">多肉の育て方</h1>
-            <div class="header-divider"></div>
-            <p class="lead-copy">
-              環境や品種で育て方はさまざま。<br />
-              まずは迷わないための、基本の目安です。
-            </p>
-          </div>
-        </header>
+          </header>
 
-        <section class="group-section group-sun" aria-label="お日様グループ">
-          <div class="group-heading">
-            <span class="group-icon-badge" aria-hidden="true">
-              <svg class="group-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="12" cy="12" r="4.2" />
-                <line x1="12" y1="2.2" x2="12" y2="4.6" />
-                <line x1="12" y1="19.4" x2="12" y2="21.8" />
-                <line x1="2.2" y1="12" x2="4.6" y2="12" />
-                <line x1="19.4" y1="12" x2="21.8" y2="12" />
-                <line x1="5.07" y1="5.07" x2="6.77" y2="6.77" />
-                <line x1="17.23" y1="17.23" x2="18.93" y2="18.93" />
-                <line x1="18.93" y1="5.07" x2="17.23" y2="6.77" />
-                <line x1="6.77" y1="17.23" x2="5.07" y2="18.93" />
+          <div class="sim-section-head">
+            <h2 class="sim-section-title">
+              <svg class="wakaba-svg" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M12 6.5 L4.5 2.8 L4.5 14.5 L12 20.5 Z" fill="#d9ad4c" stroke="#9e7a2e" stroke-width="1.2" stroke-linejoin="round" />
+                <path d="M12 6.5 L19.5 2.8 L19.5 14.5 L12 20.5 Z" fill="#6b8453" stroke="#4d6239" stroke-width="1.2" stroke-linejoin="round" />
               </svg>
-            </span>
-            <div class="group-title-wrap">
-              <h2 class="group-title">お日様グループ</h2>
-              <span class="group-en">Sunlight</span>
-            </div>
-            <span class="group-desc">明るい場所が好きな多肉たち</span>
+              <span>多肉育成シミュレーター</span>
+            </h2>
+            <span class="sim-section-sub">タイプをえらんで1年の過ごし方を試してみよう</span>
           </div>
 
-          <div class="sun-grid">
-            <article class="panel-card is-main" role="button" tabindex="0" data-panel="sun-main">
-              <div class="panel-bg">
-                <img class="panel-bg-img" src="images/sun_main_bg.jpg" alt="" />
-              </div>
-              <div class="panel-text">
-                <h3 class="panel-title">春と秋に<br />元気なタイプ</h3>
-                <p class="panel-copy">
-                  春と秋がいちばんの育てどき。<br />
-                  真夏と真冬は少しひかえめに。
-                </p>
-              </div>
-              <div class="panel-bottom">
-                <span class="panel-cta-btn">
-                  <span>くわしく見る</span>
-                  <span class="cta-arrow-circle" aria-hidden="true">›</span>
-                </span>
-              </div>
-            </article>
-
-            <article class="panel-card is-sub" role="button" tabindex="0" data-panel="sun-cool">
-              <div class="panel-bg">
-                <img class="panel-bg-img" src="images/sun_cool_bg.jpg" alt="" />
-              </div>
-              <div class="panel-text">
-                <h3 class="panel-title">涼しい季節に<br />元気なタイプ</h3>
-                <p class="panel-copy">
-                  秋〜春に成長し、<br />
-                  暑い夏はほぼお休み。
-                </p>
-              </div>
-              <div class="panel-bottom">
-                <span class="panel-cta-btn">
-                  <span>くわしく見る</span>
-                  <span class="cta-arrow-circle" aria-hidden="true">›</span>
-                </span>
-              </div>
-            </article>
-
-            <article class="panel-card is-sub" role="button" tabindex="0" data-panel="sun-warm">
-              <div class="panel-bg">
-                <img class="panel-bg-img" src="images/sun_warm_bg.jpg" alt="" />
-              </div>
-              <div class="panel-text">
-                <h3 class="panel-title">寒さが<br />苦手なタイプ</h3>
-                <p class="panel-copy">
-                  明るい場所を好み、<br />
-                  冬の寒さから守ってあげる。
-                </p>
-              </div>
-              <div class="panel-bottom">
-                <span class="panel-cta-btn">
-                  <span>くわしく見る</span>
-                  <span class="cta-arrow-circle" aria-hidden="true">›</span>
-                </span>
-              </div>
-            </article>
-          </div>
-        </section>
-
-        <section class="group-section group-shade" aria-label="木もれ日グループ">
-          <div class="group-heading">
-            <span class="group-icon-badge" aria-hidden="true">
-              <svg class="group-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M19 5c-5.5.4-10.2 3.2-12.5 8.5-.7 1.6-1 3.3-1 5 1.7 0 3.4-.3 5-1 5.3-2.3 8.1-7 8.5-12.5Z" />
-                <path d="M5.5 18.5c2.8-2.8 6.2-5.8 10.5-9.2" />
-                <circle cx="7.2" cy="6.8" r="1" fill="currentColor" stroke="none" opacity="0.7" />
-                <circle cx="10.8" cy="4.8" r="0.8" fill="currentColor" stroke="none" opacity="0.55" />
-              </svg>
-            </span>
-            <div class="group-title-wrap">
-              <h2 class="group-title">木もれ日グループ</h2>
-              <span class="group-en">Soft Light</span>
-            </div>
-            <span class="group-desc">やさしい光が好きな多肉たち</span>
-          </div>
-
-          <article class="shade-card" role="button" tabindex="0" data-panel="shade-main">
-            <div class="panel-bg">
-              <img class="panel-bg-img" src="images/shade_main_bg.jpg" alt="" />
-            </div>
-            <div class="shade-overlay">
-              <div class="shade-top">
-                <h3 class="shade-title">やさしい光が好きなタイプ</h3>
-                <p class="shade-copy">
-                  直射日光は避けて、<br />
-                  明るい窓辺などで育てます。
-                </p>
-              </div>
-              <span class="panel-cta-btn">
-                <span>くわしく見る</span>
-                <span class="cta-arrow-circle" aria-hidden="true">›</span>
+          <section class="group-section group-sun" aria-label="お日様グループ">
+            <div class="group-heading">
+              <span class="group-icon-badge" aria-hidden="true">
+                <svg class="group-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="4.2" />
+                  <line x1="12" y1="2.2" x2="12" y2="4.6" />
+                  <line x1="12" y1="19.4" x2="12" y2="21.8" />
+                  <line x1="2.2" y1="12" x2="4.6" y2="12" />
+                  <line x1="19.4" y1="12" x2="21.8" y2="12" />
+                  <line x1="5.07" y1="5.07" x2="6.77" y2="6.77" />
+                  <line x1="17.23" y1="17.23" x2="18.93" y2="18.93" />
+                  <line x1="18.93" y1="5.07" x2="17.23" y2="6.77" />
+                  <line x1="6.77" y1="17.23" x2="5.07" y2="18.93" />
+                </svg>
               </span>
+              <h3 class="group-title">お日様グループ</h3>
             </div>
-          </article>
-        </section>
-      </div>
 
-      <aside class="right-column">
-        <div class="monthly-wrap">
-          <div class="monthly-card">
-            <img class="monthly-visual-img" id="monthlyVisualImg" src="images/monthly_11.jpg" alt="" />
-            <div class="month-tag">
-              <span class="month-tag-jp" id="monthTagJp">11月</span>
-              <span class="month-tag-sep" aria-hidden="true"></span>
-              <span class="month-tag-en" id="monthTagEn">November</span>
-            </div>
-          </div>
+            <div class="sun-grid">
+              <article class="panel-card is-main" role="button" tabindex="0" data-panel="sun-main">
+                <div class="panel-bg">
+                  <img class="panel-bg-img" src="images/sun_main_bg.jpg" alt="" />
+                </div>
+                <div class="panel-text">
+                  <h4 class="panel-title">春と秋に<br />元気なタイプ</h4>
+                </div>
+                <div class="panel-bottom">
+                  <span class="panel-species-line">エケベリア・セダム など</span>
+                  <span class="panel-cta-btn">
+                    <span>育て方をみる</span>
+                    <span class="cta-arrow-circle" aria-hidden="true">›</span>
+                  </span>
+                </div>
+              </article>
 
-          <div class="torn-note">
-            <div class="torn-note-title">
-              <svg class="torn-note-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <path d="M12 21V9" />
-                <path d="M12 13C7.5 13 5 9.8 5 6.5c3.2 0 5.8 1.5 7 4.5 1.2-3 3.8-4.5 7-4.5 0 3.3-2.5 6.5-7 6.5Z" />
-              </svg>
-              <span>今月のひとこと</span>
+              <article class="panel-card is-sub" role="button" tabindex="0" data-panel="sun-cool">
+                <div class="panel-bg">
+                  <img class="panel-bg-img" src="images/sun_cool_bg.jpg" alt="" />
+                </div>
+                <div class="panel-text">
+                  <h4 class="panel-title">涼しい季節に<br />元気なタイプ</h4>
+                </div>
+                <div class="panel-bottom">
+                  <span class="panel-species-line">アエオニウム など</span>
+                  <span class="panel-cta-btn">
+                    <span>育て方をみる</span>
+                    <span class="cta-arrow-circle" aria-hidden="true">›</span>
+                  </span>
+                </div>
+              </article>
+
+              <article class="panel-card is-sub" role="button" tabindex="0" data-panel="sun-warm">
+                <div class="panel-bg">
+                  <img class="panel-bg-img" src="images/sun_warm_bg.jpg" alt="" />
+                </div>
+                <div class="panel-text">
+                  <h4 class="panel-title">寒さが<br />苦手なタイプ</h4>
+                </div>
+                <div class="panel-bottom">
+                  <span class="panel-species-line">カランコエ など</span>
+                  <span class="panel-cta-btn">
+                    <span>育て方をみる</span>
+                    <span class="cta-arrow-circle" aria-hidden="true">›</span>
+                  </span>
+                </div>
+              </article>
             </div>
-            <p class="torn-note-body" id="monthlyNoteBody">
-              朝晩の冷え込みが強くなってきました。水やりは暖かい日の午前中に。霜や強い寒さから守ってあげましょう。
-            </p>
-          </div>
+          </section>
+
+          <section class="group-section group-shade" aria-label="木もれ日グループ">
+            <div class="group-heading">
+              <span class="group-icon-badge" aria-hidden="true">
+                <svg class="group-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M19 5c-5.5.4-10.2 3.2-12.5 8.5-.7 1.6-1 3.3-1 5 1.7 0 3.4-.3 5-1 5.3-2.3 8.1-7 8.5-12.5Z" />
+                  <path d="M5.5 18.5c2.8-2.8 6.2-5.8 10.5-9.2" />
+                  <circle cx="7.2" cy="6.8" r="1" fill="currentColor" stroke="none" opacity="0.7" />
+                  <circle cx="10.8" cy="4.8" r="0.8" fill="currentColor" stroke="none" opacity="0.55" />
+                </svg>
+              </span>
+              <h3 class="group-title">木もれ日グループ</h3>
+            </div>
+
+            <article class="shade-card" role="button" tabindex="0" data-panel="shade-main">
+              <div class="panel-bg">
+                <img class="panel-bg-img" src="images/shade_main_bg.jpg" alt="" />
+              </div>
+              <div class="shade-overlay">
+                <h4 class="shade-title">やさしい光が好きなタイプ</h4>
+                <div class="shade-bottom">
+                  <span class="panel-species-line">ハオルチア・ガステリア など</span>
+                  <span class="panel-cta-btn">
+                    <span>育て方をみる</span>
+                    <span class="cta-arrow-circle" aria-hidden="true">›</span>
+                  </span>
+                </div>
+              </div>
+            </article>
+          </section>
         </div>
 
-        <div class="action-buttons">
-          <button class="menu-card-btn" type="button" data-action="rules">
-            <span class="menu-card-left">
-              <span class="menu-icon-circle is-rule" aria-hidden="true">
-                <svg class="menu-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+        <!-- 右上：コラム（今月）＋ たにく丸の旅 -->
+        <aside class="right-column">
+          <div class="monthly-wrap">
+            <div class="monthly-card">
+              <img class="monthly-visual-img" id="monthlyVisualImg" src="images/monthly_11.jpg" alt="" />
+              <div class="month-tag">
+                <span class="month-tag-jp" id="monthTagJp">11月</span>
+                <span class="month-tag-sep" aria-hidden="true"></span>
+                <span class="month-tag-en" id="monthTagEn">November</span>
+              </div>
+            </div>
+
+            <div class="torn-note">
+              <div class="torn-note-title">
+                <svg class="torn-note-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M12 21V9" />
+                  <path d="M12 13C7.5 13 5 9.8 5 6.5c3.2 0 5.8 1.5 7 4.5 1.2-3 3.8-4.5 7-4.5 0 3.3-2.5 6.5-7 6.5Z" />
+                </svg>
+                <span>今月のひとこと</span>
+              </div>
+              <p class="torn-note-body" id="monthlyNoteBody">
+                朝晩の冷え込みが強くなってきました。水やりは暖かい日の午前中に。霜や強い寒さから守ってあげましょう。
+              </p>
+            </div>
+          </div>
+
+          <a class="journey-cover" href="#journey" id="travelOpenBtn">
+            <span class="journey-heading">
+              <span class="journey-by">たにく丸の</span>
+              <span class="journey-title">道の駅<br />スタンプ旅</span>
+            </span>
+            <span class="journey-bottom">
+              <span class="journey-location">
+                <svg class="journey-pin-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M12 21s-6-5.2-6-10.2a6 6 0 1 1 12 0C18 15.8 12 21 12 21Z" />
+                  <circle cx="12" cy="10.5" r="2.2" />
+                </svg>
+                <span class="journey-loc-label">いま</span>
+                <span id="travelLocation">道の駅とよはし</span>
+              </span>
+              <span class="journey-arrow" aria-hidden="true">›</span>
+            </span>
+          </a>
+        </aside>
+      </div>
+
+      <!-- 下段全幅：共通3大ガイド -->
+      <section class="bottom-guides" aria-label="どのタイプにも共通のガイド">
+        <div class="guides-heading">どのタイプにも共通のガイド</div>
+        <div class="guides-grid">
+          <button class="guide-card-btn" type="button" data-action="rules">
+            <span class="guide-card-left">
+              <span class="guide-icon-circle is-rule" aria-hidden="true">
+                <svg class="guide-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
                   <path d="M12 20v-8" />
                   <path d="M12 12c0-4.2-3.2-6.5-7-6.5 0 3.8 2.3 6.5 7 6.5Z" />
                   <path d="M12 14c0-3.8 2.8-6 6.5-6 0 3.5-2 6-6.5 6Z" />
                 </svg>
               </span>
-              <span class="menu-card-text">
-                <span class="menu-card-title">基本の3ルール</span>
-                <span class="menu-card-sub">光・風・水のキホンを知る</span>
+              <span class="guide-card-text">
+                <span class="guide-card-title">基本の3ルール</span>
+                <span class="guide-card-sub">光・風・水とお迎え初日のコツ</span>
               </span>
             </span>
-            <span class="menu-btn-arrow" aria-hidden="true">›</span>
+            <span class="guide-btn-arrow" aria-hidden="true">›</span>
           </button>
 
-          <button class="menu-card-btn" type="button" data-action="simulator">
-            <span class="menu-card-left">
-              <span class="menu-icon-circle is-sim" aria-hidden="true">
-                <svg class="menu-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
-                  <line x1="4" y1="7" x2="20" y2="7" />
-                  <circle cx="9" cy="7" r="2" fill="#ffffff" />
-                  <line x1="4" y1="12" x2="20" y2="12" />
-                  <circle cx="15" cy="12" r="2" fill="#ffffff" />
-                  <line x1="4" y1="17" x2="20" y2="17" />
-                  <circle cx="11" cy="17" r="2" fill="#ffffff" />
+          <button class="guide-card-btn" type="button" data-action="soil">
+            <span class="guide-card-left">
+              <span class="guide-icon-circle is-soil" aria-hidden="true">
+                <svg class="guide-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M5 10h14l-1.6 9.2a1.6 1.6 0 0 1-1.6 1.3H8.2a1.6 1.6 0 0 1-1.6-1.3L5 10Z" />
+                  <path d="M4 10h16" />
+                  <path d="M7.5 10c1.2-2.2 2.8-3.3 4.5-3.3s3.3 1.1 4.5 3.3" />
+                  <circle cx="10.5" cy="14.5" r="0.8" fill="currentColor" stroke="none" />
+                  <circle cx="13.8" cy="15.5" r="0.8" fill="currentColor" stroke="none" />
                 </svg>
               </span>
-              <span class="menu-card-text">
-                <span class="menu-card-title">バランスシミュレーター</span>
-                <span class="menu-card-sub">光・風・水で多肉の反応を試す</span>
+              <span class="guide-card-text">
+                <span class="guide-card-title">土・鉢・肥料のキホン</span>
+                <span class="guide-card-sub">土の考え方・鉢選び・肥料</span>
               </span>
             </span>
-            <span class="menu-btn-arrow" aria-hidden="true">›</span>
+            <span class="guide-btn-arrow" aria-hidden="true">›</span>
           </button>
 
-          <button class="menu-card-btn" type="button" data-action="sos">
-            <span class="menu-card-left">
-              <span class="menu-icon-circle is-sos" aria-hidden="true">
-                <span class="sos-badge-mini">SOS</span>
+          <button class="guide-card-btn" type="button" data-action="sos">
+            <span class="guide-card-left">
+              <span class="guide-icon-circle is-sos" aria-hidden="true">
+                <span class="sos-badge-lg">SOS</span>
               </span>
-              <span class="menu-card-text">
-                <span class="menu-card-title">困ったときのSOS</span>
-                <span class="menu-card-sub">シワシワ・徒長・ジュレ対策</span>
+              <span class="guide-card-text">
+                <span class="guide-card-title">困ったときのSOS</span>
+                <span class="guide-card-sub">シワシワ・ひょろ長・ブヨブヨ対策</span>
               </span>
             </span>
-            <span class="menu-btn-arrow" aria-hidden="true">›</span>
+            <span class="guide-btn-arrow" aria-hidden="true">›</span>
           </button>
         </div>
+      </section>
 
-        <a class="journey-cover" href="#journey" id="travelOpenBtn">
-          <span class="journey-heading">
-            <span class="journey-by">たにく丸の</span>
-            <span class="journey-title">道の駅<br />スタンプ旅</span>
-          </span>
-          <span class="journey-bottom">
-            <span class="journey-location">
-              <svg class="journey-pin-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <path d="M12 21s-6-5.2-6-10.2a6 6 0 1 1 12 0C18 15.8 12 21 12 21Z" />
-                <circle cx="12" cy="10.5" r="2.2" />
-              </svg>
-              <span class="journey-loc-label">いま</span>
-              <span id="travelLocation">道の駅とよはし</span>
-            </span>
-            <span class="journey-arrow" aria-hidden="true">›</span>
-          </span>
-        </a>
-      </aside>
+      <div class="toast-notice" id="toastNotice" role="status" aria-live="polite"></div>
     </main>
   </div>
 
@@ -1135,16 +1155,108 @@
       document.getElementById("monthlyNoteBody").textContent = data.note;
     }
 
-    document.querySelectorAll('[data-action="simulator"]').forEach((btn) => {
+    let toastTimer = null;
+    function showToast(message) {
+      const el = document.getElementById("toastNotice");
+      el.textContent = message;
+      el.classList.add("is-show");
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => {
+        el.classList.remove("is-show");
+      }, 2200);
+    }
+
+    function openPanel(type) {
+      const params = new URLSearchParams(window.location.search);
+      const qMonth = params.get("month");
+      const query = qMonth ? `type=${encodeURIComponent(type)}&month=${encodeURIComponent(qMonth)}` : `type=${encodeURIComponent(type)}`;
+      window.location.href = `sim.html?${query}`;
+    }
+
+    function handleCommonAction(action) {
+      if (action === "rules") {
+        showToast("「基本の3ルール」画面はこれから制作予定です");
+      } else if (action === "soil") {
+        showToast("「土・鉢・肥料のキホン」画面はこれから制作予定です");
+      } else if (action === "sos") {
+        showToast("「困ったときのSOS」画面はこれから制作予定です");
+      }
+    }
+
+    const panelCards = Array.from(document.querySelectorAll("[data-panel]"));
+    const menuButtons = Array.from(document.querySelectorAll("[data-action]"));
+    let lastTapTs = 0;
+
+    document.addEventListener("pointerdown", (e) => {
+      if (e.pointerType === "mouse" && e.button !== 0) return;
+      const now = Date.now();
+      if (now - lastTapTs < 250) return;
+      const directCard = e.target && e.target.closest ? e.target.closest("[data-panel]") : null;
+      if (directCard) {
+        lastTapTs = now;
+        e.preventDefault();
+        openPanel(directCard.dataset.panel);
+        return;
+      }
+      const directBtn = e.target && e.target.closest ? e.target.closest("[data-action]") : null;
+      if (directBtn) {
+        lastTapTs = now;
+        e.preventDefault();
+        handleCommonAction(directBtn.dataset.action);
+        return;
+      }
+      const x = e.clientX;
+      const y = e.clientY;
+      for (const card of panelCards) {
+        const rect = card.getBoundingClientRect();
+        if (x >= rect.left && x <= rect.right && y >= rect.top && y <= rect.bottom) {
+          lastTapTs = now;
+          e.preventDefault();
+          openPanel(card.dataset.panel);
+          return;
+        }
+      }
+      for (const btn of menuButtons) {
+        const rect = btn.getBoundingClientRect();
+        if (x >= rect.left && x <= rect.right && y >= rect.top && y <= rect.bottom) {
+          lastTapTs = now;
+          e.preventDefault();
+          handleCommonAction(btn.dataset.action);
+          return;
+        }
+      }
+    }, { capture: true, passive: false });
+
+    panelCards.forEach((card) => {
+      card.addEventListener("click", () => {
+        if (Date.now() - lastTapTs < 400) return;
+        openPanel(card.dataset.panel);
+      });
+      card.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          openPanel(card.dataset.panel);
+        }
+      });
+    });
+
+    menuButtons.forEach((btn) => {
       btn.addEventListener("click", () => {
-        window.location.href = "simulator.html";
+        if (Date.now() - lastTapTs < 400) return;
+        handleCommonAction(btn.dataset.action);
       });
     });
 
     function fitCanvas() {
       const canvas = document.getElementById("appCanvas");
       const scale = Math.min(window.innerWidth / 1080, window.innerHeight / 786);
-      canvas.style.transform = `translate(-50%, -50%) scale(${scale})`;
+      if (window.CSS && CSS.supports && CSS.supports("zoom", "1")) {
+        canvas.style.zoom = scale;
+        canvas.style.transform = "none";
+      } else {
+        canvas.style.zoom = "";
+        canvas.style.transform = `scale(${scale})`;
+      }
     }
 
     window.addEventListener("resize", fitCanvas);
