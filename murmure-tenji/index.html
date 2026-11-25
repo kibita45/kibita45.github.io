@@ -889,6 +889,7 @@
       transform: translateX(-50%) translateY(0);
     }
   </style>
+  <noscript><style>#monthlyVisualImg { display: none; }</style></noscript>
 </head>
 <body>
   <div class="viewport-wrapper">
@@ -897,7 +898,8 @@
       <!-- 上段全幅：メイン「多肉の育て方」＋「今月のひとこと」合体パネル（1:1画像） -->
       <section class="hero-panel" role="button" tabindex="0" data-action="rules" aria-label="多肉の育て方（光・風・水やりのきほんを見る）">
         <div class="hero-visual">
-          <img class="monthly-visual-img" id="monthlyVisualImg" src="images/monthly_11.jpg" alt="" />
+          <img class="monthly-visual-img" id="monthlyVisualImg" alt="" />
+          <noscript><img class="monthly-visual-img" src="images/monthly_11.jpg" alt="" /></noscript>
           <div class="month-tag">
             <span class="month-tag-jp" id="monthTagJp">11月</span>
             <span class="month-tag-sep" aria-hidden="true"></span>
@@ -940,6 +942,34 @@
           </div>
         </div>
       </section>
+      <script>
+    const MONTHLY_DATA = {
+      1: { jp: "1月", en: "January", img: "images/monthly_01.jpg", note: "寒さの本番です。多くの多肉はゆっくり冬休み中なので、水やりは暖かい日の昼間にごく少しだけ。凍らない明るい場所で春を待ちましょう。" },
+      2: { jp: "2月", en: "February", img: "images/monthly_02.jpg", note: "一年でいちばん寒い時期です。土が乾いていても慌てて水をあげなくて大丈夫。晴れた日中は窓辺でたっぷり光を当ててあげましょう。" },
+      3: { jp: "3月", en: "March", img: "images/monthly_03.jpg", note: "春の気配とともに多肉たちが目覚める季節です。暖かい日から少しずつ水やりを再開し、冬に室内にいた子は外のやわらかな光に慣らしましょう。" },
+      4: { jp: "4月", en: "April", img: "images/monthly_04.jpg", note: "お日様と風を浴びてぐんぐん育つ季節です。鉢を持って軽くなったら、底から水が出るまでたっぷり水やりを。植え替えにもぴったりの時期です。" },
+      5: { jp: "5月", en: "May", img: "images/monthly_05.jpg", note: "成長のピークで葉もぷっくり元気に育ちます。急に日差しが強くなる日も増えるので、来月の梅雨に向けて風通しのよい場所を意識しておくと安心です。" },
+      6: { jp: "6月", en: "June", img: "images/monthly_06.jpg", note: "梅雨のジメジメと長雨は多肉がいちばん苦手な環境です。雨の当たらない明るい場所へ移して水やりは控えめに。とにかく風通しを大切にしましょう。" },
+      7: { jp: "7月", en: "July", img: "images/monthly_07.jpg", note: "同じ夏でも、すやすや眠る子と元気に育つ子がいます。強い直射日光と蒸れに気をつけつつ、水やりは下のシミュレーターでタイプを見てみましょう。" },
+      8: { jp: "8月", en: "August", img: "images/monthly_08.jpg", note: "真夏の暑さで多くの多肉はひと休み中です。無理に水をあげすぎると根が傷みやすいので、強い日差しを避けた風通しのよい明るい日陰で涼しく過ごさせて。" },
+      9: { jp: "9月", en: "September", img: "images/monthly_09.jpg", note: "残暑が落ち着き、朝晩に涼しい風が吹きはじめたら秋の成長がスタートです。控えていた水やりも、気温の様子を見ながら少しずつ増やしてあげましょう。" },
+      10: { jp: "10月", en: "October", img: "images/monthly_10.jpg", note: "多肉がいちばん元気で美しく輝く季節です。お日様と風をたっぷり浴びて寒暖差が出てくると、葉の先から少しずつ紅葉が始まります。" },
+      11: { jp: "11月", en: "November", img: "images/monthly_11.jpg", note: "朝晩の冷え込みが強まり、紅葉がいちだんと深まる季節です。水やりは暖かい日の午前中にすませ、寒さが苦手な子は早めにお部屋へ移してあげましょう。" },
+      12: { jp: "12月", en: "December", img: "images/monthly_12.jpg", note: "紅葉がいちばん深まり、宝石のようにきれいな姿を見せてくれる季節です。水やりは控えめにして、霜や強い寒さから守ってあげましょう。" }
+    };
+
+    function applyMonth() {
+      const params = new URLSearchParams(window.location.search);
+      const qMonth = parseInt(params.get("month"), 10);
+      const month = (qMonth >= 1 && qMonth <= 12) ? qMonth : (new Date().getMonth() + 1);
+      const data = MONTHLY_DATA[month] || MONTHLY_DATA[11];
+      document.getElementById("monthlyVisualImg").src = data.img;
+      document.getElementById("monthTagJp").textContent = data.jp;
+      document.getElementById("monthTagEn").textContent = data.en;
+      document.getElementById("monthlyNoteBody").textContent = data.note;
+    }
+    applyMonth();
+      </script>
 
       <!-- 下段：左（シミュレーター枠）＋ 右（土・SOS・旅の3段） -->
       <div class="bottom-split">
@@ -1060,32 +1090,6 @@
   </div>
 
   <script>
-    const MONTHLY_DATA = {
-      1: { jp: "1月", en: "January", img: "images/monthly_01.jpg", note: "寒さの本番です。多くの多肉はゆっくり冬休み中なので、水やりは暖かい日の昼間にごく少しだけ。凍らない明るい場所で春を待ちましょう。" },
-      2: { jp: "2月", en: "February", img: "images/monthly_02.jpg", note: "一年でいちばん寒い時期です。土が乾いていても慌てて水をあげなくて大丈夫。晴れた日中は窓辺でたっぷり光を当ててあげましょう。" },
-      3: { jp: "3月", en: "March", img: "images/monthly_03.jpg", note: "春の気配とともに多肉たちが目覚める季節です。暖かい日から少しずつ水やりを再開し、冬に室内にいた子は外のやわらかな光に慣らしましょう。" },
-      4: { jp: "4月", en: "April", img: "images/monthly_04.jpg", note: "お日様と風を浴びてぐんぐん育つ季節です。鉢を持って軽くなったら、底から水が出るまでたっぷり水やりを。植え替えにもぴったりの時期です。" },
-      5: { jp: "5月", en: "May", img: "images/monthly_05.jpg", note: "成長のピークで葉もぷっくり元気に育ちます。急に日差しが強くなる日も増えるので、来月の梅雨に向けて風通しのよい場所を意識しておくと安心です。" },
-      6: { jp: "6月", en: "June", img: "images/monthly_06.jpg", note: "梅雨のジメジメと長雨は多肉がいちばん苦手な環境です。雨の当たらない明るい場所へ移して水やりは控えめに。とにかく風通しを大切にしましょう。" },
-      7: { jp: "7月", en: "July", img: "images/monthly_07.jpg", note: "同じ夏でも、すやすや眠る子と元気に育つ子がいます。強い直射日光と蒸れに気をつけつつ、水やりは下のシミュレーターでタイプを見てみましょう。" },
-      8: { jp: "8月", en: "August", img: "images/monthly_08.jpg", note: "真夏の暑さで多くの多肉はひと休み中です。無理に水をあげすぎると根が傷みやすいので、強い日差しを避けた風通しのよい明るい日陰で涼しく過ごさせて。" },
-      9: { jp: "9月", en: "September", img: "images/monthly_09.jpg", note: "残暑が落ち着き、朝晩に涼しい風が吹きはじめたら秋の成長がスタートです。控えていた水やりも、気温の様子を見ながら少しずつ増やしてあげましょう。" },
-      10: { jp: "10月", en: "October", img: "images/monthly_10.jpg", note: "多肉がいちばん元気で美しく輝く季節です。お日様と風をたっぷり浴びて寒暖差が出てくると、葉の先から少しずつ紅葉が始まります。" },
-      11: { jp: "11月", en: "November", img: "images/monthly_11.jpg", note: "朝晩の冷え込みが強まり、紅葉がいちだんと深まる季節です。水やりは暖かい日の午前中にすませ、寒さが苦手な子は早めにお部屋へ移してあげましょう。" },
-      12: { jp: "12月", en: "December", img: "images/monthly_12.jpg", note: "紅葉がいちばん深まり、宝石のようにきれいな姿を見せてくれる季節です。水やりは控えめにして、霜や強い寒さから守ってあげましょう。" }
-    };
-
-    function applyMonth() {
-      const params = new URLSearchParams(window.location.search);
-      const qMonth = parseInt(params.get("month"), 10);
-      const month = (qMonth >= 1 && qMonth <= 12) ? qMonth : (new Date().getMonth() + 1);
-      const data = MONTHLY_DATA[month] || MONTHLY_DATA[11];
-      document.getElementById("monthlyVisualImg").src = data.img;
-      document.getElementById("monthTagJp").textContent = data.jp;
-      document.getElementById("monthTagEn").textContent = data.en;
-      document.getElementById("monthlyNoteBody").textContent = data.note;
-    }
-
     let toastTimer = null;
     function showToast(message) {
       const el = document.getElementById("toastNotice");
@@ -1229,7 +1233,6 @@
 
     window.addEventListener("resize", fitCanvas);
     window.addEventListener("orientationchange", fitCanvas);
-    applyMonth();
     fitCanvas();
   </script>
 </body>

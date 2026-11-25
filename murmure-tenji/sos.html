@@ -1244,54 +1244,15 @@
       detailTermEl.textContent = s.term;
       detailTitleEl.textContent = s.title;
 
-      let activeData = s;
-
+      checkBoxEl.classList.toggle("is-hidden", !s.check);
       if (s.check) {
-        checkBoxEl.classList.remove("is-hidden");
         checkQuestionEl.textContent = s.check.question;
-        const selectedId = choiceState[s.id] || null;
         checkChoicesEl.innerHTML = s.check.choices.map((c) => `
-          <button class="check-choice-btn ${c.id === selectedId ? "is-selected" : ""}" type="button" data-choice="${c.id}">
+          <button class="check-choice-btn" type="button" data-choice="${c.id}">
             <span>${c.label}</span>
           </button>
         `).join("");
-
-        if (!selectedId) {
-          precheckPanelEl.classList.remove("is-hidden");
-          resultBodyEl.classList.add("is-hidden");
-          precheckLeadEl.textContent = s.check.precheckLead;
-          precheckSubEl.textContent = s.check.precheckSub;
-        } else {
-          precheckPanelEl.classList.add("is-hidden");
-          resultBodyEl.classList.remove("is-hidden");
-          activeData = s.check.choices.find((c) => c.id === selectedId) || s.check.choices[0];
-        }
-      } else {
-        checkBoxEl.classList.add("is-hidden");
-        precheckPanelEl.classList.add("is-hidden");
-        resultBodyEl.classList.remove("is-hidden");
       }
-
-      if (!resultBodyEl.classList.contains("is-hidden")) {
-        causeBoxEl.classList.remove("is-urgent", "is-safe");
-        if (activeData.tone === "urgent") causeBoxEl.classList.add("is-urgent");
-        if (activeData.tone === "safe") causeBoxEl.classList.add("is-safe");
-
-        causeLabelEl.textContent = activeData.causeLabel;
-        causeTitleEl.textContent = activeData.causeTitle;
-        causeDescEl.textContent = activeData.causeDesc;
-
-        doListEl.innerHTML = activeData.dos.map((d, idx) => `
-          <li class="do-item">
-            <span class="do-num" aria-hidden="true">${idx + 1}</span>
-            <span>${d}</span>
-          </li>
-        `).join("");
-
-        ngMainEl.textContent = activeData.ngMain;
-        ngDescEl.textContent = activeData.ngDesc;
-      }
-
       relatedBarEl.innerHTML = s.related.map((r) => `
         <button class="related-btn ${r.primary ? "is-primary" : ""}" type="button" data-nav-url="${r.nav}">
           <span class="rel-left">
@@ -1301,19 +1262,58 @@
           <span class="rel-arrow" aria-hidden="true">›</span>
         </button>
       `).join("");
+      renderResponse(s);
+    }
+
+    function renderResponse(s) {
+      let activeData = s;
+      if (s.check) {
+        const selectedId = choiceState[s.id];
+        for (const button of checkChoicesEl.children) {
+          button.classList.toggle("is-selected", button.dataset.choice === selectedId);
+        }
+        activeData = s.check.choices.find((choice) => choice.id === selectedId);
+      }
+      precheckPanelEl.classList.toggle("is-hidden", Boolean(activeData));
+      resultBodyEl.classList.toggle("is-hidden", !activeData);
+      if (!activeData) {
+        precheckLeadEl.textContent = s.check.precheckLead;
+        precheckSubEl.textContent = s.check.precheckSub;
+        return;
+      }
+
+      causeBoxEl.classList.remove("is-urgent", "is-safe");
+      if (activeData.tone === "urgent") causeBoxEl.classList.add("is-urgent");
+      if (activeData.tone === "safe") causeBoxEl.classList.add("is-safe");
+
+      causeLabelEl.textContent = activeData.causeLabel;
+      causeTitleEl.textContent = activeData.causeTitle;
+      causeDescEl.textContent = activeData.causeDesc;
+
+      doListEl.innerHTML = activeData.dos.map((d, idx) => `
+        <li class="do-item">
+          <span class="do-num" aria-hidden="true">${idx + 1}</span>
+          <span>${d}</span>
+        </li>
+      `).join("");
+
+      ngMainEl.textContent = activeData.ngMain;
+      ngDescEl.textContent = activeData.ngDesc;
     }
 
     function selectSymptom(id) {
       if (!id || id === currentSymId) return;
       currentSymId = id;
-      renderSymptomList();
+      for (const button of symptomListEl.children) {
+        button.classList.toggle("is-active", button.dataset.sym === id);
+      }
       renderDetail();
     }
 
     function selectChoice(choiceId) {
-      if (!choiceId) return;
+      if (!choiceId || choiceState[currentSymId] === choiceId) return;
       choiceState[currentSymId] = choiceId;
-      renderDetail();
+      renderResponse(SYMPTOMS.find((s) => s.id === currentSymId));
     }
 
     const pageParams = new URLSearchParams(window.location.search);

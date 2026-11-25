@@ -2491,29 +2491,42 @@
       return { mood: "good", icon: "◎", title: "安心の冬越し！", comment: "霜よけ＋明るい場所＋控えめ水でOK" };
     }
 
-    const _preloadedImages = {};
-    function preloadAllDioramaImages() {
-      const urls = new Set();
-      Object.values(TYPE_CONFIGS).forEach((cfg) => {
-        if (cfg.komorebi) {
-          Object.values(cfg.komorebi).forEach((src) => urls.add(src));
-        }
-      });
-      Object.values(LAYERED_PARTS).forEach((p) => {
-        if (p.sky) urls.add(p.sky);
-        if (p.skyByType) Object.values(p.skyByType).forEach((s) => s && urls.add(s));
-        if (p.ground) urls.add(p.ground);
-        if (p.groundByType) Object.values(p.groundByType).forEach((s) => s && urls.add(s));
-        if (p.char) urls.add(p.char);
-        if (p.charByType) Object.values(p.charByType).forEach((s) => s && urls.add(s));
-      });
-      urls.forEach((src) => {
-        if (_preloadedImages[src]) return;
-        const im = new Image();
-        im.decoding = "async";
-        im.src = src;
-        _preloadedImages[src] = im;
-      });
+    // Keep the original PNG paths as the keys used by the layout editor.
+    const LOSSLESS_PARTS = new Set([
+      "images/ground_autumn.png",
+      "images/ground_rain.png",
+      "images/ground_spring.png",
+      "images/ground_summer.png",
+      "images/ground_winter_in.png",
+      "images/ground_winter_out.png",
+      "images/komorebi_autumn.png",
+      "images/komorebi_spring.png",
+      "images/komorebi_summer.png",
+      "images/taniku_autumn_happy.png",
+      "images/taniku_happy.png",
+      "images/taniku_rain_humid.png",
+      "images/taniku_rain_rest.png",
+      "images/taniku_summer_happy.png",
+      "images/taniku_summer_hot_v2.png",
+      "images/taniku_summer_rest.png",
+      "images/taniku_summer_sleep.png",
+      "images/taniku_winter_cold.png",
+      "images/taniku_winter_happy.png",
+      "images/taniku_winter_indoor.png",
+    ]);
+
+    function setPartImage(image, source) {
+      image.onerror = null;
+      if (!LOSSLESS_PARTS.has(source)) {
+        image.src = source;
+        return;
+      }
+      const webp = source.replace("images/", "images/lite/").replace(/\.png$/, ".webp");
+      image.onerror = () => {
+        image.onerror = null;
+        image.src = source;
+      };
+      image.src = webp;
     }
 
     function updateDioramaImage(season, src, komorebiSrc = "") {
@@ -2529,7 +2542,7 @@
         if (komorebiSrc) {
           if (leafImg.dataset.currentSrc !== komorebiSrc) {
             leafImg.dataset.currentSrc = komorebiSrc;
-            leafImg.src = komorebiSrc;
+            setPartImage(leafImg, komorebiSrc);
           }
           panel.classList.add("has-komorebi");
         } else {
@@ -2564,7 +2577,7 @@
           : layered.ground;
         if (groundImg.dataset.currentSrc !== resolvedGround) {
           groundImg.dataset.currentSrc = resolvedGround;
-          groundImg.src = resolvedGround;
+          setPartImage(groundImg, resolvedGround);
         }
 
         const resolvedChar = (layered.charByType && layered.charByType[state.type] !== undefined)
@@ -2575,7 +2588,7 @@
           panel.classList.remove("no-char");
           if (charImg.dataset.currentSrc !== resolvedChar) {
             charImg.dataset.currentSrc = resolvedChar;
-            charImg.src = resolvedChar;
+            setPartImage(charImg, resolvedChar);
           }
           const cAdj = (typeof CHAR_ADJUSTMENTS !== "undefined" && CHAR_ADJUSTMENTS[resolvedChar])
             ? CHAR_ADJUSTMENTS[resolvedChar]
@@ -3327,7 +3340,6 @@
     window.addEventListener("resize", fitCanvas);
     window.addEventListener("orientationchange", fitCanvas);
     initFromParams();
-    preloadAllDioramaImages();
     fitCanvas();
     resetIdleTimer();
   </script>
