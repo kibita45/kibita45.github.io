@@ -5,10 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
 
   <!-- =========================================================================
-    保木平珈琲 Murmure｜展示用iPad Webアプリ「多肉の育て方」トップ画面（旅カード準備中・SOS接続版）
-    - 左上：ヘッダー（「多肉の育て方」のみ）＋「🔰 多肉育成シミュレーター」＋高さ・大きさを揃えた1行説明
-    - 右上：コラム（今月のひとこと）＋ たにく丸の道の駅スタンプ旅（ただいま準備中表示＋タップ時トースト）
-    - 下段全幅：どのタイプにも共通の3大ガイド（基本の3要素［rules.html］／土の基本［soil.html］／困ったときのSOS［sos.html］）
+    保木平珈琲 Murmure｜展示用iPad Webアプリ「多肉の育て方」トップ画面（正式版）
+    - 上段全幅（高さ266px）：メイン「多肉の育て方」＋「今月のひとこと」合体パネル（1:1正方形画像）
+    - 左下：多肉育成シミュレーター（4タイプ：春秋元気／夏お休み／寒さ苦手／やさしい光）
+    - 右下：お役立ち＆お楽しみ（土の基本／困ったときのSOS／たにく丸の道の駅スタンプ旅）
     - 基準キャンバス: 1080 × 786 px（iPad横向き・スクロールなし・自動スケール対応）
     - Muse連携用ID（#travelOpenBtn / #travelLocation）を維持
   ========================================================================= -->
@@ -41,6 +41,8 @@
       --sun-soft: rgba(201, 122, 41, 0.12);
       --shade-color: #698154;
       --shade-soft: rgba(105, 129, 84, 0.13);
+      --water-color: #467b96;
+      --water-soft: rgba(70, 123, 150, 0.12);
       --soil-color: #8c6239;
       --soil-soft: rgba(140, 98, 57, 0.13);
       --accent-sos: #b4533c;
@@ -101,7 +103,7 @@
       min-height: 786px;
       background: linear-gradient(135deg, #f9f5e9, #f2ead9);
       transform-origin: center center;
-      padding: 15px 20px 16px;
+      padding: 16px 28px 16px;
       display: flex;
       flex-direction: column;
       gap: 14px;
@@ -119,423 +121,51 @@
       opacity: 0.75;
     }
 
-    /* ================= 上段：左（シミュレーター）＋ 右（コラム＆旅） ================= */
-    .top-split {
+    /* ================= 上段全幅：メイン「多肉の育て方」＋「今月のひとこと」合体パネル（高さ266px・画像1:1） ================= */
+    .hero-panel {
       position: relative;
       z-index: 1;
-      flex: 1 1 auto;
-      min-height: 0;
-      display: grid;
-      grid-template-columns: 1fr 296px;
-      gap: 18px;
-    }
-
-    /* ================= 左上：ヘッダー＋シミュレーター4パネル ================= */
-    .left-area {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      min-width: 0;
-      min-height: 0;
-    }
-
-    .site-header {
-      display: flex;
-      align-items: center;
-      padding: 0 2px;
-      flex-shrink: 0;
-    }
-
-    .main-title {
-      font-family: var(--font-serif);
-      font-size: 33px;
-      font-weight: 700;
-      letter-spacing: 0.06em;
-      line-height: 1.05;
-      flex-shrink: 0;
-    }
-
-    /* シミュレーター見出し（初心者マーク＋タイトル＋高さと大きさを揃えた1行説明） */
-    .sim-section-head {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 2px 2px 0;
-      flex-shrink: 0;
-    }
-
-    .sim-section-title {
-      font-family: var(--font-ui);
-      font-size: 16px;
-      font-weight: 700;
-      color: var(--ink-main);
-      letter-spacing: 0.03em;
-      line-height: 1.2;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      flex-shrink: 0;
-    }
-
-    .wakaba-svg {
-      width: 17px;
-      height: 17px;
-      display: block;
-      flex-shrink: 0;
-    }
-
-    .sim-section-sub {
-      font-family: var(--font-ui);
-      font-size: 15px;
-      font-weight: 500;
-      line-height: 1.2;
-      color: var(--ink-sub);
-      letter-spacing: 0.01em;
-      white-space: nowrap;
-    }
-
-    /* グループ領域（外箱なし・控えめなサブラベル） */
-    .group-section {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-      min-height: 0;
-    }
-
-    .group-sun {
-      flex: 1 1 auto;
-      min-height: 0;
-    }
-
-    .group-shade {
-      height: 176px;
-      flex-shrink: 0;
-      margin-top: 2px;
-    }
-
-    .group-heading {
-      padding: 0 2px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      flex-shrink: 0;
-    }
-
-    .group-heading::after {
-      content: "";
-      flex: 1;
-      height: 1px;
-      margin-left: 4px;
-    }
-
-    .group-sun .group-heading::after { background: rgba(201, 122, 41, 0.28); }
-    .group-shade .group-heading::after { background: rgba(105, 129, 84, 0.3); }
-
-    .group-icon-badge {
-      width: 20px;
-      height: 20px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-    }
-
-    .group-sun .group-icon-badge { background: var(--sun-soft); color: var(--sun-color); }
-    .group-shade .group-icon-badge { background: var(--shade-soft); color: var(--shade-color); }
-
-    .group-icon-svg { width: 13px; height: 13px; display: block; }
-
-    .group-title {
-      font-family: var(--font-ui);
-      font-size: 13.8px;
-      font-weight: 700;
-      letter-spacing: 0.04em;
-      line-height: 1.2;
-      flex-shrink: 0;
-    }
-
-    .group-sun .group-title { color: #9c5718; }
-    .group-shade .group-title { color: #476335; }
-
-    .sun-grid {
-      flex: 1;
-      min-height: 0;
-      display: grid;
-      grid-template-columns: 40fr 30fr 30fr;
-      gap: 12px;
-    }
-
-    /* ================= 4タイプカード本体 ================= */
-    .panel-card {
-      position: relative;
-      background: linear-gradient(180deg, #fdfaf2 0%, #f4ead8 100%);
-      border: 1px solid var(--line-soft);
-      border-radius: 12px;
-      padding: 12px 12px 10px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      overflow: hidden;
-      cursor: pointer;
-      box-shadow: var(--shadow-soft);
-      transition: transform 0.14s ease, box-shadow 0.14s ease;
-    }
-
-    .panel-card::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      z-index: 1;
-      pointer-events: none;
-      background: linear-gradient(
-        180deg,
-        rgba(250, 245, 235, 0.78) 0%,
-        rgba(250, 245, 235, 0.36) 24%,
-        rgba(250, 245, 235, 0) 40%
-      );
-    }
-
-    .panel-card:active { transform: scale(0.988); }
-
-    .panel-card.is-main {
-      border-color: #d6c2a0;
-      padding: 12px 14px 10px;
-    }
-
-    .panel-bg {
-      position: absolute;
-      inset: 0;
-      z-index: 0;
-      pointer-events: none;
-      overflow: hidden;
-    }
-
-    .panel-bg-img {
+      flex: 0 0 266px;
       width: 100%;
-      height: 100%;
-      object-fit: cover;
-      object-position: center bottom;
-      display: block;
-    }
-
-    .panel-text {
-      position: relative;
-      z-index: 2;
-    }
-
-    [data-panel="sun-main"] { --type-color: var(--tag-1); --type-color-dark: var(--tag-1-dark); }
-    [data-panel="sun-cool"] { --type-color: var(--tag-2); --type-color-dark: var(--tag-2-dark); }
-    [data-panel="sun-warm"] { --type-color: var(--tag-3); --type-color-dark: var(--tag-3-dark); }
-    [data-panel="shade-main"] { --type-color: var(--tag-4); --type-color-dark: var(--tag-4-dark); }
-
-    .panel-title {
-      font-family: var(--font-serif);
-      font-weight: 700;
-      line-height: 1.24;
-      letter-spacing: 0.02em;
-      color: var(--ink-main);
-      display: inline-block;
-      padding-bottom: 4px;
-      border-bottom: 2.5px solid var(--type-color);
-      text-shadow: 0 1px 6px rgba(255, 252, 245, 0.9);
-    }
-
-    .panel-card.is-main .panel-title { font-size: 23px; }
-    .panel-card.is-sub .panel-title { font-size: 19px; }
-
-    .panel-bottom {
-      position: relative;
-      z-index: 2;
-      width: 100%;
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 6px;
-    }
-
-    .panel-species-line {
-      display: inline-block;
-      max-width: 100%;
-      padding: 2.5px 9px;
-      border-radius: 999px;
-      background: rgba(255, 253, 248, 0.94);
-      border: 1px solid rgba(199, 180, 148, 0.65);
-      font-family: var(--font-ui);
-      font-size: 12.6px;
-      font-weight: 500;
-      color: var(--ink-main);
-      line-height: 1.22;
-      white-space: nowrap;
+      background: var(--card-paper);
+      border: 1px solid #d5c3a4;
+      border-bottom: 3px solid #cbb692;
+      border-radius: 14px;
+      box-shadow: 0 4px 16px rgba(72, 54, 38, 0.085);
       overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .panel-card.is-main .panel-species-line {
-      font-size: 13.2px;
-      padding: 2.5px 11px;
-    }
-
-    .panel-cta-btn {
-      width: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-      padding: 6.5px 10px 6px 12px;
-      border-radius: 9px;
-      background: var(--type-color);
-      border: 1px solid var(--type-color-dark);
-      border-bottom: 2.5px solid var(--type-color-dark);
-      color: #ffffff;
-      font-family: var(--font-ui);
-      font-size: 14.2px;
-      font-weight: 700;
-      letter-spacing: 0.04em;
-      line-height: 1.15;
-      white-space: nowrap;
-      box-shadow: 0 3px 8px rgba(58, 36, 16, 0.18);
-      transition: filter 0.12s ease;
-    }
-
-    .panel-card:active .panel-cta-btn,
-    .shade-card:active .panel-cta-btn {
-      filter: brightness(0.95);
-    }
-
-    .cta-arrow-circle {
-      width: 18px;
-      height: 18px;
-      border-radius: 50%;
-      background: rgba(255, 255, 255, 0.94);
-      color: var(--type-color);
-      font-size: 14px;
-      font-weight: 700;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      line-height: 1;
-      padding-left: 1px;
-      flex-shrink: 0;
-    }
-
-    /* 木もれ日パネル（横長） */
-    .shade-card {
-      position: relative;
-      flex: 1;
-      min-height: 0;
-      background: linear-gradient(90deg, #f6efe0 0%, #f3e7cf 55%, #efe0c2 100%);
-      border: 1px solid var(--line-soft);
-      border-radius: 12px;
-      padding: 12px 15px 11px;
-      overflow: hidden;
-      cursor: pointer;
       display: flex;
       align-items: stretch;
-      box-shadow: var(--shadow-soft);
-      transition: transform 0.14s ease;
+      cursor: pointer;
+      text-align: left;
+      transition: transform 0.14s ease, box-shadow 0.14s ease, background-color 0.14s ease;
     }
 
-    .shade-card::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      z-index: 1;
-      pointer-events: none;
-      background: linear-gradient(
-        90deg,
-        rgba(248, 243, 232, 0.84) 0%,
-        rgba(248, 243, 232, 0.45) 28%,
-        rgba(248, 243, 232, 0) 48%
-      );
+    .hero-panel:active {
+      transform: scale(0.992);
+      background: #fbf7ee;
     }
 
-    .shade-card:active { transform: scale(0.988); }
-
-    .shade-card .panel-bg-img {
-      width: 100%;
+    .hero-visual {
+      position: relative;
+      flex: 0 0 266px;
       height: 100%;
-      object-fit: cover;
-      object-position: right center;
-    }
-
-    .shade-overlay {
-      position: relative;
-      z-index: 2;
-      width: 58%;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      align-items: flex-start;
-      gap: 6px;
-    }
-
-    .shade-title {
-      font-family: var(--font-serif);
-      font-size: 22.5px;
-      font-weight: 700;
-      line-height: 1.2;
-      letter-spacing: 0.02em;
-      color: var(--ink-main);
-      display: inline-block;
-      border-bottom: 2.5px solid var(--type-color);
-      padding-bottom: 3px;
-      text-shadow: 0 1px 6px rgba(255, 252, 245, 0.9);
-    }
-
-    .shade-bottom {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 6px;
-    }
-
-    .shade-card .panel-cta-btn {
-      width: auto;
-      min-width: 180px;
-      padding: 6.5px 14px 6px 18px;
-    }
-
-    /* ================= 右上：コラム（今月のひとこと）＋ たにく丸の旅 ================= */
-    .right-column {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      min-height: 0;
-    }
-
-    .monthly-wrap {
-      flex: 1 1 auto;
-      min-height: 0;
-      display: flex;
-      flex-direction: column;
-      background: var(--card-paper);
-      border: 1px solid var(--line-soft);
-      border-radius: 12px;
-      box-shadow: var(--shadow-soft);
-      overflow: hidden;
-    }
-
-    .monthly-card {
-      position: relative;
-      flex: 1 1 auto;
-      min-height: 152px;
       background: linear-gradient(180deg, #efe4d1 0%, #e4d4bc 100%);
       overflow: hidden;
+      border-right: 1px solid #ebe1cf;
     }
 
     .monthly-visual-img {
       width: 100%;
       height: 100%;
       object-fit: cover;
-      object-position: center 42%;
+      object-position: center center;
       display: block;
     }
 
     .month-tag {
       position: absolute;
-      top: 9px;
-      left: 9px;
+      top: 10px;
+      left: 10px;
       z-index: 2;
       background: rgba(255, 253, 248, 0.94);
       -webkit-backdrop-filter: blur(4px);
@@ -575,23 +205,154 @@
       line-height: 1;
     }
 
-    .torn-note {
-      background: var(--card-paper);
-      border-top: 1px solid #ebe1cf;
-      padding: 9px 13px 10px;
+    .hero-content {
+      flex: 1 1 auto;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 18px 26px 17px 26px;
+      gap: 15px;
+    }
+
+    .hero-top {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 7px;
+      min-width: 0;
+    }
+
+    .hero-kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 0 0 0 1px;
+      background: none;
+      border: none;
+      font-family: var(--font-ui);
+      font-size: 13.8px;
+      font-weight: 700;
+      color: #4a6636;
+      letter-spacing: 0.05em;
+      line-height: 1.2;
+      white-space: nowrap;
+    }
+
+    .wakaba-svg {
+      width: 16px;
+      height: 16px;
+      display: block;
       flex-shrink: 0;
+    }
+
+    .hero-title-cta-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: nowrap;
+    }
+
+    .hero-title {
+      font-family: var(--font-serif);
+      font-size: 38px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      line-height: 1;
+      color: var(--ink-main);
+      white-space: nowrap;
+    }
+
+    .hero-cta {
+      flex-shrink: 0;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      padding: 6px 11px 6px 15px;
+      border-radius: 999px;
+      background: var(--tag-4);
+      border: 1px solid var(--tag-4-dark);
+      border-bottom: 2px solid var(--tag-4-dark);
+      color: #ffffff;
+      font-family: var(--font-ui);
+      font-size: 14.5px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      line-height: 1;
+      white-space: nowrap;
+      box-shadow: 0 2px 8px rgba(53, 77, 37, 0.2);
+      transform: translateY(2px);
+      transition: filter 0.12s ease;
+    }
+
+    .hero-panel:active .hero-cta {
+      filter: brightness(0.94);
+    }
+
+    .hero-cta-circle {
+      width: 19px;
+      height: 19px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.95);
+      color: var(--tag-4);
+      font-size: 14.5px;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 1;
+      padding-left: 1px;
+      flex-shrink: 0;
+    }
+
+    .hero-sub {
+      font-family: var(--font-ui);
+      font-size: 15.8px;
+      font-weight: 500;
+      color: var(--ink-sub);
+      letter-spacing: 0.02em;
+      line-height: 1.32;
+      white-space: nowrap;
+    }
+
+    .hero-sub .kw-sun {
+      color: #b5651d;
+      font-weight: 700;
+    }
+
+    .hero-sub .kw-wind {
+      color: #466832;
+      font-weight: 700;
+    }
+
+    .hero-sub .kw-water {
+      color: #2d6a87;
+      font-weight: 700;
+    }
+
+    /* 今月のひとこと（2行ぴったりで読みやすく収まるノート枠） */
+    .hero-column-box {
+      flex: 0 0 auto;
+      background: #f9f3e6;
+      border: 1px solid #e4d5bc;
+      border-left: 3.5px solid #b57347;
+      border-radius: 10px;
+      padding: 11px 16px 12px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
     }
 
     .torn-note-title {
       font-family: var(--font-ui);
-      font-size: 14.2px;
+      font-size: 14px;
       font-weight: 700;
-      color: #744225;
-      margin-bottom: 4px;
+      color: #7c4727;
       display: flex;
       align-items: center;
       gap: 5px;
-      letter-spacing: 0.03em;
+      letter-spacing: 0.04em;
     }
 
     .torn-note-icon {
@@ -604,21 +365,419 @@
 
     .torn-note-body {
       font-family: var(--font-ui);
-      font-size: 14px;
+      font-size: 15px;
       font-weight: 500;
-      line-height: 1.48;
+      line-height: 1.56;
       color: var(--ink-main);
     }
 
-    /* たにく丸の道の駅スタンプ旅カード（ただいま準備中） */
+    /* ================= 下段：左（シミュレーター枠）＋ 右（土・SOS・旅の3段） ================= */
+    .bottom-split {
+      position: relative;
+      z-index: 1;
+      flex: 1 1 auto;
+      min-height: 0;
+      display: grid;
+      grid-template-columns: 1fr 278px;
+      gap: 16px;
+    }
+
+    /* ================= 左下：多肉育成シミュレーター（ひとまとまりの枠） ================= */
+    .left-sim-area {
+      background: rgba(255, 252, 245, 0.62);
+      border: 1.5px solid #dccbb0;
+      border-radius: 14px;
+      padding: 12px 14px 13px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      min-width: 0;
+      min-height: 0;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7), 0 2px 10px rgba(72, 54, 38, 0.04);
+    }
+
+    .section-head-row {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 14px;
+      padding: 0 2px 5px;
+      border-bottom: 1px solid rgba(199, 180, 148, 0.42);
+      flex-shrink: 0;
+    }
+
+    .sim-section-title {
+      font-family: var(--font-serif);
+      font-size: 25px;
+      font-weight: 700;
+      color: var(--ink-main);
+      letter-spacing: 0.05em;
+      line-height: 1.15;
+      flex-shrink: 0;
+    }
+
+    .sim-section-sub {
+      font-family: var(--font-ui);
+      font-size: 13.6px;
+      font-weight: 500;
+      line-height: 1.2;
+      color: var(--ink-muted);
+      letter-spacing: 0.01em;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .sun-grid {
+      flex: 1 1 auto;
+      min-height: 0;
+      display: grid;
+      grid-template-columns: 40fr 30fr 30fr;
+      gap: 10px;
+    }
+
+    [data-panel="sun-main"] { --type-color: var(--tag-1); --type-color-dark: var(--tag-1-dark); }
+    [data-panel="sun-cool"] { --type-color: var(--tag-2); --type-color-dark: var(--tag-2-dark); }
+    [data-panel="sun-warm"] { --type-color: var(--tag-3); --type-color-dark: var(--tag-3-dark); }
+    [data-panel="shade-main"] { --type-color: var(--tag-4); --type-color-dark: var(--tag-4-dark); }
+
+    .panel-card {
+      position: relative;
+      background: #f7efe0;
+      border: 1px solid #d6c2a0;
+      border-radius: 12px;
+      padding: 10px 10px 10px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: flex-start;
+      overflow: hidden;
+      cursor: pointer;
+      box-shadow: var(--shadow-soft);
+      transition: transform 0.14s ease, box-shadow 0.14s ease;
+    }
+
+    .panel-card:active {
+      transform: scale(0.988);
+    }
+
+    .panel-card.is-main {
+      padding: 10px 12px 10px;
+    }
+
+    .panel-bg {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      overflow: hidden;
+      background: #f7efe0;
+    }
+
+    .panel-bg-img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center 62%;
+      display: block;
+    }
+
+    [data-panel="sun-main"] .panel-bg-img {
+      object-position: center 54%;
+    }
+
+    .panel-top-ui {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 4px;
+      max-width: 100%;
+    }
+
+    .panel-type-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 5.5px 9px 5px 13px;
+      border-radius: 999px;
+      background: var(--type-color);
+      border: 1px solid var(--type-color-dark);
+      border-bottom: 2px solid var(--type-color-dark);
+      color: #ffffff;
+      box-shadow: 0 2px 6px rgba(58, 36, 16, 0.16);
+      max-width: 100%;
+      transition: filter 0.12s ease;
+    }
+
+    .panel-card:active .panel-type-pill,
+    .shade-card:active .panel-type-pill {
+      filter: brightness(0.94);
+    }
+
+    .panel-title {
+      font-family: var(--font-ui);
+      font-weight: 700;
+      line-height: 1.15;
+      letter-spacing: 0.03em;
+      color: #ffffff;
+      white-space: nowrap;
+    }
+
+    .panel-card.is-main .panel-title {
+      font-size: 15.5px;
+    }
+
+    .panel-card.is-sub .panel-title {
+      font-size: 14.2px;
+    }
+
+    .cta-arrow-circle {
+      width: 17px;
+      height: 17px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.94);
+      color: var(--type-color);
+      font-size: 13.5px;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 1;
+      padding-left: 1px;
+      flex-shrink: 0;
+    }
+
+    .panel-species-text {
+      font-family: var(--font-ui);
+      font-size: 12px;
+      font-weight: 700;
+      color: #4f3e30;
+      line-height: 1.25;
+      padding-left: 5px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 100%;
+      text-shadow: 0 1px 3px rgba(255, 252, 245, 0.95), 0 0 6px rgba(255, 252, 245, 0.85);
+    }
+
+    .panel-card.is-main .panel-species-text {
+      font-size: 12.6px;
+    }
+
+    .shade-card {
+      position: relative;
+      flex: 0 0 142px;
+      min-height: 0;
+      background: #f5eddc;
+      border: 1px solid #d6c2a0;
+      border-radius: 12px;
+      padding: 13px 14px 12px;
+      overflow: hidden;
+      cursor: pointer;
+      display: flex;
+      align-items: flex-start;
+      box-shadow: var(--shadow-soft);
+      transition: transform 0.14s ease;
+    }
+
+    .shade-card:active {
+      transform: scale(0.988);
+    }
+
+    .shade-card .panel-bg-img {
+      object-position: right center;
+    }
+
+    .shade-overlay {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 6px;
+    }
+
+    .shade-card .panel-type-pill {
+      padding: 6.5px 11px 6px 16px;
+      gap: 9px;
+    }
+
+    .shade-title {
+      font-family: var(--font-ui);
+      font-size: 16px;
+      font-weight: 700;
+      line-height: 1.15;
+      letter-spacing: 0.03em;
+      color: #ffffff;
+      white-space: nowrap;
+    }
+
+    .shade-card .panel-species-text {
+      font-size: 12.8px;
+      padding-left: 6px;
+    }
+
+    /* ================= 右下：3段（土の基本 ／ 困ったときのSOS ／ たにく丸の旅） ================= */
+    .right-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+      min-height: 0;
+      padding-top: 2px;
+    }
+
+    .right-head-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      height: 24px;
+      padding: 0 2px;
+      font-family: var(--font-ui);
+      font-size: 13.2px;
+      font-weight: 700;
+      color: var(--ink-muted);
+      letter-spacing: 0.04em;
+      flex-shrink: 0;
+    }
+
+    .right-head-label::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: rgba(199, 180, 148, 0.55);
+    }
+
+    .right-cards-body {
+      flex: 1 1 auto;
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .guide-card-btn {
+      flex: 0 0 92px;
+      width: 100%;
+      background: var(--card-paper);
+      border: 1px solid var(--line-soft);
+      border-bottom: 2.5px solid #d4c3a7;
+      border-radius: 12px;
+      padding: 10px 12px 9px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      font-family: var(--font-ui);
+      color: var(--ink-main);
+      box-shadow: var(--shadow-soft);
+      cursor: pointer;
+      text-align: left;
+      transition: transform 0.12s ease, background-color 0.12s ease;
+    }
+
+    .guide-card-btn:active {
+      transform: scale(0.988);
+      background: #f5efe3;
+    }
+
+    .guide-card-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .guide-icon-circle {
+      width: 42px;
+      height: 42px;
+      border-radius: 11px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .guide-icon-circle.is-soil {
+      background: var(--soil-soft);
+      border: 1px solid rgba(140, 98, 57, 0.3);
+      color: var(--soil-color);
+    }
+
+    .guide-icon-circle.is-sos {
+      background: rgba(180, 83, 60, 0.12);
+      border: 1px solid rgba(180, 83, 60, 0.3);
+      color: var(--accent-sos);
+    }
+
+    .guide-icon-svg {
+      width: 22px;
+      height: 22px;
+      display: block;
+    }
+
+    .sos-badge-lg {
+      font-family: sans-serif;
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      color: var(--accent-sos);
+    }
+
+    .guide-card-text {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      min-width: 0;
+    }
+
+    .guide-card-title {
+      font-family: var(--font-serif);
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      line-height: 1.15;
+      color: var(--ink-main);
+      white-space: nowrap;
+    }
+
+    .guide-card-sub {
+      font-family: var(--font-ui);
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--ink-sub);
+      line-height: 1.3;
+    }
+
+    .guide-btn-arrow {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      font-size: 16px;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      padding-left: 1px;
+    }
+
+    .guide-card-btn[data-action="soil"] .guide-btn-arrow { background: #f3eae0; color: #754e28; }
+    .guide-card-btn[data-action="sos"] .guide-btn-arrow { background: #f8e4df; color: #a3432c; }
+
     .journey-cover {
-      flex: 0 0 176px;
+      flex: 1 1 auto;
+      min-height: 0;
       position: relative;
       display: flex;
       flex-direction: column;
       align-items: flex-start;
       justify-content: space-between;
-      padding: 15px 13px 11px;
+      padding: 15px 13px 12px;
       overflow: hidden;
       background: #f8ead1 url("images/travel_card_bg.jpg") center / cover no-repeat;
       border: 1px solid var(--line-soft);
@@ -628,15 +787,6 @@
       text-decoration: none;
       cursor: pointer;
       transition: transform 0.14s ease;
-    }
-
-    .journey-cover.is-coming-soon::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: rgba(246, 240, 228, 0.28);
-      pointer-events: none;
-      z-index: 0;
     }
 
     .journey-cover > * {
@@ -656,10 +806,10 @@
     .journey-by {
       display: inline-block;
       padding-bottom: 2px;
-      margin-bottom: 2px;
+      margin-bottom: 3px;
       border-bottom: 2px solid rgba(138, 162, 108, 0.78);
       font-family: var(--font-ui);
-      font-size: 13.4px;
+      font-size: 13.2px;
       font-weight: 700;
       letter-spacing: 0.08em;
       line-height: 1.05;
@@ -668,7 +818,7 @@
 
     .journey-title {
       font-family: var(--font-serif);
-      font-size: 23.5px;
+      font-size: 22.5px;
       font-weight: 700;
       line-height: 1.18;
       letter-spacing: 0.03em;
@@ -687,12 +837,12 @@
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      padding: 5px 13px 5px 11px;
+      padding: 5px 12px 5px 10px;
       background: rgba(255, 253, 248, 0.95);
       border: 1px solid #cbb796;
       border-radius: 999px;
       font-family: var(--font-ui);
-      font-size: 13.4px;
+      font-size: 12.8px;
       font-weight: 700;
       line-height: 1.2;
       color: #5c4936;
@@ -714,160 +864,6 @@
       text-overflow: ellipsis;
     }
 
-    /* ================= 下段全幅：共通3大ガイド（基本の3要素 / 土の基本 / SOS） ================= */
-    .bottom-guides {
-      position: relative;
-      z-index: 1;
-      flex: 0 0 auto;
-      display: flex;
-      flex-direction: column;
-      gap: 7px;
-    }
-
-    .guides-heading {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 0 2px;
-      font-family: var(--font-ui);
-      font-size: 13.6px;
-      font-weight: 700;
-      color: var(--ink-muted);
-      letter-spacing: 0.04em;
-    }
-
-    .guides-heading::after {
-      content: "";
-      flex: 1;
-      height: 1px;
-      background: rgba(199, 180, 148, 0.55);
-    }
-
-    .guides-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 14px;
-    }
-
-    .guide-card-btn {
-      width: 100%;
-      background: var(--card-paper);
-      border: 1px solid var(--line-soft);
-      border-bottom: 2.5px solid #d4c3a7;
-      border-radius: 12px;
-      padding: 13px 16px 12px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      font-family: var(--font-ui);
-      color: var(--ink-main);
-      box-shadow: var(--shadow-soft);
-      cursor: pointer;
-      text-align: left;
-      transition: transform 0.12s ease, background-color 0.12s ease;
-    }
-
-    .guide-card-btn:active {
-      transform: scale(0.988);
-      background: #f5efe3;
-    }
-
-    .guide-card-left {
-      display: flex;
-      align-items: center;
-      gap: 13px;
-      min-width: 0;
-    }
-
-    .guide-icon-circle {
-      width: 46px;
-      height: 46px;
-      border-radius: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-    }
-
-    .guide-icon-circle.is-rule {
-      background: var(--shade-soft);
-      border: 1px solid rgba(105, 129, 84, 0.3);
-      color: var(--shade-color);
-    }
-
-    .guide-icon-circle.is-soil {
-      background: var(--soil-soft);
-      border: 1px solid rgba(140, 98, 57, 0.3);
-      color: var(--soil-color);
-    }
-
-    .guide-icon-circle.is-sos {
-      background: rgba(180, 83, 60, 0.12);
-      border: 1px solid rgba(180, 83, 60, 0.3);
-      color: var(--accent-sos);
-    }
-
-    .guide-icon-svg {
-      width: 24px;
-      height: 24px;
-      display: block;
-    }
-
-    .sos-badge-lg {
-      font-family: sans-serif;
-      font-size: 14px;
-      font-weight: 800;
-      letter-spacing: 0.04em;
-      color: var(--accent-sos);
-    }
-
-    .guide-card-text {
-      display: flex;
-      flex-direction: column;
-      gap: 3px;
-      min-width: 0;
-    }
-
-    .guide-card-title {
-      font-family: var(--font-serif);
-      font-size: 19.5px;
-      font-weight: 700;
-      letter-spacing: 0.02em;
-      line-height: 1.2;
-      color: var(--ink-main);
-      white-space: nowrap;
-    }
-
-    .guide-card-sub {
-      font-family: var(--font-ui);
-      font-size: 13.8px;
-      font-weight: 500;
-      color: var(--ink-sub);
-      line-height: 1.3;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .guide-btn-arrow {
-      width: 28px;
-      height: 28px;
-      border-radius: 50%;
-      font-size: 18px;
-      font-weight: 700;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-      padding-left: 1px;
-    }
-
-    .guide-card-btn[data-action="rules"] .guide-btn-arrow { background: #e8efe2; color: #4e693a; }
-    .guide-card-btn[data-action="soil"] .guide-btn-arrow { background: #f3eae0; color: #754e28; }
-    .guide-card-btn[data-action="sos"] .guide-btn-arrow { background: #f8e4df; color: #a3432c; }
-
-    /* 準備中トースト */
     .toast-notice {
       position: absolute;
       bottom: 24px;
@@ -898,219 +894,166 @@
   <div class="viewport-wrapper">
     <main class="canvas" id="appCanvas">
 
-      <!-- 上段：左（シミュレーター）＋ 右（コラム＆旅） -->
-      <div class="top-split">
-        <div class="left-area">
-          <header class="site-header">
-            <h1 class="main-title">多肉の育て方</h1>
-          </header>
+      <!-- 上段全幅：メイン「多肉の育て方」＋「今月のひとこと」合体パネル（1:1画像） -->
+      <section class="hero-panel" role="button" tabindex="0" data-action="rules" aria-label="多肉の育て方（光・風・水やりのきほんを見る）">
+        <div class="hero-visual">
+          <img class="monthly-visual-img" id="monthlyVisualImg" src="images/monthly_11.jpg" alt="" />
+          <div class="month-tag">
+            <span class="month-tag-jp" id="monthTagJp">11月</span>
+            <span class="month-tag-sep" aria-hidden="true"></span>
+            <span class="month-tag-en" id="monthTagEn">November</span>
+          </div>
+        </div>
 
-          <div class="sim-section-head">
-            <h2 class="sim-section-title">
+        <div class="hero-content">
+          <div class="hero-top">
+            <span class="hero-kicker">
               <svg class="wakaba-svg" viewBox="0 0 24 24" aria-hidden="true">
                 <path d="M12 6.5 L4.5 2.8 L4.5 14.5 L12 20.5 Z" fill="#d9ad4c" stroke="#9e7a2e" stroke-width="1.2" stroke-linejoin="round" />
                 <path d="M12 6.5 L19.5 2.8 L19.5 14.5 L12 20.5 Z" fill="#6b8453" stroke="#4d6239" stroke-width="1.2" stroke-linejoin="round" />
               </svg>
-              <span>多肉育成シミュレーター</span>
-            </h2>
-            <span class="sim-section-sub">タイプをえらんで1年の過ごし方を試してみよう</span>
+              <span>まずはここから</span>
+            </span>
+
+            <div class="hero-title-cta-row">
+              <h1 class="hero-title">多肉の育て方</h1>
+              <span class="hero-cta">
+                <span>くわしく見る</span>
+                <span class="hero-cta-circle" aria-hidden="true">›</span>
+              </span>
+            </div>
+
+            <p class="hero-sub">どのタイプにも共通する、<span class="kw-sun">光</span>・<span class="kw-wind">風</span>・<span class="kw-water">水やり</span>のきほん</p>
           </div>
 
-          <section class="group-section group-sun" aria-label="お日様グループ">
-            <div class="group-heading">
-              <span class="group-icon-badge" aria-hidden="true">
-                <svg class="group-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-                  <circle cx="12" cy="12" r="4.2" />
-                  <line x1="12" y1="2.2" x2="12" y2="4.6" />
-                  <line x1="12" y1="19.4" x2="12" y2="21.8" />
-                  <line x1="2.2" y1="12" x2="4.6" y2="12" />
-                  <line x1="19.4" y1="12" x2="21.8" y2="12" />
-                  <line x1="5.07" y1="5.07" x2="6.77" y2="6.77" />
-                  <line x1="17.23" y1="17.23" x2="18.93" y2="18.93" />
-                  <line x1="18.93" y1="5.07" x2="17.23" y2="6.77" />
-                  <line x1="6.77" y1="17.23" x2="5.07" y2="18.93" />
-                </svg>
-              </span>
-              <h3 class="group-title">お日様グループ</h3>
+          <div class="hero-column-box">
+            <div class="torn-note-title">
+              <svg class="torn-note-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M12 21V9" />
+                <path d="M12 13C7.5 13 5 9.8 5 6.5c3.2 0 5.8 1.5 7 4.5 1.2-3 3.8-4.5 7-4.5 0 3.3-2.5 6.5-7 6.5Z" />
+              </svg>
+              <span>今月のひとこと</span>
             </div>
-
-            <div class="sun-grid">
-              <article class="panel-card is-main" role="button" tabindex="0" data-panel="sun-main">
-                <div class="panel-bg">
-                  <img class="panel-bg-img" src="images/sun_main_bg.jpg" alt="" />
-                </div>
-                <div class="panel-text">
-                  <h4 class="panel-title">春と秋に<br />元気なタイプ</h4>
-                </div>
-                <div class="panel-bottom">
-                  <span class="panel-species-line">エケベリア・セダム など</span>
-                  <span class="panel-cta-btn">
-                    <span>育て方をみる</span>
-                    <span class="cta-arrow-circle" aria-hidden="true">›</span>
-                  </span>
-                </div>
-              </article>
-
-              <article class="panel-card is-sub" role="button" tabindex="0" data-panel="sun-cool">
-                <div class="panel-bg">
-                  <img class="panel-bg-img" src="images/sun_cool_bg.jpg" alt="" />
-                </div>
-                <div class="panel-text">
-                  <h4 class="panel-title">涼しい季節に<br />元気なタイプ</h4>
-                </div>
-                <div class="panel-bottom">
-                  <span class="panel-species-line">アエオニウム など</span>
-                  <span class="panel-cta-btn">
-                    <span>育て方をみる</span>
-                    <span class="cta-arrow-circle" aria-hidden="true">›</span>
-                  </span>
-                </div>
-              </article>
-
-              <article class="panel-card is-sub" role="button" tabindex="0" data-panel="sun-warm">
-                <div class="panel-bg">
-                  <img class="panel-bg-img" src="images/sun_warm_bg.jpg" alt="" />
-                </div>
-                <div class="panel-text">
-                  <h4 class="panel-title">寒さが<br />苦手なタイプ</h4>
-                </div>
-                <div class="panel-bottom">
-                  <span class="panel-species-line">カランコエ など</span>
-                  <span class="panel-cta-btn">
-                    <span>育て方をみる</span>
-                    <span class="cta-arrow-circle" aria-hidden="true">›</span>
-                  </span>
-                </div>
-              </article>
-            </div>
-          </section>
-
-          <section class="group-section group-shade" aria-label="木もれ日グループ">
-            <div class="group-heading">
-              <span class="group-icon-badge" aria-hidden="true">
-                <svg class="group-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M19 5c-5.5.4-10.2 3.2-12.5 8.5-.7 1.6-1 3.3-1 5 1.7 0 3.4-.3 5-1 5.3-2.3 8.1-7 8.5-12.5Z" />
-                  <path d="M5.5 18.5c2.8-2.8 6.2-5.8 10.5-9.2" />
-                  <circle cx="7.2" cy="6.8" r="1" fill="currentColor" stroke="none" opacity="0.7" />
-                  <circle cx="10.8" cy="4.8" r="0.8" fill="currentColor" stroke="none" opacity="0.55" />
-                </svg>
-              </span>
-              <h3 class="group-title">木もれ日グループ</h3>
-            </div>
-
-            <article class="shade-card" role="button" tabindex="0" data-panel="shade-main">
-              <div class="panel-bg">
-                <img class="panel-bg-img" src="images/shade_main_bg.jpg" alt="" />
-              </div>
-              <div class="shade-overlay">
-                <h4 class="shade-title">やさしい光が好きなタイプ</h4>
-                <div class="shade-bottom">
-                  <span class="panel-species-line">ハオルチア・ガステリア など</span>
-                  <span class="panel-cta-btn">
-                    <span>育て方をみる</span>
-                    <span class="cta-arrow-circle" aria-hidden="true">›</span>
-                  </span>
-                </div>
-              </div>
-            </article>
-          </section>
-        </div>
-
-        <!-- 右上：コラム（今月）＋ たにく丸の旅（準備中） -->
-        <aside class="right-column">
-          <div class="monthly-wrap">
-            <div class="monthly-card">
-              <img class="monthly-visual-img" id="monthlyVisualImg" src="images/monthly_11.jpg" alt="" />
-              <div class="month-tag">
-                <span class="month-tag-jp" id="monthTagJp">11月</span>
-                <span class="month-tag-sep" aria-hidden="true"></span>
-                <span class="month-tag-en" id="monthTagEn">November</span>
-              </div>
-            </div>
-
-            <div class="torn-note">
-              <div class="torn-note-title">
-                <svg class="torn-note-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                  <path d="M12 21V9" />
-                  <path d="M12 13C7.5 13 5 9.8 5 6.5c3.2 0 5.8 1.5 7 4.5 1.2-3 3.8-4.5 7-4.5 0 3.3-2.5 6.5-7 6.5Z" />
-                </svg>
-                <span>今月のひとこと</span>
-              </div>
-              <p class="torn-note-body" id="monthlyNoteBody">
-                朝晩の冷え込みが強くなってきました。水やりは暖かい日の午前中に。霜や強い寒さから守ってあげましょう。
-              </p>
-            </div>
+            <p class="torn-note-body" id="monthlyNoteBody">
+              朝晩の冷え込みが強まり、紅葉がいちだんと深まる季節です。水やりは暖かい日の午前中にすませ、寒さが苦手な子は早めにお部屋へ移してあげましょう。
+            </p>
           </div>
-
-          <a class="journey-cover is-coming-soon" href="#journey" id="travelOpenBtn" aria-label="たにく丸の道の駅スタンプ旅（ただいま準備中）">
-            <span class="journey-heading">
-              <span class="journey-by">たにく丸の</span>
-              <span class="journey-title">道の駅<br />スタンプ旅</span>
-            </span>
-            <span class="journey-bottom">
-              <span class="journey-location">
-                <span class="journey-prep-dot" aria-hidden="true"></span>
-                <span id="travelLocation">ただいま準備中</span>
-              </span>
-            </span>
-          </a>
-        </aside>
-      </div>
-
-      <!-- 下段全幅：共通3大ガイド -->
-      <section class="bottom-guides" aria-label="どのタイプにも共通のガイド">
-        <div class="guides-heading">どのタイプにも共通のガイド</div>
-        <div class="guides-grid">
-          <button class="guide-card-btn" type="button" data-action="rules">
-            <span class="guide-card-left">
-              <span class="guide-icon-circle is-rule" aria-hidden="true">
-                <svg class="guide-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M12 20v-8" />
-                  <path d="M12 12c0-4.2-3.2-6.5-7-6.5 0 3.8 2.3 6.5 7 6.5Z" />
-                  <path d="M12 14c0-3.8 2.8-6 6.5-6 0 3.5-2 6-6.5 6Z" />
-                </svg>
-              </span>
-              <span class="guide-card-text">
-                <span class="guide-card-title">基本の3要素</span>
-                <span class="guide-card-sub">光・風・水やりのタイミング</span>
-              </span>
-            </span>
-            <span class="guide-btn-arrow" aria-hidden="true">›</span>
-          </button>
-
-          <button class="guide-card-btn" type="button" data-action="soil">
-            <span class="guide-card-left">
-              <span class="guide-icon-circle is-soil" aria-hidden="true">
-                <svg class="guide-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M5 10h14l-1.6 9.2a1.6 1.6 0 0 1-1.6 1.3H8.2a1.6 1.6 0 0 1-1.6-1.3L5 10Z" />
-                  <path d="M4 10h16" />
-                  <path d="M7.5 10c1.2-2.2 2.8-3.3 4.5-3.3s3.3 1.1 4.5 3.3" />
-                  <circle cx="10.5" cy="14.5" r="0.8" fill="currentColor" stroke="none" />
-                  <circle cx="13.8" cy="15.5" r="0.8" fill="currentColor" stroke="none" />
-                </svg>
-              </span>
-              <span class="guide-card-text">
-                <span class="guide-card-title">土の基本</span>
-                <span class="guide-card-sub">土の考え方・鉢選び・肥料</span>
-              </span>
-            </span>
-            <span class="guide-btn-arrow" aria-hidden="true">›</span>
-          </button>
-
-          <button class="guide-card-btn" type="button" data-action="sos">
-            <span class="guide-card-left">
-              <span class="guide-icon-circle is-sos" aria-hidden="true">
-                <span class="sos-badge-lg">SOS</span>
-              </span>
-              <span class="guide-card-text">
-                <span class="guide-card-title">困ったときのSOS</span>
-                <span class="guide-card-sub">シワシワ・ひょろ長・ブヨブヨ対策</span>
-              </span>
-            </span>
-            <span class="guide-btn-arrow" aria-hidden="true">›</span>
-          </button>
         </div>
       </section>
+
+      <!-- 下段：左（シミュレーター枠）＋ 右（土・SOS・旅の3段） -->
+      <div class="bottom-split">
+        <section class="left-sim-area" aria-label="多肉育成シミュレーター">
+          <div class="section-head-row">
+            <h2 class="sim-section-title">多肉育成シミュレーター</h2>
+            <span class="sim-section-sub">タイプを押して1年の過ごし方と光・風・水を試そう</span>
+          </div>
+
+          <div class="sun-grid">
+            <article class="panel-card is-main" role="button" tabindex="0" data-panel="sun-main">
+              <div class="panel-bg">
+                <img class="panel-bg-img" src="images/sun_main_bg.jpg" alt="" />
+              </div>
+              <div class="panel-top-ui">
+                <span class="panel-type-pill">
+                  <span class="panel-title">春秋元気タイプ</span>
+                  <span class="cta-arrow-circle" aria-hidden="true">›</span>
+                </span>
+                <span class="panel-species-text">エケベリア・セダム など</span>
+              </div>
+            </article>
+
+            <article class="panel-card is-sub" role="button" tabindex="0" data-panel="sun-cool">
+              <div class="panel-bg">
+                <img class="panel-bg-img" src="images/sun_cool_bg.jpg" alt="" />
+              </div>
+              <div class="panel-top-ui">
+                <span class="panel-type-pill">
+                  <span class="panel-title">夏お休みタイプ</span>
+                  <span class="cta-arrow-circle" aria-hidden="true">›</span>
+                </span>
+                <span class="panel-species-text">アエオニウム など</span>
+              </div>
+            </article>
+
+            <article class="panel-card is-sub" role="button" tabindex="0" data-panel="sun-warm">
+              <div class="panel-bg">
+                <img class="panel-bg-img" src="images/sun_warm_bg.jpg" alt="" />
+              </div>
+              <div class="panel-top-ui">
+                <span class="panel-type-pill">
+                  <span class="panel-title">寒さ苦手タイプ</span>
+                  <span class="cta-arrow-circle" aria-hidden="true">›</span>
+                </span>
+                <span class="panel-species-text">カランコエ など</span>
+              </div>
+            </article>
+          </div>
+
+          <article class="shade-card" role="button" tabindex="0" data-panel="shade-main">
+            <div class="panel-bg">
+              <img class="panel-bg-img" src="images/shade_main_bg.jpg" alt="" />
+            </div>
+            <div class="shade-overlay">
+              <span class="panel-type-pill">
+                <span class="shade-title">やさしい光タイプ</span>
+                <span class="cta-arrow-circle" aria-hidden="true">›</span>
+              </span>
+              <span class="panel-species-text">ハオルチア・ガステリア など</span>
+            </div>
+          </article>
+        </section>
+
+        <aside class="right-stack" aria-label="お役立ちガイドとたにく丸の旅">
+          <div class="right-head-label">お役立ち ＆ お楽しみ</div>
+          <div class="right-cards-body">
+            <button class="guide-card-btn" type="button" data-action="soil">
+              <span class="guide-card-left">
+                <span class="guide-icon-circle is-soil" aria-hidden="true">
+                  <svg class="guide-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M5 10h14l-1.6 9.2a1.6 1.6 0 0 1-1.6 1.3H8.2a1.6 1.6 0 0 1-1.6-1.3L5 10Z" />
+                    <path d="M4 10h16" />
+                    <path d="M7.5 10c1.2-2.2 2.8-3.3 4.5-3.3s3.3 1.1 4.5 3.3" />
+                    <circle cx="10.5" cy="14.5" r="0.8" fill="currentColor" stroke="none" />
+                    <circle cx="13.8" cy="15.5" r="0.8" fill="currentColor" stroke="none" />
+                  </svg>
+                </span>
+                <span class="guide-card-text">
+                  <span class="guide-card-title">土の基本</span>
+                  <span class="guide-card-sub">土の考え方・鉢選び・肥料</span>
+                </span>
+              </span>
+              <span class="guide-btn-arrow" aria-hidden="true">›</span>
+            </button>
+
+            <button class="guide-card-btn" type="button" data-action="sos">
+              <span class="guide-card-left">
+                <span class="guide-icon-circle is-sos" aria-hidden="true">
+                  <span class="sos-badge-lg">SOS</span>
+                </span>
+                <span class="guide-card-text">
+                  <span class="guide-card-title">困ったときのSOS</span>
+                  <span class="guide-card-sub">シワシワ・ひょろ長・<br />ブヨブヨ対策</span>
+                </span>
+              </span>
+              <span class="guide-btn-arrow" aria-hidden="true">›</span>
+            </button>
+
+            <a class="journey-cover is-coming-soon" href="#journey" id="travelOpenBtn" aria-label="たにく丸の道の駅スタンプ旅（ただいま準備中）">
+              <span class="journey-heading">
+                <span class="journey-by">たにく丸の</span>
+                <span class="journey-title">道の駅<br />スタンプ旅</span>
+              </span>
+              <span class="journey-bottom">
+                <span class="journey-location">
+                  <span class="journey-prep-dot" aria-hidden="true"></span>
+                  <span id="travelLocation">ただいま準備中</span>
+                </span>
+              </span>
+            </a>
+          </div>
+        </aside>
+      </div>
 
       <div class="toast-notice" id="toastNotice" role="status" aria-live="polite"></div>
     </main>
@@ -1118,18 +1061,18 @@
 
   <script>
     const MONTHLY_DATA = {
-      1: { jp: "1月", en: "January", img: "images/monthly_01.jpg", note: "寒さの本番です。水やりは控えめに、暖かい日の昼間に少しだけ。凍らない明るい場所で冬越しをしましょう。" },
-      2: { jp: "2月", en: "February", img: "images/monthly_02.jpg", note: "一年でいちばん寒い時期。まだ水やりは控えめで大丈夫です。晴れた日は窓辺でたっぷり光を当ててあげて。" },
-      3: { jp: "3月", en: "March", img: "images/monthly_03.jpg", note: "春の気配とともに目覚める季節。暖かい日から少しずつ水やりを再開し、外のやわらかな光に慣らしましょう。" },
-      4: { jp: "4月", en: "April", img: "images/monthly_04.jpg", note: "ぐんぐん育つ気持ちのよい季節。鉢が軽くなったらたっぷり水やりをして、風通しのよい場所で育てましょう。" },
-      5: { jp: "5月", en: "May", img: "images/monthly_05.jpg", note: "成長のピークですが、日差しが急に強くなる日も。梅雨に向けて、今のうちから風通しを意識しておくと安心です。" },
-      6: { jp: "6月", en: "June", img: "images/monthly_06.jpg", note: "梅雨のジメジメは多肉の苦手なもの。長雨を避け、水やりを控えめにして、とにかく風通しをいちばん大切に。" },
-      7: { jp: "7月", en: "July", img: "images/monthly_07.jpg", note: "同じ夏でも、眠る子と育つ子がいます。強い直射日光と蒸れに気をつけつつ、水やりは鉢のタイプを見てみましょう。" },
-      8: { jp: "8月", en: "August", img: "images/monthly_08.jpg", note: "真夏の暑さで多くの多肉はひと休み。無理に水をあげすぎず、強い日差しを避けて涼しく過ごさせてあげましょう。" },
-      9: { jp: "9月", en: "September", img: "images/monthly_09.jpg", note: "残暑が落ち着くころから、少しずつ秋の成長がスタート。朝晩が涼しくなってきたら、水やりも徐々に増やして。" },
-      10: { jp: "10月", en: "October", img: "images/monthly_10.jpg", note: "多肉がいちばん元気で美しくなる季節。お日様と風をたっぷり浴びると、葉の先から少しずつ紅葉が始まります。" },
-      11: { jp: "11月", en: "November", img: "images/monthly_11.jpg", note: "朝晩の冷え込みが強くなってきました。水やりは暖かい日の午前中に。霜や強い寒さから守ってあげましょう。" },
-      12: { jp: "12月", en: "December", img: "images/monthly_12.jpg", note: "紅葉がいちばん深まる季節です。水やりを控えめにして、寒さに弱い種類は早めにお部屋の中へ移動してあげて。" }
+      1: { jp: "1月", en: "January", img: "images/monthly_01.jpg", note: "寒さの本番です。多くの多肉はゆっくり冬休み中なので、水やりは暖かい日の昼間にごく少しだけ。凍らない明るい場所で春を待ちましょう。" },
+      2: { jp: "2月", en: "February", img: "images/monthly_02.jpg", note: "一年でいちばん寒い時期です。土が乾いていても慌てて水をあげなくて大丈夫。晴れた日中は窓辺でたっぷり光を当ててあげましょう。" },
+      3: { jp: "3月", en: "March", img: "images/monthly_03.jpg", note: "春の気配とともに多肉たちが目覚める季節です。暖かい日から少しずつ水やりを再開し、冬に室内にいた子は外のやわらかな光に慣らしましょう。" },
+      4: { jp: "4月", en: "April", img: "images/monthly_04.jpg", note: "お日様と風を浴びてぐんぐん育つ季節です。鉢を持って軽くなったら、底から水が出るまでたっぷり水やりを。植え替えにもぴったりの時期です。" },
+      5: { jp: "5月", en: "May", img: "images/monthly_05.jpg", note: "成長のピークで葉もぷっくり元気に育ちます。急に日差しが強くなる日も増えるので、来月の梅雨に向けて風通しのよい場所を意識しておくと安心です。" },
+      6: { jp: "6月", en: "June", img: "images/monthly_06.jpg", note: "梅雨のジメジメと長雨は多肉がいちばん苦手な環境です。雨の当たらない明るい場所へ移して水やりは控えめに。とにかく風通しを大切にしましょう。" },
+      7: { jp: "7月", en: "July", img: "images/monthly_07.jpg", note: "同じ夏でも、すやすや眠る子と元気に育つ子がいます。強い直射日光と蒸れに気をつけつつ、水やりは下のシミュレーターでタイプを見てみましょう。" },
+      8: { jp: "8月", en: "August", img: "images/monthly_08.jpg", note: "真夏の暑さで多くの多肉はひと休み中です。無理に水をあげすぎると根が傷みやすいので、強い日差しを避けた風通しのよい明るい日陰で涼しく過ごさせて。" },
+      9: { jp: "9月", en: "September", img: "images/monthly_09.jpg", note: "残暑が落ち着き、朝晩に涼しい風が吹きはじめたら秋の成長がスタートです。控えていた水やりも、気温の様子を見ながら少しずつ増やしてあげましょう。" },
+      10: { jp: "10月", en: "October", img: "images/monthly_10.jpg", note: "多肉がいちばん元気で美しく輝く季節です。お日様と風をたっぷり浴びて寒暖差が出てくると、葉の先から少しずつ紅葉が始まります。" },
+      11: { jp: "11月", en: "November", img: "images/monthly_11.jpg", note: "朝晩の冷え込みが強まり、紅葉がいちだんと深まる季節です。水やりは暖かい日の午前中にすませ、寒さが苦手な子は早めにお部屋へ移してあげましょう。" },
+      12: { jp: "12月", en: "December", img: "images/monthly_12.jpg", note: "紅葉がいちばん深まり、宝石のようにきれいな姿を見せてくれる季節です。水やりは控えめにして、霜や強い寒さから守ってあげましょう。" }
     };
 
     function applyMonth() {
@@ -1255,6 +1198,12 @@
       btn.addEventListener("click", () => {
         if (Date.now() - lastTapTs < 400) return;
         handleCommonAction(btn.dataset.action);
+      });
+      btn.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          handleCommonAction(btn.dataset.action);
+        }
       });
     });
 

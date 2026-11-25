@@ -5,12 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
 
   <!-- =========================================================================
-    保木平珈琲 Murmure｜展示用iPad Webアプリ「土・鉢・肥料の基本」（v20）
+    保木平珈琲 Murmure｜展示用iPad Webアプリ「土・鉢・肥料の基本」（v21）
     - 左ガイドレールを「お迎え直後 → ① → ②」の1本の流れで接続
     - 1段目（土）：乾きやすい配合に「🔰 初心者に安心」バッジを追加
     - 2段目（鉢・肥料）：
       ・左（鉢・広め）：「鉢は土が乾きやすいと安全」の切り口で、底穴／根に合う大きさ（大きすぎると乾かず根腐れの赤字＋鉢底石で調節）／素材比較
-      ・右（肥料＋枠外CTA）：肥料カードをコンパクトに引き締め、「基本の3要素を見る ›」を枠の外へ独立配置
+      ・右（肥料＋枠外CTA）：肥料カードをコンパクトに引き締め、「多肉の育て方を見る ›」を枠の外へ独立配置（名称統一済み）
     - 全サブ画面統一：1080×786px・左上に「‹ もどる」「⌂ トップへ」常時表示
     - 無操作5分（300000ms）でトップ自動復帰、?month= パラメータ引き継ぎ対応
   ========================================================================= -->
@@ -254,7 +254,6 @@
       padding-top: 0px;
     }
 
-    /* Row 0：お迎え直後ピル（左レールから横長に展開）＋ 安心バナー */
     .start-flow-row {
       grid-column: 1 / -1;
       position: relative;
@@ -340,7 +339,6 @@
       box-shadow: 0 1px 4px rgba(72, 54, 38, 0.16);
     }
 
-    /* 最上段：お迎え直後バナー */
     .reassure-banner {
       flex: 1 1 auto;
       min-width: 0;
@@ -427,9 +425,8 @@
     }
 
     .soil-visual-card.is-drain { --accent: var(--drain-color); --deep: var(--drain-deep); --soft: var(--drain-soft); }
-    .soil-visual-card.is-hold  { --accent: var(--hold-color);  --deep: var(--hold-deep);  --soft: var(--hold-soft); }
+    .soil-visual-card.is-hold { --accent: var(--hold-color); --deep: var(--hold-deep); --soft: var(--hold-soft); }
 
-    /* 左側：鉢の断面図解パネル */
     .pot-diagram-box {
       background: #faf6ee;
       border: 1px solid #e6dac6;
@@ -459,7 +456,6 @@
       white-space: nowrap;
     }
 
-    /* 右側：テキスト解説 */
     .soil-card-body {
       display: flex;
       flex-direction: column;
@@ -578,7 +574,6 @@
       font-weight: 700;
     }
 
-    /* ①の下：市販の土に混ぜて調節する補足帯 */
     .soil-mix-tip {
       margin-top: 8px;
       background: #faf6ee;
@@ -623,7 +618,6 @@
       min-width: 0;
     }
 
-    /* 左：鉢の選び方カード（広め） */
     .pot-card {
       background: var(--card-paper);
       border: 1px solid var(--line-soft);
@@ -694,7 +688,6 @@
       line-height: 1.38;
     }
 
-    /* 素材の乾き方（下段・はみ出し防止の2段構成） */
     .pot-material-bar {
       margin-top: 9px;
       padding-top: 8px;
@@ -732,7 +725,7 @@
     }
 
     .pot-pill.is-terracotta { background: #fdf8f2; border-color: #e4c7a8; }
-    .pot-pill.is-plastic    { background: #f4f8fb; border-color: #c2d6e3; }
+    .pot-pill.is-plastic { background: #f4f8fb; border-color: #c2d6e3; }
 
     .pot-pill-state {
       display: inline-flex;
@@ -754,9 +747,8 @@
     }
 
     .pot-pill.is-terracotta .pot-pill-state { background: var(--drain-color); }
-    .pot-pill.is-plastic .pot-pill-state    { background: var(--hold-color); }
+    .pot-pill.is-plastic .pot-pill-state { background: var(--hold-color); }
 
-    /* 右列：肥料カード（上）＋ 基本の3要素ボタン（枠の外・下） */
     .right-side-col {
       display: flex;
       flex-direction: column;
@@ -853,7 +845,6 @@
       color: #963422;
     }
 
-    /* 枠の外に独立させた「基本の3要素を見る」ボタン */
     .rules-cta-btn {
       flex: 0 0 auto;
       width: 100%;
@@ -951,30 +942,22 @@
             <article class="soil-visual-card is-drain">
               <div class="pot-diagram-box" aria-hidden="true">
                 <svg class="pot-svg" viewBox="0 0 130 156">
-                  <!-- 多肉の葉（ミニロゼット） -->
                   <path d="M65 44 C56 32 45 28 38 33 C44 41 54 45 65 46 Z" fill="#89a870" stroke="#4f6b3a" stroke-width="1.3"/>
                   <path d="M65 44 C74 32 85 28 92 33 C86 41 76 45 65 46 Z" fill="#89a870" stroke="#4f6b3a" stroke-width="1.3"/>
                   <path d="M65 44 C58 26 52 16 58 13 C64 18 65 30 65 44 Z" fill="#a2bd88" stroke="#4f6b3a" stroke-width="1.3"/>
                   <path d="M65 44 C72 26 78 16 72 13 C66 18 65 30 65 44 Z" fill="#a2bd88" stroke="#4f6b3a" stroke-width="1.3"/>
                   <path d="M65 45 C61 30 65 20 65 20 C65 20 69 30 65 45 Z" fill="#b7cf9d" stroke="#4f6b3a" stroke-width="1.2"/>
-                  <!-- 鉢の輪郭（断面） -->
                   <path d="M22 48 H108 L96 134 H34 Z" fill="#eadbc2" stroke="#8c6239" stroke-width="2" stroke-linejoin="round"/>
-                  <!-- 乾いた土エリア（上〜中まで広く乾いている） -->
                   <path d="M25 52 H105 L97 110 H33 Z" fill="#ebd9be"/>
-                  <!-- 湿った土エリア（底のほうに少しだけ） -->
                   <path d="M33 110 H97 L94 132 H36 Z" fill="#9c7550"/>
-                  <!-- 粒が大きい・隙間が多い表現（丸い小石） -->
                   <g fill="#d4b892" stroke="#a6855c" stroke-width="0.9">
                     <circle cx="42" cy="64" r="4.2"/><circle cx="58" cy="60" r="3.6"/><circle cx="76" cy="65" r="4.5"/><circle cx="92" cy="61" r="3.4"/>
                     <circle cx="37" cy="78" r="3.8"/><circle cx="52" cy="76" r="4.4"/><circle cx="69" cy="79" r="3.6"/><circle cx="86" cy="77" r="4.2"/>
                     <circle cx="45" cy="93" r="4.3"/><circle cx="63" cy="92" r="3.9"/><circle cx="81" cy="94" r="4.1"/>
                     <circle cx="53" cy="104" r="3.3"/><circle cx="74" cy="105" r="3.5"/>
                   </g>
-                  <!-- 根っこ -->
                   <path d="M65 47 C64 60 58 72 52 84 M65 47 C66 62 72 74 79 86 M65 56 C63 72 65 86 63 98" fill="none" stroke="#855a34" stroke-width="1.4" stroke-linecap="round"/>
-                  <!-- 鉢のフチ -->
                   <rect x="17" y="44" width="96" height="9" rx="3" fill="#d9b48f" stroke="#8c6239" stroke-width="1.8"/>
-                  <!-- 底穴 -->
                   <rect x="57" y="132" width="16" height="4" rx="1.5" fill="#faf6ee" stroke="#8c6239" stroke-width="1.2"/>
                 </svg>
                 <span class="diagram-caption">乾いた部分が多い</span>
@@ -1015,35 +998,26 @@
             <article class="soil-visual-card is-hold">
               <div class="pot-diagram-box" aria-hidden="true">
                 <svg class="pot-svg" viewBox="0 0 130 156">
-                  <!-- 多肉の葉（ミニロゼット） -->
                   <path d="M65 44 C56 32 45 28 38 33 C44 41 54 45 65 46 Z" fill="#89a870" stroke="#4f6b3a" stroke-width="1.3"/>
                   <path d="M65 44 C74 32 85 28 92 33 C86 41 76 45 65 46 Z" fill="#89a870" stroke="#4f6b3a" stroke-width="1.3"/>
                   <path d="M65 44 C58 26 52 16 58 13 C64 18 65 30 65 44 Z" fill="#a2bd88" stroke="#4f6b3a" stroke-width="1.3"/>
                   <path d="M65 44 C72 26 78 16 72 13 C66 18 65 30 65 44 Z" fill="#a2bd88" stroke="#4f6b3a" stroke-width="1.3"/>
                   <path d="M65 45 C61 30 65 20 65 20 C65 20 69 30 65 45 Z" fill="#b7cf9d" stroke="#4f6b3a" stroke-width="1.2"/>
-                  <!-- 鉢の輪郭（断面） -->
                   <path d="M22 48 H108 L96 134 H34 Z" fill="#eadbc2" stroke="#8c6239" stroke-width="2" stroke-linejoin="round"/>
-                  <!-- 乾いた土エリア（表面付近だけ） -->
                   <path d="M25 52 H105 L102 74 H28 Z" fill="#ebd9be"/>
-                  <!-- 湿った土エリア（中〜底までたっぷり水分が残っている） -->
                   <path d="M28 74 H102 L94 132 H36 Z" fill="#8f6a47"/>
-                  <!-- 細かい粒＋水分の表現 -->
                   <g fill="#735133" opacity="0.55">
                     <circle cx="42" cy="84" r="2.2"/><circle cx="56" cy="88" r="2"/><circle cx="72" cy="83" r="2.3"/><circle cx="88" cy="87" r="2"/>
                     <circle cx="38" cy="99" r="2"/><circle cx="52" cy="103" r="2.4"/><circle cx="68" cy="98" r="2"/><circle cx="84" cy="102" r="2.2"/>
                     <circle cx="46" cy="116" r="2.2"/><circle cx="62" cy="118" r="2"/><circle cx="78" cy="115" r="2.3"/>
                   </g>
-                  <!-- 水分のしずくマーク（土の中に残るイメージ） -->
                   <g fill="#90c5de" opacity="0.88">
                     <path d="M47 91 C47 91 44 95.5 44 97.2 a3 3 0 0 0 6 0 C50 95.5 47 91 47 91 Z"/>
                     <path d="M81 94 C81 94 78 98.5 78 100.2 a3 3 0 0 0 6 0 C84 98.5 81 94 81 94 Z"/>
                     <path d="M64 111 C64 111 61 115.5 61 117.2 a3 3 0 0 0 6 0 C67 115.5 64 111 64 111 Z"/>
                   </g>
-                  <!-- 根っこ -->
                   <path d="M65 47 C64 60 58 72 52 84 M65 47 C66 62 72 74 79 86 M65 56 C63 72 65 86 63 98" fill="none" stroke="#4f331c" stroke-width="1.4" stroke-linecap="round"/>
-                  <!-- 鉢のフチ -->
                   <rect x="17" y="44" width="96" height="9" rx="3" fill="#d9b48f" stroke="#8c6239" stroke-width="1.8"/>
-                  <!-- 底穴 -->
                   <rect x="57" y="132" width="16" height="4" rx="1.5" fill="#faf6ee" stroke="#8c6239" stroke-width="1.2"/>
                 </svg>
                 <span class="diagram-caption">水分が長く残る</span>
@@ -1111,7 +1085,6 @@
                 </div>
               </div>
 
-              <!-- 素材で乾き方が変わる -->
               <div class="pot-material-bar" aria-label="鉢の素材による乾き方の違い">
                 <span class="pot-mat-label">素材でも乾き方が変わります</span>
                 <div class="pot-pair">
@@ -1127,7 +1100,7 @@
               </div>
             </div>
 
-            <!-- 右列：肥料カード（上）＋ 基本の3要素を見るボタン（枠の外・下） -->
+            <!-- 右列：肥料カード（上）＋ 多肉の育て方を見るボタン（枠の外・下） -->
             <div class="right-side-col">
               <div class="fert-side-card" aria-label="肥料の目安">
                 <div class="fert-head">
@@ -1148,7 +1121,7 @@
               </div>
 
               <button class="rules-cta-btn" type="button" id="jumpRulesBtn" data-nav="rules.html?from=soil">
-                <span>基本の3要素を見る</span>
+                <span>多肉の育て方を見る</span>
                 <span class="rules-cta-arrow" aria-hidden="true">›</span>
               </button>
             </div>

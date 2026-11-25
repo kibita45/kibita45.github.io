@@ -5,12 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
 
   <!-- =========================================================================
-    保木平珈琲 Murmure｜展示用iPad Webアプリ「困ったときのSOS」（v6）
+    保木平珈琲 Murmure｜展示用iPad Webアプリ「困ったときのSOS」（v7）
     - 1080×786px 固定キャンバス・スクロールなし・全サブ画面共通デザイン
     - 1問チェック対象（シワシワ／急に透けてぶよぶよ／下の葉）は「未選択」で開き、
       回答前は「まず確かめること」を表示。タップ後に対処・NG行動を表示する
     - 「葉が急に透けて、ぶよぶよになった」で凍害（冷え込んだ翌朝）と蒸れ・腐敗を分離
     - 関連ガイド遷移時に &sym=〇〇 を引き継ぎ、各ページの「‹ もどる」で元の症状へ復帰可能
+    - 関連ガイドの表記を「多肉の育て方を見る」へ統一
     - 左上2ボタン「‹ もどる」「⌂ トップへ」常時表示、無操作5分（300000ms）でトップ自動復帰
   ========================================================================= -->
 
@@ -245,7 +246,6 @@
       gap: 16px;
     }
 
-    /* 左カラム：症状リスト */
     .symptom-col {
       display: flex;
       flex-direction: column;
@@ -411,7 +411,6 @@
       overflow: hidden;
     }
 
-    /* パネル上部：症状見出し＋イラスト（小見出しを削ってスッキリ） */
     .detail-head {
       display: flex;
       align-items: center;
@@ -462,7 +461,6 @@
       line-height: 1.2;
     }
 
-    /* 1問チェックボックス（対象症状のみ表示） */
     .check-box {
       background: var(--check-soft);
       border: 1.5px solid var(--check-border);
@@ -541,7 +539,6 @@
       box-shadow: 0 3px 8px rgba(36, 86, 112, 0.22);
     }
 
-    /* 未選択時：「まず確かめること」ガイドパネル（上に詰めて視線を近く） */
     .precheck-panel {
       flex: 1 1 auto;
       background: linear-gradient(180deg, #faf6ee 0%, #f5efe2 100%);
@@ -602,7 +599,6 @@
       font-weight: 700;
     }
 
-    /* 診断結果エリア（回答後、または1問チェック不要の症状で表示） */
     .result-body {
       flex: 1 1 auto;
       min-height: 0;
@@ -615,7 +611,6 @@
       display: none;
     }
 
-    /* 原因サマリー帯 */
     .cause-box {
       background: #faf6ee;
       border: 1px solid #e3d6c0;
@@ -649,7 +644,7 @@
     }
 
     .cause-box.is-urgent .cause-label { color: var(--sos-deep); }
-    .cause-box.is-safe .cause-label   { color: var(--ok-deep); }
+    .cause-box.is-safe .cause-label { color: var(--ok-deep); }
 
     .cause-title {
       font-family: var(--font-ui);
@@ -667,7 +662,6 @@
       line-height: 1.44;
     }
 
-    /* 今すぐやること（主役・大きく強調） ＋ NG行動 */
     .action-grid {
       flex: 1 1 auto;
       min-height: 0;
@@ -777,7 +771,6 @@
       line-height: 1.46;
     }
 
-    /* 下部：関連ガイドリンクバー（枠外） */
     .related-bar {
       flex: 0 0 auto;
       display: grid;
@@ -906,7 +899,6 @@
           </div>
 
           <article class="detail-card" id="detailCard">
-            <!-- 上部見出し（小見出しなし・シンプル） -->
             <div class="detail-head">
               <div class="detail-icon-big" id="detailIcon" aria-hidden="true"></div>
               <div class="detail-title-group">
@@ -915,7 +907,6 @@
               </div>
             </div>
 
-            <!-- 1問チェック（対象症状のみ表示・初期未選択） -->
             <div class="check-box is-hidden" id="checkBox">
               <div class="check-q-row">
                 <span class="check-q-badge">1問チェック</span>
@@ -924,7 +915,6 @@
               <div class="check-btn-row" id="checkChoices"></div>
             </div>
 
-            <!-- 未選択時：「まず確かめること」ガイドパネル -->
             <div class="precheck-panel is-hidden" id="precheckPanel">
               <span class="precheck-pill">まず確かめること</span>
               <p class="precheck-lead" id="precheckLead"></p>
@@ -932,7 +922,6 @@
               <span class="precheck-tap-hint">▲ 上の2つから近いほうをタップすると対処が出ます</span>
             </div>
 
-            <!-- 診断結果エリア（回答後、またはチェック不要の症状で表示） -->
             <div class="result-body" id="resultBody">
               <div class="cause-box" id="causeBox">
                 <span class="cause-label" id="causeLabel">考えられる原因</span>
@@ -955,7 +944,6 @@
             </div>
           </article>
 
-          <!-- 下部：関連ガイドへの導線（枠外・2ボタン） -->
           <div class="related-bar" id="relatedBar"></div>
         </section>
 
@@ -965,7 +953,6 @@
   </div>
 
   <script>
-    /* ================= 症状アイコンSVG ================= */
     const ICONS = {
       wrinkle: `<svg viewBox="0 0 40 40" fill="none">
         <path d="M20 34 C12 31 7 23 9 14 C14 15 18 20 20 26 C22 20 26 15 31 14 C33 23 28 31 20 34 Z" fill="#c7d4ad" stroke="#5b7a46" stroke-width="1.8" stroke-linejoin="round"/>
@@ -1007,7 +994,6 @@
       </svg>`
     };
 
-    /* ================= 6症状データ ================= */
     const SYMPTOMS = [
       {
         id: "wrinkle",
@@ -1051,7 +1037,7 @@
           ]
         },
         related: [
-          { tag: "竹串チェック", label: "基本の3要素を見る", nav: "rules.html", primary: true },
+          { tag: "竹串チェック", label: "多肉の育て方を見る", nav: "rules.html", primary: true },
           { tag: "タイプ別", label: "多肉育成シミュレーター", nav: "sim.html", primary: false }
         ]
       },
@@ -1073,7 +1059,7 @@
         ngDesc: "暗い場所にいた株を急に強い光へ出すと、葉焼けしてしまいます。やわらかな光から慣らしてあげましょう。",
         related: [
           { tag: "光と風の目安", label: "多肉育成シミュレーター", nav: "sim.html", primary: true },
-          { tag: "置き場所", label: "基本の3要素を見る", nav: "rules.html", primary: false }
+          { tag: "置き場所", label: "多肉の育て方を見る", nav: "rules.html", primary: false }
         ]
       },
       {
@@ -1140,7 +1126,7 @@
         ngDesc: "少し焼けた程度なら株自体は生きています。無理に葉を取ると株の体力が落ちてしまいます。",
         related: [
           { tag: "タイプ別の光", label: "多肉育成シミュレーター", nav: "sim.html", primary: true },
-          { tag: "置き場所", label: "基本の3要素を見る", nav: "rules.html", primary: false }
+          { tag: "置き場所", label: "多肉の育て方を見る", nav: "rules.html", primary: false }
         ]
       },
       {
@@ -1185,7 +1171,7 @@
           ]
         },
         related: [
-          { tag: "水やり判断", label: "基本の3要素を見る", nav: "rules.html", primary: true },
+          { tag: "水やり判断", label: "多肉の育て方を見る", nav: "rules.html", primary: true },
           { tag: "乾きやすい鉢", label: "土・鉢・肥料の基本", nav: "soil.html", primary: false }
         ]
       },
@@ -1206,13 +1192,12 @@
         ngMain: "ほかの鉢と密着させたまま放置する",
         ngDesc: "気づかないうちに隣の鉢へどんどん広がります。株元の枯れ葉掃除と風通しがいちばんの予防になります。",
         related: [
-          { tag: "風通しのコツ", label: "基本の3要素を見る", nav: "rules.html", primary: true },
+          { tag: "風通しのコツ", label: "多肉の育て方を見る", nav: "rules.html", primary: true },
           { tag: "土の環境", label: "土・鉢・肥料の基本", nav: "soil.html", primary: false }
         ]
       }
     ];
 
-    /* ================= 状態管理と描画（1問チェックは初期未選択） ================= */
     let currentSymId = SYMPTOMS[0].id;
     const choiceState = {
       wrinkle: null,
@@ -1331,7 +1316,6 @@
       renderDetail();
     }
 
-    /* ================= ナビゲーション＆パラメータ引き継ぎ ================= */
     const pageParams = new URLSearchParams(window.location.search);
     const fromPage = pageParams.get("from") || "";
 
@@ -1392,7 +1376,6 @@
       else if (role === "home") window.location.href = buildHomeUrl();
     }
 
-    /* ================= 縮小キャンバス対応タップ判定（pointerdown＋座標直接判定） ================= */
     let lastTapTs = 0;
 
     function handleInteractiveTarget(target) {
@@ -1466,7 +1449,6 @@
     window.addEventListener("resize", fitCanvas);
     window.addEventListener("orientationchange", fitCanvas);
 
-    // 初期描画（URL ?sym=&choice= で直接指定・関連ページからの復帰に対応）
     const initSym = pageParams.get("sym");
     if (initSym && SYMPTOMS.some((s) => s.id === initSym)) {
       currentSymId = initSym;
