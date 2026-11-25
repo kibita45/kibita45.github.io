@@ -5,11 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
 
   <!-- =========================================================================
-    保木平珈琲 Murmure｜展示用iPad Webアプリ「多肉の育て方」トップ画面（整理・明朝タイトル確定版）
+    保木平珈琲 Murmure｜展示用iPad Webアプリ「多肉の育て方」トップ画面（旅カード準備中・SOS接続版）
     - 左上：ヘッダー（「多肉の育て方」のみ）＋「🔰 多肉育成シミュレーター」＋高さ・大きさを揃えた1行説明
-    - 初心者さんへタグ・ヘッダーのリード文・グループ横の細かい説明を削除してスッキリ整理
-    - 右上：コラム（今月のひとこと）＋ たにく丸の道の駅スタンプ旅
-    - 下段全幅：どのタイプにも共通の3大ガイド（基本の3ルール／土・鉢・肥料のキホン／困ったときのSOS）
+    - 右上：コラム（今月のひとこと）＋ たにく丸の道の駅スタンプ旅（ただいま準備中表示＋タップ時トースト）
+    - 下段全幅：どのタイプにも共通の3大ガイド（基本の3要素［rules.html］／土の基本［soil.html］／困ったときのSOS［sos.html］）
     - 基準キャンバス: 1080 × 786 px（iPad横向き・スクロールなし・自動スケール対応）
     - Muse連携用ID（#travelOpenBtn / #travelLocation）を維持
   ========================================================================= -->
@@ -31,8 +30,8 @@
       --bg-paper: #f6f0e4;
       --card-paper: #fffdf8;
       --ink-main: #2d1f16;
-      --ink-sub: #544437;
-      --ink-muted: #7d6e5d;
+      --ink-sub: #3a2b20;
+      --ink-muted: #625344;
       --line-soft: #dfd0b6;
       --line-card: #e3d6c2;
       --line-accent: #c7b494;
@@ -49,8 +48,8 @@
       --tag-1-dark: #8a394c;
       --tag-2: #3d7699;
       --tag-2-dark: #285470;
-      --tag-3: #c86d25;
-      --tag-3-dark: #944b12;
+      --tag-3: #b05712;
+      --tag-3-dark: #803d0a;
       --tag-4: #4d6b38;
       --tag-4-dark: #354d25;
       --font-serif: "Shippori Mincho", "Hiragino Mincho ProN", "Yu Mincho", serif;
@@ -247,7 +246,7 @@
 
     .group-title {
       font-family: var(--font-ui);
-      font-size: 13px;
+      font-size: 13.8px;
       font-weight: 700;
       letter-spacing: 0.04em;
       line-height: 1.2;
@@ -358,12 +357,12 @@
       max-width: 100%;
       padding: 2.5px 9px;
       border-radius: 999px;
-      background: rgba(255, 253, 248, 0.92);
-      border: 1px solid rgba(199, 180, 148, 0.6);
+      background: rgba(255, 253, 248, 0.94);
+      border: 1px solid rgba(199, 180, 148, 0.65);
       font-family: var(--font-ui);
-      font-size: 11.6px;
-      font-weight: 700;
-      color: var(--ink-sub);
+      font-size: 12.6px;
+      font-weight: 500;
+      color: var(--ink-main);
       line-height: 1.22;
       white-space: nowrap;
       overflow: hidden;
@@ -371,7 +370,7 @@
     }
 
     .panel-card.is-main .panel-species-line {
-      font-size: 12.2px;
+      font-size: 13.2px;
       padding: 2.5px 11px;
     }
 
@@ -388,7 +387,7 @@
       border-bottom: 2.5px solid var(--type-color-dark);
       color: #ffffff;
       font-family: var(--font-ui);
-      font-size: 13.8px;
+      font-size: 14.2px;
       font-weight: 700;
       letter-spacing: 0.04em;
       line-height: 1.15;
@@ -518,7 +517,7 @@
     .monthly-card {
       position: relative;
       flex: 1 1 auto;
-      min-height: 160px;
+      min-height: 152px;
       background: linear-gradient(180deg, #efe4d1 0%, #e4d4bc 100%);
       overflow: hidden;
     }
@@ -577,13 +576,13 @@
     .torn-note {
       background: var(--card-paper);
       border-top: 1px solid #ebe1cf;
-      padding: 10px 13px 11px;
+      padding: 9px 13px 10px;
       flex-shrink: 0;
     }
 
     .torn-note-title {
       font-family: var(--font-ui);
-      font-size: 13.5px;
+      font-size: 14.2px;
       font-weight: 700;
       color: #744225;
       margin-bottom: 4px;
@@ -594,8 +593,8 @@
     }
 
     .torn-note-icon {
-      width: 14.5px;
-      height: 14.5px;
+      width: 15px;
+      height: 15px;
       color: #a65c37;
       flex-shrink: 0;
       display: block;
@@ -603,13 +602,13 @@
 
     .torn-note-body {
       font-family: var(--font-ui);
-      font-size: 13px;
+      font-size: 14px;
       font-weight: 500;
-      line-height: 1.52;
+      line-height: 1.48;
       color: var(--ink-main);
     }
 
-    /* たにく丸の道の駅スタンプ旅カード */
+    /* たにく丸の道の駅スタンプ旅カード（ただいま準備中） */
     .journey-cover {
       flex: 0 0 176px;
       position: relative;
@@ -629,6 +628,20 @@
       transition: transform 0.14s ease;
     }
 
+    .journey-cover.is-coming-soon::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: rgba(246, 240, 228, 0.28);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .journey-cover > * {
+      position: relative;
+      z-index: 1;
+    }
+
     .journey-cover:active { transform: scale(0.988); }
 
     .journey-heading {
@@ -644,7 +657,7 @@
       margin-bottom: 2px;
       border-bottom: 2px solid rgba(138, 162, 108, 0.78);
       font-family: var(--font-ui);
-      font-size: 12.8px;
+      font-size: 13.4px;
       font-weight: 700;
       letter-spacing: 0.08em;
       line-height: 1.05;
@@ -671,33 +684,25 @@
     .journey-location {
       display: inline-flex;
       align-items: center;
-      gap: 5px;
-      padding: 4.5px 11px 4.5px 9px;
-      background: rgba(255, 253, 248, 0.94);
-      border: 1px solid #d5c4a6;
+      gap: 6px;
+      padding: 5px 13px 5px 11px;
+      background: rgba(255, 253, 248, 0.95);
+      border: 1px solid #cbb796;
       border-radius: 999px;
       font-family: var(--font-ui);
-      font-size: 12.8px;
+      font-size: 13.4px;
       font-weight: 700;
       line-height: 1.2;
-      color: #32251a;
+      color: #5c4936;
       box-shadow: 0 1px 4px rgba(66, 53, 33, 0.08);
       min-width: 0;
-      max-width: calc(100% - 34px);
     }
 
-    .journey-pin-svg {
-      width: 13.5px;
-      height: 13.5px;
-      color: #4e693a;
-      flex-shrink: 0;
-      display: block;
-    }
-
-    .journey-loc-label {
-      font-size: 11px;
-      font-weight: 700;
-      color: #776149;
+    .journey-prep-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #9a856a;
       flex-shrink: 0;
     }
 
@@ -707,22 +712,7 @@
       text-overflow: ellipsis;
     }
 
-    .journey-arrow {
-      display: grid;
-      place-items: center;
-      width: 27px;
-      height: 27px;
-      border-radius: 50%;
-      background: rgba(255, 253, 248, 0.94);
-      border: 1px solid #d5c4a6;
-      color: #425b32;
-      font: 700 19px/1 Georgia, serif;
-      padding-left: 1px;
-      flex-shrink: 0;
-      box-shadow: 0 1px 4px rgba(66, 53, 33, 0.1);
-    }
-
-    /* ================= 下段全幅：共通3大ガイド（基本の3ルール / 土・鉢・肥料 / SOS） ================= */
+    /* ================= 下段全幅：共通3大ガイド（基本の3要素 / 土の基本 / SOS） ================= */
     .bottom-guides {
       position: relative;
       z-index: 1;
@@ -738,7 +728,7 @@
       gap: 10px;
       padding: 0 2px;
       font-family: var(--font-ui);
-      font-size: 12.8px;
+      font-size: 13.6px;
       font-weight: 700;
       color: var(--ink-muted);
       letter-spacing: 0.04em;
@@ -763,7 +753,7 @@
       border: 1px solid var(--line-soft);
       border-bottom: 2.5px solid #d4c3a7;
       border-radius: 12px;
-      padding: 14px 16px 13px;
+      padding: 13px 16px 12px;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -839,16 +829,17 @@
 
     .guide-card-title {
       font-family: var(--font-serif);
-      font-size: 19px;
+      font-size: 19.5px;
       font-weight: 700;
       letter-spacing: 0.02em;
       line-height: 1.2;
       color: var(--ink-main);
+      white-space: nowrap;
     }
 
     .guide-card-sub {
       font-family: var(--font-ui);
-      font-size: 12.6px;
+      font-size: 13.8px;
       font-weight: 500;
       color: var(--ink-sub);
       line-height: 1.3;
@@ -1023,7 +1014,7 @@
           </section>
         </div>
 
-        <!-- 右上：コラム（今月）＋ たにく丸の旅 -->
+        <!-- 右上：コラム（今月）＋ たにく丸の旅（準備中） -->
         <aside class="right-column">
           <div class="monthly-wrap">
             <div class="monthly-card">
@@ -1049,21 +1040,16 @@
             </div>
           </div>
 
-          <a class="journey-cover" href="#journey" id="travelOpenBtn">
+          <a class="journey-cover is-coming-soon" href="#journey" id="travelOpenBtn" aria-label="たにく丸の道の駅スタンプ旅（ただいま準備中）">
             <span class="journey-heading">
               <span class="journey-by">たにく丸の</span>
               <span class="journey-title">道の駅<br />スタンプ旅</span>
             </span>
             <span class="journey-bottom">
               <span class="journey-location">
-                <svg class="journey-pin-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                  <path d="M12 21s-6-5.2-6-10.2a6 6 0 1 1 12 0C18 15.8 12 21 12 21Z" />
-                  <circle cx="12" cy="10.5" r="2.2" />
-                </svg>
-                <span class="journey-loc-label">いま</span>
-                <span id="travelLocation">道の駅とよはし</span>
+                <span class="journey-prep-dot" aria-hidden="true"></span>
+                <span id="travelLocation">ただいま準備中</span>
               </span>
-              <span class="journey-arrow" aria-hidden="true">›</span>
             </span>
           </a>
         </aside>
@@ -1083,8 +1069,8 @@
                 </svg>
               </span>
               <span class="guide-card-text">
-                <span class="guide-card-title">基本の3ルール</span>
-                <span class="guide-card-sub">光・風・水とお迎え初日のコツ</span>
+                <span class="guide-card-title">基本の3要素</span>
+                <span class="guide-card-sub">光・風・水やりのタイミング</span>
               </span>
             </span>
             <span class="guide-btn-arrow" aria-hidden="true">›</span>
@@ -1102,7 +1088,7 @@
                 </svg>
               </span>
               <span class="guide-card-text">
-                <span class="guide-card-title">土・鉢・肥料のキホン</span>
+                <span class="guide-card-title">土の基本</span>
                 <span class="guide-card-sub">土の考え方・鉢選び・肥料</span>
               </span>
             </span>
@@ -1136,7 +1122,7 @@
       4: { jp: "4月", en: "April", img: "images/monthly_04.jpg", note: "ぐんぐん育つ気持ちのよい季節。鉢が軽くなったらたっぷり水やりをして、風通しのよい場所で育てましょう。" },
       5: { jp: "5月", en: "May", img: "images/monthly_05.jpg", note: "成長のピークですが、日差しが急に強くなる日も。梅雨に向けて、今のうちから風通しを意識しておくと安心です。" },
       6: { jp: "6月", en: "June", img: "images/monthly_06.jpg", note: "梅雨のジメジメは多肉の苦手なもの。長雨を避け、水やりを控えめにして、とにかく風通しをいちばん大切に。" },
-      7: { jp: "7月", en: "July", img: "images/monthly_07.jpg", note: "強い直射日光と蒸れに注意が必要な時期。涼しい夕方に少しだけ水やりをして、風通しのよい半日陰で守って。" },
+      7: { jp: "7月", en: "July", img: "images/monthly_07.jpg", note: "同じ夏でも、眠る子と育つ子がいます。強い直射日光と蒸れに気をつけつつ、水やりは鉢のタイプを見てみましょう。" },
       8: { jp: "8月", en: "August", img: "images/monthly_08.jpg", note: "真夏の暑さで多くの多肉はひと休み。無理に水をあげすぎず、強い日差しを避けて涼しく過ごさせてあげましょう。" },
       9: { jp: "9月", en: "September", img: "images/monthly_09.jpg", note: "残暑が落ち着くころから、少しずつ秋の成長がスタート。朝晩が涼しくなってきたら、水やりも徐々に増やして。" },
       10: { jp: "10月", en: "October", img: "images/monthly_10.jpg", note: "多肉がいちばん元気で美しくなる季節。お日様と風をたっぷり浴びると、葉の先から少しずつ紅葉が始まります。" },
@@ -1174,17 +1160,24 @@
     }
 
     function handleCommonAction(action) {
+      const params = new URLSearchParams(window.location.search);
+      const qMonth = params.get("month");
       if (action === "rules") {
-        showToast("「基本の3ルール」画面はこれから制作予定です");
+        window.location.href = qMonth ? `rules.html?month=${encodeURIComponent(qMonth)}` : "rules.html";
       } else if (action === "soil") {
-        showToast("「土・鉢・肥料のキホン」画面はこれから制作予定です");
+        window.location.href = qMonth ? `soil.html?month=${encodeURIComponent(qMonth)}` : "soil.html";
       } else if (action === "sos") {
-        showToast("「困ったときのSOS」画面はこれから制作予定です");
+        window.location.href = qMonth ? `sos.html?month=${encodeURIComponent(qMonth)}` : "sos.html";
       }
+    }
+
+    function handleTravelTap() {
+      showToast("「たにく丸の道の駅スタンプ旅」はただいま準備中です");
     }
 
     const panelCards = Array.from(document.querySelectorAll("[data-panel]"));
     const menuButtons = Array.from(document.querySelectorAll("[data-action]"));
+    const travelBtn = document.getElementById("travelOpenBtn");
     let lastTapTs = 0;
 
     document.addEventListener("pointerdown", (e) => {
@@ -1205,6 +1198,13 @@
         handleCommonAction(directBtn.dataset.action);
         return;
       }
+      const directTravel = e.target && e.target.closest ? e.target.closest("#travelOpenBtn") : null;
+      if (directTravel) {
+        lastTapTs = now;
+        e.preventDefault();
+        handleTravelTap();
+        return;
+      }
       const x = e.clientX;
       const y = e.clientY;
       for (const card of panelCards) {
@@ -1222,6 +1222,15 @@
           lastTapTs = now;
           e.preventDefault();
           handleCommonAction(btn.dataset.action);
+          return;
+        }
+      }
+      if (travelBtn) {
+        const rect = travelBtn.getBoundingClientRect();
+        if (x >= rect.left && x <= rect.right && y >= rect.top && y <= rect.bottom) {
+          lastTapTs = now;
+          e.preventDefault();
+          handleTravelTap();
           return;
         }
       }
@@ -1246,6 +1255,14 @@
         handleCommonAction(btn.dataset.action);
       });
     });
+
+    if (travelBtn) {
+      travelBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+        if (Date.now() - lastTapTs < 400) return;
+        handleTravelTap();
+      });
+    }
 
     function fitCanvas() {
       const canvas = document.getElementById("appCanvas");

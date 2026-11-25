@@ -1,0 +1,1255 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+
+  <!-- =========================================================================
+    保木平珈琲 Murmure｜展示用iPad Webアプリ「土・鉢・肥料の基本」（v20）
+    - 左ガイドレールを「お迎え直後 → ① → ②」の1本の流れで接続
+    - 1段目（土）：乾きやすい配合に「🔰 初心者に安心」バッジを追加
+    - 2段目（鉢・肥料）：
+      ・左（鉢・広め）：「鉢は土が乾きやすいと安全」の切り口で、底穴／根に合う大きさ（大きすぎると乾かず根腐れの赤字＋鉢底石で調節）／素材比較
+      ・右（肥料＋枠外CTA）：肥料カードをコンパクトに引き締め、「基本の3要素を見る ›」を枠の外へ独立配置
+    - 全サブ画面統一：1080×786px・左上に「‹ もどる」「⌂ トップへ」常時表示
+    - 無操作5分（300000ms）でトップ自動復帰、?month= パラメータ引き継ぎ対応
+  ========================================================================= -->
+
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="多肉の育て方" />
+  <meta name="format-detection" content="telephone=no" />
+  <link rel="manifest" href="manifest.json" />
+
+  <title>Murmure｜土・鉢・肥料の基本</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=Shippori+Mincho:wght@400;500;600;700&family=Zen+Maru+Gothic:wght@500;700&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --bg-paper: #f6f0e4;
+      --card-paper: #fffdf8;
+      --ink-main: #2d1f16;
+      --ink-sub: #3a2b20;
+      --ink-muted: #625344;
+      --line-soft: #dfd0b6;
+      --line-hair: rgba(180, 162, 134, 0.44);
+      --rail-color: #74855d;
+      --rail-line: #c7d1b6;
+
+      --soil-color: #8c6239;
+      --soil-deep: #5c3c1e;
+      --soil-soft: rgba(140, 98, 57, 0.13);
+
+      --drain-color: #b86b2b;
+      --drain-deep: #854816;
+      --drain-soft: rgba(184, 107, 43, 0.13);
+
+      --hold-color: #3f7896;
+      --hold-deep: #245670;
+      --hold-soft: rgba(63, 120, 150, 0.13);
+
+      --base-color: #5b7a46;
+      --base-deep: #3d572b;
+      --base-dark: #435e32;
+      --base-soft: rgba(91, 122, 70, 0.14);
+
+      --good-bg: #edf6ec;
+      --good-ink: #2b5c30;
+      --warn-bg: #fdf2ee;
+      --warn-ink: #9c3424;
+      --alert-red: #b83324;
+
+      --shadow-soft: 0 2px 10px rgba(72, 54, 38, 0.055);
+      --font-serif: "Shippori Mincho", "Hiragino Mincho ProN", "Yu Mincho", serif;
+      --font-ui: "Zen Maru Gothic", "Hiragino Maru Gothic ProN", sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+      -webkit-user-select: none;
+      user-select: none;
+      -webkit-touch-callout: none;
+    }
+
+    button, a {
+      touch-action: manipulation;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: #e9dfd0;
+      font-family: var(--font-serif);
+      color: var(--ink-main);
+    }
+
+    .viewport-wrapper {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      height: 100dvh;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .canvas {
+      position: relative;
+      width: 1080px;
+      height: 786px;
+      min-width: 1080px;
+      min-height: 786px;
+      background: linear-gradient(135deg, #f9f5e9, #f2ead9);
+      transform-origin: center center;
+      padding: 15px 22px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      box-shadow: 0 12px 36px rgba(59, 45, 35, 0.14);
+      overflow: hidden;
+    }
+
+    .canvas::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background-image: radial-gradient(rgba(110, 88, 66, 0.045) 1px, transparent 0);
+      background-size: 16px 16px;
+      opacity: 0.75;
+    }
+
+    /* ================= 1. 上部ヘッダー（全サブ画面統一） ================= */
+    .page-header {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      flex-shrink: 0;
+      border-bottom: 1px solid #d6cbb5;
+      padding-bottom: 8px;
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .header-nav-group {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 5px 15px 5px 11px;
+      background: rgba(255, 253, 248, 0.85);
+      border: 1px solid #d8cab3;
+      border-bottom: 2px solid #cbbba0;
+      border-radius: 999px;
+      font-family: var(--font-ui);
+      font-size: 14.5px;
+      font-weight: 700;
+      color: var(--ink-main);
+      cursor: pointer;
+      flex-shrink: 0;
+      transition: transform 0.12s ease;
+    }
+
+    .back-btn:active { transform: translateY(1px) scale(0.97); }
+
+    .back-arrow {
+      font-size: 20px;
+      line-height: 1;
+      color: var(--soil-color);
+    }
+
+    .home-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 5px 13px 5px 11px;
+      background: rgba(255, 253, 248, 0.72);
+      border: 1px solid #d8cab3;
+      border-bottom: 2px solid #cbbba0;
+      border-radius: 999px;
+      font-family: var(--font-ui);
+      font-size: 13.6px;
+      font-weight: 700;
+      color: var(--ink-sub);
+      cursor: pointer;
+      flex-shrink: 0;
+      transition: transform 0.12s ease;
+    }
+
+    .home-btn:active { transform: translateY(1px) scale(0.97); }
+
+    .home-btn svg {
+      width: 15px;
+      height: 15px;
+      color: var(--soil-color);
+      display: block;
+      flex-shrink: 0;
+    }
+
+    .title-wrap {
+      display: flex;
+      align-items: baseline;
+      gap: 12px;
+    }
+
+    .page-title {
+      font-family: var(--font-serif);
+      font-size: 26px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      line-height: 1.12;
+    }
+
+    .page-en {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-style: italic;
+      font-size: 16.5px;
+      font-weight: 600;
+      color: #6b5f47;
+    }
+
+    /* ================= 2. ガイドレール付き3段グリッド（お迎え直後 → ① → ②） ================= */
+    .flow-workspace {
+      position: relative;
+      z-index: 2;
+      flex: 1 1 auto;
+      min-height: 0;
+      display: grid;
+      grid-template-columns: 38px 1fr;
+      grid-template-rows: auto auto auto;
+      align-content: space-between;
+      column-gap: 12px;
+      row-gap: 14px;
+    }
+
+    .rail-cell {
+      position: relative;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding-top: 0px;
+    }
+
+    /* Row 0：お迎え直後ピル（左レールから横長に展開）＋ 安心バナー */
+    .start-flow-row {
+      grid-column: 1 / -1;
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .start-flow-row::after {
+      content: "";
+      position: absolute;
+      left: 19px;
+      top: 50%;
+      bottom: -30px;
+      width: 2.5px;
+      background: var(--rail-line);
+      transform: translateX(-50%);
+      z-index: 0;
+    }
+
+    .rail-pill-start {
+      position: relative;
+      z-index: 2;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      height: 32px;
+      padding: 0 13px;
+      border-radius: 999px;
+      background: var(--base-color);
+      border: 2px solid #fffdf8;
+      color: #ffffff;
+      font-family: var(--font-ui);
+      font-size: 13.4px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      white-space: nowrap;
+      flex-shrink: 0;
+      box-shadow: 0 2px 6px rgba(61, 87, 43, 0.22);
+    }
+
+    .rail-cell.is-step1::before {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: -30px;
+      bottom: -30px;
+      width: 2.5px;
+      background: var(--rail-line);
+      transform: translateX(-50%);
+      z-index: 0;
+    }
+
+    .rail-cell.is-step2::before {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: -30px;
+      height: 44px;
+      width: 2.5px;
+      background: var(--rail-line);
+      transform: translateX(-50%);
+      z-index: 0;
+    }
+
+    .rail-badge {
+      position: relative;
+      z-index: 2;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--rail-color);
+      border: 2px solid #fffdf8;
+      color: #fff;
+      font-family: var(--font-ui);
+      font-size: 14.5px;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      box-shadow: 0 1px 4px rgba(72, 54, 38, 0.16);
+    }
+
+    /* 最上段：お迎え直後バナー */
+    .reassure-banner {
+      flex: 1 1 auto;
+      min-width: 0;
+      background: linear-gradient(90deg, #eaf3e3 0%, #f7fbf3 65%, #fffdf8 100%);
+      border: 1.5px solid #adc69a;
+      border-left: 5px solid var(--base-color);
+      border-radius: 12px;
+      padding: 12px 18px;
+      display: flex;
+      align-items: center;
+      box-shadow: 0 3px 10px rgba(61, 87, 43, 0.09);
+    }
+
+    .reassure-text {
+      font-family: var(--font-ui);
+      font-size: 18.5px;
+      font-weight: 700;
+      color: var(--base-deep);
+      line-height: 1.3;
+      letter-spacing: 0.02em;
+    }
+
+    .section-stack {
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+      min-height: 0;
+    }
+
+    .step-section-head {
+      display: flex;
+      align-items: baseline;
+      gap: 11px;
+      min-height: 26px;
+      padding: 2px 2px 0;
+      margin-bottom: 6px;
+      flex-shrink: 0;
+    }
+
+    .step-head-title {
+      font-family: var(--font-ui);
+      font-size: 16.2px;
+      font-weight: 700;
+      color: var(--ink-main);
+      line-height: 1.2;
+      white-space: nowrap;
+    }
+
+    .step-head-desc {
+      font-family: var(--font-ui);
+      font-size: 14px;
+      font-weight: 500;
+      color: #625344;
+      line-height: 1.2;
+      white-space: nowrap;
+    }
+
+    .step-head-desc strong {
+      color: var(--ink-main);
+      font-weight: 700;
+    }
+
+    /* ================= Row 1：① 植え替えるなら、どんな土？（断面図解つき2列） ================= */
+    .soil-compare-grid {
+      height: 234px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      align-items: stretch;
+    }
+
+    .soil-visual-card {
+      background: var(--card-paper);
+      border: 1px solid var(--line-soft);
+      border-top: 4.5px solid var(--accent);
+      border-radius: 12px;
+      padding: 14px 16px 13px;
+      box-shadow: var(--shadow-soft);
+      display: grid;
+      grid-template-columns: 152px 1fr;
+      gap: 15px;
+      align-items: stretch;
+      min-width: 0;
+    }
+
+    .soil-visual-card.is-drain { --accent: var(--drain-color); --deep: var(--drain-deep); --soft: var(--drain-soft); }
+    .soil-visual-card.is-hold  { --accent: var(--hold-color);  --deep: var(--hold-deep);  --soft: var(--hold-soft); }
+
+    /* 左側：鉢の断面図解パネル */
+    .pot-diagram-box {
+      background: #faf6ee;
+      border: 1px solid #e6dac6;
+      border-radius: 10px;
+      padding: 10px 8px 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .pot-svg {
+      width: 126px;
+      height: 150px;
+      display: block;
+      flex-shrink: 0;
+    }
+
+    .diagram-caption {
+      font-family: var(--font-ui);
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--deep);
+      text-align: center;
+      line-height: 1.25;
+      white-space: nowrap;
+    }
+
+    /* 右側：テキスト解説 */
+    .soil-card-body {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      min-width: 0;
+    }
+
+    .soil-title-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    .soil-card-title {
+      font-family: var(--font-ui);
+      font-size: 19.5px;
+      font-weight: 700;
+      color: var(--deep);
+      line-height: 1.2;
+      padding-left: 10px;
+      border-left: 4.5px solid var(--accent);
+      white-space: nowrap;
+    }
+
+    .beginner-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 3px 9px 3px 7px;
+      border-radius: 999px;
+      background: #f1f6ec;
+      border: 1px solid #b6cca6;
+      font-family: var(--font-ui);
+      font-size: 12px;
+      font-weight: 700;
+      color: #365225;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .wakaba-svg {
+      width: 14px;
+      height: 14px;
+      display: block;
+      flex-shrink: 0;
+    }
+
+    .soil-when-box {
+      background: var(--soft);
+      border-radius: 9px;
+      padding: 8.5px 11px;
+      margin-bottom: 12px;
+    }
+
+    .soil-when-text {
+      font-family: var(--font-ui);
+      font-size: 14.6px;
+      font-weight: 700;
+      color: var(--deep);
+      line-height: 1.38;
+    }
+
+    .soil-points {
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+    }
+
+    .soil-pt {
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+      font-family: var(--font-ui);
+      font-size: 14.6px;
+      font-weight: 500;
+      line-height: 1.44;
+      color: var(--ink-sub);
+    }
+
+    .soil-pt strong {
+      color: var(--ink-main);
+      font-weight: 700;
+    }
+
+    .pt-mark {
+      width: 22px;
+      height: 22px;
+      border-radius: 6px;
+      font-family: var(--font-ui);
+      font-size: 13px;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .pt-mark.is-good { background: var(--good-bg); color: var(--good-ink); }
+    .pt-mark.is-warn { background: var(--warn-bg); color: var(--warn-ink); }
+
+    .soil-ex-note {
+      margin-top: auto;
+      padding-top: 7px;
+      border-top: 1px dashed var(--line-hair);
+      font-family: var(--font-ui);
+      font-size: 12.8px;
+      font-weight: 500;
+      color: var(--ink-muted);
+      line-height: 1.4;
+    }
+
+    .soil-ex-note strong {
+      color: var(--ink-sub);
+      font-weight: 700;
+    }
+
+    /* ①の下：市販の土に混ぜて調節する補足帯 */
+    .soil-mix-tip {
+      margin-top: 8px;
+      background: #faf6ee;
+      border: 1px solid #e2d5bf;
+      border-left: 4px solid var(--soil-color);
+      border-radius: 9px;
+      padding: 6.5px 13px;
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      font-family: var(--font-ui);
+      font-size: 13.6px;
+      font-weight: 500;
+      color: var(--ink-sub);
+      line-height: 1.3;
+    }
+
+    .soil-mix-tip strong {
+      color: var(--ink-main);
+      font-weight: 700;
+    }
+
+    .mix-tip-tag {
+      display: inline-flex;
+      align-items: center;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: var(--soil-soft);
+      color: var(--soil-deep);
+      font-size: 12px;
+      font-weight: 700;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    /* ================= Row 2：② 鉢の選び方（左・広め）＋ 肥料＆枠外CTA（右） ================= */
+    .bottom-split {
+      height: 248px;
+      display: grid;
+      grid-template-columns: 1fr 376px;
+      gap: 14px;
+      min-width: 0;
+    }
+
+    /* 左：鉢の選び方カード（広め） */
+    .pot-card {
+      background: var(--card-paper);
+      border: 1px solid var(--line-soft);
+      border-top: 4px solid var(--soil-color);
+      border-radius: 12px;
+      padding: 14px 18px 13px;
+      box-shadow: var(--shadow-soft);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-width: 0;
+    }
+
+    .pot-main-grid {
+      display: grid;
+      grid-template-columns: 0.84fr 1.16fr;
+      gap: 0;
+      flex: 1;
+    }
+
+    .pot-main-col {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      gap: 7px;
+      min-width: 0;
+    }
+
+    .pot-main-col:first-child { padding-right: 16px; }
+    .pot-main-col:last-child { padding-left: 16px; border-left: 1px dashed var(--line-hair); }
+
+    .pot-main-title {
+      font-family: var(--font-ui);
+      font-size: 17.5px;
+      font-weight: 700;
+      color: var(--ink-main);
+      line-height: 1.24;
+      padding-left: 9px;
+      border-left: 4px solid var(--soil-color);
+    }
+
+    .pot-main-desc {
+      font-family: var(--font-ui);
+      font-size: 14.4px;
+      font-weight: 500;
+      line-height: 1.48;
+      color: var(--ink-sub);
+    }
+
+    .pot-main-desc strong {
+      color: var(--ink-main);
+      font-weight: 700;
+    }
+
+    .pot-alert-red {
+      color: var(--alert-red);
+      font-weight: 700;
+    }
+
+    .pot-tip-note {
+      font-family: var(--font-ui);
+      font-size: 13.2px;
+      font-weight: 500;
+      color: var(--soil-deep);
+      background: #f8f2e8;
+      border-radius: 7px;
+      padding: 5px 9px;
+      line-height: 1.38;
+    }
+
+    /* 素材の乾き方（下段・はみ出し防止の2段構成） */
+    .pot-material-bar {
+      margin-top: 9px;
+      padding-top: 8px;
+      border-top: 1px dashed var(--line-hair);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      flex-shrink: 0;
+    }
+
+    .pot-mat-label {
+      font-family: var(--font-ui);
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--soil-deep);
+      line-height: 1.2;
+      white-space: nowrap;
+    }
+
+    .pot-pair {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .pot-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 4px 10px 4px 5px;
+      border-radius: 9px;
+      border: 1px solid #e4d8c5;
+      white-space: nowrap;
+    }
+
+    .pot-pill.is-terracotta { background: #fdf8f2; border-color: #e4c7a8; }
+    .pot-pill.is-plastic    { background: #f4f8fb; border-color: #c2d6e3; }
+
+    .pot-pill-state {
+      display: inline-flex;
+      align-items: center;
+      padding: 2px 8px;
+      border-radius: 6px;
+      font-family: var(--font-ui);
+      font-size: 12.2px;
+      font-weight: 700;
+      color: #ffffff;
+      line-height: 1.2;
+    }
+
+    .pot-pill-name {
+      font-family: var(--font-ui);
+      font-size: 13.2px;
+      font-weight: 700;
+      color: var(--ink-main);
+    }
+
+    .pot-pill.is-terracotta .pot-pill-state { background: var(--drain-color); }
+    .pot-pill.is-plastic .pot-pill-state    { background: var(--hold-color); }
+
+    /* 右列：肥料カード（上）＋ 基本の3要素ボタン（枠の外・下） */
+    .right-side-col {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      min-width: 0;
+      min-height: 0;
+    }
+
+    .fert-side-card {
+      flex: 1 1 auto;
+      background: linear-gradient(180deg, #fafcf7 0%, #f1f6ec 100%);
+      border: 1.5px solid #c2d4b4;
+      border-top: 4px solid var(--base-color);
+      border-radius: 12px;
+      padding: 13px 15px 12px;
+      box-shadow: 0 3px 10px rgba(72, 92, 56, 0.08);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-width: 0;
+    }
+
+    .fert-head {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+
+    .fert-pill {
+      display: inline-flex;
+      align-items: center;
+      padding: 3px 10px;
+      border-radius: 999px;
+      background: var(--base-color);
+      color: #ffffff;
+      font-family: var(--font-ui);
+      font-size: 12px;
+      font-weight: 700;
+      line-height: 1.1;
+      letter-spacing: 0.04em;
+      flex-shrink: 0;
+    }
+
+    .fert-title {
+      font-family: var(--font-ui);
+      font-size: 17.5px;
+      font-weight: 700;
+      color: var(--base-deep);
+      line-height: 1.2;
+      white-space: nowrap;
+    }
+
+    .fert-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      flex: 1;
+      justify-content: center;
+    }
+
+    .fert-item {
+      display: grid;
+      grid-template-columns: 74px 1fr;
+      align-items: baseline;
+      gap: 8px;
+      font-family: var(--font-ui);
+      font-size: 13.8px;
+      font-weight: 500;
+      color: #2f3b27;
+      line-height: 1.44;
+    }
+
+    .fert-item strong {
+      color: #203117;
+      font-weight: 700;
+    }
+
+    .fert-tag {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2px 6px;
+      border-radius: 5px;
+      background: #e3eedb;
+      color: var(--base-deep);
+      font-size: 11.8px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .fert-tag.is-warn {
+      background: #f8e8e2;
+      color: #963422;
+    }
+
+    /* 枠の外に独立させた「基本の3要素を見る」ボタン */
+    .rules-cta-btn {
+      flex: 0 0 auto;
+      width: 100%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 12px 14px 11px 16px;
+      border-radius: 11px;
+      background: var(--base-color);
+      border: 1px solid var(--base-dark);
+      border-bottom: 3.5px solid #324a24;
+      color: #ffffff;
+      font-family: var(--font-ui);
+      font-size: 15.2px;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      white-space: nowrap;
+      cursor: pointer;
+      box-shadow: 0 3px 10px rgba(61, 87, 43, 0.22);
+      transition: transform 0.12s ease, filter 0.12s ease;
+    }
+
+    .rules-cta-btn:active {
+      transform: translateY(1px) scale(0.98);
+      filter: brightness(0.96);
+    }
+
+    .rules-cta-arrow {
+      width: 21px;
+      height: 21px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.96);
+      color: var(--base-color);
+      font-size: 16px;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding-left: 1px;
+    }
+  </style>
+</head>
+<body>
+  <div class="viewport-wrapper">
+    <main class="canvas" id="appCanvas">
+
+      <!-- 上部ヘッダー -->
+      <header class="page-header">
+        <div class="header-left">
+          <div class="header-nav-group">
+            <button class="back-btn" type="button" id="backHomeBtn" data-nav="back">
+              <span class="back-arrow" aria-hidden="true">‹</span>
+              <span>もどる</span>
+            </button>
+            <button class="home-btn" type="button" id="topHomeBtn" data-nav="index.html">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M3 10.5 12 3l9 7.5" />
+                <path d="M5.5 9.5V20h13V9.5" />
+              </svg>
+              <span>トップへ</span>
+            </button>
+          </div>
+
+          <div class="title-wrap">
+            <h1 class="page-title">土・鉢・肥料の基本</h1>
+            <span class="page-en">Soil, Pots &amp; Fertilizer</span>
+          </div>
+        </div>
+      </header>
+
+      <!-- ガイドレール付き3段グリッド（お迎え直後 → ① → ②） -->
+      <div class="flow-workspace">
+
+        <!-- Row 0：お迎え直後 -->
+        <div class="start-flow-row" role="note">
+          <span class="rail-pill-start">お迎え直後</span>
+          <div class="reassure-banner">
+            <p class="reassure-text">買ったばかりの元気な株は、まず今の鉢のままで大丈夫です。</p>
+          </div>
+        </div>
+
+        <!-- Row 1：① 植え替えるなら、どんな土？（断面図解つき） -->
+        <div class="rail-cell is-step1" aria-hidden="true">
+          <span class="rail-badge">1</span>
+        </div>
+        <div class="section-stack">
+          <div class="step-section-head">
+            <h2 class="step-head-title">植え替えるなら、どんな土？</h2>
+            <span class="step-head-desc">最初は市販の<strong>「多肉植物の土」</strong>から始められます</span>
+          </div>
+
+          <section class="soil-compare-grid" aria-label="土の乾き方の比較">
+            <!-- 左：乾きやすい配合 -->
+            <article class="soil-visual-card is-drain">
+              <div class="pot-diagram-box" aria-hidden="true">
+                <svg class="pot-svg" viewBox="0 0 130 156">
+                  <!-- 多肉の葉（ミニロゼット） -->
+                  <path d="M65 44 C56 32 45 28 38 33 C44 41 54 45 65 46 Z" fill="#89a870" stroke="#4f6b3a" stroke-width="1.3"/>
+                  <path d="M65 44 C74 32 85 28 92 33 C86 41 76 45 65 46 Z" fill="#89a870" stroke="#4f6b3a" stroke-width="1.3"/>
+                  <path d="M65 44 C58 26 52 16 58 13 C64 18 65 30 65 44 Z" fill="#a2bd88" stroke="#4f6b3a" stroke-width="1.3"/>
+                  <path d="M65 44 C72 26 78 16 72 13 C66 18 65 30 65 44 Z" fill="#a2bd88" stroke="#4f6b3a" stroke-width="1.3"/>
+                  <path d="M65 45 C61 30 65 20 65 20 C65 20 69 30 65 45 Z" fill="#b7cf9d" stroke="#4f6b3a" stroke-width="1.2"/>
+                  <!-- 鉢の輪郭（断面） -->
+                  <path d="M22 48 H108 L96 134 H34 Z" fill="#eadbc2" stroke="#8c6239" stroke-width="2" stroke-linejoin="round"/>
+                  <!-- 乾いた土エリア（上〜中まで広く乾いている） -->
+                  <path d="M25 52 H105 L97 110 H33 Z" fill="#ebd9be"/>
+                  <!-- 湿った土エリア（底のほうに少しだけ） -->
+                  <path d="M33 110 H97 L94 132 H36 Z" fill="#9c7550"/>
+                  <!-- 粒が大きい・隙間が多い表現（丸い小石） -->
+                  <g fill="#d4b892" stroke="#a6855c" stroke-width="0.9">
+                    <circle cx="42" cy="64" r="4.2"/><circle cx="58" cy="60" r="3.6"/><circle cx="76" cy="65" r="4.5"/><circle cx="92" cy="61" r="3.4"/>
+                    <circle cx="37" cy="78" r="3.8"/><circle cx="52" cy="76" r="4.4"/><circle cx="69" cy="79" r="3.6"/><circle cx="86" cy="77" r="4.2"/>
+                    <circle cx="45" cy="93" r="4.3"/><circle cx="63" cy="92" r="3.9"/><circle cx="81" cy="94" r="4.1"/>
+                    <circle cx="53" cy="104" r="3.3"/><circle cx="74" cy="105" r="3.5"/>
+                  </g>
+                  <!-- 根っこ -->
+                  <path d="M65 47 C64 60 58 72 52 84 M65 47 C66 62 72 74 79 86 M65 56 C63 72 65 86 63 98" fill="none" stroke="#855a34" stroke-width="1.4" stroke-linecap="round"/>
+                  <!-- 鉢のフチ -->
+                  <rect x="17" y="44" width="96" height="9" rx="3" fill="#d9b48f" stroke="#8c6239" stroke-width="1.8"/>
+                  <!-- 底穴 -->
+                  <rect x="57" y="132" width="16" height="4" rx="1.5" fill="#faf6ee" stroke="#8c6239" stroke-width="1.2"/>
+                </svg>
+                <span class="diagram-caption">乾いた部分が多い</span>
+              </div>
+
+              <div class="soil-card-body">
+                <div class="soil-title-row">
+                  <h3 class="soil-card-title">乾きやすい配合</h3>
+                  <span class="beginner-badge">
+                    <svg class="wakaba-svg" viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M12 6.5 L4.5 2.8 L4.5 14.5 L12 20.5 Z" fill="#d9ad4c" stroke="#9e7a2e" stroke-width="1.2" stroke-linejoin="round" />
+                      <path d="M12 6.5 L19.5 2.8 L19.5 14.5 L12 20.5 Z" fill="#6b8453" stroke="#4d6239" stroke-width="1.2" stroke-linejoin="round" />
+                    </svg>
+                    <span>初心者に安心</span>
+                  </span>
+                </div>
+
+                <div class="soil-when-box">
+                  <p class="soil-when-text">なかなか乾かないときにおすすめ</p>
+                </div>
+
+                <div class="soil-points">
+                  <p class="soil-pt">
+                    <span class="pt-mark is-good" aria-hidden="true">◎</span>
+                    <span>通気性がよいので、<strong>根腐れしにくい</strong></span>
+                  </p>
+                  <p class="soil-pt">
+                    <span class="pt-mark is-warn" aria-hidden="true">△</span>
+                    <span>乾くのが早く、<strong>水切れしやすい</strong></span>
+                  </p>
+                </div>
+
+                <p class="soil-ex-note"><strong>例：</strong>軽石・日向土・パーライト・粒の粗い赤玉土や鹿沼土が多めのブレンドなど</p>
+              </div>
+            </article>
+
+            <!-- 右：水分が長く残る配合 -->
+            <article class="soil-visual-card is-hold">
+              <div class="pot-diagram-box" aria-hidden="true">
+                <svg class="pot-svg" viewBox="0 0 130 156">
+                  <!-- 多肉の葉（ミニロゼット） -->
+                  <path d="M65 44 C56 32 45 28 38 33 C44 41 54 45 65 46 Z" fill="#89a870" stroke="#4f6b3a" stroke-width="1.3"/>
+                  <path d="M65 44 C74 32 85 28 92 33 C86 41 76 45 65 46 Z" fill="#89a870" stroke="#4f6b3a" stroke-width="1.3"/>
+                  <path d="M65 44 C58 26 52 16 58 13 C64 18 65 30 65 44 Z" fill="#a2bd88" stroke="#4f6b3a" stroke-width="1.3"/>
+                  <path d="M65 44 C72 26 78 16 72 13 C66 18 65 30 65 44 Z" fill="#a2bd88" stroke="#4f6b3a" stroke-width="1.3"/>
+                  <path d="M65 45 C61 30 65 20 65 20 C65 20 69 30 65 45 Z" fill="#b7cf9d" stroke="#4f6b3a" stroke-width="1.2"/>
+                  <!-- 鉢の輪郭（断面） -->
+                  <path d="M22 48 H108 L96 134 H34 Z" fill="#eadbc2" stroke="#8c6239" stroke-width="2" stroke-linejoin="round"/>
+                  <!-- 乾いた土エリア（表面付近だけ） -->
+                  <path d="M25 52 H105 L102 74 H28 Z" fill="#ebd9be"/>
+                  <!-- 湿った土エリア（中〜底までたっぷり水分が残っている） -->
+                  <path d="M28 74 H102 L94 132 H36 Z" fill="#8f6a47"/>
+                  <!-- 細かい粒＋水分の表現 -->
+                  <g fill="#735133" opacity="0.55">
+                    <circle cx="42" cy="84" r="2.2"/><circle cx="56" cy="88" r="2"/><circle cx="72" cy="83" r="2.3"/><circle cx="88" cy="87" r="2"/>
+                    <circle cx="38" cy="99" r="2"/><circle cx="52" cy="103" r="2.4"/><circle cx="68" cy="98" r="2"/><circle cx="84" cy="102" r="2.2"/>
+                    <circle cx="46" cy="116" r="2.2"/><circle cx="62" cy="118" r="2"/><circle cx="78" cy="115" r="2.3"/>
+                  </g>
+                  <!-- 水分のしずくマーク（土の中に残るイメージ） -->
+                  <g fill="#90c5de" opacity="0.88">
+                    <path d="M47 91 C47 91 44 95.5 44 97.2 a3 3 0 0 0 6 0 C50 95.5 47 91 47 91 Z"/>
+                    <path d="M81 94 C81 94 78 98.5 78 100.2 a3 3 0 0 0 6 0 C84 98.5 81 94 81 94 Z"/>
+                    <path d="M64 111 C64 111 61 115.5 61 117.2 a3 3 0 0 0 6 0 C67 115.5 64 111 64 111 Z"/>
+                  </g>
+                  <!-- 根っこ -->
+                  <path d="M65 47 C64 60 58 72 52 84 M65 47 C66 62 72 74 79 86 M65 56 C63 72 65 86 63 98" fill="none" stroke="#4f331c" stroke-width="1.4" stroke-linecap="round"/>
+                  <!-- 鉢のフチ -->
+                  <rect x="17" y="44" width="96" height="9" rx="3" fill="#d9b48f" stroke="#8c6239" stroke-width="1.8"/>
+                  <!-- 底穴 -->
+                  <rect x="57" y="132" width="16" height="4" rx="1.5" fill="#faf6ee" stroke="#8c6239" stroke-width="1.2"/>
+                </svg>
+                <span class="diagram-caption">水分が長く残る</span>
+              </div>
+
+              <div class="soil-card-body">
+                <div class="soil-title-row">
+                  <h3 class="soil-card-title">水分が長く残る配合</h3>
+                </div>
+
+                <div class="soil-when-box">
+                  <p class="soil-when-text">すぐに乾きすぎるときにおすすめ</p>
+                </div>
+
+                <div class="soil-points">
+                  <p class="soil-pt">
+                    <span class="pt-mark is-good" aria-hidden="true">◎</span>
+                    <span>ゆっくり乾くので、<strong>水やりがラク</strong></span>
+                  </p>
+                  <p class="soil-pt">
+                    <span class="pt-mark is-warn" aria-hidden="true">△</span>
+                    <span>湿気がこもると<strong>蒸れやすい</strong></span>
+                  </p>
+                </div>
+
+                <p class="soil-ex-note"><strong>例：</strong>粒の細かい赤玉土・鹿沼土や、培養土・ピートモスが多めのブレンドなど</p>
+              </div>
+            </article>
+          </section>
+
+          <div class="soil-mix-tip">
+            <span class="mix-tip-tag">調節のコツ</span>
+            <span>最初は市販の<strong>「多肉植物の土」</strong>をベースに、おうちの環境に合わせて調節するのもおすすめです。</span>
+          </div>
+        </div>
+
+        <!-- Row 2：② 鉢は土が乾きやすいと安全（左・広め）＋ 肥料＆枠外CTA（右） -->
+        <div class="rail-cell is-step2" aria-hidden="true">
+          <span class="rail-badge">2</span>
+        </div>
+        <div class="section-stack">
+          <div class="step-section-head">
+            <h2 class="step-head-title">鉢は底穴と大きさで選ぶ</h2>
+            <span class="step-head-desc">まずはこの2つを押さえれば大丈夫</span>
+          </div>
+
+          <section class="bottom-split" aria-label="鉢の選び方と肥料">
+            <!-- 左：鉢の選び方（広め） -->
+            <div class="pot-card">
+              <div class="pot-main-grid">
+                <div class="pot-main-col">
+                  <h3 class="pot-main-title">底穴がある鉢</h3>
+                  <p class="pot-main-desc">
+                    水が抜けないと根腐れしやすくなります。<strong>穴なし鉢は水加減が難しい</strong>ので、まずは底穴のある鉢が安心です。
+                  </p>
+                </div>
+
+                <div class="pot-main-col">
+                  <h3 class="pot-main-title">根に合う大きさ</h3>
+                  <p class="pot-main-desc">
+                    <strong>根が鉢いっぱいに回ったら、ひと回り大きい鉢へ</strong>（その株が育ち始めるころが目安）。<br />
+                    <span class="pot-alert-red">※大きすぎると土が乾かず根腐れのもと。</span>
+                  </p>
+                  <p class="pot-tip-note">小さな鉢なら<strong>鉢底石は不要</strong>。深めの鉢だけ底石で土の量を調節できます。</p>
+                </div>
+              </div>
+
+              <!-- 素材で乾き方が変わる -->
+              <div class="pot-material-bar" aria-label="鉢の素材による乾き方の違い">
+                <span class="pot-mat-label">素材でも乾き方が変わります</span>
+                <div class="pot-pair">
+                  <div class="pot-pill is-terracotta">
+                    <span class="pot-pill-state">乾きやすい</span>
+                    <span class="pot-pill-name">素焼き・テラコッタ鉢</span>
+                  </div>
+                  <div class="pot-pill is-plastic">
+                    <span class="pot-pill-state">乾きにくい</span>
+                    <span class="pot-pill-name">プラ鉢・ブリキ缶</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 右列：肥料カード（上）＋ 基本の3要素を見るボタン（枠の外・下） -->
+            <div class="right-side-col">
+              <div class="fert-side-card" aria-label="肥料の目安">
+                <div class="fert-head">
+                  <span class="fert-pill">基本はいらない</span>
+                  <h3 class="fert-title">肥料はあげたほうがいい？</h3>
+                </div>
+
+                <div class="fert-list">
+                  <p class="fert-item">
+                    <span class="fert-tag">理由・特徴</span>
+                    <span><strong>大きく育てたいとき</strong>に少量。多いと<strong>徒長・紅葉がさめやすい</strong>。</span>
+                  </p>
+                  <p class="fert-item">
+                    <span class="fert-tag is-warn">注意点</span>
+                    <span><strong>「元肥入り」の土</strong>なら、植え替え時の追加は不要。あげるなら<strong>育っている時期だけ</strong>（休眠期はお休み）。</span>
+                  </p>
+                </div>
+              </div>
+
+              <button class="rules-cta-btn" type="button" id="jumpRulesBtn" data-nav="rules.html?from=soil">
+                <span>基本の3要素を見る</span>
+                <span class="rules-cta-arrow" aria-hidden="true">›</span>
+              </button>
+            </div>
+          </section>
+        </div>
+
+      </div>
+
+    </main>
+  </div>
+
+  <script>
+    function navigateTo(url) {
+      if (!url) return;
+      const params = new URLSearchParams(window.location.search);
+      const qMonth = params.get("month");
+      if (url === "back") {
+        const fromPage = params.get("from") || "";
+        if (fromPage === "sos") {
+          const next = new URLSearchParams();
+          const qSosFrom = params.get("sosFrom");
+          if (qSosFrom) next.set("from", qSosFrom);
+          ["sym", "choice", "type", "season", "light", "wind", "water", "month"].forEach((k) => {
+            const v = params.get(k);
+            if (v) next.set(k, v);
+          });
+          const qs = next.toString();
+          window.location.href = qs ? `sos.html?${qs}` : "sos.html";
+          return;
+        }
+        window.location.href = qMonth ? `index.html?month=${encodeURIComponent(qMonth)}` : "index.html";
+        return;
+      }
+      if (qMonth) {
+        const sep = url.indexOf("?") === -1 ? "?" : "&";
+        window.location.href = `${url}${sep}month=${encodeURIComponent(qMonth)}`;
+        return;
+      }
+      window.location.href = url;
+    }
+
+    const navButtons = Array.from(document.querySelectorAll("[data-nav]"));
+    let lastTapTs = 0;
+
+    document.addEventListener("pointerdown", (e) => {
+      if (e.pointerType === "mouse" && e.button !== 0) return;
+      const now = Date.now();
+      if (now - lastTapTs < 250) return;
+      const directBtn = e.target && e.target.closest ? e.target.closest("[data-nav]") : null;
+      if (directBtn) {
+        lastTapTs = now;
+        e.preventDefault();
+        navigateTo(directBtn.dataset.nav);
+        return;
+      }
+      const x = e.clientX;
+      const y = e.clientY;
+      for (const btn of navButtons) {
+        const rect = btn.getBoundingClientRect();
+        if (x >= rect.left && x <= rect.right && y >= rect.top && y <= rect.bottom) {
+          lastTapTs = now;
+          e.preventDefault();
+          navigateTo(btn.dataset.nav);
+          return;
+        }
+      }
+    }, { capture: true, passive: false });
+
+    navButtons.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        if (Date.now() - lastTapTs < 400) return;
+        navigateTo(btn.dataset.nav);
+      });
+    });
+
+    // 無操作5分でトップ画面へ自動復帰
+    let idleTimer = null;
+    function resetIdleTimer() {
+      clearTimeout(idleTimer);
+      idleTimer = setTimeout(() => {
+        window.location.href = "index.html";
+      }, 300000);
+    }
+    ["pointerdown", "touchstart", "click", "keydown"].forEach((ev) => {
+      window.addEventListener(ev, resetIdleTimer, { passive: true });
+    });
+
+    function fitCanvas() {
+      const canvas = document.getElementById("appCanvas");
+      const scale = Math.min(window.innerWidth / 1080, window.innerHeight / 786);
+      if (window.CSS && CSS.supports && CSS.supports("zoom", "1")) {
+        canvas.style.zoom = scale;
+        canvas.style.transform = "none";
+      } else {
+        canvas.style.zoom = "";
+        canvas.style.transform = `scale(${scale})`;
+      }
+    }
+
+    window.addEventListener("resize", fitCanvas);
+    window.addEventListener("orientationchange", fitCanvas);
+    fitCanvas();
+    resetIdleTimer();
+  </script>
+</body>
+</html>

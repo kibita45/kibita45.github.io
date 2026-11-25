@@ -5,16 +5,19 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
 
   <!-- =========================================================================
-    保木平珈琲 Murmure｜展示用iPad Webアプリ「多肉育成シミュレーター」（v55復元＋パーツ合成統合版）
-    - V54/V55の全機能を完全復元：
+    保木平珈琲 Murmure｜展示用iPad Webアプリ「多肉育成シミュレーター」（v58・仕上げ完了版）
+    - V54/V55の全機能を完全継承：
       ・タイトル「多肉育成シミュレーター」（Succulent Care Simulator）
       ・イメージカラー（春ピンク・夏緑／エケベリア系ピンク・カランコエ系オレンジ）
       ・タイプ切替タブの写真見栄え（未選択は写真くっきり＋左グラデ、選択中は単色白文字）
       ・ステップ2・3の外出し見出し行＋左レーンの「水やり」ピン
       ・均等5分割の季節タブ＆ジオラマタップ領域＋12ヶ月カラーバー＆選択ハイライト枠
       ・24ステップ水やり波グラフ＆「⚠注意」ゾーン・バッジ
-      ・全960通り判定ロジック・座標直接判定・無操作3分トップ復帰・裏モード2タブ
+      ・全960通り判定ロジック・座標直接判定・無操作5分トップ復帰・裏モード2タブ
     - 新規パーツ合成（3層：空・地面PNG・たにく丸PNG）＆実態ベース木漏れ日を統合
+    - 夏の座り姿たにく丸（hot_v2 / rest / sleep）の足元影を接地位置・幅に個別最適化
+    - 基本の3要素（rules.html）＆困ったSOS（sos.html）へ状態パラメータを引き継ぎ、復帰時に自動復元
+    - SOSから遷移時、「‹ もどる」で元の症状（?sym=〇〇）へ復帰
   ========================================================================= -->
 
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -52,8 +55,8 @@
       --tag-1-dark: #8a394c;
       --tag-2: #3d7699;
       --tag-2-dark: #285470;
-      --tag-3: #c86d25;
-      --tag-3-dark: #944b12;
+      --tag-3: #b05712;
+      --tag-3-dark: #803d0a;
       --tag-4: #4d6b38;
       --tag-4-dark: #354d25;
       /* 季節イメージカラー（春＝ピンク、夏＝緑） */
@@ -161,6 +164,13 @@
       gap: 14px;
     }
 
+    .header-nav-group {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+
     .back-btn {
       display: inline-flex;
       align-items: center;
@@ -185,6 +195,34 @@
       font-size: 20px;
       line-height: 1;
       color: var(--theme-accent);
+    }
+
+    .home-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 5px 13px 5px 11px;
+      background: rgba(255, 253, 248, 0.72);
+      border: 1px solid #d8cab3;
+      border-bottom: 2px solid #cbbba0;
+      border-radius: 999px;
+      font-family: var(--font-ui);
+      font-size: 13.6px;
+      font-weight: 700;
+      color: var(--ink-sub);
+      cursor: pointer;
+      flex-shrink: 0;
+      transition: transform 0.12s ease;
+    }
+
+    .home-btn:active { transform: translateY(1px) scale(0.97); }
+
+    .home-btn svg {
+      width: 15px;
+      height: 15px;
+      color: var(--theme-accent);
+      display: block;
+      flex-shrink: 0;
     }
 
     .title-wrap {
@@ -272,7 +310,6 @@
       z-index: 0;
     }
 
-    /* ステップ2・3共通の外出し見出し行（ボタン・カードの外、一段上に配置） */
     .step-section-head {
       display: flex;
       align-items: center;
@@ -316,9 +353,9 @@
 
     .step-head-desc {
       font-family: var(--font-ui);
-      font-size: 12px;
+      font-size: 13.4px;
       font-weight: 500;
-      color: #7d6e5d;
+      color: #625344;
       line-height: 1.2;
       white-space: nowrap;
     }
@@ -539,7 +576,6 @@
       background: #f9f5e9;
     }
 
-    /* カレンダー上端：画像と一体化した均等5季節パネルヘッダー */
     .cal-season-tabs {
       position: relative;
       z-index: 4;
@@ -552,7 +588,6 @@
       flex-shrink: 0;
     }
 
-    /* 画像の下・水やり波の上：12ヶ月の期間カラーバー（区切り線なし・水やりと連動） */
     .cal-months-band {
       position: relative;
       z-index: 3;
@@ -572,7 +607,7 @@
       z-index: 2;
       font-family: var(--font-ui);
       text-align: center;
-      font-size: 12.2px;
+      font-size: 13px;
       font-weight: 700;
       color: #3d2e23;
       line-height: 1;
@@ -580,7 +615,6 @@
       pointer-events: none;
     }
 
-    /* 選択中の季節に対応する月の範囲を囲うハイライト枠 */
     .months-active-frame {
       position: absolute;
       top: 1px;
@@ -638,8 +672,6 @@
     }
 
     .diorama-panel.is-loaded img.dio-base-img { opacity: 1; }
-
-    /* パーツ合成モード（空画像/グラデ＋地面PNG＋足元影＋たにく丸PNG） */
     .diorama-panel.is-layered img.dio-base-img { display: none; }
 
     .diorama-panel.is-layered.dio-spring {
@@ -687,7 +719,6 @@
     }
     .diorama-panel.is-layered img.dio-ground-img { display: block; }
 
-    /* 冬を基準に、濃すぎる地面（夏・秋）だけぼかし無しで柔らかく馴染ませる */
     .diorama-panel.is-layered.dio-summer img.dio-ground-img {
       filter: brightness(1.09) contrast(0.89) saturate(0.88);
     }
@@ -695,7 +726,6 @@
       filter: brightness(1.08) contrast(0.90) saturate(0.86);
     }
 
-    /* ぼかし無しの極薄・季節別ベール（空・地面のみ、たにく丸の後ろに配置） */
     .diorama-panel.is-layered::after {
       content: "";
       position: absolute;
@@ -719,7 +749,6 @@
       background: none;
     }
 
-    /* 地面の色に合わせた足元影（季節・室内外ごと） */
     .diorama-panel .dio-char-shadow {
       display: none;
       position: absolute;
@@ -744,7 +773,7 @@
     .diorama-panel.is-layered .dio-char-shadow { display: block; }
 
     .diorama-panel.dio-spring .dio-char-shadow { --shadow-rgb: 58, 76, 38; --shadow-a1: 0.32; --shadow-a2: 0.15; }
-    .diorama-panel.dio-rain .dio-char-shadow   { --shadow-rgb: 42, 60, 74; --shadow-a1: 0.34; --shadow-a2: 0.16; }
+    .diorama-panel.dio-rain .dio-char-shadow { --shadow-rgb: 42, 60, 74; --shadow-a1: 0.34; --shadow-a2: 0.16; }
     .diorama-panel.dio-summer .dio-char-shadow { --shadow-rgb: 50, 68, 30; --shadow-a1: 0.38; --shadow-a2: 0.18; }
     .diorama-panel.dio-autumn .dio-char-shadow { --shadow-rgb: 92, 58, 32; --shadow-a1: 0.34; --shadow-a2: 0.16; }
     .diorama-panel.dio-winter .dio-char-shadow { --shadow-rgb: 60, 82, 104; --shadow-a1: 0.30; --shadow-a2: 0.14; }
@@ -755,7 +784,6 @@
       --shadow-a2: 0.16;
     }
 
-    /* 木漏れ日コマのみ、上部にほんのり木陰の空気を添える（ベールの後ろ） */
     .diorama-panel.has-komorebi::before {
       content: "";
       position: absolute;
@@ -765,7 +793,6 @@
       background: linear-gradient(180deg, rgba(84, 110, 64, 0.08) 0%, rgba(84, 110, 64, 0.02) 48%, rgba(84, 110, 64, 0) 78%);
     }
 
-    /* たにく丸本体（ベールの手前・blur/drop-shadow不使用で輪郭くっきり） */
     .diorama-panel img.dio-char-img {
       display: none;
       position: absolute;
@@ -779,7 +806,6 @@
     }
     .diorama-panel.is-layered img.dio-char-img { display: block; }
 
-    /* 冬基準の明るさ・コントラスト微調整（上半身がくすまない範囲で自然に） */
     .canvas.type-sun-main .diorama-panel.is-layered.dio-summer img.dio-char-img {
       filter: brightness(1.01) contrast(1.02);
     }
@@ -796,7 +822,6 @@
       display: none;
     }
 
-    /* 木漏れ日パーツ（透過枝葉のみ・上端に自然にかかる） */
     .diorama-panel img.komorebi-leaf {
       position: absolute;
       top: 0;
@@ -815,14 +840,12 @@
 
     .diorama-panel.has-komorebi img.komorebi-leaf { opacity: 1; }
 
-    /* 均等5分割パネル（上の季節タブと縦ラインを揃えてスッキリ区切る） */
     .dio-spring { left: 0%; width: 20%; border-right: 1px solid rgba(255, 253, 248, 0.72); }
     .dio-rain { left: 20%; width: 20%; border-right: 1px solid rgba(255, 253, 248, 0.72); }
     .dio-summer { left: 40%; width: 20%; border-right: 1px solid rgba(255, 253, 248, 0.72); }
     .dio-autumn { left: 60%; width: 20%; border-right: 1px solid rgba(255, 253, 248, 0.72); }
     .dio-winter { left: 80%; width: 20%; }
 
-    /* ジオラマ上の均等5分割タップ領域（画像タップでも季節を切り替えられる） */
     .stage-hit-layer {
       position: absolute;
       inset: 0;
@@ -869,7 +892,6 @@
       pointer-events: none;
     }
 
-    /* ================= カレンダー下辺：水やりペース帯（なめらかな水量の波グラフ） ================= */
     .cal-water-wrap {
       position: relative;
       z-index: 3;
@@ -907,7 +929,6 @@
       gap: 1px;
     }
 
-    /* 吹き出しの見出し色と枠線を季節カラーに統一 */
     .pos-spring .season-bubble { --bub-accent: var(--season-spring-dark); --bub-border: rgba(201, 109, 130, 0.52); }
     .pos-rain .season-bubble { --bub-accent: var(--season-rain-dark); --bub-border: rgba(85, 129, 156, 0.52); }
     .pos-summer .season-bubble { --bub-accent: var(--season-summer-dark); --bub-border: rgba(84, 133, 71, 0.52); }
@@ -1001,7 +1022,6 @@
     .season-pick-btn.is-current-season .season-now-badge { display: inline-block; }
     .season-pick-btn.is-active .season-now-badge { background: rgba(255, 255, 255, 0.28); color: #ffffff; }
 
-    /* 水やりエリア内の注意時期ハイライト＆バッジ */
     .water-caution-layer {
       position: absolute;
       inset: 0;
@@ -1039,7 +1059,6 @@
       box-shadow: 0 1px 3px rgba(120, 40, 30, 0.12);
     }
 
-    /* 非選択時も季節カラーを文字色に適用（選択時は背景塗り＋白文字） */
     .season-pick-btn[data-season="spring"] { color: var(--season-spring-dark); }
     .season-pick-btn[data-season="rain"] { color: var(--season-rain-dark); }
     .season-pick-btn[data-season="summer"] { color: var(--season-summer-dark); }
@@ -1200,15 +1219,26 @@
       box-shadow: 0 2px 6px rgba(45, 31, 22, 0.16);
     }
 
+    .result-col {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      min-height: 0;
+      min-width: 0;
+    }
+
     .result-card {
+      flex: 1 1 auto;
+      min-height: 0;
       background: #fffdf8;
       border: 2px solid #8ea874;
       border-radius: 12px;
-      padding: 12px 14px 11px;
+      padding: 13px 14px 12px;
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: space-between;
+      justify-content: center;
+      gap: 11px;
       text-align: center;
       box-shadow: var(--shadow-soft);
       transition: background 0.22s ease, border-color 0.22s ease;
@@ -1229,25 +1259,11 @@
     .result-card.state-rot { background: #fdf0ee; border-color: #cc5a4e; --res-color: #992418; --res-bg: #b84135; }
     .result-card.state-freeze { background: #eef6fa; border-color: #548ba8; --res-color: #21526b; --res-bg: #3e718c; }
 
-    .result-season-label {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      font-family: var(--font-ui);
-      font-size: 14px;
-      font-weight: 700;
-      color: var(--res-color, #3a5c22);
-      background: rgba(255, 255, 255, 0.9);
-      border: 1px solid rgba(160, 140, 115, 0.34);
-      padding: 2.5px 12px;
-      border-radius: 999px;
-    }
-
     .result-main {
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 5px;
+      gap: 4px;
     }
 
     .result-mark-row {
@@ -1258,13 +1274,13 @@
     }
 
     .result-icon-circle {
-      width: 45px;
-      height: 45px;
+      width: 44px;
+      height: 44px;
       border-radius: 50%;
       background: var(--res-bg, #557a39);
       color: #fff;
       font-family: var(--font-ui);
-      font-size: 25px;
+      font-size: 24px;
       font-weight: 700;
       display: flex;
       align-items: center;
@@ -1275,7 +1291,7 @@
 
     .result-status-text {
       font-family: var(--font-ui);
-      font-size: 22px;
+      font-size: 21.5px;
       font-weight: 700;
       color: var(--res-color, #3a5c22);
       line-height: 1.2;
@@ -1284,14 +1300,108 @@
 
     .result-comment {
       font-family: var(--font-ui);
-      font-size: 14.5px;
+      font-size: 14.6px;
       font-weight: 500;
-      line-height: 1.45;
+      line-height: 1.42;
       color: var(--ink-main);
-      background: rgba(255, 255, 255, 0.84);
+      background: rgba(255, 255, 255, 0.86);
       border-radius: 8px;
       padding: 8px 11px;
       width: 100%;
+    }
+
+    .result-links-row {
+      flex: 0 0 44px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .result-link-btn {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+      padding: 0 9px 0 9px;
+      background: #fffdf8;
+      border: 1px solid #dfd0b6;
+      border-bottom: 2.5px solid #d1c0a3;
+      border-radius: 10px;
+      font-family: var(--font-ui);
+      font-size: 13.5px;
+      font-weight: 700;
+      color: var(--ink-main);
+      cursor: pointer;
+      box-shadow: var(--shadow-soft);
+      white-space: nowrap;
+      transition: transform 0.12s ease, background-color 0.12s ease;
+    }
+
+    .result-link-btn:active {
+      transform: translateY(1px) scale(0.98);
+      background: #f5efe3;
+    }
+
+    .result-link-left {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      min-width: 0;
+    }
+
+    .result-link-icon {
+      width: 24px;
+      height: 24px;
+      border-radius: 7px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .result-link-icon.is-rules {
+      background: var(--shade-soft);
+      border: 1px solid rgba(105, 129, 84, 0.28);
+      color: var(--shade-color);
+    }
+
+    .result-link-icon.is-sos {
+      background: rgba(180, 83, 60, 0.12);
+      border: 1px solid rgba(180, 83, 60, 0.3);
+      color: #b4533c;
+      font-family: sans-serif;
+      font-size: 9.5px;
+      font-weight: 800;
+      letter-spacing: 0.02em;
+    }
+
+    .result-link-icon svg {
+      width: 14px;
+      height: 14px;
+      display: block;
+    }
+
+    .result-link-arrow {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      font-size: 13.5px;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      padding-left: 1px;
+    }
+
+    .result-link-btn[data-guide="rules"] .result-link-arrow {
+      background: #e8efe2;
+      color: #4e693a;
+    }
+
+    .result-link-btn[data-guide="sos"] .result-link-arrow {
+      background: #f8e4df;
+      color: #a3432c;
     }
 
     button:focus-visible {
@@ -1299,7 +1409,6 @@
       outline-offset: -3px;
     }
 
-    /* 準備中トースト */
     .toast-notice {
       position: absolute;
       top: 62px;
@@ -1538,10 +1647,19 @@
 
       <header class="sim-header">
         <div class="header-left">
-          <button class="back-btn" type="button" id="backHomeBtn">
-            <span class="back-arrow" aria-hidden="true">‹</span>
-            <span>もどる</span>
-          </button>
+          <div class="header-nav-group">
+            <button class="back-btn" type="button" id="backHomeBtn">
+              <span class="back-arrow" aria-hidden="true">‹</span>
+              <span>もどる</span>
+            </button>
+            <button class="home-btn" type="button" id="topHomeBtn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M3 10.5 12 3l9 7.5" />
+                <path d="M5.5 9.5V20h13V9.5" />
+              </svg>
+              <span>トップへ</span>
+            </button>
+          </div>
 
           <div class="title-wrap">
             <h1 class="page-title">多肉育成シミュレーター</h1>
@@ -1782,17 +1900,41 @@
               </div>
             </div>
 
-            <div class="result-card state-good" id="resultCard" aria-live="polite">
-              <div class="result-season-label" id="resultSeasonLabel">春（3〜5月）の結果</div>
-
-              <div class="result-main">
-                <div class="result-mark-row">
-                  <div class="result-icon-circle" id="resultIcon">◎</div>
-                  <div class="result-status-text" id="resultStatus">ぐんぐん元気！</div>
+            <div class="result-col">
+              <div class="result-card state-good" id="resultCard" aria-live="polite">
+                <div class="result-main">
+                  <div class="result-mark-row">
+                    <div class="result-icon-circle" id="resultIcon">◎</div>
+                    <div class="result-status-text" id="resultStatus">ぐんぐん元気！</div>
+                  </div>
                 </div>
+
+                <p class="result-comment" id="resultComment">土が乾いたら、鉢底から水が出るまであげてね</p>
               </div>
 
-              <p class="result-comment" id="resultComment">土が乾いたら、鉢底から水が出るまであげてね</p>
+              <div class="result-links-row" aria-label="関連ガイドへのリンク">
+                <button class="result-link-btn" type="button" id="jumpRulesBtn" data-guide="rules">
+                  <span class="result-link-left">
+                    <span class="result-link-icon is-rules" aria-hidden="true">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 20v-8" />
+                        <path d="M12 12c0-4.2-3.2-6.5-7-6.5 0 3.8 2.3 6.5 7 6.5Z" />
+                        <path d="M12 14c0-3.8 2.8-6 6.5-6 0 3.5-2 6-6.5 6Z" />
+                      </svg>
+                    </span>
+                    <span>基本の3要素</span>
+                  </span>
+                  <span class="result-link-arrow" aria-hidden="true">›</span>
+                </button>
+
+                <button class="result-link-btn" type="button" id="jumpSosBtn" data-guide="sos">
+                  <span class="result-link-left">
+                    <span class="result-link-icon is-sos" aria-hidden="true">SOS</span>
+                    <span>困ったSOS</span>
+                  </span>
+                  <span class="result-link-arrow" aria-hidden="true">›</span>
+                </button>
+              </div>
             </div>
           </section>
         </div>
@@ -1952,7 +2094,6 @@
       }
     };
 
-    /* パーツ合成（背景：梅雨＆冬室内のみ画像／他はCSSグラデーション ＋ 地面PNG ＋ たにく丸PNG） */
     const LAYERED_PARTS = {
       spring: {
         sky: "",
@@ -2004,18 +2145,17 @@
       }
     };
 
-    /* たにく丸パーツ個別の大きさ・位置微調整（裏モード「たにく丸」タブと連動） */
     const CHAR_ADJUSTMENTS = {
-      "images/taniku_happy.png":         { height: 116, bottom: 16, left: 0 },
-      "images/taniku_rain_humid.png":    { height: 114, bottom: 16, left: 3 },
-      "images/taniku_rain_rest.png":     { height: 118, bottom: 16, left: 0 },
-      "images/taniku_summer_hot_v2.png": { height: 102, bottom: 15, left: 3 },
-      "images/taniku_summer_happy.png":  { height: 112, bottom: 16, left: 1 },
-      "images/taniku_summer_rest.png":   { height: 106, bottom: 14, left: -1 },
-      "images/taniku_summer_sleep.png":  { height: 106, bottom: 14, left: 0 },
-      "images/taniku_autumn_happy.png":  { height: 116, bottom: 16, left: 2 },
-      "images/taniku_winter_cold.png":   { height: 118, bottom: 16, left: -1 },
-      "images/taniku_winter_happy.png":  { height: 118, bottom: 16, left: 0 },
+      "images/taniku_happy.png": { height: 116, bottom: 16, left: 0 },
+      "images/taniku_rain_humid.png": { height: 114, bottom: 16, left: 3 },
+      "images/taniku_rain_rest.png": { height: 118, bottom: 16, left: 0 },
+      "images/taniku_summer_hot_v2.png": { height: 102, bottom: 15, left: 3, shadowDx: 0, shadowDy: 4, shadowW: 88, shadowH: 18 },
+      "images/taniku_summer_happy.png": { height: 112, bottom: 16, left: 1 },
+      "images/taniku_summer_rest.png": { height: 106, bottom: 14, left: -1, shadowDx: 0, shadowDy: 4, shadowW: 90, shadowH: 18 },
+      "images/taniku_summer_sleep.png": { height: 106, bottom: 14, left: 0, shadowDx: 0, shadowDy: 4, shadowW: 88, shadowH: 18 },
+      "images/taniku_autumn_happy.png": { height: 116, bottom: 16, left: 2 },
+      "images/taniku_winter_cold.png": { height: 118, bottom: 16, left: -1 },
+      "images/taniku_winter_happy.png": { height: 118, bottom: 16, left: 0 },
       "images/taniku_winter_indoor.png": { height: 116, bottom: 16, left: 0 }
     };
 
@@ -2042,10 +2182,10 @@
         },
         bubbles: {
           spring: { phase: "成長期", tone: "tone-grow", note: "ぐんぐん育つよ！" },
-          rain: { phase: "梅雨", tone: "tone-rain", note: "ジメジメ苦手だな…" },
-          summer: { phase: "夏休み", tone: "tone-summer", note: "暑くてぐったり…" },
+          rain: { phase: "蒸れ注意", tone: "tone-rain", note: "ジメジメ苦手だな…" },
+          summer: { phase: "ひと休み", tone: "tone-summer", note: "暑くてぐったり…" },
           autumn: { phase: "成長期", tone: "tone-grow", note: "涼しくなって元気！" },
-          winter: { phase: "冬休み", tone: "tone-winter", note: "寒くてじっとお休み" }
+          winter: { phase: "ゆっくり", tone: "tone-winter", note: "寒くてじっとしてるよ" }
         },
         waterBar: [
           { span: 6, level: 3, label: "乾いたらたっぷり" },
@@ -2079,10 +2219,10 @@
         },
         bubbles: {
           spring: { phase: "成長期", tone: "tone-grow", note: "お日さま大好き！" },
-          rain: { phase: "休眠準備", tone: "tone-rain", note: "そろそろ眠たいな…" },
-          summer: { phase: "夏は休眠", tone: "tone-sleep", note: "ぐっすりお休み中…" },
+          rain: { phase: "休眠準備", tone: "tone-rain", note: "ふぁ…雨よけしてね" },
+          summer: { phase: "完全休眠", tone: "tone-sleep", note: "涼しい日陰でぐっすり" },
           autumn: { phase: "成長期", tone: "tone-grow", note: "目が覚めてきたよ！" },
-          winter: { phase: "冬も元気", tone: "tone-grow", note: "寒い季節もへっちゃら" }
+          winter: { phase: "成長期", tone: "tone-grow", note: "涼しいの好き。霜は苦手！" }
         },
         waterBar: [
           { span: 6, level: 3, label: "乾いたらたっぷり" },
@@ -2113,10 +2253,10 @@
         },
         bubbles: {
           spring: { phase: "成長期", tone: "tone-grow", note: "ぽかぽか元気だよ！" },
-          rain: { phase: "梅雨", tone: "tone-rain", note: "ジメジメ苦手だな…" },
-          summer: { phase: "夏も元気", tone: "tone-summer", note: "暑さには強いよ！" },
+          rain: { phase: "蒸れ注意", tone: "tone-rain", note: "ジメジメ苦手だな…" },
+          summer: { phase: "成長期", tone: "tone-summer", note: "暑さには強いよ！" },
           autumn: { phase: "成長期", tone: "tone-grow", note: "寒くなる前にぐんぐん" },
-          winter: { phase: "冬越し", tone: "tone-indoor", note: "寒いよ〜おうちが好き" }
+          winter: { phase: "暖かい室内へ", tone: "tone-indoor", note: "寒いのは苦手なんだ〜" }
         },
         waterBar: [
           { span: 6, level: 3, label: "乾いたらたっぷり" },
@@ -2152,10 +2292,10 @@
         },
         bubbles: {
           spring: { phase: "成長期", tone: "tone-grow", note: "やさしい光が心地いい" },
-          rain: { phase: "梅雨", tone: "tone-rain", note: "ムレムレは苦手だな…" },
-          summer: { phase: "夏休み", tone: "tone-summer", note: "涼しい日陰でひと休み" },
+          rain: { phase: "蒸れ注意", tone: "tone-rain", note: "風を通してあげてね" },
+          summer: { phase: "ひと休み", tone: "tone-summer", note: "涼しい木陰でのんびり" },
           autumn: { phase: "成長期", tone: "tone-grow", note: "やさしい光でまた元気" },
-          winter: { phase: "冬越し", tone: "tone-winter", note: "窓辺でしずかにお休み" }
+          winter: { phase: "ゆっくり", tone: "tone-winter", note: "明るい窓辺でしずかに" }
         },
         waterBar: [
           { span: 6, level: 3, label: "乾いたらたっぷり" },
@@ -2168,7 +2308,7 @@
       }
     };
 
-    const state = { type: "sun-main", season: "spring", light: 3, wind: 2, water: 3 };
+    const state = { type: "sun-main", season: "spring", light: 3, wind: 2, water: 3, manualSeason: false };
 
     function detectCurrentSeason(type) {
       const params = new URLSearchParams(window.location.search);
@@ -2384,7 +2524,6 @@
     function preloadAllDioramaImages() {
       const urls = new Set();
       Object.values(TYPE_CONFIGS).forEach((cfg) => {
-        Object.values(cfg.images).forEach((src) => urls.add(src));
         if (cfg.komorebi) {
           Object.values(cfg.komorebi).forEach((src) => urls.add(src));
         }
@@ -2397,7 +2536,6 @@
         if (p.char) urls.add(p.char);
         if (p.charByType) Object.values(p.charByType).forEach((s) => s && urls.add(s));
       });
-      Object.values(IMAGE_FALLBACKS).forEach((src) => urls.add(src));
       urls.forEach((src) => {
         if (_preloadedImages[src]) return;
         const im = new Image();
@@ -2478,10 +2616,14 @@
           charImg.style.bottom = `${cb}px`;
           charImg.style.transform = `translateX(calc(-50% + ${cl}px))`;
           if (shadowEl) {
-            const sw = Math.max(40, Math.round(78 * (ch / 118)));
+            const sw = Number.isFinite(cAdj.shadowW) ? cAdj.shadowW : Math.max(40, Math.round(78 * (ch / 118)));
+            const sh = Number.isFinite(cAdj.shadowH) ? cAdj.shadowH : 16;
+            const sdx = Number.isFinite(cAdj.shadowDx) ? cAdj.shadowDx : 0;
+            const sdy = Number.isFinite(cAdj.shadowDy) ? cAdj.shadowDy : 0;
             shadowEl.style.width = `${sw}px`;
-            shadowEl.style.bottom = `${cb - 4}px`;
-            shadowEl.style.transform = `translateX(calc(-50% + ${cl}px))`;
+            shadowEl.style.height = `${sh}px`;
+            shadowEl.style.bottom = `${cb - 4 + sdy}px`;
+            shadowEl.style.transform = `translateX(calc(-50% + ${cl + sdx}px))`;
           }
         } else {
           panel.classList.add("no-char");
@@ -2616,10 +2758,10 @@
 
         waterWave.innerHTML =
           `<defs>` +
-            `<linearGradient id="waterWaveGrad" x1="0" y1="0" x2="0" y2="1">` +
-              `<stop offset="0%" stop-color="#3f87ad" stop-opacity="0.58"/>` +
-              `<stop offset="100%" stop-color="#5ca2c4" stop-opacity="0.16"/>` +
-            `</linearGradient>` +
+          `<linearGradient id="waterWaveGrad" x1="0" y1="0" x2="0" y2="1">` +
+          `<stop offset="0%" stop-color="#3f87ad" stop-opacity="0.58"/>` +
+          `<stop offset="100%" stop-color="#5ca2c4" stop-opacity="0.16"/>` +
+          `</linearGradient>` +
           `</defs>` +
           gridLines +
           `<path d="${areaD}" fill="url(#waterWaveGrad)"/>` +
@@ -2645,8 +2787,6 @@
 
     function updateResultView(animate = true) {
       const res = evaluate(state.type, state.season, state);
-      const meta = SEASON_META[state.season];
-      const months = getSeasonMonths(state.type, state.season);
       const card = document.getElementById("resultCard");
 
       card.className = `result-card state-${res.mood}`;
@@ -2655,7 +2795,6 @@
         card.classList.add("is-pop");
       }
 
-      document.getElementById("resultSeasonLabel").textContent = `${meta.name}（${months}）の結果`;
       document.getElementById("resultIcon").textContent = res.icon;
       document.getElementById("resultStatus").textContent = res.title;
       document.getElementById("resultComment").textContent = res.comment;
@@ -2708,8 +2847,9 @@
     document.querySelectorAll(".type-tab").forEach((tab) => {
       tab.addEventListener("click", () => {
         state.type = tab.dataset.type;
+        const targetSeason = state.manualSeason ? state.season : detectCurrentSeason(state.type);
         renderFixedCalendar();
-        selectSeason(state.season, true);
+        selectSeason(targetSeason, true);
         syncEditDockUI();
       });
     });
@@ -2721,6 +2861,7 @@
           syncEditDockUI();
           return;
         }
+        state.manualSeason = true;
         selectSeason(btn.dataset.season, true);
       });
     });
@@ -2781,7 +2922,54 @@
     });
 
     document.getElementById("backHomeBtn").addEventListener("click", () => {
-      window.location.href = "index.html";
+      const params = new URLSearchParams(window.location.search);
+      const qMonth = params.get("month");
+      const from = params.get("from");
+      if (from === "rules") {
+        window.location.href = qMonth ? `rules.html?month=${encodeURIComponent(qMonth)}` : "rules.html";
+        return;
+      }
+      if (from === "sos") {
+        const next = new URLSearchParams();
+        const qSosFrom = params.get("sosFrom");
+        if (qSosFrom) next.set("from", qSosFrom);
+        ["sym", "choice", "type", "season", "light", "wind", "water", "month"].forEach((k) => {
+          const v = params.get(k);
+          if (v) next.set(k, v);
+        });
+        const qs = next.toString();
+        window.location.href = qs ? `sos.html?${qs}` : "sos.html";
+        return;
+      }
+      window.location.href = qMonth ? `index.html?month=${encodeURIComponent(qMonth)}` : "index.html";
+    });
+
+    document.getElementById("topHomeBtn").addEventListener("click", () => {
+      const params = new URLSearchParams(window.location.search);
+      const qMonth = params.get("month");
+      window.location.href = qMonth ? `index.html?month=${encodeURIComponent(qMonth)}` : "index.html";
+    });
+
+    function buildSimStateQuery() {
+      const params = new URLSearchParams(window.location.search);
+      const next = new URLSearchParams();
+      next.set("from", "sim");
+      next.set("type", state.type);
+      next.set("season", state.season);
+      next.set("light", String(state.light));
+      next.set("wind", String(state.wind));
+      next.set("water", String(state.water));
+      const qMonth = params.get("month");
+      if (qMonth) next.set("month", qMonth);
+      return next.toString();
+    }
+
+    document.getElementById("jumpRulesBtn").addEventListener("click", () => {
+      window.location.href = `rules.html?${buildSimStateQuery()}`;
+    });
+
+    document.getElementById("jumpSosBtn").addEventListener("click", () => {
+      window.location.href = `sos.html?${buildSimStateQuery()}`;
     });
 
     let toastTimer = null;
@@ -2802,25 +2990,34 @@
         state.type = paramType;
       }
       const paramSeason = params.get("season");
+      if (paramSeason && SEASON_META[paramSeason]) {
+        state.manualSeason = true;
+      }
       const initialSeason = (paramSeason && SEASON_META[paramSeason])
         ? paramSeason
         : detectCurrentSeason(state.type);
 
       renderFixedCalendar();
       selectSeason(initialSeason, false);
+      const pLight = parseInt(params.get("light"), 10);
+      const pWind = parseInt(params.get("wind"), 10);
+      const pWater = parseInt(params.get("water"), 10);
+      if (pLight >= 1 && pLight <= 4 && pWind >= 1 && pWind <= 3 && pWater >= 1 && pWater <= 4) {
+        setControls(pLight, pWind, pWater, false);
+      }
       if (params.get("edit") === "1") {
         setEditMode(true);
       }
     }
 
-    // 無操作3分でトップ画面へ自動復帰（共用iPad対策）
+    // 無操作5分でトップ画面へ自動復帰（共用iPad対策）
     let idleTimer = null;
     function resetIdleTimer() {
       clearTimeout(idleTimer);
       if (editState.enabled) return;
       idleTimer = setTimeout(() => {
         window.location.href = "index.html";
-      }, 180000);
+      }, 300000);
     }
     ["pointerdown", "touchstart", "click", "keydown"].forEach((ev) => {
       window.addEventListener(ev, resetIdleTimer, { passive: true });
@@ -2955,7 +3152,8 @@
     function applyEditValues(h, b, l) {
       const src = getCurrentEditCharSrc();
       if (!src) return;
-      CHAR_ADJUSTMENTS[src] = { height: h, bottom: b, left: l };
+      const prev = CHAR_ADJUSTMENTS[src] || {};
+      CHAR_ADJUSTMENTS[src] = Object.assign({}, prev, { height: h, bottom: b, left: l });
       ["spring", "rain", "summer", "autumn", "winter"].forEach((s) => {
         if (getResolvedCharFor(state.type, s) === src) {
           const kSrc = (TYPE_CONFIGS[state.type].komorebi && TYPE_CONFIGS[state.type].komorebi[s]) || "";

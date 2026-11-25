@@ -1,0 +1,1484 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+
+  <!-- =========================================================================
+    保木平珈琲 Murmure｜展示用iPad Webアプリ「困ったときのSOS」（v5）
+    - 1080×786px 固定キャンバス・スクロールなし・全サブ画面共通デザイン
+    - 1問チェック対象（シワシワ／急に透けてぶよぶよ／下の葉）は「未選択」で開き、
+      回答前は「まず確かめること」を表示。タップ後に対処・NG行動を表示する
+    - 「葉が急に透けて、ぶよぶよになった」で凍害（冷え込んだ翌朝）と蒸れ・腐敗を分離
+    - 関連ガイド遷移時に &sym=〇〇 を引き継ぎ、各ページの「‹ もどる」で元の症状へ復帰可能
+    - 左上2ボタン「‹ もどる」「⌂ トップへ」常時表示、無操作5分（300000ms）でトップ自動復帰
+  ========================================================================= -->
+
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="多肉の育て方" />
+  <meta name="format-detection" content="telephone=no" />
+  <link rel="manifest" href="manifest.json" />
+
+  <title>Murmure｜困ったときのSOS</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=Shippori+Mincho:wght@400;500;600;700&family=Zen+Maru+Gothic:wght@500;700&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --bg-paper: #f6f0e4;
+      --card-paper: #fffdf8;
+      --ink-main: #2d1f16;
+      --ink-sub: #3a2b20;
+      --ink-muted: #625344;
+      --line-soft: #dfd0b6;
+      --line-hair: rgba(180, 162, 134, 0.44);
+
+      --sos-color: #c43b2b;
+      --sos-deep: #8f1d14;
+      --sos-dark: #9c2719;
+      --sos-soft: #fdf2f0;
+      --sos-border: #dfa29a;
+
+      --ok-color: #5b7a46;
+      --ok-deep: #3d572b;
+      --ok-soft: #f1f6ec;
+      --ok-border: #b8cca8;
+
+      --check-color: #3f7896;
+      --check-deep: #245670;
+      --check-soft: #eef6fa;
+      --check-border: #b8d3e0;
+
+      --amber-color: #b86b2b;
+      --amber-deep: #854816;
+      --amber-soft: #fdf6ee;
+
+      --shadow-soft: 0 2px 10px rgba(72, 54, 38, 0.055);
+      --font-serif: "Shippori Mincho", "Hiragino Mincho ProN", "Yu Mincho", serif;
+      --font-ui: "Zen Maru Gothic", "Hiragino Maru Gothic ProN", sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+      -webkit-user-select: none;
+      user-select: none;
+      -webkit-touch-callout: none;
+    }
+
+    button, a {
+      touch-action: manipulation;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: #e9dfd0;
+      font-family: var(--font-serif);
+      color: var(--ink-main);
+    }
+
+    .viewport-wrapper {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      height: 100dvh;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .canvas {
+      position: relative;
+      width: 1080px;
+      height: 786px;
+      min-width: 1080px;
+      min-height: 786px;
+      background: linear-gradient(135deg, #f9f5e9, #f2ead9);
+      transform-origin: center center;
+      padding: 15px 22px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      box-shadow: 0 12px 36px rgba(59, 45, 35, 0.14);
+      overflow: hidden;
+    }
+
+    .canvas::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background-image: radial-gradient(rgba(110, 88, 66, 0.045) 1px, transparent 0);
+      background-size: 16px 16px;
+      opacity: 0.75;
+    }
+
+    /* ================= 1. 上部ヘッダー（全サブ画面統一） ================= */
+    .page-header {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      flex-shrink: 0;
+      border-bottom: 1px solid #d6cbb5;
+      padding-bottom: 8px;
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .header-nav-group {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 5px 15px 5px 11px;
+      background: rgba(255, 253, 248, 0.85);
+      border: 1px solid #d8cab3;
+      border-bottom: 2px solid #cbbba0;
+      border-radius: 999px;
+      font-family: var(--font-ui);
+      font-size: 14.5px;
+      font-weight: 700;
+      color: var(--ink-main);
+      cursor: pointer;
+      flex-shrink: 0;
+      transition: transform 0.12s ease;
+    }
+
+    .back-btn:active { transform: translateY(1px) scale(0.97); }
+
+    .back-arrow {
+      font-size: 20px;
+      line-height: 1;
+      color: var(--sos-color);
+    }
+
+    .home-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 5px 13px 5px 11px;
+      background: rgba(255, 253, 248, 0.72);
+      border: 1px solid #d8cab3;
+      border-bottom: 2px solid #cbbba0;
+      border-radius: 999px;
+      font-family: var(--font-ui);
+      font-size: 13.6px;
+      font-weight: 700;
+      color: var(--ink-sub);
+      cursor: pointer;
+      flex-shrink: 0;
+      transition: transform 0.12s ease;
+    }
+
+    .home-btn:active { transform: translateY(1px) scale(0.97); }
+
+    .home-btn svg {
+      width: 15px;
+      height: 15px;
+      color: var(--sos-color);
+      display: block;
+      flex-shrink: 0;
+    }
+
+    .title-wrap {
+      display: flex;
+      align-items: baseline;
+      gap: 12px;
+    }
+
+    .page-title {
+      font-family: var(--font-serif);
+      font-size: 26px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      line-height: 1.12;
+    }
+
+    .page-en {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-style: italic;
+      font-size: 16.5px;
+      font-weight: 600;
+      color: #6b5f47;
+    }
+
+    .header-hint {
+      font-family: var(--font-ui);
+      font-size: 13.6px;
+      font-weight: 500;
+      color: var(--ink-muted);
+      white-space: nowrap;
+    }
+
+    /* ================= 2. メイン2カラム構成（左：6症状メニュー／右：対処ボード） ================= */
+    .sos-workspace {
+      position: relative;
+      z-index: 2;
+      flex: 1 1 auto;
+      min-height: 0;
+      display: grid;
+      grid-template-columns: 336px 1fr;
+      gap: 16px;
+    }
+
+    /* 左カラム：症状リスト */
+    .symptom-col {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      min-height: 0;
+    }
+
+    .col-lead {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 0 2px;
+      flex-shrink: 0;
+    }
+
+    .col-step-num {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: var(--sos-color);
+      color: #ffffff;
+      font-family: var(--font-ui);
+      font-size: 13.5px;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .col-lead-title {
+      font-family: var(--font-ui);
+      font-size: 15.8px;
+      font-weight: 700;
+      color: var(--ink-main);
+    }
+
+    .symptom-list {
+      flex: 1 1 auto;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 8px;
+      min-height: 0;
+    }
+
+    .symptom-btn {
+      flex: 1 1 0;
+      width: 100%;
+      background: var(--card-paper);
+      border: 1.5px solid var(--line-soft);
+      border-bottom: 3px solid #d2c1a4;
+      border-radius: 12px;
+      padding: 9px 13px 9px 12px;
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      text-align: left;
+      cursor: pointer;
+      transition: transform 0.1s ease, background-color 0.12s ease, border-color 0.12s ease;
+      position: relative;
+    }
+
+    .symptom-btn:active {
+      transform: translateY(1px) scale(0.99);
+    }
+
+    .symptom-btn.is-active {
+      background: linear-gradient(90deg, #fff6f4 0%, #fffdf8 100%);
+      border-color: var(--sos-color);
+      border-left: 6px solid var(--sos-color);
+      border-bottom: 3px solid var(--sos-dark);
+      box-shadow: 0 4px 12px rgba(196, 59, 43, 0.14);
+    }
+
+    .sym-icon-wrap {
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      background: #f5eee2;
+      border: 1px solid #e2d4bc;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .symptom-btn.is-active .sym-icon-wrap {
+      background: #fcebe8;
+      border-color: #e4afa7;
+    }
+
+    .sym-icon-wrap svg {
+      width: 28px;
+      height: 28px;
+      display: block;
+    }
+
+    .sym-btn-text {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      min-width: 0;
+      flex: 1;
+    }
+
+    .sym-btn-title {
+      font-family: var(--font-ui);
+      font-size: 16.4px;
+      font-weight: 700;
+      color: var(--ink-main);
+      line-height: 1.24;
+      white-space: nowrap;
+    }
+
+    .symptom-btn.is-active .sym-btn-title {
+      color: var(--sos-deep);
+    }
+
+    .sym-btn-sub {
+      font-family: var(--font-ui);
+      font-size: 12.6px;
+      font-weight: 500;
+      color: var(--ink-muted);
+      line-height: 1.2;
+      white-space: nowrap;
+    }
+
+    .sym-btn-arrow {
+      font-family: var(--font-ui);
+      font-size: 20px;
+      font-weight: 700;
+      color: #c2b093;
+      line-height: 1;
+      flex-shrink: 0;
+    }
+
+    .symptom-btn.is-active .sym-btn-arrow {
+      color: var(--sos-color);
+    }
+
+    /* ================= 右カラム：診断＆対処パネル ================= */
+    .detail-col {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      min-width: 0;
+      min-height: 0;
+    }
+
+    .detail-card {
+      flex: 1 1 auto;
+      background: var(--card-paper);
+      border: 1.5px solid var(--line-soft);
+      border-top: 5px solid var(--sos-color);
+      border-radius: 14px;
+      padding: 16px 21px 16px;
+      box-shadow: var(--shadow-soft);
+      display: flex;
+      flex-direction: column;
+      gap: 13px;
+      min-height: 0;
+      overflow: hidden;
+    }
+
+    /* パネル上部：症状見出し＋イラスト（小見出しを削ってスッキリ） */
+    .detail-head {
+      display: flex;
+      align-items: center;
+      gap: 13px;
+      padding-bottom: 11px;
+      border-bottom: 1px dashed var(--line-hair);
+      flex-shrink: 0;
+    }
+
+    .detail-icon-big {
+      width: 54px;
+      height: 54px;
+      border-radius: 13px;
+      background: #fdf4f2;
+      border: 1.5px solid #e6b8b0;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .detail-icon-big svg {
+      width: 36px;
+      height: 36px;
+      display: block;
+    }
+
+    .detail-title-group {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      min-width: 0;
+    }
+
+    .detail-title {
+      font-family: var(--font-ui);
+      font-size: 23.5px;
+      font-weight: 700;
+      color: var(--ink-main);
+      line-height: 1.2;
+    }
+
+    .detail-term {
+      font-family: var(--font-ui);
+      font-size: 13.4px;
+      font-weight: 700;
+      color: var(--ink-muted);
+      line-height: 1.2;
+    }
+
+    /* 1問チェックボックス（対象症状のみ表示） */
+    .check-box {
+      background: var(--check-soft);
+      border: 1.5px solid var(--check-border);
+      border-radius: 11px;
+      padding: 11px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+      flex-shrink: 0;
+    }
+
+    .check-box.is-hidden {
+      display: none;
+    }
+
+    .check-q-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .check-q-badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 2.5px 9px;
+      border-radius: 999px;
+      background: var(--check-color);
+      color: #ffffff;
+      font-family: var(--font-ui);
+      font-size: 12.2px;
+      font-weight: 700;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .check-q-text {
+      font-family: var(--font-ui);
+      font-size: 15.8px;
+      font-weight: 700;
+      color: var(--check-deep);
+      line-height: 1.28;
+    }
+
+    .check-btn-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .check-choice-btn {
+      padding: 10px 12px;
+      border-radius: 10px;
+      background: #ffffff;
+      border: 1.5px solid #9dc0d1;
+      border-bottom: 3px solid #7fa6ba;
+      font-family: var(--font-ui);
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--check-deep);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      line-height: 1.25;
+      transition: transform 0.1s ease, background-color 0.12s ease;
+    }
+
+    .check-choice-btn:active { transform: translateY(1px) scale(0.98); }
+
+    .check-choice-btn.is-selected {
+      background: var(--check-color);
+      border-color: var(--check-deep);
+      border-bottom-color: #193e52;
+      color: #ffffff;
+      box-shadow: 0 3px 8px rgba(36, 86, 112, 0.22);
+    }
+
+    /* 未選択時：「まず確かめること」ガイドパネル（上に詰めて視線を近く） */
+    .precheck-panel {
+      flex: 1 1 auto;
+      background: linear-gradient(180deg, #faf6ee 0%, #f5efe2 100%);
+      border: 1.5px dashed #ccb897;
+      border-radius: 12px;
+      padding: 18px 22px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: flex-start;
+      gap: 11px;
+    }
+
+    .precheck-panel.is-hidden {
+      display: none;
+    }
+
+    .precheck-pill {
+      display: inline-flex;
+      align-items: center;
+      padding: 4px 12px;
+      border-radius: 999px;
+      background: var(--amber-color);
+      color: #ffffff;
+      font-family: var(--font-ui);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+    }
+
+    .precheck-lead {
+      font-family: var(--font-ui);
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--ink-main);
+      line-height: 1.5;
+    }
+
+    .precheck-sub {
+      font-family: var(--font-ui);
+      font-size: 14.8px;
+      font-weight: 500;
+      color: var(--ink-sub);
+      line-height: 1.55;
+    }
+
+    .precheck-tap-hint {
+      margin-top: 4px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 13px;
+      border-radius: 999px;
+      background: rgba(63, 120, 150, 0.12);
+      color: var(--check-deep);
+      font-family: var(--font-ui);
+      font-size: 13.8px;
+      font-weight: 700;
+    }
+
+    /* 診断結果エリア（回答後、または1問チェック不要の症状で表示） */
+    .result-body {
+      flex: 1 1 auto;
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .result-body.is-hidden {
+      display: none;
+    }
+
+    /* 原因サマリー帯 */
+    .cause-box {
+      background: #faf6ee;
+      border: 1px solid #e3d6c0;
+      border-left: 5px solid var(--amber-color);
+      border-radius: 10px;
+      padding: 10px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      flex-shrink: 0;
+    }
+
+    .cause-box.is-urgent {
+      background: #fff4f2;
+      border-color: #e4b5ae;
+      border-left-color: var(--sos-color);
+    }
+
+    .cause-box.is-safe {
+      background: var(--ok-soft);
+      border-color: var(--ok-border);
+      border-left-color: var(--ok-color);
+    }
+
+    .cause-label {
+      font-family: var(--font-ui);
+      font-size: 12.2px;
+      font-weight: 700;
+      color: var(--amber-deep);
+      letter-spacing: 0.03em;
+    }
+
+    .cause-box.is-urgent .cause-label { color: var(--sos-deep); }
+    .cause-box.is-safe .cause-label   { color: var(--ok-deep); }
+
+    .cause-title {
+      font-family: var(--font-ui);
+      font-size: 18.2px;
+      font-weight: 700;
+      color: var(--ink-main);
+      line-height: 1.28;
+    }
+
+    .cause-desc {
+      font-family: var(--font-ui);
+      font-size: 14.2px;
+      font-weight: 500;
+      color: var(--ink-sub);
+      line-height: 1.44;
+    }
+
+    /* 今すぐやること（主役・大きく強調） ＋ NG行動 */
+    .action-grid {
+      flex: 1 1 auto;
+      min-height: 0;
+      display: grid;
+      grid-template-columns: 1.42fr 0.88fr;
+      gap: 13px;
+      align-items: stretch;
+    }
+
+    .do-card {
+      background: linear-gradient(180deg, #f5faf1 0%, #edf5e7 100%);
+      border: 2px solid #9ebc89;
+      border-top: 5px solid var(--ok-color);
+      border-radius: 12px;
+      padding: 13px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+      box-shadow: 0 3px 10px rgba(61, 87, 43, 0.08);
+    }
+
+    .box-head-pill {
+      align-self: flex-start;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 3.5px 12px;
+      border-radius: 999px;
+      font-family: var(--font-ui);
+      font-size: 13.4px;
+      font-weight: 700;
+      color: #ffffff;
+      background: var(--ok-color);
+      letter-spacing: 0.03em;
+    }
+
+    .do-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 11px;
+      flex: 1;
+      justify-content: flex-start;
+      padding-top: 2px;
+    }
+
+    .do-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 9px;
+      font-family: var(--font-ui);
+      font-size: 15.6px;
+      font-weight: 500;
+      color: var(--ink-main);
+      line-height: 1.48;
+    }
+
+    .do-item strong {
+      font-weight: 700;
+      color: var(--ok-deep);
+    }
+
+    .do-num {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: var(--ok-color);
+      color: #ffffff;
+      font-size: 13.4px;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .ng-card {
+      background: linear-gradient(180deg, #fff6f5 0%, #fcece9 100%);
+      border: 1.5px solid var(--sos-border);
+      border-top: 4px solid var(--sos-color);
+      border-radius: 12px;
+      padding: 13px 15px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .ng-card .box-head-pill {
+      background: var(--sos-color);
+      font-size: 12.8px;
+    }
+
+    .ng-main {
+      font-family: var(--font-ui);
+      font-size: 16.6px;
+      font-weight: 700;
+      color: var(--sos-deep);
+      line-height: 1.32;
+    }
+
+    .ng-desc {
+      font-family: var(--font-ui);
+      font-size: 14px;
+      font-weight: 500;
+      color: #4a241f;
+      line-height: 1.46;
+    }
+
+    /* 下部：関連ガイドリンクバー（枠外） */
+    .related-bar {
+      flex: 0 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .related-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 11px 16px;
+      border-radius: 11px;
+      background: var(--card-paper);
+      border: 1.5px solid #d4c4a8;
+      border-bottom: 3px solid #c2ae8c;
+      font-family: var(--font-ui);
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--ink-main);
+      cursor: pointer;
+      box-shadow: var(--shadow-soft);
+      transition: transform 0.12s ease;
+    }
+
+    .related-btn:active { transform: translateY(1px) scale(0.98); }
+
+    .related-btn.is-primary {
+      background: var(--ok-color);
+      border-color: var(--ok-deep);
+      border-bottom-color: #2f4620;
+      color: #ffffff;
+    }
+
+    .rel-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-width: 0;
+      white-space: nowrap;
+    }
+
+    .rel-tag {
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: #f1eadc;
+      color: var(--ink-muted);
+      font-size: 12px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .related-btn.is-primary .rel-tag {
+      background: rgba(255, 255, 255, 0.22);
+      color: #ffffff;
+    }
+
+    .rel-arrow {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: #f1eadc;
+      color: var(--ink-sub);
+      font-size: 16px;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding-left: 1px;
+      flex-shrink: 0;
+    }
+
+    .related-btn.is-primary .rel-arrow {
+      background: rgba(255, 255, 255, 0.95);
+      color: var(--ok-color);
+    }
+  </style>
+</head>
+<body>
+  <div class="viewport-wrapper">
+    <main class="canvas" id="appCanvas">
+
+      <!-- 上部ヘッダー -->
+      <header class="page-header">
+        <div class="header-left">
+          <div class="header-nav-group">
+            <button class="back-btn" type="button" id="backBtn" data-nav-role="back">
+              <span class="back-arrow" aria-hidden="true">‹</span>
+              <span>もどる</span>
+            </button>
+            <button class="home-btn" type="button" id="topHomeBtn" data-nav-role="home">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M3 10.5 12 3l9 7.5" />
+                <path d="M5.5 9.5V20h13V9.5" />
+              </svg>
+              <span>トップへ</span>
+            </button>
+          </div>
+
+          <div class="title-wrap">
+            <h1 class="page-title">困ったときのSOS</h1>
+            <span class="page-en">Trouble SOS</span>
+          </div>
+        </div>
+        <span class="header-hint">いまの見た目に近いものをタップしてください</span>
+      </header>
+
+      <!-- メイン2カラム -->
+      <div class="sos-workspace">
+
+        <!-- 左：6症状メニュー -->
+        <section class="symptom-col" aria-label="症状をえらぶ">
+          <div class="col-lead">
+            <span class="col-step-num" aria-hidden="true">1</span>
+            <h2 class="col-lead-title">いま、どんな様子？</h2>
+          </div>
+
+          <div class="symptom-list" id="symptomList"></div>
+        </section>
+
+        <!-- 右：診断＆対処パネル -->
+        <section class="detail-col" aria-label="原因と対処法">
+          <div class="col-lead">
+            <span class="col-step-num" aria-hidden="true">2</span>
+            <h2 class="col-lead-title">まず確かめること・今すぐできる対処</h2>
+          </div>
+
+          <article class="detail-card" id="detailCard">
+            <!-- 上部見出し（小見出しなし・シンプル） -->
+            <div class="detail-head">
+              <div class="detail-icon-big" id="detailIcon" aria-hidden="true"></div>
+              <div class="detail-title-group">
+                <h3 class="detail-title" id="detailTitle"></h3>
+                <span class="detail-term" id="detailTerm"></span>
+              </div>
+            </div>
+
+            <!-- 1問チェック（対象症状のみ表示・初期未選択） -->
+            <div class="check-box is-hidden" id="checkBox">
+              <div class="check-q-row">
+                <span class="check-q-badge">1問チェック</span>
+                <p class="check-q-text" id="checkQuestion"></p>
+              </div>
+              <div class="check-btn-row" id="checkChoices"></div>
+            </div>
+
+            <!-- 未選択時：「まず確かめること」ガイドパネル -->
+            <div class="precheck-panel is-hidden" id="precheckPanel">
+              <span class="precheck-pill">まず確かめること</span>
+              <p class="precheck-lead" id="precheckLead"></p>
+              <p class="precheck-sub" id="precheckSub"></p>
+              <span class="precheck-tap-hint">▲ 上の2つから近いほうをタップすると対処が出ます</span>
+            </div>
+
+            <!-- 診断結果エリア（回答後、またはチェック不要の症状で表示） -->
+            <div class="result-body" id="resultBody">
+              <div class="cause-box" id="causeBox">
+                <span class="cause-label" id="causeLabel">考えられる原因</span>
+                <p class="cause-title" id="causeTitle"></p>
+                <p class="cause-desc" id="causeDesc"></p>
+              </div>
+
+              <div class="action-grid">
+                <div class="do-card">
+                  <span class="box-head-pill">今すぐやること</span>
+                  <ol class="do-list" id="doList"></ol>
+                </div>
+
+                <div class="ng-card">
+                  <span class="box-head-pill">これはNG</span>
+                  <p class="ng-main" id="ngMain"></p>
+                  <p class="ng-desc" id="ngDesc"></p>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <!-- 下部：関連ガイドへの導線（枠外・2ボタン） -->
+          <div class="related-bar" id="relatedBar"></div>
+        </section>
+
+      </div>
+
+    </main>
+  </div>
+
+  <script>
+    /* ================= 症状アイコンSVG ================= */
+    const ICONS = {
+      wrinkle: `<svg viewBox="0 0 40 40" fill="none">
+        <path d="M20 34 C12 31 7 23 9 14 C14 15 18 20 20 26 C22 20 26 15 31 14 C33 23 28 31 20 34 Z" fill="#c7d4ad" stroke="#5b7a46" stroke-width="1.8" stroke-linejoin="round"/>
+        <path d="M20 34 C16 24 16 12 20 6 C24 12 24 24 20 34 Z" fill="#dce6c8" stroke="#5b7a46" stroke-width="1.8" stroke-linejoin="round"/>
+        <path d="M18 15 Q20 17 22 15 M17.5 21 Q20 23 22.5 21 M18 27 Q20 29 22 27" stroke="#8c6239" stroke-width="1.4" stroke-linecap="round"/>
+      </svg>`,
+      stretch: `<svg viewBox="0 0 40 40" fill="none">
+        <path d="M20 36 V8" stroke="#6f8c56" stroke-width="2.6" stroke-linecap="round"/>
+        <ellipse cx="14" cy="29" rx="5" ry="2.6" transform="rotate(-18 14 29)" fill="#b7cf9d" stroke="#4f6b3a" stroke-width="1.4"/>
+        <ellipse cx="26" cy="23" rx="5" ry="2.6" transform="rotate(18 26 23)" fill="#b7cf9d" stroke="#4f6b3a" stroke-width="1.4"/>
+        <ellipse cx="14" cy="17" rx="4.5" ry="2.4" transform="rotate(-18 14 17)" fill="#c9deb2" stroke="#4f6b3a" stroke-width="1.4"/>
+        <ellipse cx="25" cy="11" rx="4" ry="2.2" transform="rotate(15 25 11)" fill="#c9deb2" stroke="#4f6b3a" stroke-width="1.4"/>
+        <path d="M32 14 L32 6 M29 9 L32 6 L35 9" stroke="#b86b2b" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>`,
+      jelly: `<svg viewBox="0 0 40 40" fill="none">
+        <path d="M20 33 C11 31 7 23 11 14 C15 16 18 20 20 25 C22 20 25 16 29 14 C33 23 29 31 20 33 Z" fill="#e6cfa4" stroke="#b86b2b" stroke-width="1.8" stroke-linejoin="round"/>
+        <path d="M20 33 C16 23 17 12 20 7 C23 12 24 23 20 33 Z" fill="#f2dfc0" fill-opacity="0.72" stroke="#b86b2b" stroke-width="1.6" stroke-dasharray="2.5 2"/>
+        <path d="M12 29 C12 29 9.5 33 9.5 34.8 a2.5 2.5 0 0 0 5 0 C14.5 33 12 29 12 29 Z" fill="#5b9ab8"/>
+        <path d="M29 27 C29 27 26.8 30.5 26.8 32 a2.2 2.2 0 0 0 4.4 0 C31.2 30.5 29 27 29 27 Z" fill="#5b9ab8"/>
+      </svg>`,
+      burn: `<svg viewBox="0 0 40 40" fill="none">
+        <circle cx="30" cy="10" r="4.5" fill="#e8a146"/>
+        <path d="M30 3 V4.5 M30 15.5 V17 M23 10 H24.5 M35.5 10 H37 M25.2 5.2 L26.3 6.3 M33.7 13.7 L34.8 14.8" stroke="#c27121" stroke-width="1.5" stroke-linecap="round"/>
+        <path d="M17 34 C10 29 8 19 14 11 C21 15 24 24 17 34 Z" fill="#9fb984" stroke="#4f6b3a" stroke-width="1.7" stroke-linejoin="round"/>
+        <ellipse cx="16.5" cy="21" rx="4.2" ry="6" transform="rotate(-12 16.5 21)" fill="#9c5633" opacity="0.88"/>
+      </svg>`,
+      drop: `<svg viewBox="0 0 40 40" fill="none">
+        <path d="M20 26 C14 23 12 15 16 9 C19 13 20 19 20 26 Z" fill="#a2bd88" stroke="#4f6b3a" stroke-width="1.6"/>
+        <path d="M20 26 C26 23 28 15 24 9 C21 13 20 19 20 26 Z" fill="#89a870" stroke="#4f6b3a" stroke-width="1.6"/>
+        <ellipse cx="12" cy="32" rx="5.5" ry="2.8" transform="rotate(-12 12 32)" fill="#d6b482" stroke="#8c6239" stroke-width="1.4"/>
+        <ellipse cx="28" cy="33" rx="5.5" ry="2.8" transform="rotate(14 28 33)" fill="#c9a06c" stroke="#8c6239" stroke-width="1.4"/>
+      </svg>`,
+      bug: `<svg viewBox="0 0 40 40" fill="none">
+        <path d="M20 34 C11 30 9 19 15 10 C22 14 26 24 20 34 Z" fill="#a2bd88" stroke="#4f6b3a" stroke-width="1.7"/>
+        <ellipse cx="24" cy="21" rx="7" ry="5" fill="#fffdf8" stroke="#8c6239" stroke-width="1.6"/>
+        <circle cx="21" cy="20" r="1.2" fill="#5c3c1e"/>
+        <circle cx="26" cy="22" r="1.2" fill="#5c3c1e"/>
+        <path d="M18 17 L15 15 M17 21 L14 21 M18 25 L15 27 M30 17 L33 15 M31 21 L34 21 M30 25 L33 27" stroke="#8c6239" stroke-width="1.4" stroke-linecap="round"/>
+      </svg>`
+    };
+
+    /* ================= 6症状データ ================= */
+    const SYMPTOMS = [
+      {
+        id: "wrinkle",
+        title: "葉がシワシワ・ペラペラ",
+        sub: "土の乾き具合で対処が真逆",
+        term: "水不足 ／ 根の不調",
+        icon: ICONS.wrinkle,
+        check: {
+          question: "鉢の中の土は乾いていますか？（竹串・鉢の重さでチェック）",
+          precheckLead: "まず確かめるのは、鉢の中がまだ湿っているか。葉のシワだけでは、水を足すか決められません。",
+          precheckSub: "水不足のときも、根が弱って水を吸えないときも、葉は同じようにしぼみます。帰ったら鉢の重さや竹串で土の中を確かめましょう。",
+          choices: [
+            {
+              id: "dry",
+              label: "中まで乾いている",
+              tone: "normal",
+              causeLabel: "考えられる原因",
+              causeTitle: "お水が足りていないサインです（水不足）",
+              causeDesc: "葉にためていた水分を使って、しぼんでいる状態です。まずは落ち着いて今の季節の育て方を確認しましょう。",
+              dos: [
+                "<strong>今のタイプ・季節のおすすめを確認して</strong>、「乾いたらたっぷり」の時期なら株元の土に鉢底から水が出るまであげます。",
+                "<strong>控えめ・少量の時期なら</strong>、夏は夕方・冬は暖かい午前に少量で様子を見ましょう。"
+              ],
+              ngMain: "暑い日中や冷え込む夜にたっぷりあげる",
+              ngDesc: "気温が厳しい時間帯に水を与えると、蒸れや凍結でかえって株が傷んでしまいます。"
+            },
+            {
+              id: "wet",
+              label: "土が湿っている",
+              tone: "urgent",
+              causeLabel: "要注意のサイン",
+              causeTitle: "まだ水やり直後か、根が水を吸えていないかも",
+              causeDesc: "水をあげた直後なら数日でハリが戻ることもあります。湿った状態が長く続くなら根の不調を考えましょう。",
+              dos: [
+                "<strong>今は水を足さずに</strong>、風通しのよい明るい日陰で土を乾かしながら様子を見ます。",
+                "<strong>湿ったままシワが増え、茎が柔らかいなら</strong>、元気な葉や茎の上部だけカットして仕立て直せます。"
+              ],
+              ngMain: "「シワシワだから」と水を足す",
+              ngDesc: "土が湿っているのに水を足すと、弱った根がさらに傷んで回復しにくくなります。"
+            }
+          ]
+        },
+        related: [
+          { tag: "竹串チェック", label: "基本の3要素を見る", nav: "rules.html", primary: true },
+          { tag: "タイプ別", label: "多肉育成シミュレーター", nav: "sim.html", primary: false }
+        ]
+      },
+      {
+        id: "stretch",
+        title: "ひょろひょろ伸びた",
+        sub: "葉と葉の間が開いて間延び",
+        term: "いわゆる「徒長（とちょう）」",
+        icon: ICONS.stretch,
+        tone: "normal",
+        causeLabel: "考えられる原因",
+        causeTitle: "光が足りず、お日様を探して伸びています",
+        causeDesc: "日照不足の状態で水やりや肥料が続くと、茎が細長く伸びて葉の色も薄くなりやすくなります。",
+        dos: [
+          "いまより<strong>明るい窓辺や屋外の風通しがよい場所</strong>へ、数日かけて少しずつ慣らしながら移動します。",
+          "置き場所を変えたあとは、<strong>これから出る葉と葉の間隔が詰まってくるか</strong>を見てみましょう。光が弱いままなら水やり間隔を長めに。"
+        ],
+        ngMain: "いきなり強い直射日光に出す",
+        ngDesc: "暗い場所にいた株を急に強い光へ出すと、葉焼けしてしまいます。やわらかな光から慣らしてあげましょう。",
+        related: [
+          { tag: "光と風の目安", label: "多肉育成シミュレーター", nav: "sim.html", primary: true },
+          { tag: "置き場所", label: "基本の3要素を見る", nav: "rules.html", primary: false }
+        ]
+      },
+      {
+        id: "jelly",
+        title: "葉が急に透けて、ぶよぶよ",
+        sub: "触るとポロッと取れる",
+        term: "凍害 ／ 蒸れ・腐敗（いわゆるジュレ）",
+        icon: ICONS.jelly,
+        check: {
+          question: "どんなタイミングで急に変わりましたか？",
+          precheckLead: "まず確かめるのは、「冷え込んだ翌朝」か「暖かい時期の蒸れ」か。最初にやる動きが変わります。",
+          precheckSub: "※ハオルチアなど生まれつき葉に透明な「窓」がある種類とは別に、昨日まで硬かった葉が急にぶよぶよになったときの対処です。",
+          choices: [
+            {
+              id: "freeze",
+              label: "冷え込んだ翌朝に急に変わった",
+              tone: "normal",
+              causeLabel: "考えられる原因",
+              causeTitle: "寒さで葉が傷んだ可能性があります（低温障害・凍害）",
+              causeDesc: "強い冷え込みや冷たい風に当たると、凍る手前でも葉が傷んで透けたようになります。まずは慌てて切らずに傷みの範囲を見ます。",
+              dos: [
+                "<strong>すぐ凍らない明るい場所（暖房の風が直接当たらない室内）</strong>へ移し、数日かけて傷みの範囲を見守ります。",
+                "<strong>溶けて崩れた葉だけ</strong>をそっと取り除き、しっかり乾くまで水やりはお休みしましょう。"
+              ],
+              ngMain: "すぐ全体を切る・暖かいお湯や直射に当てる",
+              ngDesc: "急激に温めたり慌てて切ったりすると、助かるはずの茎や成長点まで傷んでしまいます。"
+            },
+            {
+              id: "rot",
+              label: "暖かい時期・株元が黒く柔らかい",
+              tone: "urgent",
+              causeLabel: "急いで対応",
+              causeTitle: "高温と湿気による「蒸れ・腐敗」が疑われます",
+              causeDesc: "鉢の中に熱と湿気がこもると、株元や葉が煮えたように傷んで腐りが広がりやすくなります。",
+              dos: [
+                "<strong>透けた葉はすぐ取り除き</strong>、風通しのよい涼しい日陰へ移して土をしっかり乾かします。",
+                "<strong>株元の黒く柔らかい部分が広がっているなら</strong>、緑色の元気な部分までカットして切り口を乾かしましょう。"
+              ],
+              ngMain: "そのまま放置する・水をあげる",
+              ngDesc: "傷んだ部分をそのままにすると、元気な茎や葉まで一気に腐りが広がってしまいます。"
+            }
+          ]
+        },
+        related: [
+          { tag: "季節の目安", label: "多肉育成シミュレーター", nav: "sim.html", primary: true },
+          { tag: "乾きやすい土", label: "土・鉢・肥料の基本", nav: "soil.html", primary: false }
+        ]
+      },
+      {
+        id: "burn",
+        title: "葉が茶色く焼けた",
+        sub: "日が当たる側だけカサカサ",
+        term: "葉焼け（はやけ）",
+        icon: ICONS.burn,
+        tone: "normal",
+        causeLabel: "考えられる原因",
+        causeTitle: "急な強い日差しや、真夏の西日に当たりました",
+        causeDesc: "室内にいた株を急に外へ出したり、強い日差しが当たり続けると、葉の表面が茶色や白っぽく焼けます。",
+        dos: [
+          "<strong>レースカーテン越しや明るい日陰</strong>など、直射日光の当たらない涼しい場所へ移します。",
+          "焼けた部分は元に戻りませんが、<strong>新しい葉が生え変われば目立たなくなる</strong>ので見守りましょう。"
+        ],
+        ngMain: "焼けた葉を無理に全部ちぎる",
+        ngDesc: "少し焼けた程度なら株自体は生きています。無理に葉を取ると株の体力が落ちてしまいます。",
+        related: [
+          { tag: "タイプ別の光", label: "多肉育成シミュレーター", nav: "sim.html", primary: true },
+          { tag: "置き場所", label: "基本の3要素を見る", nav: "rules.html", primary: false }
+        ]
+      },
+      {
+        id: "drop",
+        title: "下の葉が枯れる・落ちる",
+        sub: "自然な生え変わりか、蒸れか見分け",
+        term: "下葉の枯れ・落葉",
+        icon: ICONS.drop,
+        check: {
+          question: "下の葉は、どんなふうに枯れていますか？",
+          precheckLead: "まず確かめるのは、下の葉が「カラカラ」か「水分を含んで落ちているか」。枯れ方で安心か要注意かが変わります。",
+          precheckSub: "中心の葉にハリがあるかどうかも一緒に見ておくと、株が元気かどうかすぐ判断できます。",
+          choices: [
+            {
+              id: "dryleaf",
+              label: "カラカラに乾いて枯れる",
+              tone: "safe",
+              causeLabel: "安心してください",
+              causeTitle: "自然な生え変わり（新陳代謝）のことが多いです",
+              causeDesc: "下の古い葉だけが少しずつ乾き、中心の葉に張りがあれば大丈夫。古い葉から水分を使って新しい葉を育てています。",
+              dos: [
+                "<strong>完全にカリカリになった枯れ葉</strong>だけ、ピンセットなどでそっと取り除きます。",
+                "風通しを保つため、株元に枯れ葉がたまらないようにしておくと虫予防にもなります。"
+              ],
+              ngMain: "慌てて毎日水をあげる",
+              ngDesc: "自然な生え変わりを水不足と勘違いして水をやりすぎると、かえって根腐れの原因になります。"
+            },
+            {
+              id: "wetleaf",
+              label: "緑のまま・ブヨブヨ落ちる",
+              tone: "urgent",
+              causeLabel: "要注意のサイン",
+              causeTitle: "水のやりすぎ・蒸れで弱っています",
+              causeDesc: "乾いていないのに葉がポロポロ落ちたり、付け根が黒っぽいときは、土が湿りすぎているサインです。",
+              dos: [
+                "<strong>すぐ水やりを止めて</strong>、風通しのよい明るい日陰でしっかり土を乾かします。",
+                "鉢底の穴がふさがっていないか、受け皿に水がたまっていないかも確認しましょう。"
+              ],
+              ngMain: "受け皿に水をためたままにする",
+              ngDesc: "鉢の中がずっと湿った状態になり、根が窒息して株全体が傷んでしまいます。"
+            }
+          ]
+        },
+        related: [
+          { tag: "水やり判断", label: "基本の3要素を見る", nav: "rules.html", primary: true },
+          { tag: "乾きやすい鉢", label: "土・鉢・肥料の基本", nav: "soil.html", primary: false }
+        ]
+      },
+      {
+        id: "bug",
+        title: "白い綿・小さな虫がついた",
+        sub: "葉の付け根にフワフワや粒",
+        term: "カイガラムシ・アブラムシなど",
+        icon: ICONS.bug,
+        tone: "urgent",
+        causeLabel: "考えられる原因",
+        causeTitle: "風通しが弱い場所や、枯れ葉の陰につきやすい虫です",
+        causeDesc: "葉全体に均一な白い粉がつく品種もありますが、葉の付け根に「白い綿のかたまり」があればカイガラムシなどのサインです。",
+        dos: [
+          "<strong>ほかの鉢から少し離し</strong>、<strong>葉の付け根に白い綿のかたまりがないか</strong>よく見て、綿棒やピンセットでやさしく取り除きます。",
+          "くり返し出るときは、<strong>その植物と虫に使えることをラベルで確認</strong>した市販スプレーを使い、風通しを良くしましょう。"
+        ],
+        ngMain: "ほかの鉢と密着させたまま放置する",
+        ngDesc: "気づかないうちに隣の鉢へどんどん広がります。株元の枯れ葉掃除と風通しがいちばんの予防になります。",
+        related: [
+          { tag: "風通しのコツ", label: "基本の3要素を見る", nav: "rules.html", primary: true },
+          { tag: "土の環境", label: "土・鉢・肥料の基本", nav: "soil.html", primary: false }
+        ]
+      }
+    ];
+
+    /* ================= 状態管理と描画（1問チェックは初期未選択） ================= */
+    let currentSymId = SYMPTOMS[0].id;
+    const choiceState = {
+      wrinkle: null,
+      jelly: null,
+      drop: null
+    };
+
+    const symptomListEl = document.getElementById("symptomList");
+    const detailIconEl = document.getElementById("detailIcon");
+    const detailTermEl = document.getElementById("detailTerm");
+    const detailTitleEl = document.getElementById("detailTitle");
+    const checkBoxEl = document.getElementById("checkBox");
+    const checkQuestionEl = document.getElementById("checkQuestion");
+    const checkChoicesEl = document.getElementById("checkChoices");
+    const precheckPanelEl = document.getElementById("precheckPanel");
+    const precheckLeadEl = document.getElementById("precheckLead");
+    const precheckSubEl = document.getElementById("precheckSub");
+    const resultBodyEl = document.getElementById("resultBody");
+    const causeBoxEl = document.getElementById("causeBox");
+    const causeLabelEl = document.getElementById("causeLabel");
+    const causeTitleEl = document.getElementById("causeTitle");
+    const causeDescEl = document.getElementById("causeDesc");
+    const doListEl = document.getElementById("doList");
+    const ngMainEl = document.getElementById("ngMain");
+    const ngDescEl = document.getElementById("ngDesc");
+    const relatedBarEl = document.getElementById("relatedBar");
+
+    function renderSymptomList() {
+      symptomListEl.innerHTML = SYMPTOMS.map((s) => `
+        <button class="symptom-btn ${s.id === currentSymId ? "is-active" : ""}" type="button" data-sym="${s.id}">
+          <span class="sym-icon-wrap" aria-hidden="true">${s.icon}</span>
+          <span class="sym-btn-text">
+            <span class="sym-btn-title">${s.title}</span>
+            <span class="sym-btn-sub">${s.sub}</span>
+          </span>
+          <span class="sym-btn-arrow" aria-hidden="true">›</span>
+        </button>
+      `).join("");
+    }
+
+    function renderDetail() {
+      const s = SYMPTOMS.find((x) => x.id === currentSymId) || SYMPTOMS[0];
+      detailIconEl.innerHTML = s.icon;
+      detailTermEl.textContent = s.term;
+      detailTitleEl.textContent = s.title;
+
+      let activeData = s;
+
+      if (s.check) {
+        checkBoxEl.classList.remove("is-hidden");
+        checkQuestionEl.textContent = s.check.question;
+        const selectedId = choiceState[s.id] || null;
+        checkChoicesEl.innerHTML = s.check.choices.map((c) => `
+          <button class="check-choice-btn ${c.id === selectedId ? "is-selected" : ""}" type="button" data-choice="${c.id}">
+            <span>${c.label}</span>
+          </button>
+        `).join("");
+
+        if (!selectedId) {
+          precheckPanelEl.classList.remove("is-hidden");
+          resultBodyEl.classList.add("is-hidden");
+          precheckLeadEl.textContent = s.check.precheckLead;
+          precheckSubEl.textContent = s.check.precheckSub;
+        } else {
+          precheckPanelEl.classList.add("is-hidden");
+          resultBodyEl.classList.remove("is-hidden");
+          activeData = s.check.choices.find((c) => c.id === selectedId) || s.check.choices[0];
+        }
+      } else {
+        checkBoxEl.classList.add("is-hidden");
+        precheckPanelEl.classList.add("is-hidden");
+        resultBodyEl.classList.remove("is-hidden");
+      }
+
+      if (!resultBodyEl.classList.contains("is-hidden")) {
+        causeBoxEl.classList.remove("is-urgent", "is-safe");
+        if (activeData.tone === "urgent") causeBoxEl.classList.add("is-urgent");
+        if (activeData.tone === "safe") causeBoxEl.classList.add("is-safe");
+
+        causeLabelEl.textContent = activeData.causeLabel;
+        causeTitleEl.textContent = activeData.causeTitle;
+        causeDescEl.textContent = activeData.causeDesc;
+
+        doListEl.innerHTML = activeData.dos.map((d, idx) => `
+          <li class="do-item">
+            <span class="do-num" aria-hidden="true">${idx + 1}</span>
+            <span>${d}</span>
+          </li>
+        `).join("");
+
+        ngMainEl.textContent = activeData.ngMain;
+        ngDescEl.textContent = activeData.ngDesc;
+      }
+
+      relatedBarEl.innerHTML = s.related.map((r) => `
+        <button class="related-btn ${r.primary ? "is-primary" : ""}" type="button" data-nav-url="${r.nav}">
+          <span class="rel-left">
+            <span class="rel-tag">${r.tag}</span>
+            <span>${r.label}</span>
+          </span>
+          <span class="rel-arrow" aria-hidden="true">›</span>
+        </button>
+      `).join("");
+    }
+
+    function selectSymptom(id) {
+      if (!id || id === currentSymId) return;
+      currentSymId = id;
+      renderSymptomList();
+      renderDetail();
+    }
+
+    function selectChoice(choiceId) {
+      if (!choiceId) return;
+      choiceState[currentSymId] = choiceId;
+      renderDetail();
+    }
+
+    /* ================= ナビゲーション＆パラメータ引き継ぎ ================= */
+    const pageParams = new URLSearchParams(window.location.search);
+    const fromPage = pageParams.get("from") || "";
+
+    function buildHomeUrl() {
+      const qMonth = pageParams.get("month");
+      return qMonth ? `index.html?month=${encodeURIComponent(qMonth)}` : "index.html";
+    }
+
+    function buildSimUrl(addFromSos = false) {
+      const next = new URLSearchParams();
+      if (addFromSos) {
+        next.set("from", "sos");
+        next.set("sym", currentSymId);
+        if (choiceState[currentSymId]) next.set("choice", choiceState[currentSymId]);
+        if (fromPage) next.set("sosFrom", fromPage);
+      }
+      ["type", "season", "light", "wind", "water", "month"].forEach((k) => {
+        const v = pageParams.get(k);
+        if (v) next.set(k, v);
+      });
+      const qs = next.toString();
+      return qs ? `sim.html?${qs}` : "sim.html";
+    }
+
+    function buildBackUrl() {
+      if (fromPage === "sim") return buildSimUrl(false);
+      if (fromPage === "rules") {
+        const qMonth = pageParams.get("month");
+        return qMonth ? `rules.html?month=${encodeURIComponent(qMonth)}` : "rules.html";
+      }
+      if (fromPage === "soil") {
+        const qMonth = pageParams.get("month");
+        return qMonth ? `soil.html?month=${encodeURIComponent(qMonth)}` : "soil.html";
+      }
+      return buildHomeUrl();
+    }
+
+    function navigateWithParams(baseUrl) {
+      if (!baseUrl) return;
+      if (baseUrl === "sim.html") {
+        window.location.href = buildSimUrl(true);
+        return;
+      }
+      const next = new URLSearchParams();
+      next.set("from", "sos");
+      next.set("sym", currentSymId);
+      if (choiceState[currentSymId]) next.set("choice", choiceState[currentSymId]);
+      if (fromPage) next.set("sosFrom", fromPage);
+      ["type", "season", "light", "wind", "water", "month"].forEach((k) => {
+        const v = pageParams.get(k);
+        if (v) next.set(k, v);
+      });
+      window.location.href = `${baseUrl}?${next.toString()}`;
+    }
+
+    function handleNavRole(role) {
+      if (role === "back") window.location.href = buildBackUrl();
+      else if (role === "home") window.location.href = buildHomeUrl();
+    }
+
+    /* ================= 縮小キャンバス対応タップ判定（pointerdown＋座標直接判定） ================= */
+    let lastTapTs = 0;
+
+    function handleInteractiveTarget(target) {
+      if (!target) return false;
+      const symBtn = target.closest("[data-sym]");
+      if (symBtn) { selectSymptom(symBtn.dataset.sym); return true; }
+      const choiceBtn = target.closest("[data-choice]");
+      if (choiceBtn) { selectChoice(choiceBtn.dataset.choice); return true; }
+      const navRoleBtn = target.closest("[data-nav-role]");
+      if (navRoleBtn) { handleNavRole(navRoleBtn.dataset.navRole); return true; }
+      const navUrlBtn = target.closest("[data-nav-url]");
+      if (navUrlBtn) { navigateWithParams(navUrlBtn.dataset.navUrl); return true; }
+      return false;
+    }
+
+    document.addEventListener("pointerdown", (e) => {
+      if (e.pointerType === "mouse" && e.button !== 0) return;
+      const now = Date.now();
+      if (now - lastTapTs < 200) return;
+
+      if (e.target && e.target.closest && handleInteractiveTarget(e.target)) {
+        lastTapTs = now;
+        e.preventDefault();
+        return;
+      }
+
+      const x = e.clientX;
+      const y = e.clientY;
+      const allBtns = document.querySelectorAll("[data-sym], [data-choice], [data-nav-role], [data-nav-url]");
+      for (const btn of allBtns) {
+        const rect = btn.getBoundingClientRect();
+        if (rect.width === 0 || rect.height === 0) continue;
+        if (x >= rect.left && x <= rect.right && y >= rect.top && y <= rect.bottom) {
+          lastTapTs = now;
+          e.preventDefault();
+          handleInteractiveTarget(btn);
+          return;
+        }
+      }
+    }, { capture: true, passive: false });
+
+    document.addEventListener("click", (e) => {
+      if (Date.now() - lastTapTs < 350) return;
+      if (e.target && e.target.closest) handleInteractiveTarget(e.target);
+    });
+
+    // 無操作5分でトップ画面へ自動復帰
+    let idleTimer = null;
+    function resetIdleTimer() {
+      clearTimeout(idleTimer);
+      idleTimer = setTimeout(() => {
+        window.location.href = "index.html";
+      }, 300000);
+    }
+    ["pointerdown", "touchstart", "click", "keydown"].forEach((ev) => {
+      window.addEventListener(ev, resetIdleTimer, { passive: true });
+    });
+
+    function fitCanvas() {
+      const canvas = document.getElementById("appCanvas");
+      const scale = Math.min(window.innerWidth / 1080, window.innerHeight / 786);
+      if (window.CSS && CSS.supports && CSS.supports("zoom", "1")) {
+        canvas.style.zoom = scale;
+        canvas.style.transform = "none";
+      } else {
+        canvas.style.zoom = "";
+        canvas.style.transform = `scale(${scale})`;
+      }
+    }
+
+    window.addEventListener("resize", fitCanvas);
+    window.addEventListener("orientationchange", fitCanvas);
+
+    // 初期描画（URL ?sym=&choice= で直接指定・関連ページからの復帰に対応）
+    const initSym = pageParams.get("sym");
+    if (initSym && SYMPTOMS.some((s) => s.id === initSym)) {
+      currentSymId = initSym;
+    }
+    const initChoice = pageParams.get("choice");
+    const initSymObj = SYMPTOMS.find((s) => s.id === currentSymId);
+    if (initChoice && initSymObj && initSymObj.check && initSymObj.check.choices.some((c) => c.id === initChoice)) {
+      choiceState[currentSymId] = initChoice;
+    }
+    renderSymptomList();
+    renderDetail();
+    fitCanvas();
+    resetIdleTimer();
+  </script>
+</body>
+</html>

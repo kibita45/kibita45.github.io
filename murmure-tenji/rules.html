@@ -1,0 +1,1104 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+
+  <!-- =========================================================================
+    保木平珈琲 Murmure｜展示用iPad Webアプリ「基本の3要素」（v21）
+    - 全サブ画面統一：左上に「‹ もどる」「⌂ トップへ」の2ボタンを常時表示
+    - 2段目：竹串ピルの○×を外し、「先が湿っている」「先まで乾いている」の観察表現へ整理
+    - シミュレーター／土・鉢・肥料から遷移時：「‹ もどる」で直前の状態（タイプ・季節・光・風・水）へ復帰
+    - 3段目：「水のあげ方」見出し横に赤文字で「※水をあげる日の目安です（休眠期は控えめに）」を配置
+    - 右下注意カード：綺麗な赤（#c43b2b）＋「光・風・水」の3色漢字ミニバッジ
+    - 無操作自動ホーム復帰：5分（300000ms）
+  ========================================================================= -->
+
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="多肉の育て方" />
+  <meta name="format-detection" content="telephone=no" />
+  <link rel="manifest" href="manifest.json" />
+
+  <title>Murmure｜基本の3要素</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=Shippori+Mincho:wght@400;500;600;700&family=Zen+Maru+Gothic:wght@500;700&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --bg-paper: #f6f0e4;
+      --card-paper: #fffdf8;
+      --ink-main: #2d1f16;
+      --ink-sub: #3a2b20;
+      --ink-muted: #625344;
+      --line-soft: #dfd0b6;
+      --line-hair: rgba(180, 162, 134, 0.44);
+      --rail-color: #74855d;
+      --rail-line: #c7d1b6;
+      --sun-color: #c27121;
+      --sun-deep: #8f4d0e;
+      --sun-soft: rgba(201, 122, 41, 0.13);
+      --wind-color: #5b7a46;
+      --wind-deep: #3d572b;
+      --wind-soft: rgba(105, 129, 84, 0.14);
+      --water-color: #3f7896;
+      --water-deep: #245670;
+      --water-soft: rgba(79, 132, 158, 0.14);
+      --warn-color: #c43b2b;
+      --warn-deep: #8f1d14;
+      --warn-dark: #9c2719;
+      --warn-bg: #fdf2f0;
+      --shadow-soft: 0 2px 10px rgba(72, 54, 38, 0.055);
+      --font-serif: "Shippori Mincho", "Hiragino Mincho ProN", "Yu Mincho", serif;
+      --font-ui: "Zen Maru Gothic", "Hiragino Maru Gothic ProN", sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+      -webkit-user-select: none;
+      user-select: none;
+      -webkit-touch-callout: none;
+    }
+
+    button, a {
+      touch-action: manipulation;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: #e9dfd0;
+      font-family: var(--font-serif);
+      color: var(--ink-main);
+    }
+
+    .viewport-wrapper {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      height: 100dvh;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .canvas {
+      position: relative;
+      width: 1080px;
+      height: 786px;
+      min-width: 1080px;
+      min-height: 786px;
+      background: linear-gradient(135deg, #f9f5e9, #f2ead9);
+      transform-origin: center center;
+      padding: 15px 22px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      box-shadow: 0 12px 36px rgba(59, 45, 35, 0.14);
+      overflow: hidden;
+    }
+
+    .canvas::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background-image: radial-gradient(rgba(110, 88, 66, 0.045) 1px, transparent 0);
+      background-size: 16px 16px;
+      opacity: 0.75;
+    }
+
+    /* ================= 1. 上部ヘッダー（全サブ画面統一） ================= */
+    .page-header {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      flex-shrink: 0;
+      border-bottom: 1px solid #d6cbb5;
+      padding-bottom: 8px;
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .header-nav-group {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 5px 15px 5px 11px;
+      background: rgba(255, 253, 248, 0.85);
+      border: 1px solid #d8cab3;
+      border-bottom: 2px solid #cbbba0;
+      border-radius: 999px;
+      font-family: var(--font-ui);
+      font-size: 14.5px;
+      font-weight: 700;
+      color: var(--ink-main);
+      cursor: pointer;
+      flex-shrink: 0;
+      transition: transform 0.12s ease;
+    }
+
+    .back-btn:active { transform: translateY(1px) scale(0.97); }
+
+    .back-arrow {
+      font-size: 20px;
+      line-height: 1;
+      color: var(--wind-color);
+    }
+
+    .home-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 5px 13px 5px 11px;
+      background: rgba(255, 253, 248, 0.72);
+      border: 1px solid #d8cab3;
+      border-bottom: 2px solid #cbbba0;
+      border-radius: 999px;
+      font-family: var(--font-ui);
+      font-size: 13.6px;
+      font-weight: 700;
+      color: var(--ink-sub);
+      cursor: pointer;
+      flex-shrink: 0;
+      transition: transform 0.12s ease;
+    }
+
+    .home-btn:active { transform: translateY(1px) scale(0.97); }
+
+    .home-btn svg {
+      width: 15px;
+      height: 15px;
+      color: var(--wind-color);
+      display: block;
+      flex-shrink: 0;
+    }
+
+    .title-wrap {
+      display: flex;
+      align-items: baseline;
+      gap: 12px;
+    }
+
+    .page-title {
+      font-family: var(--font-serif);
+      font-size: 26px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      line-height: 1.12;
+    }
+
+    .page-en {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-style: italic;
+      font-size: 16.5px;
+      font-weight: 600;
+      color: #6b5f47;
+    }
+
+    /* ================= 2. 全体3ステップ・グリッド（sim.html と同じ左レール構成） ================= */
+    .flow-workspace {
+      position: relative;
+      z-index: 2;
+      flex: 1 1 auto;
+      min-height: 0;
+      display: grid;
+      grid-template-columns: 38px 1fr;
+      grid-template-rows: auto auto auto;
+      align-content: space-between;
+      column-gap: 12px;
+      row-gap: 18px;
+    }
+
+    .rail-cell {
+      position: relative;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding-top: 0px;
+    }
+
+    .rail-cell.is-step1::after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: 14px;
+      bottom: -38px;
+      width: 2.5px;
+      background: var(--rail-line);
+      transform: translateX(-50%);
+      z-index: 0;
+    }
+
+    .rail-cell.is-step2::before {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: -38px;
+      bottom: -38px;
+      width: 2.5px;
+      background: var(--rail-line);
+      transform: translateX(-50%);
+      z-index: 0;
+    }
+
+    .rail-cell.is-step3::before {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: -38px;
+      height: 52px;
+      width: 2.5px;
+      background: var(--rail-line);
+      transform: translateX(-50%);
+      z-index: 0;
+    }
+
+    .rail-badge {
+      position: relative;
+      z-index: 2;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--rail-color);
+      border: 2px solid #fffdf8;
+      color: #fff;
+      font-family: var(--font-ui);
+      font-size: 14.5px;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      box-shadow: 0 1px 4px rgba(72, 54, 38, 0.16);
+    }
+
+    .section-stack {
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+    }
+
+    .step-section-head {
+      display: flex;
+      align-items: baseline;
+      gap: 11px;
+      min-height: 26px;
+      padding: 2px 2px 0;
+      margin-bottom: 6px;
+    }
+
+    .step-head-title {
+      font-family: var(--font-ui);
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--ink-main);
+      line-height: 1.2;
+      white-space: nowrap;
+    }
+
+    .step-head-desc {
+      font-family: var(--font-ui);
+      font-size: 13.8px;
+      font-weight: 500;
+      color: #625344;
+      line-height: 1.2;
+      white-space: nowrap;
+    }
+
+    .step-head-note-red {
+      font-family: var(--font-ui);
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--warn-color);
+      line-height: 1.2;
+      white-space: nowrap;
+    }
+
+    /* ================= Row 1：① 光・風・水の3カード ================= */
+    .rules-top-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 13px;
+    }
+
+    .rule-card {
+      background: var(--card-paper);
+      border: 1px solid var(--line-soft);
+      border-top: 4px solid var(--accent);
+      border-radius: 12px;
+      padding: 13px 15px 13px;
+      box-shadow: var(--shadow-soft);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+    }
+
+    .rule-card.is-light { --accent: var(--sun-color); --deep: var(--sun-deep); --soft: var(--sun-soft); }
+    .rule-card.is-wind  { --accent: var(--wind-color); --deep: var(--wind-deep); --soft: var(--wind-soft); }
+    .rule-card.is-water { --accent: var(--water-color); --deep: var(--water-deep); --soft: var(--water-soft); }
+
+    .rule-card-head {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+      flex-shrink: 0;
+    }
+
+    .rule-kanji-badge {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      background: var(--accent);
+      color: #ffffff;
+      font-family: var(--font-serif);
+      font-size: 22px;
+      font-weight: 700;
+      line-height: 1;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      box-shadow: 0 2px 5px rgba(60, 42, 24, 0.14);
+    }
+
+    .rule-sub-tag {
+      font-family: var(--font-ui);
+      font-size: 13.2px;
+      font-weight: 700;
+      color: var(--deep);
+      background: var(--soft);
+      padding: 3.5px 11px;
+      border-radius: 999px;
+      white-space: nowrap;
+      letter-spacing: 0.03em;
+    }
+
+    .rule-lead {
+      font-family: var(--font-ui);
+      font-size: 19px;
+      font-weight: 700;
+      color: var(--deep);
+      line-height: 1.24;
+      letter-spacing: 0.01em;
+      white-space: nowrap;
+      padding-left: 9px;
+      border-left: 4px solid var(--accent);
+      margin-bottom: 8px;
+      flex-shrink: 0;
+    }
+
+    .rule-desc {
+      font-family: var(--font-ui);
+      font-size: 14.6px;
+      font-weight: 500;
+      line-height: 1.48;
+      color: var(--ink-sub);
+    }
+
+    .rule-desc strong {
+      color: var(--ink-main);
+      font-weight: 700;
+    }
+
+    /* ================= Row 2：② 水やりの見分け方 ================= */
+    .water-check-sheet {
+      background: var(--card-paper);
+      border: 1px solid var(--line-soft);
+      border-top: 4px solid var(--water-color);
+      border-radius: 12px;
+      padding: 14px 20px 14px;
+      box-shadow: var(--shadow-soft);
+      display: grid;
+      grid-template-columns: 1fr 1.24fr 0.94fr;
+      gap: 0;
+    }
+
+    .check-col {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      gap: 8px;
+      min-width: 0;
+    }
+
+    .check-col:first-child {
+      padding-right: 20px;
+    }
+
+    .check-col:nth-child(2) {
+      padding: 0 20px;
+      border-left: 1px dashed var(--line-hair);
+    }
+
+    .check-col:last-child {
+      padding-left: 20px;
+      border-left: 1px dashed var(--line-hair);
+    }
+
+    .check-head {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      height: 28px;
+      flex-shrink: 0;
+    }
+
+    .check-num {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: var(--water-color);
+      color: #ffffff;
+      font-family: var(--font-ui);
+      font-size: 14px;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .check-ref-tag {
+      font-family: var(--font-ui);
+      font-size: 11.8px;
+      font-weight: 700;
+      color: var(--water-deep);
+      background: var(--water-soft);
+      padding: 3px 9px;
+      border-radius: 999px;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .check-title {
+      font-family: var(--font-ui);
+      font-size: 18.5px;
+      font-weight: 700;
+      color: var(--ink-main);
+      line-height: 1.24;
+      white-space: nowrap;
+    }
+
+    .check-col.is-sub .check-title {
+      font-size: 17.5px;
+      color: var(--ink-sub);
+    }
+
+    .check-desc {
+      font-family: var(--font-ui);
+      font-size: 14.8px;
+      font-weight: 500;
+      line-height: 1.54;
+      color: var(--ink-sub);
+    }
+
+    .check-desc strong {
+      color: var(--ink-main);
+      font-weight: 700;
+    }
+
+    .skewer-pair {
+      margin-top: 2px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .skewer-pill {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 6px 8px;
+      border-radius: 9px;
+      background: #faf7f2;
+      border: 1px solid #e4d8c5;
+    }
+
+    .skewer-pill.is-wet {
+      background: #fdf4f2;
+      border-color: #e4c1b8;
+    }
+
+    .skewer-pill.is-dry {
+      background: #f3faf4;
+      border-color: #bed9c4;
+    }
+
+    .skewer-svg {
+      width: 12px;
+      height: 30px;
+      flex-shrink: 0;
+      display: block;
+    }
+
+    .skewer-label {
+      font-family: var(--font-ui);
+      font-size: 13.8px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .skewer-pill.is-wet .skewer-label { color: #8c2c20; }
+    .skewer-pill.is-dry .skewer-label { color: #2b5c30; }
+
+    /* ================= Row 3：③ 水のあげ方（左）＋ 季節とタイプの注意＆シミュレーター（右下） ================= */
+    .bottom-split {
+      height: 230px;
+      display: grid;
+      grid-template-columns: 1fr 358px;
+      gap: 14px;
+      min-width: 0;
+    }
+
+    .howto-card {
+      background: var(--card-paper);
+      border: 1px solid var(--line-soft);
+      border-radius: 12px;
+      padding: 14px 18px 14px;
+      box-shadow: var(--shadow-soft);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-width: 0;
+    }
+
+    .howto-row {
+      display: grid;
+      grid-template-columns: 132px 1fr;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 0;
+      border-bottom: 1px dashed var(--line-hair);
+      flex: 1;
+    }
+
+    .howto-row:first-child { padding-top: 2px; }
+    .howto-row:last-child { border-bottom: none; padding-bottom: 2px; }
+
+    .howto-label {
+      font-family: var(--font-ui);
+      font-size: 14.4px;
+      font-weight: 700;
+      color: var(--water-deep);
+      white-space: nowrap;
+    }
+
+    .howto-row.is-link .howto-label {
+      color: var(--wind-deep);
+    }
+
+    .howto-text {
+      font-family: var(--font-ui);
+      font-size: 14.8px;
+      font-weight: 500;
+      line-height: 1.5;
+      color: var(--ink-main);
+    }
+
+    .howto-text strong {
+      font-weight: 700;
+      color: var(--ink-main);
+    }
+
+    .em-grow {
+      display: inline-block;
+      padding: 0.5px 7px;
+      margin-right: 5px;
+      border-radius: 5px;
+      background: #e6f2f7;
+      color: var(--water-deep);
+      font-weight: 700;
+    }
+
+    .sim-guide-card {
+      background: linear-gradient(180deg, #fff6f5 0%, #fceae7 100%);
+      border: 1.5px solid #dfa29a;
+      border-top: 4px solid var(--warn-color);
+      border-radius: 12px;
+      padding: 16px 17px 15px;
+      box-shadow: 0 3px 12px rgba(156, 39, 25, 0.1);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+    }
+
+    .sim-guide-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 11px;
+    }
+
+    .notice-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 11px;
+      border-radius: 999px;
+      background: var(--warn-color);
+      color: #ffffff;
+      font-family: var(--font-ui);
+      font-size: 12.4px;
+      font-weight: 700;
+      line-height: 1.1;
+      letter-spacing: 0.05em;
+      flex-shrink: 0;
+    }
+
+    .notice-pill svg {
+      width: 13.5px;
+      height: 13.5px;
+      display: block;
+    }
+
+    .mini-kanji-group {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      flex-shrink: 0;
+    }
+
+    .mini-kanji {
+      width: 26px;
+      height: 26px;
+      border-radius: 7px;
+      color: #ffffff;
+      font-family: var(--font-serif);
+      font-size: 14.5px;
+      font-weight: 700;
+      line-height: 1;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 1px 3px rgba(60, 42, 24, 0.16);
+    }
+
+    .mini-kanji.is-light { background: var(--sun-color); }
+    .mini-kanji.is-wind  { background: var(--wind-color); }
+    .mini-kanji.is-water { background: var(--water-color); }
+
+    .sim-guide-body {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+    }
+
+    .sim-guide-title {
+      font-family: var(--font-ui);
+      font-size: 19.5px;
+      font-weight: 700;
+      color: var(--warn-deep);
+      line-height: 1.24;
+      letter-spacing: 0.01em;
+    }
+
+    .sim-guide-desc {
+      font-family: var(--font-ui);
+      font-size: 14.8px;
+      font-weight: 500;
+      color: #45241f;
+      line-height: 1.52;
+    }
+
+    .sim-cta-btn {
+      margin-top: auto;
+      width: 100%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 12px 14px 11px 16px;
+      border-radius: 10px;
+      background: var(--warn-color);
+      border: 1px solid var(--warn-dark);
+      border-bottom: 3.5px solid #7d1b10;
+      color: #ffffff;
+      font-family: var(--font-ui);
+      font-size: 15.2px;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      white-space: nowrap;
+      cursor: pointer;
+      box-shadow: 0 3px 9px rgba(156, 39, 25, 0.24);
+      transition: transform 0.12s ease, filter 0.12s ease;
+    }
+
+    .sim-cta-btn:active {
+      transform: translateY(1px) scale(0.98);
+      filter: brightness(0.96);
+    }
+
+    .sim-cta-arrow {
+      width: 21px;
+      height: 21px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.96);
+      color: var(--warn-color);
+      font-size: 16px;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding-left: 1px;
+    }
+  </style>
+</head>
+<body>
+  <div class="viewport-wrapper">
+    <main class="canvas" id="appCanvas">
+
+      <!-- 上部ヘッダー -->
+      <header class="page-header">
+        <div class="header-left">
+          <div class="header-nav-group">
+            <button class="back-btn" type="button" id="backBtn" data-nav-role="back">
+              <span class="back-arrow" aria-hidden="true">‹</span>
+              <span>もどる</span>
+            </button>
+            <button class="home-btn" type="button" id="topHomeBtn" data-nav-role="home">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M3 10.5 12 3l9 7.5" />
+                <path d="M5.5 9.5V20h13V9.5" />
+              </svg>
+              <span>トップへ</span>
+            </button>
+          </div>
+
+          <div class="title-wrap">
+            <h1 class="page-title">基本の3要素</h1>
+            <span class="page-en">Three Essentials</span>
+          </div>
+        </div>
+      </header>
+
+      <!-- 3ステップ・グリッド（sim.html と同じ左レール 1→2→3） -->
+      <div class="flow-workspace">
+
+        <!-- Row 1：① 光・風・水のキホン -->
+        <div class="rail-cell is-step1" aria-hidden="true">
+          <span class="rail-badge">1</span>
+        </div>
+        <div class="section-stack">
+          <div class="step-section-head">
+            <h2 class="step-head-title">光・風・水のキホン</h2>
+            <span class="step-head-desc">まずはこの3つを覚えておけば大丈夫</span>
+          </div>
+
+          <section class="rules-top-grid" aria-label="光・風・水のキホン">
+            <!-- 光 -->
+            <article class="rule-card is-light">
+              <div class="rule-card-head">
+                <h3 class="rule-kanji-badge">光</h3>
+                <span class="rule-sub-tag">置き場所</span>
+              </div>
+              <p class="rule-lead">明るい場所が基本</p>
+              <p class="rule-desc">
+                <strong>暗い部屋の奥は避けて</strong>、明るい場所へ。日差しの強さはそれぞれのタイプに合わせます。
+              </p>
+            </article>
+
+            <!-- 風 -->
+            <article class="rule-card is-wind">
+              <div class="rule-card-head">
+                <h3 class="rule-kanji-badge">風</h3>
+                <span class="rule-sub-tag">蒸れ防止</span>
+              </div>
+              <p class="rule-lead">風通しがいちばんの保険</p>
+              <p class="rule-desc">
+                無風でこもると<strong>蒸れて傷みやすい</strong>です。窓や弱い風で空気を動かして。
+              </p>
+            </article>
+
+            <!-- 水 -->
+            <article class="rule-card is-water">
+              <div class="rule-card-head">
+                <h3 class="rule-kanji-badge">水</h3>
+                <span class="rule-sub-tag">いちばん迷う</span>
+              </div>
+              <p class="rule-lead">乾きのサインで判断</p>
+              <p class="rule-desc">
+                <strong>「何日に1回」ではなく</strong>、土がしっかり乾いてからあげるのが基本です。
+              </p>
+            </article>
+          </section>
+        </div>
+
+        <!-- Row 2：② 水やりの見分け方（全幅・3列バランス統一） -->
+        <div class="rail-cell is-step2" aria-hidden="true">
+          <span class="rail-badge">2</span>
+        </div>
+        <div class="section-stack">
+          <div class="step-section-head">
+            <h2 class="step-head-title">今日は水をあげる？</h2>
+          </div>
+
+          <section class="water-check-sheet" aria-label="水やりの見分け方">
+            <!-- ① まず、鉢を持つ -->
+            <div class="check-col">
+              <div class="check-head">
+                <h3 class="check-title">まず、鉢を持つ</h3>
+              </div>
+              <p class="check-desc">
+                <strong>水やりをした日に一度持って</strong>重さを覚えておきましょう。数日後、ふっと軽くなったら乾いてきた目安です。
+              </p>
+            </div>
+
+            <!-- ② 迷ったら、土の中 -->
+            <div class="check-col">
+              <div class="check-head">
+                <h3 class="check-title">迷ったら、土の中</h3>
+              </div>
+              <p class="check-desc">
+                鉢の端に竹串をそっと差して抜きます。<strong>先が湿っていたら、今日はお休み</strong>。
+              </p>
+
+              <div class="skewer-pair" aria-label="竹串の見分け方見本">
+                <div class="skewer-pill is-wet">
+                  <svg class="skewer-svg" viewBox="0 0 14 36" aria-hidden="true">
+                    <rect x="5" y="1" width="4" height="19" rx="1.5" fill="#e6cfa4" stroke="#b89b6a" stroke-width="0.8"/>
+                    <path d="M5 20 H9 V29 L7 35 L5 29 Z" fill="#8b5a36" stroke="#6b4022" stroke-width="0.8"/>
+                  </svg>
+                  <span class="skewer-label">先が湿っている</span>
+                </div>
+                <div class="skewer-pill is-dry">
+                  <svg class="skewer-svg" viewBox="0 0 14 36" aria-hidden="true">
+                    <path d="M5 2.5 C5 1.5 9 1.5 9 2.5 V29 L7 35 L5 29 Z" fill="#ebd6ae" stroke="#bfa272" stroke-width="0.8"/>
+                  </svg>
+                  <span class="skewer-label">先まで乾いている</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- 参考に：下の葉のハリ -->
+            <div class="check-col is-sub">
+              <div class="check-head">
+                <span class="check-ref-tag">参考に</span>
+                <h3 class="check-title">下の葉のハリ</h3>
+              </div>
+              <p class="check-desc">
+                下の葉のハリが落ちるのも目安のひとつ。<strong>葉が柔らかくても、土が湿っていたら待ちましょう。</strong>
+              </p>
+            </div>
+          </section>
+        </div>
+
+        <!-- Row 3：③ 水のあげ方（左）＋ 季節とタイプの注意＆シミュレーター（右下） -->
+        <div class="rail-cell is-step3" aria-hidden="true">
+          <span class="rail-badge">3</span>
+        </div>
+        <div class="section-stack">
+          <div class="step-section-head">
+            <h2 class="step-head-title">水のあげ方</h2>
+            <span class="step-head-note-red">※水をあげる日の目安です（休眠期は控えめに）</span>
+          </div>
+
+          <section class="bottom-split" aria-label="水のあげ方とシミュレーター案内">
+            <!-- 左：あげ方・時間帯・光風とのつながり -->
+            <div class="howto-card">
+              <div class="howto-row">
+                <span class="howto-label">あげ方</span>
+                <p class="howto-text">
+                  <span class="em-grow">「乾いたらたっぷり」の時期は</span><strong>株元の土に、鉢底から水が出るまで</strong>。受け皿の水は根腐れのもとになるので必ず捨てます。
+                </p>
+              </div>
+
+              <div class="howto-row">
+                <span class="howto-label">時間帯のめやす</span>
+                <p class="howto-text">
+                  <strong>夏は暑さがやわらいでから</strong>。<br />
+                  <strong>冬は暖かい日の午前中に</strong>。
+                </p>
+              </div>
+
+              <div class="howto-row is-link">
+                <span class="howto-label">光・風とのつながり</span>
+                <p class="howto-text">
+                  光や風が少ない場所では、土が乾くまで時間がかかります。<br />
+                  <strong>次の水やりまで間隔をあけましょう</strong>。
+                </p>
+              </div>
+            </div>
+
+            <!-- 右下：季節とタイプで変わる注意＆シミュレーター直行カード -->
+            <div class="sim-guide-card" aria-label="季節とタイプごとの違い・シミュレーター案内">
+              <div class="sim-guide-top">
+                <span class="notice-pill">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/>
+                    <line x1="12" y1="9" x2="12" y2="13.5"/>
+                    <circle cx="12" cy="17" r="0.9" fill="currentColor" stroke="none"/>
+                  </svg>
+                  <span>注意</span>
+                </span>
+                <div class="mini-kanji-group" aria-label="光・風・水">
+                  <span class="mini-kanji is-light">光</span>
+                  <span class="mini-kanji is-wind">風</span>
+                  <span class="mini-kanji is-water">水</span>
+                </div>
+              </div>
+
+              <div class="sim-guide-body">
+                <h3 class="sim-guide-title">季節とタイプで変わります</h3>
+                <p class="sim-guide-desc">
+                  夏に休む子、冬は室内の子などさまざま。<br />
+                  ちょうどいい1年の過ごし方を試してみよう！
+                </p>
+              </div>
+
+              <button class="sim-cta-btn" type="button" id="jumpSimBtn" data-nav-role="sim">
+                <span>多肉育成シミュレーターで試す</span>
+                <span class="sim-cta-arrow" aria-hidden="true">›</span>
+              </button>
+            </div>
+          </section>
+        </div>
+
+      </div>
+
+    </main>
+  </div>
+
+  <script>
+    const pageParams = new URLSearchParams(window.location.search);
+    const fromPage = pageParams.get("from") || "";
+
+    function buildHomeUrl() {
+      const qMonth = pageParams.get("month");
+      return qMonth ? `index.html?month=${encodeURIComponent(qMonth)}` : "index.html";
+    }
+
+    function buildSimUrl(addFromRules = false) {
+      const next = new URLSearchParams();
+      if (addFromRules && fromPage !== "sim") next.set("from", "rules");
+      ["type", "season", "light", "wind", "water", "month"].forEach((k) => {
+        const v = pageParams.get(k);
+        if (v) next.set(k, v);
+      });
+      const qs = next.toString();
+      return qs ? `sim.html?${qs}` : "sim.html";
+    }
+
+    function buildBackUrl() {
+      if (fromPage === "sim") {
+        return buildSimUrl(false);
+      }
+      if (fromPage === "soil") {
+        const qMonth = pageParams.get("month");
+        return qMonth ? `soil.html?month=${encodeURIComponent(qMonth)}` : "soil.html";
+      }
+      if (fromPage === "sos") {
+        const next = new URLSearchParams();
+        const qSosFrom = pageParams.get("sosFrom");
+        if (qSosFrom) next.set("from", qSosFrom);
+        ["sym", "choice", "type", "season", "light", "wind", "water", "month"].forEach((k) => {
+          const v = pageParams.get(k);
+          if (v) next.set(k, v);
+        });
+        const qs = next.toString();
+        return qs ? `sos.html?${qs}` : "sos.html";
+      }
+      return buildHomeUrl();
+    }
+
+    function handleNavRole(role) {
+      if (role === "back") {
+        window.location.href = buildBackUrl();
+      } else if (role === "home") {
+        window.location.href = buildHomeUrl();
+      } else if (role === "sim") {
+        window.location.href = buildSimUrl(true);
+      }
+    }
+
+    const navButtons = Array.from(document.querySelectorAll("[data-nav-role]"));
+    let lastTapTs = 0;
+
+    document.addEventListener("pointerdown", (e) => {
+      if (e.pointerType === "mouse" && e.button !== 0) return;
+      const now = Date.now();
+      if (now - lastTapTs < 250) return;
+      const directBtn = e.target && e.target.closest ? e.target.closest("[data-nav-role]") : null;
+      if (directBtn) {
+        lastTapTs = now;
+        e.preventDefault();
+        handleNavRole(directBtn.dataset.navRole);
+        return;
+      }
+      const x = e.clientX;
+      const y = e.clientY;
+      for (const btn of navButtons) {
+        const rect = btn.getBoundingClientRect();
+        if (rect.width === 0 || rect.height === 0) continue;
+        if (x >= rect.left && x <= rect.right && y >= rect.top && y <= rect.bottom) {
+          lastTapTs = now;
+          e.preventDefault();
+          handleNavRole(btn.dataset.navRole);
+          return;
+        }
+      }
+    }, { capture: true, passive: false });
+
+    navButtons.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        if (Date.now() - lastTapTs < 400) return;
+        handleNavRole(btn.dataset.navRole);
+      });
+    });
+
+    // 無操作5分でトップ画面へ自動復帰
+    let idleTimer = null;
+    function resetIdleTimer() {
+      clearTimeout(idleTimer);
+      idleTimer = setTimeout(() => {
+        window.location.href = "index.html";
+      }, 300000);
+    }
+    ["pointerdown", "touchstart", "click", "keydown"].forEach((ev) => {
+      window.addEventListener(ev, resetIdleTimer, { passive: true });
+    });
+
+    function fitCanvas() {
+      const canvas = document.getElementById("appCanvas");
+      const scale = Math.min(window.innerWidth / 1080, window.innerHeight / 786);
+      if (window.CSS && CSS.supports && CSS.supports("zoom", "1")) {
+        canvas.style.zoom = scale;
+        canvas.style.transform = "none";
+      } else {
+        canvas.style.zoom = "";
+        canvas.style.transform = `scale(${scale})`;
+      }
+    }
+
+    window.addEventListener("resize", fitCanvas);
+    window.addEventListener("orientationchange", fitCanvas);
+    fitCanvas();
+    resetIdleTimer();
+  </script>
+</body>
+</html>
