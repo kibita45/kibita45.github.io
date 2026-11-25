@@ -1,22 +1,23 @@
 {
   "background_color": "#f6f0e4",
   "display": "standalone",
+  "icons": [
+    {
+      "sizes": "180x180",
+      "src": "images/apple-touch-icon.png",
+      "type": "image/png"
+    },
+    {
+      "purpose": "any maskable",
+      "sizes": "512x512",
+      "src": "images/icon-512.png",
+      "type": "image/png"
+    }
+  ],
   "name": "Murmure｜多肉の育て方",
   "orientation": "landscape",
   "scope": "./",
   "short_name": "多肉の育て方",
   "start_url": "./index.html",
-  "theme_color": "#f6f0e4",
-  "icons": [
-    {
-      "src": "icon-192.png",
-      "sizes": "192x192",
-      "type": "image/png"
-    },
-    {
-      "src": "icon-512.png",
-      "sizes": "512x512",
-      "type": "image/png"
-    }
-  ]
+  "theme_color": "#f6f0e4"
 }
