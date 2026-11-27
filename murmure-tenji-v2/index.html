@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+
+  <!-- =========================================================================
+    保木平珈琲 Murmure｜展示用iPad Webアプリ「多肉植物の世界」トップ画面（v2・水彩表紙版）
+    - basics.html / sim.html と完全統一した「温かいクリーム紙 × こげ茶インク × 明朝見出し × 淡面ボタン」
+    - カード枠を外し、水彩イラストとタイポグラフィを1枚の紙面へ自然に溶け込ませた表紙構成
+    - 上段（主役）：たにく丸＋「はじめての方へ 多肉の育て方」（basics.html）
+    - 下段（横3列）：育成シミュレーター（sim.html）／ 多肉植物のふしぎ（仮・準備中）／ 困ったときのSOS
+    - 1080 × 786 px 固定キャンバス・スクロールなし・自動スケール対応
+  ========================================================================= -->
+
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="多肉の育て方" />
+  <meta name="theme-color" content="#f6f0e4" />
+  <meta name="format-detection" content="telephone=no" />
+  <link rel="manifest" href="manifest.json" />
+  <link rel="apple-touch-icon" sizes="180x180" href="images/apple-touch-icon.png" />
+  <link rel="icon" type="image/png" sizes="512x512" href="images/icon-512.png" />
+
+  <title>Murmure 保木平珈琲｜多肉の育て方</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=Shippori+Mincho:wght@500;600;700&family=Zen+Maru+Gothic:wght@400;500;700&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      /* basics.html / sim.html と完全統一：温かいカフェ図鑑トーン */
+      --bg-outer: #e9dfd0;
+      --bg-paper: #f6f0e4;
+      --card-paper: #fffdf8;
+      --surface-muted: #faf6ed;
+      --ink-main: #2d1f16;
+      --ink-title: #3a2619;
+      --ink-sub: #4e3d30;
+      --ink-muted: #6e5c4d;
+      --line-soft: #d7c7ad;
+      --line-strong: #c2ae8e;
+
+      /* 操作の軸色（basics.html / sim.html と完全統一） */
+      --axis: #5e4736;
+      --axis-dark: #453326;
+      --axis-soft: #f2eadc;
+      --axis-fill: #ebe0cc;
+
+      /* やわらかな水彩アクセント */
+      --wash-sage: rgba(173, 191, 140, 0.34);
+      --sage-line: #9ab07c;
+      --care-green: #4d6b38;
+      --care-green-dark: #364f25;
+
+      --shadow-soft: 0 2px 10px rgba(72, 54, 38, 0.06);
+
+      --font-serif: "Shippori Mincho", "Hiragino Mincho ProN", "Yu Mincho", serif;
+      --font-ui: "Zen Maru Gothic", "Hiragino Maru Gothic ProN", sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+      -webkit-user-select: none;
+      user-select: none;
+      -webkit-touch-callout: none;
+    }
+
+    a, button {
+      font: inherit;
+      color: inherit;
+      text-decoration: none;
+      touch-action: manipulation;
+    }
+
+    a:focus-visible, button:focus-visible {
+      outline: 3px solid #ab542c;
+      outline-offset: -3px;
+    }
+
+    svg {
+      display: block;
+      flex-shrink: 0;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: var(--bg-outer);
+      font-family: var(--font-ui);
+      color: var(--ink-main);
+    }
+
+    .viewport-wrapper {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      height: 100dvh;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .canvas {
+      position: relative;
+      width: 1080px;
+      height: 786px;
+      min-width: 1080px;
+      min-height: 786px;
+      background: linear-gradient(135deg, #f9f5e9, #f2ead9);
+      transform-origin: center center;
+      padding: 16px 28px 16px;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 12px 36px rgba(59, 45, 35, 0.14);
+      overflow: hidden;
+    }
+
+    .canvas::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background-image: radial-gradient(rgba(110, 88, 66, 0.045) 1px, transparent 0);
+      background-size: 16px 16px;
+      opacity: 0.7;
+    }
+
+    /* ================= 1. 最上部マストヘッド（左右細線＋中央署名） ================= */
+    .cover-mast {
+      position: relative;
+      z-index: 5;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      height: 36px;
+      flex-shrink: 0;
+    }
+
+    .mast-rule {
+      flex: 1 1 auto;
+      height: 1px;
+      background: linear-gradient(90deg, rgba(194, 174, 142, 0.45), var(--line-strong));
+    }
+
+    .mast-rule.is-right {
+      background: linear-gradient(90deg, var(--line-strong), rgba(194, 174, 142, 0.45));
+    }
+
+    .brand-center {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+
+    .brand-leaf {
+      width: 24px;
+      height: 24px;
+      color: #6b844e;
+    }
+
+    .brand-wordmark {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-style: italic;
+      font-size: 25px;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      color: var(--ink-main);
+      line-height: 1;
+    }
+
+    .brand-caption {
+      font-family: var(--font-serif);
+      font-size: 16.5px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      color: var(--ink-sub);
+    }
+
+    .brand-bar {
+      width: 1px;
+      height: 14px;
+      background: var(--line-strong);
+      margin: 0 2px;
+    }
+
+    /* ================= 2. 上段（主役）：水彩たにく丸 ＋ 多肉の育て方 ================= */
+    .hero-care-link {
+      position: relative;
+      z-index: 2;
+      flex: 1 1 auto;
+      min-height: 0;
+      display: block;
+      margin: 2px -28px 0;
+      cursor: pointer;
+      transition: transform 0.1s ease;
+    }
+
+    .hero-care-link:active {
+      transform: translateY(1px);
+    }
+
+    .hero-bg-wrap {
+      position: absolute;
+      inset: 0 0 -10px 0;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 1;
+    }
+
+    .hero-bg-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: left 30%;
+      display: block;
+      mix-blend-mode: multiply;
+      filter: brightness(1.03) contrast(1.03);
+      mask-image: linear-gradient(180deg, transparent 0%, #000 4%, #000 95%, transparent 100%);
+      -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 4%, #000 95%, transparent 100%);
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 3;
+      margin-left: 468px;
+      width: 576px;
+      height: 100%;
+      padding: 42px 28px 26px 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+
+    /* 水彩筆跡風「はじめての方へ」ラベル */
+    .beginner-wash-wrap {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 14px;
+    }
+
+    .beginner-wash {
+      position: relative;
+      display: inline-block;
+      padding: 6px 28px 7px;
+      font-family: var(--font-serif);
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      color: var(--ink-title);
+      background: var(--wash-sage);
+      border-radius: 28px 18px 24px 16px / 14px 20px 14px 18px;
+      box-shadow: 0 0 12px rgba(173, 191, 140, 0.22);
+    }
+
+    .spark-svg {
+      position: absolute;
+      top: -12px;
+      right: -24px;
+      width: 24px;
+      height: 24px;
+      color: #6d5847;
+    }
+
+    .hero-title {
+      font-family: var(--font-serif);
+      font-size: 72px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      line-height: 1.1;
+      color: var(--ink-title);
+      text-shadow: 0 0 14px rgba(249, 245, 233, 0.9);
+    }
+
+    .hero-wave-svg {
+      width: 448px;
+      height: 18px;
+      margin: 10px 0 12px;
+      color: var(--sage-line);
+    }
+
+    .hero-sub {
+      font-family: var(--font-serif);
+      font-size: 21px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      color: var(--ink-sub);
+      margin-bottom: 24px;
+      text-shadow: 0 0 10px rgba(249, 245, 233, 0.95);
+    }
+
+    /* basics.html / sim.html と完全統一した「押せる」ピルボタン */
+    .hero-cta-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      height: 48px;
+      padding: 0 28px 0 32px;
+      border-radius: 999px;
+      background: var(--axis-fill);
+      border: 1.8px solid var(--axis);
+      border-bottom: 3px solid var(--axis-dark);
+      color: var(--ink-main);
+      font-family: var(--font-ui);
+      font-size: 15.5px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      box-shadow: 0 3px 10px rgba(59, 45, 35, 0.11);
+      transition: background-color 0.14s ease, transform 0.08s ease;
+    }
+
+    .hero-care-link:hover .hero-cta-pill {
+      background: #e2d3ba;
+    }
+
+    .hero-cta-arrow {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: rgba(94, 71, 54, 0.14);
+      color: var(--axis-dark);
+      font-size: 18px;
+      font-weight: 700;
+      line-height: 1;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding-left: 1.5px;
+      padding-bottom: 1px;
+    }
+
+    /* ================= 3. 上段と下段を静かに分ける水平線 ================= */
+    .section-divider {
+      position: relative;
+      z-index: 4;
+      height: 1px;
+      background: var(--line-soft);
+      flex-shrink: 0;
+      margin: 4px 0 12px;
+    }
+
+    /* ================= 4. 下段（横3列・枠なし＋細い縦区切り線） ================= */
+    .bottom-nav {
+      position: relative;
+      z-index: 4;
+      flex: 0 0 166px;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      align-items: stretch;
+    }
+
+    .bottom-item {
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 20px 12px 14px;
+      border-radius: 14px;
+      cursor: pointer;
+      transition: background-color 0.14s ease, transform 0.08s ease;
+    }
+
+    .bottom-item:hover {
+      background: rgba(255, 253, 248, 0.62);
+    }
+
+    .bottom-item:active {
+      transform: translateY(1px);
+      background: rgba(235, 224, 204, 0.65);
+    }
+
+    /* 項目間の繊細な縦線（上下に余白を残して抜け感を維持） */
+    .bottom-item + .bottom-item::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 24px;
+      bottom: 24px;
+      width: 1px;
+      background: var(--line-soft);
+      pointer-events: none;
+    }
+
+    .item-art-box {
+      flex: 0 0 104px;
+      height: 104px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .item-art-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+      mix-blend-mode: multiply;
+      filter: brightness(1.03) contrast(1.03);
+      mask-image: radial-gradient(ellipse 48% 48% at 50% 50%, #000 72%, transparent 100%);
+      -webkit-mask-image: radial-gradient(ellipse 48% 48% at 50% 50%, #000 72%, transparent 100%);
+    }
+
+    .item-art-box.is-sos img {
+      width: 96%;
+      height: 96%;
+    }
+
+    .item-copy {
+      flex: 1 1 auto;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      padding-right: 16px;
+    }
+
+    .item-title {
+      font-family: var(--font-serif);
+      font-size: 23px;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      line-height: 1.26;
+      color: var(--ink-title);
+      white-space: nowrap;
+    }
+
+    .item-desc {
+      font-family: var(--font-ui);
+      font-size: 13px;
+      font-weight: 500;
+      line-height: 1.45;
+      color: var(--ink-muted);
+      white-space: nowrap;
+    }
+
+    .item-wip-tag {
+      display: inline-block;
+      margin-left: 5px;
+      padding: 1px 7px;
+      border-radius: 999px;
+      background: var(--axis-soft);
+      border: 1px solid var(--line-strong);
+      font-size: 10.5px;
+      font-weight: 700;
+      color: var(--axis);
+      vertical-align: 1px;
+    }
+
+    .item-arrow {
+      position: absolute;
+      right: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: var(--axis-soft);
+      border: 1.2px solid rgba(94, 71, 54, 0.28);
+      color: var(--axis-dark);
+      font-size: 16px;
+      font-weight: 700;
+      line-height: 1;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding-left: 1.5px;
+      padding-bottom: 1px;
+      opacity: 0.85;
+      transition: opacity 0.14s ease, background-color 0.14s ease;
+    }
+
+    .bottom-item:hover .item-arrow {
+      opacity: 1;
+      background: var(--axis-fill);
+    }
+
+    /* ================= 5. 「多肉植物のふしぎ」準備中ダイアログ（basics.html と完全統一） ================= */
+    .preview-dialog {
+      border: 1.2px solid var(--line-strong);
+      border-radius: 18px;
+      background: var(--card-paper);
+      color: var(--ink-main);
+      padding: 28px 34px;
+      margin: auto;
+      max-width: 86vw;
+      width: 430px;
+      box-shadow: 0 12px 48px rgba(45, 31, 22, 0.2);
+      text-align: center;
+    }
+
+    .preview-dialog::backdrop {
+      background: rgba(45, 31, 22, 0.34);
+    }
+
+    .preview-dialog h2 {
+      font-family: var(--font-serif);
+      font-size: 25px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      margin-bottom: 12px;
+      color: var(--ink-title);
+    }
+
+    .preview-dialog p {
+      font-family: var(--font-ui);
+      font-size: 15px;
+      line-height: 1.65;
+      color: var(--ink-sub);
+      margin-bottom: 18px;
+    }
+
+    .preview-dialog button {
+      padding: 10px 30px;
+      border-radius: 999px;
+      border: 1.5px solid var(--axis);
+      border-bottom: 2.5px solid var(--axis-dark);
+      background: var(--axis-fill);
+      color: var(--ink-main);
+      font-family: var(--font-ui);
+      font-size: 14.5px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .preview-dialog button:active {
+      transform: translateY(1px);
+    }
+  </style>
+</head>
+<body>
+  <div class="viewport-wrapper">
+    <main class="canvas" id="appCanvas">
+
+      <!-- 1. 最上部マストヘッド -->
+      <header class="cover-mast">
+        <span class="mast-rule" aria-hidden="true"></span>
+        <div class="brand-center">
+          <svg class="brand-leaf" viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M6 24 C10 18, 15 11, 22 4" />
+            <path d="M12 16 C8 14, 7 10, 10 8 C12 9, 13 12, 12 16 Z" fill="rgba(107, 132, 78, 0.22)" />
+            <path d="M16 11 C18 7, 22 7, 23 10 C21 12, 18 12, 16 11 Z" fill="rgba(107, 132, 78, 0.22)" />
+            <path d="M9 20 C12 20, 15 18, 15 15 C12 15, 10 17, 9 20 Z" fill="rgba(107, 132, 78, 0.22)" />
+          </svg>
+          <span class="brand-wordmark" lang="fr">Murmure</span>
+          <span class="brand-caption">保木平珈琲</span>
+        </div>
+        <span class="mast-rule is-right" aria-hidden="true"></span>
+      </header>
+
+      <!-- 2. 上段（主役）：多肉の育て方 -->
+      <a href="basics.html" class="hero-care-link" aria-label="はじめての方へ 多肉の育て方 5つの要素とタイプ別の違いをみる">
+        <div class="hero-bg-wrap" aria-hidden="true">
+          <img class="hero-bg-img auto-img" data-src="images/top_hero_bg.jpg" alt="" />
+        </div>
+
+        <div class="hero-content">
+          <div class="beginner-wash-wrap">
+            <span class="beginner-wash">はじめての方へ</span>
+            <svg class="spark-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true">
+              <path d="M6 12 L9 5" />
+              <path d="M11 15 L17 9" />
+              <path d="M13 20 L20 18" />
+            </svg>
+          </div>
+
+          <h1 class="hero-title">多肉の育て方</h1>
+
+          <svg class="hero-wave-svg" viewBox="0 0 460 18" fill="none" aria-hidden="true">
+            <path d="M6 12 C110 2, 230 3, 330 8 C385 11, 425 12, 454 9" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" opacity="0.72" />
+            <path d="M40 14 C150 6, 260 6, 370 11" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" opacity="0.4" />
+          </svg>
+
+          <p class="hero-sub">5つの要素とタイプ別の違い</p>
+
+          <span class="hero-cta-pill">
+            <span>育て方をみる</span>
+            <span class="hero-cta-arrow" aria-hidden="true">›</span>
+          </span>
+        </div>
+      </a>
+
+      <!-- 3. 細い水平区切り線 -->
+      <div class="section-divider" aria-hidden="true"></div>
+
+      <!-- 4. 下段（横3列）：育成シミュレーター / 多肉植物のふしぎ（仮） / 困ったときのSOS -->
+      <nav class="bottom-nav" aria-label="コンテンツメニュー">
+        <a href="sim.html" class="bottom-item" aria-label="光・風・水でどう変わる？ 季節に合わせて試してみよう">
+          <div class="item-art-box" aria-hidden="true">
+            <img class="auto-img" data-src="images/top_icon_sim.jpg" alt="" />
+          </div>
+          <div class="item-copy">
+            <h2 class="item-title">光・風・水で<br />どう変わる？</h2>
+            <p class="item-desc">季節に合わせて試してみよう</p>
+          </div>
+          <span class="item-arrow" aria-hidden="true">›</span>
+        </a>
+
+        <button type="button" class="bottom-item" id="wonderBtn" style="background:none; border:none; text-align:left;" aria-label="多肉植物のふしぎ 知る・深める（準備中）">
+          <div class="item-art-box" aria-hidden="true">
+            <img class="auto-img" data-src="images/top_icon_wonder.jpg" alt="" />
+          </div>
+          <div class="item-copy">
+            <h2 class="item-title">多肉植物の<br />ふしぎ</h2>
+            <p class="item-desc">知る・深める<span class="item-wip-tag">準備中</span></p>
+          </div>
+          <span class="item-arrow" aria-hidden="true">›</span>
+        </button>
+
+        <a href="sos.html" class="bottom-item" aria-label="困ったときのSOS 症状から調べる">
+          <div class="item-art-box is-sos" aria-hidden="true">
+            <img class="auto-img" data-src="images/top_icon_sos.jpg" alt="" />
+          </div>
+          <div class="item-copy">
+            <h2 class="item-title">困ったときの<br />SOS</h2>
+            <p class="item-desc">症状から調べる</p>
+          </div>
+          <span class="item-arrow" aria-hidden="true">›</span>
+        </a>
+      </nav>
+
+    </main>
+  </div>
+
+  <!-- 「多肉植物のふしぎ」仮オープン時の案内ダイアログ -->
+  <dialog class="preview-dialog" id="wonderDialog">
+    <h2>多肉植物のふしぎ</h2>
+    <p>葉に水を蓄える仕組みや、原産地のひみつ、紅葉の理由などを少しずつ書き足していく予定です。<br />どうぞお楽しみに！</p>
+    <button id="wonderCloseBtn" type="button">閉じる</button>
+  </dialog>
+
+  <script>
+    function fitCanvas() {
+      const canvas = document.getElementById("appCanvas");
+      const scale = Math.min(window.innerWidth / 1080, window.innerHeight / 786);
+      if (window.CSS && CSS.supports && CSS.supports("zoom", "1")) {
+        canvas.style.zoom = scale;
+        canvas.style.transform = "none";
+      } else {
+        canvas.style.zoom = "";
+        canvas.style.transform = `scale(${scale})`;
+      }
+    }
+    window.addEventListener("resize", fitCanvas);
+    window.addEventListener("orientationchange", fitCanvas);
+    fitCanvas();
+
+    // 外部画像の自動探索（version2直下・試作フォルダ・親フォルダ・version1）
+    (function loadAutoImages() {
+      const prefixes = ["", "多肉の育て方｜操作できる試作/", "../", "../version1/"];
+      document.querySelectorAll(".auto-img[data-src]").forEach((img) => {
+        const rel = img.dataset.src;
+        let idx = 0;
+        function tryNext() {
+          if (idx >= prefixes.length) {
+            img.onerror = null;
+            img.style.display = "none";
+            return;
+          }
+          img.onerror = tryNext;
+          img.src = prefixes[idx++] + rel;
+        }
+        tryNext();
+      });
+    })();
+
+    // monthパラメータ引き継ぎ
+    const month = new URLSearchParams(location.search).get("month");
+    if (month && /^(?:[1-9]|1[0-2])$/.test(month)) {
+      for (const link of document.querySelectorAll("a[href]")) {
+        const dest = new URL(link.getAttribute("href"), document.baseURI);
+        dest.searchParams.set("month", month);
+        link.setAttribute("href", dest.href);
+      }
+    }
+
+    // 「多肉植物のふしぎ」仮ダイアログ制御
+    const wonderDialog = document.getElementById("wonderDialog");
+    document.getElementById("wonderBtn").addEventListener("click", () => {
+      wonderDialog.showModal();
+    });
+    document.getElementById("wonderCloseBtn").addEventListener("click", () => {
+      wonderDialog.close();
+    });
+    wonderDialog.addEventListener("click", (e) => {
+      if (e.target === wonderDialog) {
+        const r = wonderDialog.getBoundingClientRect();
+        if (e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom) {
+          wonderDialog.close();
+        }
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+
+  <!-- =========================================================================
+    保木平珈琲 Murmure｜展示用iPad Webアプリ「タイプ別ガイド：やさしい光タイプ」（v2・表記統一版）
+    - ヘッダー固定（basics.html / sim.html 統一・英語削除・タイプ横に代表品種）
+    - 関連リンク表記を「光・風・水を試す」へ統一
+  ========================================================================= -->
+
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="多肉の育て方" />
+  <meta name="theme-color" content="#f6f0e4" />
+  <meta name="format-detection" content="telephone=no" />
+  <link rel="manifest" href="manifest.json" />
+  <link rel="apple-touch-icon" sizes="180x180" href="images/apple-touch-icon.png" />
+  <link rel="icon" type="image/png" sizes="512x512" href="images/icon-512.png" />
+
+  <title>Murmure｜やさしい光タイプ（ハオルチア・ガステリア・ハオルチオプシス など）</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;600;700&family=Zen+Maru+Gothic:wght@400;500;700&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --bg-outer: #e9dfd0;
+      --bg-paper: #f6f0e4;
+      --card-paper: #fffdf8;
+      --surface-muted: #f7f2e7;
+      --ink-main: #2d1f16;
+      --ink-sub: #4e3d30;
+      --ink-muted: #6e5c4d;
+      --line-soft: #d7c7ad;
+      --line-strong: #c2ae8e;
+
+      --axis: #5e4736;
+      --axis-dark: #453326;
+      --axis-soft: #f2eadc;
+      --axis-fill: #ebe0cc;
+
+      --type-color: #4d6b38;
+      --type-dark: #375025;
+      --type-soft: rgba(77, 107, 56, 0.10);
+      --type-bd: rgba(77, 107, 56, 0.34);
+
+      --shadow-soft: 0 2px 10px rgba(72, 54, 38, 0.06);
+      --font-serif: "Shippori Mincho", "Hiragino Mincho ProN", "Yu Mincho", serif;
+      --font-ui: "Zen Maru Gothic", "Hiragino Maru Gothic ProN", sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
+    a, button { font: inherit; color: inherit; text-decoration: none; touch-action: manipulation; }
+    a:focus-visible, button:focus-visible { outline: 3px solid #ab542c; outline-offset: -3px; }
+    svg { display: block; flex-shrink: 0; }
+
+    html, body { width: 100%; height: 100%; overflow: hidden; background: var(--bg-outer); font-family: var(--font-ui); color: var(--ink-main); }
+    .viewport-wrapper { position: fixed; inset: 0; width: 100vw; height: 100vh; height: 100dvh; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+
+    .canvas { position: relative; width: 1080px; height: 786px; min-width: 1080px; min-height: 786px; background: linear-gradient(135deg, #f9f5e9, #f2ead9); transform-origin: center center; display: flex; flex-direction: column; box-shadow: 0 12px 36px rgba(59, 45, 35, 0.14); overflow: hidden; }
+    .canvas::before { content: ""; position: absolute; inset: 0; pointer-events: none; background-image: radial-gradient(rgba(110, 88, 66, 0.045) 1px, transparent 0); background-size: 16px 16px; opacity: 0.7; }
+
+    .page-header { position: relative; z-index: 10; display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-shrink: 0; margin: 0 24px; padding: 14px 0 8px; border-bottom: 1px solid var(--line-soft); background: transparent; }
+    .header-left { display: flex; align-items: center; gap: 16px; min-width: 0; }
+    .header-nav-group { display: inline-flex; align-items: center; gap: 8px; flex-shrink: 0; }
+
+    .back-btn, .home-btn { display: inline-flex; align-items: center; gap: 6px; height: 40px; padding: 0 15px; background: var(--card-paper); border: 1px solid var(--line-soft); border-bottom: 2px solid var(--line-strong); border-radius: 10px; font-family: var(--font-ui); font-size: 14.5px; font-weight: 700; color: var(--ink-main); cursor: pointer; flex-shrink: 0; transition: background-color 0.12s ease, transform 0.08s ease; }
+    .home-btn { background: var(--axis-soft); border-color: #cbbba6; border-bottom-color: #b39f86; color: var(--axis); }
+    .back-btn:active, .home-btn:active { transform: translateY(1px); background: #ebe4d5; }
+    .back-arrow { font-size: 19px; line-height: 1; color: var(--axis); }
+    .home-btn svg { width: 15px; height: 15px; color: var(--axis); }
+
+    .title-wrap { display: flex; align-items: center; gap: 11px; min-width: 0; }
+    .header-type-dot { width: 14px; height: 14px; border-radius: 50%; background: var(--type-color); flex-shrink: 0; }
+    .page-title { font-family: var(--font-serif); font-size: 25px; font-weight: 700; letter-spacing: 0.06em; line-height: 1.12; color: var(--ink-main); white-space: nowrap; }
+    .header-species { font-family: var(--font-ui); font-size: 13.5px; font-weight: 500; color: var(--ink-muted); padding-left: 12px; border-left: 1.5px solid var(--line-strong); line-height: 1.2; white-space: nowrap; }
+
+    .scroll-area { position: relative; z-index: 2; flex: 1 1 auto; min-height: 0; overflow-y: auto; overflow-x: hidden; -webkit-overflow-scrolling: touch; touch-action: pan-y; scroll-behavior: smooth; padding: 12px 28px 36px; }
+    .scroll-area::-webkit-scrollbar { width: 7px; }
+    .scroll-area::-webkit-scrollbar-track { background: transparent; }
+    .scroll-area::-webkit-scrollbar-thumb { background: rgba(110, 92, 77, 0.34); border-radius: 999px; }
+
+    .first-view { display: flex; flex-direction: column; gap: 0px; }
+    .hero-spread { position: relative; display: flex; align-items: center; height: 196px; padding: 10px 440px 14px 68px; margin: -12px -28px 0; overflow: hidden; }
+    .hero-catch { position: relative; z-index: 2; font-family: var(--font-serif); font-size: 39px; font-weight: 700; line-height: 1.36; color: var(--ink-main); letter-spacing: 0.05em; text-shadow: 0 1px 10px rgba(246, 240, 228, 0.92); }
+    .hero-art-box { position: absolute; inset: 0; z-index: 0; pointer-events: none; }
+    .hero-art { width: 100%; height: 100%; object-fit: cover; object-position: right center; -webkit-mask-image: linear-gradient(180deg, #000 0%, #000 86%, transparent 100%); mask-image: linear-gradient(180deg, #000 0%, #000 86%, transparent 100%); pointer-events: none; }
+
+    .chart-board { position: relative; z-index: 2; margin-top: 2px; padding: 10px 8px 4px; display: flex; flex-direction: column; gap: 12px; }
+    .chart-svg-wrap { width: 100%; display: block; }
+    .chart-svg { width: 100%; height: auto; display: block; overflow: visible; }
+    .chart-footer { display: flex; align-items: center; justify-content: flex-end; gap: 16px; padding: 0 6px; }
+    .chart-footer-links { display: inline-flex; align-items: center; gap: 8px; flex-shrink: 0; }
+    .subtle-link-sep { width: 1px; height: 13px; background: var(--line-strong); opacity: 0.7; }
+    .subtle-sim-link { display: inline-flex; align-items: center; gap: 5px; padding: 4px 10px; border-radius: 999px; background: transparent; border: 1px solid transparent; font-family: var(--font-ui); font-size: 13px; font-weight: 700; color: var(--axis); white-space: nowrap; transition: background-color 0.14s ease, border-color 0.14s ease; }
+    .subtle-sim-link:hover { background: var(--axis-soft); border-color: var(--line-soft); }
+    .subtle-sim-link:active { background: var(--axis-fill); }
+    .subtle-sim-arrow { font-size: 15px; line-height: 1; color: var(--axis); }
+  </style>
+</head>
+<body>
+  <div class="viewport-wrapper">
+    <main class="canvas" id="appCanvas">
+
+      <header class="page-header">
+        <div class="header-left">
+          <div class="header-nav-group">
+            <button class="back-btn" type="button" id="backBtn">
+              <span class="back-arrow" aria-hidden="true">‹</span>
+              <span>もどる</span>
+            </button>
+            <button class="home-btn" type="button" id="topHomeBtn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M3 10.5 12 3l9 7.5" />
+                <path d="M5.5 9.5V20h13V9.5" />
+              </svg>
+              <span>表紙</span>
+            </button>
+          </div>
+          <div class="title-wrap">
+            <span class="header-type-dot" aria-hidden="true"></span>
+            <h1 class="page-title">やさしい光タイプ</h1>
+            <span class="header-species">ハオルチア・ガステリア・ハオルチオプシス など</span>
+          </div>
+        </div>
+      </header>
+
+      <div class="scroll-area" id="scrollArea">
+        <div class="first-view">
+          <section class="hero-spread" aria-label="やさしい光タイプの特徴">
+            <h2 class="hero-catch">強い日差しは苦手<br />やわらかな光を好む</h2>
+            <div class="hero-art-box" aria-hidden="true">
+              <img class="hero-art" src="images/hero_soft_light_preview.png" alt="" />
+            </div>
+          </section>
+
+          <section class="chart-board" aria-label="1年の成長リズムと注意点">
+            <div class="chart-svg-wrap">
+              <svg class="chart-svg" viewBox="0 0 1000 342" role="img" aria-label="春と秋にやさしい光で育ち、夏は直射と蒸れを避け、冬は明るい窓辺で過ごす成長リズムの模式図">
+                <defs>
+                  <linearGradient id="curveAreaSoft" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="#5d7d52" stop-opacity="0.18" />
+                    <stop offset="65%" stop-color="#5d7d52" stop-opacity="0.06" />
+                    <stop offset="100%" stop-color="#5d7d52" stop-opacity="0.00" />
+                  </linearGradient>
+                </defs>
+                <path d="M 175 124 L 175 46 L 310 46" fill="none" stroke="#537349" stroke-width="1.2" opacity="0.72" />
+                <path d="M 640 124 L 640 46 L 506 46" fill="none" stroke="#537349" stroke-width="1.2" opacity="0.72" />
+                <text x="175" y="34" text-anchor="middle" font-family="'Zen Maru Gothic', sans-serif" font-size="12.5" font-weight="700" letter-spacing="0.05em" fill="#46693c">春（3–5月）</text>
+                <text x="640" y="34" text-anchor="middle" font-family="'Zen Maru Gothic', sans-serif" font-size="12.5" font-weight="700" letter-spacing="0.05em" fill="#46693c">秋（9–11月）</text>
+                <text x="408" y="52" text-anchor="middle" font-family="'Shippori Mincho', serif" font-size="22" font-weight="700" letter-spacing="0.06em" fill="#2d1f16">育てる季節</text>
+                <text x="408" y="78" text-anchor="middle" font-family="'Zen Maru Gothic', sans-serif" font-size="13.8" font-weight="500" fill="#5a493b">やさしい光のもとで、植え替えや株分けに適した時期</text>
+                <line x1="34" y1="226" x2="966" y2="226" stroke="#cbbba2" stroke-width="1.1" />
+                <text x="36" y="130" font-family="'Zen Maru Gothic', sans-serif" font-size="11" font-weight="500" fill="#8f7d6b">成長が活発</text>
+                <text x="36" y="218" font-family="'Zen Maru Gothic', sans-serif" font-size="11" font-weight="500" fill="#8f7d6b">ゆるやか</text>
+                <path d="M 54 198 C 98 166, 134 128, 175 128 C 238 128, 316 212, 408 212 C 500 212, 574 128, 640 128 C 706 128, 768 206, 852 206 C 896 206, 926 198, 948 188 L 948 226 L 54 226 Z" fill="url(#curveAreaSoft)" />
+                <path d="M 54 198 C 98 166, 134 128, 175 128 C 238 128, 316 212, 408 212 C 500 212, 574 128, 640 128 C 706 128, 768 206, 852 206 C 896 206, 926 198, 948 188" fill="none" stroke="#486b3e" stroke-width="2.8" stroke-linecap="round" />
+                <circle cx="175" cy="128" r="5" fill="#486b3e" stroke="#f6f0e4" stroke-width="2.2" />
+                <circle cx="640" cy="128" r="5" fill="#486b3e" stroke="#f6f0e4" stroke-width="2.2" />
+                <line x1="408" y1="218" x2="408" y2="254" stroke="#b05c1c" stroke-width="1.3" opacity="0.85" />
+                <circle cx="408" cy="212" r="5.5" fill="#b05c1c" stroke="#f6f0e4" stroke-width="2.2" />
+                <text x="408" y="196" text-anchor="middle" font-family="'Zen Maru Gothic', sans-serif" font-size="12.5" font-weight="700" letter-spacing="0.06em" fill="#a85518">ここ注意</text>
+                <text x="408" y="272" text-anchor="middle" font-family="'Zen Maru Gothic', sans-serif" font-size="12.5" font-weight="700" letter-spacing="0.05em" fill="#a85518">梅雨・夏（6–8月）</text>
+                <text x="408" y="300" text-anchor="middle" font-family="'Shippori Mincho', serif" font-size="21" font-weight="700" letter-spacing="0.05em" fill="#2d1f16">直射・蒸れから守る</text>
+                <text x="408" y="324" text-anchor="middle" font-family="'Zen Maru Gothic', sans-serif" font-size="13.8" font-weight="500" fill="#5a493b">強い日差しを避け、風通しのよい日陰で水やりを減らす</text>
+                <line x1="852" y1="212" x2="852" y2="254" stroke="#3b6b8a" stroke-width="1.3" opacity="0.85" />
+                <circle cx="852" cy="206" r="5.5" fill="#3b6b8a" stroke="#f6f0e4" stroke-width="2.2" />
+                <text x="852" y="190" text-anchor="middle" font-family="'Zen Maru Gothic', sans-serif" font-size="12.5" font-weight="700" letter-spacing="0.06em" fill="#356280">ここ注意</text>
+                <text x="852" y="272" text-anchor="middle" font-family="'Zen Maru Gothic', sans-serif" font-size="12.5" font-weight="700" letter-spacing="0.05em" fill="#356280">冬（12–2月）</text>
+                <text x="852" y="300" text-anchor="middle" font-family="'Shippori Mincho', serif" font-size="21" font-weight="700" letter-spacing="0.05em" fill="#2d1f16">寒さから守る</text>
+                <text x="852" y="324" text-anchor="middle" font-family="'Zen Maru Gothic', sans-serif" font-size="13.8" font-weight="500" fill="#5a493b">明るい窓辺で霜を避け、水やりを減らす</text>
+              </svg>
+            </div>
+
+            <div class="chart-footer">
+              <div class="chart-footer-links">
+                <a href="sim.html?type=shade-main&from=type" class="subtle-sim-link" id="simJumpBtnSubtle">
+                  <span>このタイプの光・風・水を試す</span>
+                  <span class="subtle-sim-arrow" aria-hidden="true">›</span>
+                </a>
+                <span class="subtle-link-sep" aria-hidden="true"></span>
+                <a href="basics.html" class="subtle-sim-link" id="basicsJumpBtnSubtle">
+                  <span>5つの基本にもどる</span>
+                  <span class="subtle-sim-arrow" aria-hidden="true">›</span>
+                </a>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <script>
+    function fitCanvas() {
+      const canvas = document.getElementById("appCanvas");
+      const scale = Math.min(window.innerWidth / 1080, window.innerHeight / 786);
+      if (window.CSS && CSS.supports && CSS.supports("zoom", "1")) {
+        canvas.style.zoom = scale;
+        canvas.style.transform = "none";
+      } else {
+        canvas.style.zoom = "";
+        canvas.style.transform = `scale(${scale})`;
+      }
+    }
+    window.addEventListener("resize", fitCanvas);
+    window.addEventListener("orientationchange", fitCanvas);
+    fitCanvas();
+
+    const params = new URLSearchParams(window.location.search);
+    const qMonth = params.get("month");
+
+    document.getElementById("backBtn").addEventListener("click", () => {
+      if (window.history.length > 1 && document.referrer) { window.history.back(); return; }
+      window.location.href = qMonth ? `basics.html?month=${encodeURIComponent(qMonth)}` : "basics.html";
+    });
+
+    document.getElementById("topHomeBtn").addEventListener("click", () => {
+      window.location.href = qMonth ? `index.html?month=${encodeURIComponent(qMonth)}` : "index.html";
+    });
+
+    if (qMonth) {
+      const simEl = document.getElementById("simJumpBtnSubtle");
+      if (simEl) simEl.setAttribute("href", `sim.html?type=shade-main&from=type&month=${encodeURIComponent(qMonth)}`);
+      const basicsEl = document.getElementById("basicsJumpBtnSubtle");
+      if (basicsEl) basicsEl.setAttribute("href", `basics.html?month=${encodeURIComponent(qMonth)}`);
+    }
+
+    const AUTO_RETURN_MS = 0;
+    if (AUTO_RETURN_MS) {
+      let idleTimer = null;
+      function resetIdleTimer() { clearTimeout(idleTimer); idleTimer = setTimeout(() => { window.location.href = "index.html"; }, AUTO_RETURN_MS); }
+      ["pointerdown", "touchstart", "click", "keydown", "scroll"].forEach((ev) => { window.addEventListener(ev, resetIdleTimer, { passive: true }); });
+      resetIdleTimer();
+    }
+  </script>
+</body>
+</html>
