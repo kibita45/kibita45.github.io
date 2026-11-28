@@ -4,10 +4,10 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
   <!-- =========================================================================
-       保木平珈琲 Murmure｜展示用iPad Webアプリ「多肉の育て方」（v2・軽量化版＋準備中スタンプ）
+       保木平珈琲 Murmure｜展示用iPad Webアプリ「多肉の育て方」（v2・水やり公開版）
        - sim.html と完全統一した「温かいクリーム紙 × こげ茶インク × 淡面＋枠線 × 左ガイドレーン」
        - base64埋め込み画像を外部参照（images/）へ戻して軽量化
-       - ステップ1（5つの基本）に薄く広い「準備中」透かしスタンプを配置
+       - ステップ1：「水やり」を公開（basics_water.html へ遷移）／他4項目は準備中スタンプ維持
        - ステップ2に「※わからないときは、お気軽にスタッフまで」を追記
   ========================================================================= -->
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -853,7 +853,7 @@
               <span aria-hidden="true" class="point-arrow">›</span>
               <span class="wip-stamp" aria-hidden="true"><span class="wip-stamp-mark">準備中</span></span>
             </a>
-            <a class="point-card is-water is-wip left-bottom" href="basics_water.html">
+            <a class="point-card is-water left-bottom" href="basics_water.html">
               <div aria-hidden="true" class="point-icon">
                 <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewBox="0 0 24 24">
                   <path d="M12 3.5C12 3.5 6 10.2 6 14.5a6 6 0 0 0 12 0C18 10.2 12 3.5 12 3.5Z"></path>
@@ -865,7 +865,6 @@
                 <p class="point-phrase">土の乾きと葉のサインで</p>
               </div>
               <span aria-hidden="true" class="point-arrow">›</span>
-              <span class="wip-stamp" aria-hidden="true"><span class="wip-stamp-mark">準備中</span></span>
             </a>
             <a class="point-card is-earth is-wip right-bottom" href="basics_soil.html">
               <div aria-hidden="true" class="point-icon">
@@ -1083,7 +1082,7 @@
     }
 
     const d = document.getElementById("pointPreview");
-    document.querySelectorAll(".care-map .point-card").forEach((a) => {
+    document.querySelectorAll(".care-map .point-card.is-wip").forEach((a) => {
       a.addEventListener("click", (e) => {
         e.preventDefault();
         document.getElementById("previewTitle").textContent = a.querySelector(".point-name").textContent;
