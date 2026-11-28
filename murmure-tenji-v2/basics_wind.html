@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="多肉の育て方">
+<meta name="theme-color" content="#edf2e8">
+<meta name="format-detection" content="telephone=no">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" sizes="180x180" href="images/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="512x512" href="images/icon-512.png">
+<title>Murmure｜風通しのきほん</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;600;700&family=Zen+Maru+Gothic:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+/* 風通しの章（本番組み込み版）。画像データは埋め込まない。図解はSVGシンボルで再利用。 */
+:root{--outer:#dfe7da;--paper:#edf2e8;--card:#f8faf4;--ink:#2d1f16;--sub:#4e3d30;--muted:#665c53;--line:#c4d0bd;--blue:#557353;--serif:"Shippori Mincho","Hiragino Mincho ProN","Yu Mincho","Noto Serif CJK JP",serif;--ui:"Zen Maru Gothic","Hiragino Maru Gothic ProN","Noto Sans CJK JP",sans-serif}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+html,body{width:100%;height:100%;overflow:hidden;background:var(--outer);color:var(--ink);font-family:var(--ui)}
+a,button{color:inherit;font:inherit;text-decoration:none;touch-action:manipulation}
+a:focus-visible{outline:2px solid var(--blue);outline-offset:4px}
+svg{display:block;width:100%;height:auto}
+.symbols{position:absolute;width:0;height:0;overflow:hidden}
+.viewport{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.canvas{width:1080px;height:786px;flex:none;display:flex;flex-direction:column;position:relative;overflow:hidden;transform-origin:center;background:linear-gradient(145deg,#f5f7ed 0%,#edf2e8 52%,#e2eadd 100%);box-shadow:0 12px 36px #49604720}
+.canvas:before{content:"";position:absolute;inset:0;pointer-events:none;background-image:radial-gradient(#5b79550b .8px,transparent .8px);background-size:16px 16px}
+.page-header{position:relative;z-index:3;display:flex;align-items:center;gap:16px;flex:none;margin:0 24px;padding:14px 0 8px;border-bottom:1px solid #d7c7ad}
+.nav{display:flex;gap:8px;flex:none}
+.nav a{display:flex;align-items:center;justify-content:center;gap:6px;height:40px;padding:0 15px;border:1px solid #d7c7ad;border-bottom:2px solid #c2ae8e;border-radius:10px;background:#fffdf8;font-size:14.5px;font-weight:700}
+.nav a.home{background:#f2eadc;color:#5e4736}
+.nav svg{width:15px;height:15px}
+.back-arrow{font-size:21px;line-height:1}
+.page-title{font:700 25px/1.12 var(--serif);letter-spacing:.06em}
+.page-kicker{font-size:13px;color:var(--muted);border-left:1px solid var(--line);padding-left:12px}
+.scroll-area{position:relative;flex:1;min-height:0;overflow-y:auto;overflow-x:hidden;padding:0 44px 36px;-webkit-overflow-scrolling:touch;touch-action:pan-y;scrollbar-color:#a1b49c transparent;scrollbar-width:thin}
+.scroll-area::-webkit-scrollbar{width:7px}
+.scroll-area::-webkit-scrollbar-thumb{background:#a1b49c;border-radius:8px}
+.hero{text-align:center;padding:24px 26px 8px}
+.hero h2{font:700 39px/1.3 var(--serif);letter-spacing:.045em}
+.hero p{margin-top:8px;font-size:17px;color:var(--sub);line-height:1.65;letter-spacing:.025em}
+.diagram{padding:15px 10px 25px;border-bottom:1px solid var(--line);background:radial-gradient(ellipse at 50% 46%,#f9fbf279 0%,transparent 72%)}
+.diagram-head{text-align:center}
+.diagram-head h2{font:600 20px/1.4 var(--serif);letter-spacing:.035em;color:var(--sub)}
+.stages{display:grid;grid-template-columns:1fr 38px 1fr 38px 1fr;align-items:center;gap:0;margin:2px 0 0;text-align:center}
+.stage svg{height:236px;width:100%}
+.stage h3{font:700 21px/1.35 var(--serif);margin:2px 0 5px}
+.stage p{font-size:15.5px;line-height:1.55;color:var(--sub)}
+.stage-arrow{color:#789ba6;align-self:center;transform:translateY(-24px);font:400 28px/1 var(--ui)}
+.section-head{display:block;text-align:center;padding:28px 2px 4px}
+.section-head h2{font:700 30px/1.4 var(--serif);letter-spacing:.045em}
+.feature{display:grid;grid-template-columns:300px 1fr;align-items:center;gap:34px;padding:24px 16px;border-bottom:1px solid var(--line);min-height:254px}
+.feature.reverse{grid-template-columns:minmax(0,1fr) 270px;gap:28px}
+.feature.reverse .art{order:2;display:flex;align-items:center;justify-content:center;min-height:180px}.feature.reverse .art svg{height:180px}
+.art{display:flex;align-items:center;justify-content:center;min-height:190px}
+.art svg{width:100%;height:214px}
+.article-num{font:600 28px/1 var(--serif);letter-spacing:.02em;color:#789574;flex:none;align-self:baseline}
+.feature h3,.supplement h3{font:700 25px/1.4 var(--serif);margin:0 0 11px}
+.feature p,.supplement p{font-size:17px;line-height:1.85;color:var(--sub)}
+.feature p+p{margin-top:7px}
+.note{font-size:14px!important;color:var(--blue)!important;font-weight:700}
+.extras{display:grid;grid-template-columns:1fr 1fr;gap:22px;position:relative}
+.extras:before{content:"";position:absolute;left:50%;top:14px;bottom:14px;border-left:1px solid #c4d0bd;pointer-events:none}
+.supplement{padding:16px 22px 19px;background:transparent;border-radius:0}
+.supplement svg{height:155px;margin:0 auto 10px}
+.supplement h3{font-size:22px;margin-bottom:10px}
+.supplement p{font-size:16px}
+.footer{border-top:1px solid var(--line);margin-top:25px;padding:18px 4px 0;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.footer h3{font:700 19px var(--serif);margin-bottom:4px}
+.footer p{font-size:13px;color:var(--muted)}
+.footer-links{display:flex;gap:9px}
+.footer a{background:var(--card);border:1px solid var(--line);border-bottom:2px solid #aaba9f;padding:12px 15px;border-radius:8px;font-size:15px;font-weight:700;color:var(--blue);white-space:nowrap}
+.source{font-size:11px;color:var(--muted);margin:15px 4px 0}
+.source a{text-decoration:underline}
+.article-title{display:flex;align-items:baseline;gap:13px;margin-bottom:11px}.article-title h3{margin:0}.stage-arrow svg{height:18px;width:32px;margin:auto}.feature:last-child{border-bottom:1px solid var(--line)}
+/* 風通しの章：対照図を大きく、記事は内容に応じて組む。 */
+.stages{grid-template-columns:1fr 1fr;gap:42px;align-items:start;margin:10px auto 0;max-width:924px;position:relative}
+.stages:before{content:"";position:absolute;left:50%;top:10px;bottom:10px;border-left:1px solid var(--line)}
+.stage svg{height:230px}.stage h3{font-size:23px;margin:5px 0 6px}.stage p{font-size:16px;line-height:1.6}
+.diagram{padding:14px 8px 26px}.feature{grid-template-columns:300px minmax(0,1fr)}
+.feature.reverse{grid-template-columns:minmax(0,1fr) 270px}.feature.reverse .art{order:2}
+.art svg{height:204px}.feature.reverse .art svg{height:190px}
+</style>
+</head>
+<body><svg xmlns="http://www.w3.org/2000/svg" class="symbols" aria-hidden="true"><defs><g id="rosette"><path transform="rotate(0.0)" d="M0 0 Q-15 -23.85 0 -45 Q15 -23.85 0 0Z" fill="#8da585" stroke="#657b61" stroke-width="1.2" stroke-linejoin="round"/><path transform="rotate(51.42857142857143)" d="M0 0 Q-15 -23.85 0 -45 Q15 -23.85 0 0Z" fill="#8da585" stroke="#657b61" stroke-width="1.2" stroke-linejoin="round"/><path transform="rotate(102.85714285714286)" d="M0 0 Q-15 -23.85 0 -45 Q15 -23.85 0 0Z" fill="#8da585" stroke="#657b61" stroke-width="1.2" stroke-linejoin="round"/><path transform="rotate(154.28571428571428)" d="M0 0 Q-15 -23.85 0 -45 Q15 -23.85 0 0Z" fill="#8da585" stroke="#657b61" stroke-width="1.2" stroke-linejoin="round"/><path transform="rotate(205.71428571428572)" d="M0 0 Q-15 -23.85 0 -45 Q15 -23.85 0 0Z" fill="#8da585" stroke="#657b61" stroke-width="1.2" stroke-linejoin="round"/><path transform="rotate(257.14285714285717)" d="M0 0 Q-15 -23.85 0 -45 Q15 -23.85 0 0Z" fill="#8da585" stroke="#657b61" stroke-width="1.2" stroke-linejoin="round"/><path transform="rotate(308.57142857142856)" d="M0 0 Q-15 -23.85 0 -45 Q15 -23.85 0 0Z" fill="#8da585" stroke="#657b61" stroke-width="1.2" stroke-linejoin="round"/><path transform="rotate(20.0)" d="M0 0 Q-12 -16.96 0 -32 Q12 -16.96 0 0Z" fill="#a8b99a" stroke="#657b61" stroke-width="1.2" stroke-linejoin="round"/><path transform="rotate(92.0)" d="M0 0 Q-12 -16.96 0 -32 Q12 -16.96 0 0Z" fill="#a8b99a" stroke="#657b61" stroke-width="1.2" stroke-linejoin="round"/><path transform="rotate(164.0)" d="M0 0 Q-12 -16.96 0 -32 Q12 -16.96 0 0Z" fill="#a8b99a" stroke="#657b61" stroke-width="1.2" stroke-linejoin="round"/><path transform="rotate(236.0)" d="M0 0 Q-12 -16.96 0 -32 Q12 -16.96 0 0Z" fill="#a8b99a" stroke="#657b61" stroke-width="1.2" stroke-linejoin="round"/><path transform="rotate(308.0)" d="M0 0 Q-12 -16.96 0 -32 Q12 -16.96 0 0Z" fill="#a8b99a" stroke="#657b61" stroke-width="1.2" stroke-linejoin="round"/><path transform="rotate(40.0)" d="M0 0 Q-8 -10.600000000000001 0 -20 Q8 -10.600000000000001 0 0Z" fill="#c3cfa8" stroke="#657b61" stroke-width="1.2" stroke-linejoin="round"/><path transform="rotate(130.0)" d="M0 0 Q-8 -10.600000000000001 0 -20 Q8 -10.600000000000001 0 0Z" fill="#c3cfa8" stroke="#657b61" stroke-width="1.2" stroke-linejoin="round"/><path transform="rotate(220.0)" d="M0 0 Q-8 -10.600000000000001 0 -20 Q8 -10.600000000000001 0 0Z" fill="#c3cfa8" stroke="#657b61" stroke-width="1.2" stroke-linejoin="round"/><path transform="rotate(310.0)" d="M0 0 Q-8 -10.600000000000001 0 -20 Q8 -10.600000000000001 0 0Z" fill="#c3cfa8" stroke="#657b61" stroke-width="1.2" stroke-linejoin="round"/><circle r="4" fill="#d6d9b5"/></g><g id="potted"><ellipse cy="38" rx="36" ry="5" fill="#907651" opacity=".12"/><path d="M-30 0 L-23 34 Q0 40 23 34 L30 0Z" fill="#d3aa88" stroke="#96775d" stroke-width="1.4"/><ellipse cy="0" rx="30" ry="7" fill="#b89b77" stroke="#96775d" stroke-width="1.4"/><path d="M-29 2Q0 12 29 2" fill="none" stroke="#af8666" stroke-width="2"/><use href="#rosette" transform="translate(0 -18) scale(0.77)"/></g>
+<marker id="flow-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M1 1L8 5L1 9" fill="none" stroke="#6c9385" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></marker>
+<marker id="damp-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M1 1L8 5L1 9" fill="none" stroke="#8ba7b0" stroke-width="1.7" stroke-linecap="round"/></marker>
+<g id="drop"><path d="M0 -10Q-9 2 -5 6Q0 11 5 6Q9 2 0 -10Z" fill="#92b4be" stroke="#7699a4" stroke-width=".9"/></g>
+<g id="fan"><circle r="34" fill="#edf0e7" stroke="#8b9583" stroke-width="2"/><g fill="#a6b7a5" stroke="#7b937e" stroke-width=".8"><path d="M0 -3Q-23 -4 -15 -23Q5 -31 8 -13Z"/><path d="M0 -3Q-23 -4 -15 -23Q5 -31 8 -13Z" transform="rotate(120)"/><path d="M0 -3Q-23 -4 -15 -23Q5 -31 8 -13Z" transform="rotate(240)"/></g><circle r="5" fill="#879c86"/><circle r="29" fill="none" stroke="#b1b9a7" stroke-width="1"/><path d="M-5 34V53H5V34M-25 58Q0 51 25 58V62H-25Z" fill="#b6b7a5" stroke="#8c9481" stroke-width="1.4"/></g>
+<g id="soilpot"><path d="M-48 0H48L37 76Q0 83 -37 76Z" fill="#d0a385" stroke="#94745e" stroke-width="1.6"/><path d="M-41 6H41L31 71Q0 77 -31 71Z" fill="#d8c5a5"/><path d="M-40 6H40" stroke="#a88a67" stroke-width="2"/><ellipse cx="-30" cy="13" rx="5" ry="3" fill="#b8a68b" stroke="#a19178" stroke-width=".5"/><ellipse cx="-18" cy="13" rx="5" ry="3" fill="#e5d5b5" stroke="#a19178" stroke-width=".5"/><ellipse cx="-6" cy="13" rx="5" ry="3" fill="#cdbb9a" stroke="#a19178" stroke-width=".5"/><ellipse cx="6" cy="13" rx="5" ry="3" fill="#b8a68b" stroke="#a19178" stroke-width=".5"/><ellipse cx="18" cy="13" rx="5" ry="3" fill="#e5d5b5" stroke="#a19178" stroke-width=".5"/><ellipse cx="30" cy="13" rx="5" ry="3" fill="#cdbb9a" stroke="#a19178" stroke-width=".5"/><ellipse cx="-28" cy="24" rx="5" ry="3" fill="#e5d5b5" stroke="#a19178" stroke-width=".5"/><ellipse cx="-16" cy="24" rx="5" ry="3" fill="#cdbb9a" stroke="#a19178" stroke-width=".5"/><ellipse cx="-4" cy="24" rx="5" ry="3" fill="#b8a68b" stroke="#a19178" stroke-width=".5"/><ellipse cx="8" cy="24" rx="5" ry="3" fill="#e5d5b5" stroke="#a19178" stroke-width=".5"/><ellipse cx="20" cy="24" rx="5" ry="3" fill="#cdbb9a" stroke="#a19178" stroke-width=".5"/><ellipse cx="-26" cy="35" rx="5" ry="3" fill="#cdbb9a" stroke="#a19178" stroke-width=".5"/><ellipse cx="-14" cy="35" rx="5" ry="3" fill="#b8a68b" stroke="#a19178" stroke-width=".5"/><ellipse cx="-2" cy="35" rx="5" ry="3" fill="#e5d5b5" stroke="#a19178" stroke-width=".5"/><ellipse cx="10" cy="35" rx="5" ry="3" fill="#cdbb9a" stroke="#a19178" stroke-width=".5"/><ellipse cx="22" cy="35" rx="5" ry="3" fill="#b8a68b" stroke="#a19178" stroke-width=".5"/><ellipse cx="-24" cy="46" rx="5" ry="3" fill="#b8a68b" stroke="#a19178" stroke-width=".5"/><ellipse cx="-12" cy="46" rx="5" ry="3" fill="#e5d5b5" stroke="#a19178" stroke-width=".5"/><ellipse cx="0" cy="46" rx="5" ry="3" fill="#cdbb9a" stroke="#a19178" stroke-width=".5"/><ellipse cx="12" cy="46" rx="5" ry="3" fill="#b8a68b" stroke="#a19178" stroke-width=".5"/><ellipse cx="24" cy="46" rx="5" ry="3" fill="#e5d5b5" stroke="#a19178" stroke-width=".5"/><ellipse cx="-22" cy="57" rx="5" ry="3" fill="#e5d5b5" stroke="#a19178" stroke-width=".5"/><ellipse cx="-10" cy="57" rx="5" ry="3" fill="#cdbb9a" stroke="#a19178" stroke-width=".5"/><ellipse cx="2" cy="57" rx="5" ry="3" fill="#b8a68b" stroke="#a19178" stroke-width=".5"/><ellipse cx="14" cy="57" rx="5" ry="3" fill="#e5d5b5" stroke="#a19178" stroke-width=".5"/><path d="M0 2Q-8 20 2 32T-1 67M-1 19Q-23 25 -20 49M1 33Q21 42 21 61M0 49L-14 65" fill="none" stroke="#f5e9cd" stroke-width="3.5" stroke-linecap="round"/><use href="#rosette" transform="translate(0 -16) scale(.85)"/></g></defs></svg><div class="viewport">
+<main class="canvas" id="appCanvas">
+<header class="page-header">
+<nav class="nav" aria-label="ページ移動">
+<a href="basics.html">
+<span class="back-arrow">‹</span>もどる</a>
+<a href="index.html" class="home">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+<path d="M3 10.5 12 3l9 7.5M5.5 9.5V20h13V9.5"/>
+</svg>表紙</a>
+</nav>
+<h1 class="page-title">風通しのきほん</h1>
+<span class="page-kicker">育て方の5つの基本</span>
+</header>
+<div class="scroll-area" id="scrollArea">
+<section class="hero"><h2>風を当てるより、空気を流す。</h2><p>葉のまわりに湿気や熱がこもらない環境をつくりましょう。</p></section><section class="diagram" aria-labelledby="diagram-title"><div class="diagram-head"><h2 id="diagram-title">多肉のまわりの空気を見てみると</h2></div><div class="stages"><div class="stage"><svg viewBox="0 0 420 205" role="img" aria-label="開けた場所では空気が株の周囲を通り抜ける"><path d="M24 179H396" stroke="#b4bda7" stroke-width="1.4"/><path d="M24 180H396V194H24Z" fill="#d4cfb8" opacity=".27"/><use href="#potted" transform="translate(210 134) scale(1.16)"/><path d="M35 52C100 33 158 37 205 40S318 40 383 28" fill="none" stroke="#6c9385" stroke-width="2.5" stroke-linecap="round" marker-end="url(#flow-arrow)"/><path d="M28 103C79 95 119 93 151 105" fill="none" stroke="#6c9385" stroke-width="2.5" stroke-linecap="round" marker-end="url(#flow-arrow)"/><path d="M267 108C310 97 343 96 389 85" fill="none" stroke="#6c9385" stroke-width="2.5" stroke-linecap="round" marker-end="url(#flow-arrow)"/><path d="M35 153C82 149 113 151 161 153" fill="none" stroke="#6c9385" stroke-width="2.5" stroke-linecap="round" marker-end="url(#flow-arrow)"/><path d="M258 153C307 149 350 151 389 142" fill="none" stroke="#6c9385" stroke-width="2.5" stroke-linecap="round" marker-end="url(#flow-arrow)"/><use href="#drop" transform="translate(169 73) scale(0.55)" opacity="0.8"/><use href="#drop" transform="translate(269 65) scale(0.46)" opacity="0.52"/><use href="#drop" transform="translate(324 56) scale(0.38)" opacity="0.35"/></svg><h3>空気が流れる場所</h3><p>葉のまわりの湿った空気が入れ替わり、<br>水滴や土の水分が乾きやすくなる。</p></div><div class="stage"><svg viewBox="0 0 420 205" role="img" aria-label="囲まれた場所では湿った空気が株の近くにとどまる"><ellipse cx="210" cy="112" rx="130" ry="65" fill="#b6cdd0" opacity=".25"/><ellipse cx="210" cy="117" rx="91" ry="50" fill="#9bbcc4" opacity=".19"/><path d="M46 45V179H374V45" fill="none" stroke="#ab9d83" stroke-width="5" stroke-linecap="round"/><path d="M46 45H374" stroke="#c5baa4" stroke-width="2" stroke-dasharray="5 5"/><path d="M24 179H396" stroke="#b4bda7" stroke-width="1.4"/><path d="M24 180H396V194H24Z" fill="#d4cfb8" opacity=".27"/><use href="#potted" transform="translate(210 134) scale(1.16)"/><use href="#drop" transform="translate(117 94) scale(0.64)" opacity="0.8"/><use href="#drop" transform="translate(146 64) scale(0.55)" opacity="0.85"/><use href="#drop" transform="translate(177 85) scale(0.49)" opacity="0.8"/><use href="#drop" transform="translate(255 68) scale(0.59)" opacity="0.8"/><use href="#drop" transform="translate(292 106) scale(0.65)" opacity="0.85"/><use href="#drop" transform="translate(322 78) scale(0.46)" opacity="0.65"/><use href="#drop" transform="translate(132 142) scale(0.52)" opacity="0.72"/><use href="#drop" transform="translate(283 147) scale(0.58)" opacity="0.7"/><path d="M94 70Q75 108 102 128" fill="none" stroke="#8ba7b0" stroke-width="2" stroke-linecap="round" marker-end="url(#damp-arrow)"/><path d="M326 131Q350 106 332 77" fill="none" stroke="#8ba7b0" stroke-width="2" stroke-linecap="round" marker-end="url(#damp-arrow)"/></svg><h3>空気がこもる場所</h3><p>湿った空気がとどまりやすく、<br>葉や土が湿った状態が長引くことも。</p></div></div></section><section aria-labelledby="main-title"><div class="section-head"><h2 id="main-title">多肉に心地よい風通し</h2></div><article class="feature"><div class="art"><svg viewBox="0 0 300 200" role="img" aria-label="鉢の間隔を空けた配置と密集した配置"><path d="M10 79H290M10 171H290" stroke="#b4bda7" stroke-width="1.3"/><use href="#potted" transform="translate(95 47) scale(0.72)"/><use href="#potted" transform="translate(206 47) scale(0.72)"/><path d="M150 9V67" fill="none" stroke="#6c9385" stroke-width="2.5" stroke-linecap="round" marker-end="url(#flow-arrow)"/><text x="150" y="96" text-anchor="middle" font-size="14" fill="#557353">鉢の間に空間</text><use href="#potted" transform="translate(108 140) scale(0.72)"/><use href="#potted" transform="translate(160 140) scale(0.72)"/><use href="#potted" transform="translate(212 140) scale(0.72)"/><text x="150" y="190" text-anchor="middle" font-size="14" fill="#557353">葉が重なるほど密集</text></svg></div><div><div class="article-title"><span class="article-num">01</span><h3>鉢のまわりに空間をつくる</h3></div><p>鉢をぎっしり並べたり、壁や棚の奥に押し込んだりすると、葉のまわりに空気がとどまりやすくなります。鉢同士の間隔を少し空けて、株の周囲を空気が通れるようにしましょう。</p><p class="note">風が通る隙間は、葉の高さにもつくりましょう。</p></div></article><article class="feature reverse"><div class="art"><svg viewBox="0 0 300 200" role="img" aria-label="空気が流れる鉢と乾きにくい鉢の模式図"><use href="#soilpot" transform="translate(74 80) scale(.83)"/><use href="#soilpot" transform="translate(225 80) scale(.83)"/><path d="M191 86H259L251 137Q225 141 199 137Z" fill="#87adb7" opacity=".35"/><path d="M22 45Q55 16 115 35" fill="none" stroke="#6c9385" stroke-width="2.5" stroke-linecap="round" marker-end="url(#flow-arrow)"/><path d="M32 76Q21 61 31 48" fill="none" stroke="#6c9385" stroke-width="2.5" stroke-linecap="round" marker-end="url(#flow-arrow)"/><path d="M264 60Q280 37 258 22" fill="none" stroke="#8ba7b0" stroke-width="1.5" stroke-linecap="round" marker-end="url(#damp-arrow)"/><use href="#drop" transform="translate(229 33) scale(0.5)" opacity="0.65"/><use href="#drop" transform="translate(267 43) scale(0.45)" opacity="0.5"/><text x="74" y="163" text-anchor="middle" font-size="14" fill="#557353">乾きやすい</text><text x="225" y="163" text-anchor="middle" font-size="14" fill="#557353">乾きにくい</text></svg></div><div><div class="article-title"><span class="article-num">02</span><h3>風通しで土の乾き方も変わる</h3></div><p>水やりのあと、土の表面や鉢から水分が蒸発します。空気が流れると、その周囲の湿った空気が入れ替わり、乾きやすくなります。同じ土と鉢でも、置き場所によって乾く速さは違います。</p><p class="note">水やりのタイミングは、実際の土の乾きで判断しましょう。</p></div></article><article class="feature"><div class="art"><svg viewBox="0 0 300 200" role="img" aria-label="梅雨の湿気と夏の暑さ"><path d="M14 44Q24 20 43 30Q63 5 82 32Q101 18 116 42Q126 61 102 64H30Q10 64 14 44Z" fill="#bacbd0" stroke="#9bafb6"/><use href="#drop" transform="translate(27 83) scale(0.8)" opacity="1"/><use href="#drop" transform="translate(61 81) scale(0.8)" opacity="1"/><use href="#drop" transform="translate(96 83) scale(0.8)" opacity="1"/><circle cx="240" cy="43" r="26" fill="#e1c37d" stroke="#c5a45b"/><path d="M240 8V0" transform="rotate(0 240 43)" stroke="#c5a45b" stroke-width="2"/><path d="M240 8V0" transform="rotate(45 240 43)" stroke="#c5a45b" stroke-width="2"/><path d="M240 8V0" transform="rotate(90 240 43)" stroke="#c5a45b" stroke-width="2"/><path d="M240 8V0" transform="rotate(135 240 43)" stroke="#c5a45b" stroke-width="2"/><path d="M240 8V0" transform="rotate(180 240 43)" stroke="#c5a45b" stroke-width="2"/><path d="M240 8V0" transform="rotate(225 240 43)" stroke="#c5a45b" stroke-width="2"/><path d="M240 8V0" transform="rotate(270 240 43)" stroke="#c5a45b" stroke-width="2"/><path d="M240 8V0" transform="rotate(315 240 43)" stroke="#c5a45b" stroke-width="2"/><path d="M161 66Q171 52 180 66T200 66M213 93Q223 79 232 93T252 93" fill="none" stroke="#c7a46b" stroke-width="2"/><use href="#potted" transform="translate(148 139) scale(1.15)"/><use href="#drop" transform="translate(110 98) scale(0.6)" opacity="0.8"/><use href="#drop" transform="translate(190 103) scale(0.6)" opacity="0.8"/><use href="#drop" transform="translate(152 76) scale(0.5)" opacity="0.65"/><text x="60" y="118" text-anchor="middle" font-size="14" fill="#557353">梅雨の湿気</text><text x="242" y="118" text-anchor="middle" font-size="14" fill="#557353">夏の暑さ</text></svg></div><div><div class="article-title"><span class="article-num">03</span><h3>梅雨と夏は、蒸れに気をつける</h3></div><p>湿度が高い梅雨は、水分が蒸発しにくくなります。夏は高温が重なり、種類によっては生育も鈍ります。葉や土が長く湿ったままだと、傷みや病気につながることがあります。雨を避け、熱と湿気をため込まない場所を選びましょう。</p><p class="note">風だけで湿度や暑さを解決できないこともあります。</p></div></article><article class="feature reverse"><div class="art"><svg viewBox="0 0 300 200" role="img" aria-label="サーキュレーターで部屋の空気を循環させる例"><path d="M15 12H285V169H15Z" fill="none" stroke="#b1a88e" stroke-width="2"/><path d="M15 52V117" stroke="#a4bdb5" stroke-width="5"/><use href="#fan" transform="translate(65 102) scale(.68)"/><use href="#potted" transform="translate(214 135) scale(0.8)"/><path d="M72 63Q100 22 171 26T263 55" fill="none" stroke="#6c9385" stroke-width="2.5" stroke-linecap="round" marker-end="url(#flow-arrow)"/><path d="M263 55Q286 97 255 114" fill="none" stroke="#6c9385" stroke-width="2.5" stroke-linecap="round" marker-end="url(#flow-arrow)"/><path d="M197 164Q116 172 67 146" fill="none" stroke="#6c9385" stroke-width="2.5" stroke-linecap="round" marker-end="url(#flow-arrow)"/><text x="150" y="191" text-anchor="middle" font-size="14" fill="#557353">部屋全体の空気を循環</text></svg></div><div><div class="article-title"><span class="article-num">04</span><h3>室内では空気を循環させる</h3></div><p>窓を開けられる日は、空気の出入りをつくるとよいでしょう。窓を開けにくいときは、サーキュレーターなどで部屋の空気をゆるやかに動かします。植物に強い風を当て続ける必要はありません。</p><p class="note">空気の循環と換気は別のもの。湿気や熱がこもるときは換気も考えましょう。</p></div></article></section><section aria-labelledby="extra-title"><div class="section-head"><h2 id="extra-title">風は強ければよい、ではない</h2></div><article class="feature" style="min-height:190px;border-bottom:0;padding-top:10px;padding-bottom:10px"><div class="art"><svg viewBox="0 0 300 170" role="img" aria-label="強風を直接当て続けないようにする例"><path d="M20 45H170M18 65H133M20 85H160" stroke="#90a7a2" stroke-width="3" stroke-linecap="round" marker-end="url(#flow-arrow)"/><use href="#potted" transform="translate(225 100) scale(0.93)"/><path d="M184 45L189 140" stroke="#c5a486" stroke-width="5" opacity=".7"/><text x="150" y="151" text-anchor="middle" font-size="14" fill="#557353">強い風は直接当て続けない</text></svg></div><div><p>強い風が続くと、土が予想以上に早く乾いたり、鉢が倒れたりすることがあります。エアコンの冷風・温風も直接当て続けないようにしましょう。冬は冷たい風から守りながら、空気がこもらないように工夫します。</p><p class="note">目指すのは、強い風ではなく、穏やかに空気が動く環境です。</p></div></article></section><aside class="footer">
+<div>
+<h3>自分の多肉に合う環境へ</h3>
+<p>風と水やり、置き場所は互いに関係しています。</p>
+</div>
+<div class="footer-links">
+<a href="basics.html">5つの基本にもどる　›</a>
+<a href="sim.html">光・風・水を試す　›</a>
+<a href="sos.html">困ったときのSOS　›</a>
+</div>
+</aside>
+<!-- 参考資料：Iowa State University Extension https://yardandgarden.extension.iastate.edu/how-to/growing-succulents-indoors ; University of Missouri Extension https://extension.missouri.edu/news/succulent-mania-takes-root ; University of Saskatchewan https://gardening.usask.ca/articles-and-lists/articles-indoor-growing/humidity-requirements.php ; NC State Extension https://content.ces.ncsu.edu/extension-gardener-handbook/18-plants-grown-in-containers ; University of Alaska Fairbanks https://www.uaf.edu/ces/publications/database/gardening/controlling-greenhouse-environment.php -->
+</div>
+</main>
+</div>
+<script>
+// 既存の展示用キャンバスと同じ比率。作業中は自動復帰を無効化。
+const canvas=document.getElementById('appCanvas');function fitCanvas(){const scale=Math.min(innerWidth/1080,innerHeight/786);if(window.CSS&&CSS.supports('zoom','1')){canvas.style.zoom=scale;canvas.style.transform='none'}
+else{canvas.style.transform=`scale(${scale})`}}
+addEventListener('resize',fitCanvas);addEventListener('orientationchange',fitCanvas);fitCanvas();
+const month=new URLSearchParams(location.search).get('month');if(month&&/^([1-9]|1[0-2])$/.test(month)){document.querySelectorAll('a[href$=".html"]').forEach(a=>{const u=new URL(a.getAttribute('href'),location.href);u.searchParams.set('month',month);a.setAttribute('href',u.pathname.split('/').pop()+u.search)})}
+const AUTO_RETURN_MS=0;if(AUTO_RETURN_MS){let idle;const reset=()=>{clearTimeout(idle);idle=setTimeout(()=>location.href='index.html',AUTO_RETURN_MS)};['pointerdown','touchstart','keydown','scroll'].forEach(e=>document.addEventListener(e,reset,{passive:true,capture:true}));reset()}
+</script>
+</body>
+</html>
