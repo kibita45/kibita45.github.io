@@ -4,10 +4,11 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
   <!-- =========================================================================
-    保木平珈琲 Murmure｜展示用iPad Webアプリ「多肉の育て方」（v2・軽量化版）
-    - sim.html と完全統一した「温かいクリーム紙 × こげ茶インク × 淡面＋枠線 × 左ガイドレーン」
-    - base64埋め込み画像を外部参照（images/）へ戻して軽量化
-    - ステップ2に「※わからないときは、お気軽にスタッフまで」を追記
+       保木平珈琲 Murmure｜展示用iPad Webアプリ「多肉の育て方」（v2・軽量化版＋準備中スタンプ）
+       - sim.html と完全統一した「温かいクリーム紙 × こげ茶インク × 淡面＋枠線 × 左ガイドレーン」
+       - base64埋め込み画像を外部参照（images/）へ戻して軽量化
+       - ステップ1（5つの基本）に薄く広い「準備中」透かしスタンプを配置
+       - ステップ2に「※わからないときは、お気軽にスタッフまで」を追記
   ========================================================================= -->
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
@@ -395,6 +396,7 @@
     .point-card {
       position: absolute;
       z-index: 1;
+      overflow: hidden;
       width: 302px;
       height: 116px;
       display: flex;
@@ -504,6 +506,54 @@
       padding-bottom: 1px;
       box-shadow: 0 1px 4px rgba(59, 45, 35, 0.08);
       pointer-events: none;
+    }
+
+    /* ================= 準備中 透かしスタンプ（広く薄く・奥の文字が読める設計） ================= */
+    .point-card.is-wip .point-arrow {
+      opacity: 0.45;
+    }
+
+    .wip-stamp {
+      position: absolute;
+      inset: 0;
+      z-index: 4;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .wip-stamp-mark {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 214px;
+      padding: 6px 24px;
+      transform: rotate(-10deg);
+      border: 2px solid rgba(152, 74, 48, 0.27);
+      outline: 1px solid rgba(152, 74, 48, 0.16);
+      outline-offset: 3px;
+      border-radius: 8px;
+      background: rgba(255, 253, 248, 0.18);
+      font-family: var(--font-serif);
+      font-size: 26px;
+      font-weight: 700;
+      letter-spacing: 0.40em;
+      padding-left: calc(24px + 0.40em);
+      line-height: 1.15;
+      color: rgba(152, 74, 48, 0.29);
+      white-space: nowrap;
+    }
+
+    .care-map .center-bottom .wip-stamp-mark {
+      min-width: 226px;
+      padding: 3px 22px;
+      transform: rotate(-6deg);
+      font-size: 21px;
+      letter-spacing: 0.42em;
+      padding-left: calc(22px + 0.42em);
+      outline-offset: 2px;
     }
 
     /* ================= 4. ステップ2：タイプと季節に合わせる ================= */
@@ -684,7 +734,7 @@
     .sim-cta svg { width: 17px; height: 17px; color: var(--axis); }
 
     .preview-dialog {
-      border: 1px solid var(--line-strong);
+      border: 1.2px solid var(--line-strong);
       border-radius: 18px;
       background: var(--card-paper);
       color: var(--ink-main);
@@ -692,15 +742,26 @@
       margin: auto;
       max-width: 86vw;
       width: 420px;
-      box-shadow: 0 12px 48px #2d1f1633;
+      box-shadow: 0 12px 48px rgba(45, 31, 22, 0.2);
       text-align: center;
     }
 
-    .preview-dialog::backdrop { background: #2d1f1655; }
-    .preview-dialog h2 { font: 700 27px var(--font-serif); margin-bottom: 14px; }
-    .preview-dialog p { font-size: 17px; margin: 10px 0; }
-    .preview-dialog small { font-size: 13px; color: var(--ink-muted); display: block; margin: 16px 0; }
-    .preview-dialog button { padding: 10px 28px; border-radius: 10px; border: 1px solid var(--line-strong); background: var(--axis-soft); font-weight: 700; }
+    .preview-dialog::backdrop { background: rgba(45, 31, 22, 0.34); }
+    .preview-dialog h2 { font: 700 26px var(--font-serif); margin-bottom: 12px; color: var(--ink-main); }
+    .preview-dialog p { font-size: 16.5px; font-weight: 700; color: var(--ink-sub); margin: 8px 0; }
+    .preview-dialog small { font-size: 14px; line-height: 1.65; color: var(--ink-muted); display: block; margin: 14px 0 20px; }
+    .preview-dialog button {
+      padding: 10px 30px;
+      border-radius: 999px;
+      border: 1.5px solid var(--axis);
+      border-bottom: 2.5px solid var(--axis-dark);
+      background: var(--axis-fill);
+      color: var(--ink-main);
+      font-size: 14.5px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .preview-dialog button:active { transform: translateY(1px); }
   </style>
 </head>
 <body>
@@ -756,7 +817,7 @@
                 </g>
               </svg>
             </div>
-            <a class="point-card is-wind left-top" href="basics_wind.html">
+            <a class="point-card is-wind is-wip left-top" href="basics_wind.html">
               <div aria-hidden="true" class="point-icon">
                 <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewBox="0 0 24 24">
                   <path d="M4 9h11a2.5 2.5 0 1 0-2.5-2.5"></path>
@@ -769,8 +830,9 @@
                 <p class="point-phrase">空気がこもらない場所へ</p>
               </div>
               <span aria-hidden="true" class="point-arrow">›</span>
+              <span class="wip-stamp" aria-hidden="true"><span class="wip-stamp-mark">準備中</span></span>
             </a>
-            <a class="point-card is-light right-top" href="basics_light.html">
+            <a class="point-card is-light is-wip right-top" href="basics_light.html">
               <div aria-hidden="true" class="point-icon">
                 <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewBox="0 0 24 24">
                   <circle cx="12" cy="12" r="4.2"></circle>
@@ -789,8 +851,9 @@
                 <p class="point-phrase">明るさを確保する</p>
               </div>
               <span aria-hidden="true" class="point-arrow">›</span>
+              <span class="wip-stamp" aria-hidden="true"><span class="wip-stamp-mark">準備中</span></span>
             </a>
-            <a class="point-card is-water left-bottom" href="basics_water.html">
+            <a class="point-card is-water is-wip left-bottom" href="basics_water.html">
               <div aria-hidden="true" class="point-icon">
                 <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewBox="0 0 24 24">
                   <path d="M12 3.5C12 3.5 6 10.2 6 14.5a6 6 0 0 0 12 0C18 10.2 12 3.5 12 3.5Z"></path>
@@ -802,8 +865,9 @@
                 <p class="point-phrase">土の乾きと葉のサインで</p>
               </div>
               <span aria-hidden="true" class="point-arrow">›</span>
+              <span class="wip-stamp" aria-hidden="true"><span class="wip-stamp-mark">準備中</span></span>
             </a>
-            <a class="point-card is-earth right-bottom" href="basics_soil.html">
+            <a class="point-card is-earth is-wip right-bottom" href="basics_soil.html">
               <div aria-hidden="true" class="point-icon">
                 <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewBox="0 0 24 24">
                   <path d="M5 9h14l-1.5 10.5a1.5 1.5 0 0 1-1.5 1.3H8a1.5 1.5 0 0 1-1.5-1.3L5 9Z"></path>
@@ -816,8 +880,9 @@
                 <p class="point-phrase">環境に合う乾きやすさを</p>
               </div>
               <span aria-hidden="true" class="point-arrow">›</span>
+              <span class="wip-stamp" aria-hidden="true"><span class="wip-stamp-mark">準備中</span></span>
             </a>
-            <a class="point-card is-earth center-bottom" href="basics_fertilizer.html">
+            <a class="point-card is-earth is-wip center-bottom" href="basics_fertilizer.html">
               <div aria-hidden="true" class="point-icon">
                 <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewBox="0 0 24 24">
                   <path d="M12 20v-8"></path>
@@ -830,6 +895,7 @@
                 <p class="point-phrase">必要なときに、控えめに</p>
               </div>
               <span aria-hidden="true" class="point-arrow">›</span>
+              <span class="wip-stamp" aria-hidden="true"><span class="wip-stamp-mark">準備中</span></span>
             </a>
           </div>
         </section>
@@ -921,7 +987,7 @@
   <dialog class="preview-dialog" id="pointPreview">
     <h2 id="previewTitle"></h2>
     <p id="previewPhrase"></p>
-    <small>詳細ページは今後追加予定です（配置確認用の試作）</small>
+    <small>くわしい解説ページはただいま準備中です。<br />少しずつ書き足していく予定ですので、どうぞお楽しみに！</small>
     <button id="previewClose" type="button">閉じる</button>
   </dialog>
 

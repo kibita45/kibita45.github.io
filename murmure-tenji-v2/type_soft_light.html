@@ -1,31 +1,27 @@
 <!DOCTYPE html>
+
 <html lang="ja">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
-
-  <!-- =========================================================================
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/>
+<!-- =========================================================================
     保木平珈琲 Murmure｜展示用iPad Webアプリ「タイプ別ガイド：やさしい光タイプ」（v2・表記統一版）
     - ヘッダー固定（basics.html / sim.html 統一・英語削除・タイプ横に代表品種）
     - 関連リンク表記を「光・風・水を試す」へ統一
   ========================================================================= -->
-
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-  <meta name="apple-mobile-web-app-title" content="多肉の育て方" />
-  <meta name="theme-color" content="#f6f0e4" />
-  <meta name="format-detection" content="telephone=no" />
-  <link rel="manifest" href="manifest.json" />
-  <link rel="apple-touch-icon" sizes="180x180" href="images/apple-touch-icon.png" />
-  <link rel="icon" type="image/png" sizes="512x512" href="images/icon-512.png" />
-
-  <title>Murmure｜やさしい光タイプ（ハオルチア・ガステリア・ハオルチオプシス など）</title>
-
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;600;700&family=Zen+Maru+Gothic:wght@400;500;700&display=swap" rel="stylesheet" />
-
-  <style>
+<meta content="yes" name="apple-mobile-web-app-capable"/>
+<meta content="default" name="apple-mobile-web-app-status-bar-style"/>
+<meta content="多肉の育て方" name="apple-mobile-web-app-title"/>
+<meta content="#f6f0e4" name="theme-color"/>
+<meta content="telephone=no" name="format-detection"/>
+<link rel="manifest" href="manifest.json" />
+<link href="images/apple-touch-icon.png" rel="apple-touch-icon" sizes="180x180"/>
+<link href="images/icon-512.png" rel="icon" sizes="512x512" type="image/png"/>
+<title>Murmure｜やさしい光タイプ（ハオルチア・ガステリア・ハオルチオプシス など）</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;600;700&amp;family=Zen+Maru+Gothic:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<style>
     :root {
       --bg-outer: #e9dfd0;
       --bg-paper: #f6f0e4;
@@ -47,7 +43,15 @@
       --type-soft: rgba(77, 107, 56, 0.10);
       --type-bd: rgba(77, 107, 56, 0.34);
 
+      --s-grow: #486e3e;
+      --s-grow-dark: #385930;
+      --s-summer: #b05c1c;
+      --s-summer-dark: #8f4510;
+      --s-winter: #3b6b8a;
+      --s-winter-dark: #2b5570;
+
       --shadow-soft: 0 2px 10px rgba(72, 54, 38, 0.06);
+
       --font-serif: "Shippori Mincho", "Hiragino Mincho ProN", "Yu Mincho", serif;
       --font-ui: "Zen Maru Gothic", "Hiragino Maru Gothic ProN", sans-serif;
     }
@@ -94,108 +98,185 @@
     .chart-svg { width: 100%; height: auto; display: block; overflow: visible; }
     .chart-footer { display: flex; align-items: center; justify-content: flex-end; gap: 16px; padding: 0 6px; }
     .chart-footer-links { display: inline-flex; align-items: center; gap: 8px; flex-shrink: 0; }
-    .subtle-link-sep { width: 1px; height: 13px; background: var(--line-strong); opacity: 0.7; }
     .subtle-sim-link { display: inline-flex; align-items: center; gap: 5px; padding: 4px 10px; border-radius: 999px; background: transparent; border: 1px solid transparent; font-family: var(--font-ui); font-size: 13px; font-weight: 700; color: var(--axis); white-space: nowrap; transition: background-color 0.14s ease, border-color 0.14s ease; }
     .subtle-sim-link:hover { background: var(--axis-soft); border-color: var(--line-soft); }
     .subtle-sim-link:active { background: var(--axis-fill); }
     .subtle-sim-arrow { font-size: 15px; line-height: 1; color: var(--axis); }
-  </style>
+
+    .second-view { margin-top: 20px; padding-top: 18px; border-top: 1.5px dashed var(--line-strong); display: flex; flex-direction: column; gap: 28px; }
+
+    .footer-action-bar { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 18px 24px; background: var(--surface-muted); border: 1.4px solid var(--line-strong); border-radius: 14px; box-shadow: var(--shadow-soft); }
+    .footer-action-copy { display: flex; flex-direction: column; gap: 4px; }
+    .footer-action-title { font-family: var(--font-serif); font-size: 17.5px; font-weight: 700; color: var(--ink-main); }
+    .footer-action-desc { font-size: 13.5px; font-weight: 500; color: var(--ink-sub); }
+    .footer-action-btns { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
+
+    .cta-sim { display: inline-flex; align-items: center; gap: 9px; height: 46px; padding: 0 22px; background: var(--axis-fill); border: 1.8px solid var(--axis); border-bottom: 3px solid var(--axis-dark); border-radius: 999px; font-family: var(--font-ui); font-size: 14.5px; font-weight: 700; color: var(--ink-main); box-shadow: 0 2px 7px rgba(59, 45, 35, 0.10); white-space: nowrap; transition: background-color 0.14s ease, transform 0.08s ease; }
+    .cta-sim:hover { background: #e3d4bb; }
+    .cta-sim:active { transform: translateY(1px); }
+    .cta-sim svg { width: 16px; height: 16px; color: var(--axis); }
+    .cta-arrow { font-size: 17px; font-weight: 700; color: var(--axis); }
+
+    .cta-sub { display: inline-flex; align-items: center; gap: 7px; height: 46px; padding: 0 18px; background: var(--card-paper); border: 1.2px solid var(--line-soft); border-bottom: 2px solid var(--line-strong); border-radius: 999px; font-family: var(--font-ui); font-size: 14px; font-weight: 700; color: var(--ink-sub); white-space: nowrap; transition: background-color 0.12s ease, transform 0.08s ease; }
+    .cta-sub:hover { background: #fdf9f0; }
+    .cta-sub:active { transform: translateY(1px); }
+  
+    /* Scrollable care guide prototype — header and existing hero/graph retained. */
+    .chart-board { padding: 8px 8px 0; gap: 4px; }
+    .chart-heading { display:flex; align-items:baseline; gap:16px; padding:0 6px; }
+    .chart-heading h2 { font:700 21px/1.35 var(--font-serif); letter-spacing:.04em; }
+    .chart-heading span { font:500 13px var(--font-ui); color:var(--ink-muted); }
+    .chart-svg-wrap { height:286px; }
+    .chart-svg { width:100%; height:100%; }
+    .chart-footer { padding: 0 6px 4px; }
+    .second-view { margin-top:16px; border-top:1px solid var(--line-strong); padding-top:16px; gap:28px; }
+    .section-intro { display:flex; align-items:baseline; gap:17px; padding:0 6px 12px; }
+    .section-intro h2 { font:700 25px/1.3 var(--font-serif); letter-spacing:.04em; }
+    .section-intro span { font-size:14px; color:var(--ink-muted); }
+    .care-story { display:grid; grid-template-columns:230px 1fr; align-items:center; gap:30px; padding:12px 16px 24px; min-height:218px; border-bottom:1px solid var(--line-soft); }
+    .care-story.reverse { grid-template-columns:1fr 230px; }
+    .care-story.reverse .story-art { order:2; }
+    .story-art { display:flex; align-items:center; justify-content:center; height:180px; overflow:hidden; border-radius:13px; }
+    .story-art img { width:180px; height:180px; object-fit:cover; mix-blend-mode:multiply; border-radius:13px; }
+    .story-art svg { width:100%; height:100%; }
+    .story-copy { display:flex; flex-direction:column; align-items:flex-start; gap:9px; }
+    .story-kicker { font:700 13px var(--font-ui); letter-spacing:.06em; color:var(--type-dark); }
+    .story-kicker.grow { color:var(--s-grow-dark); } .story-kicker.summer { color:var(--s-summer-dark); } .story-kicker.winter { color:var(--s-winter-dark); }
+    .story-copy h3, .enjoy-item h3 { font:700 23px/1.35 var(--font-serif); letter-spacing:.025em; }
+    .story-copy p, .enjoy-item p { font:500 16px/1.75 var(--font-ui); color:var(--ink-sub); }
+    .story-copy .story-tip { color:var(--ink-muted); font-size:14px; padding-left:12px; border-left:3px solid var(--line-strong); }
+    .enjoy-grid { display:grid; grid-template-columns:1fr 1fr; gap:24px; }
+    .enjoy-item { padding:16px 20px 20px; border:1px solid var(--line-soft); border-radius:14px; background:rgba(255,253,248,.55); display:flex; flex-direction:column; gap:9px; }
+    .enjoy-art { height:180px; display:flex; justify-content:center; align-items:center; overflow:hidden; }
+    .enjoy-art img { width:180px; height:180px; object-fit:contain; mix-blend-mode:multiply; }
+    .enjoy-art svg { height:100%; width:100%; }
+    .scroll-area { padding-bottom:36px; }
+
+  
+    .division-figure { position:relative; width:180px; height:180px; flex:none; }
+    .division-figure img { display:block; }
+    .division-figure svg { position:absolute; inset:0; width:100%; height:100%; pointer-events:none; }
+
+    /* 育てる楽しみ：水彩の縁を紙面に溶かし、余白を中心にトリミング */
+    .enjoy-art { height:246px; overflow:hidden; -webkit-mask-image:linear-gradient(to bottom,transparent 0%,#000 7%,#000 93%,transparent 100%); mask-image:linear-gradient(to bottom,transparent 0%,#000 7%,#000 93%,transparent 100%); }
+    .enjoy-item:nth-child(1) .enjoy-art { --art-size:278px; }
+    .enjoy-item:nth-child(2) .enjoy-art { --art-size:265px; }
+    .enjoy-art img { width:var(--art-size); height:var(--art-size); max-width:none; flex:none; object-fit:contain; mix-blend-mode:multiply; -webkit-mask-image:linear-gradient(to right,transparent,#000 9%,#000 91%,transparent),linear-gradient(to bottom,transparent,#000 9%,#000 91%,transparent); -webkit-mask-composite:source-in; mask-image:linear-gradient(to right,transparent,#000 9%,#000 91%,transparent),linear-gradient(to bottom,transparent,#000 9%,#000 91%,transparent); mask-composite:intersect; }
+    .enjoy-art .division-figure { width:var(--art-size); height:var(--art-size); }</style>
 </head>
 <body>
-  <div class="viewport-wrapper">
-    <main class="canvas" id="appCanvas">
-
-      <header class="page-header">
-        <div class="header-left">
-          <div class="header-nav-group">
-            <button class="back-btn" type="button" id="backBtn">
-              <span class="back-arrow" aria-hidden="true">‹</span>
-              <span>もどる</span>
-            </button>
-            <button class="home-btn" type="button" id="topHomeBtn">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <path d="M3 10.5 12 3l9 7.5" />
-                <path d="M5.5 9.5V20h13V9.5" />
-              </svg>
-              <span>表紙</span>
-            </button>
-          </div>
-          <div class="title-wrap">
-            <span class="header-type-dot" aria-hidden="true"></span>
-            <h1 class="page-title">やさしい光タイプ</h1>
-            <span class="header-species">ハオルチア・ガステリア・ハオルチオプシス など</span>
-          </div>
-        </div>
-      </header>
-
-      <div class="scroll-area" id="scrollArea">
-        <div class="first-view">
-          <section class="hero-spread" aria-label="やさしい光タイプの特徴">
-            <h2 class="hero-catch">強い日差しは苦手<br />やわらかな光を好む</h2>
-            <div class="hero-art-box" aria-hidden="true">
-              <img class="hero-art" src="images/hero_soft_light_preview.png" alt="" />
-            </div>
-          </section>
-
-          <section class="chart-board" aria-label="1年の成長リズムと注意点">
-            <div class="chart-svg-wrap">
-              <svg class="chart-svg" viewBox="0 0 1000 342" role="img" aria-label="春と秋にやさしい光で育ち、夏は直射と蒸れを避け、冬は明るい窓辺で過ごす成長リズムの模式図">
-                <defs>
-                  <linearGradient id="curveAreaSoft" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stop-color="#5d7d52" stop-opacity="0.18" />
-                    <stop offset="65%" stop-color="#5d7d52" stop-opacity="0.06" />
-                    <stop offset="100%" stop-color="#5d7d52" stop-opacity="0.00" />
-                  </linearGradient>
-                </defs>
-                <path d="M 175 124 L 175 46 L 310 46" fill="none" stroke="#537349" stroke-width="1.2" opacity="0.72" />
-                <path d="M 640 124 L 640 46 L 506 46" fill="none" stroke="#537349" stroke-width="1.2" opacity="0.72" />
-                <text x="175" y="34" text-anchor="middle" font-family="'Zen Maru Gothic', sans-serif" font-size="12.5" font-weight="700" letter-spacing="0.05em" fill="#46693c">春（3–5月）</text>
-                <text x="640" y="34" text-anchor="middle" font-family="'Zen Maru Gothic', sans-serif" font-size="12.5" font-weight="700" letter-spacing="0.05em" fill="#46693c">秋（9–11月）</text>
-                <text x="408" y="52" text-anchor="middle" font-family="'Shippori Mincho', serif" font-size="22" font-weight="700" letter-spacing="0.06em" fill="#2d1f16">育てる季節</text>
-                <text x="408" y="78" text-anchor="middle" font-family="'Zen Maru Gothic', sans-serif" font-size="13.8" font-weight="500" fill="#5a493b">やさしい光のもとで、植え替えや株分けに適した時期</text>
-                <line x1="34" y1="226" x2="966" y2="226" stroke="#cbbba2" stroke-width="1.1" />
-                <text x="36" y="130" font-family="'Zen Maru Gothic', sans-serif" font-size="11" font-weight="500" fill="#8f7d6b">成長が活発</text>
-                <text x="36" y="218" font-family="'Zen Maru Gothic', sans-serif" font-size="11" font-weight="500" fill="#8f7d6b">ゆるやか</text>
-                <path d="M 54 198 C 98 166, 134 128, 175 128 C 238 128, 316 212, 408 212 C 500 212, 574 128, 640 128 C 706 128, 768 206, 852 206 C 896 206, 926 198, 948 188 L 948 226 L 54 226 Z" fill="url(#curveAreaSoft)" />
-                <path d="M 54 198 C 98 166, 134 128, 175 128 C 238 128, 316 212, 408 212 C 500 212, 574 128, 640 128 C 706 128, 768 206, 852 206 C 896 206, 926 198, 948 188" fill="none" stroke="#486b3e" stroke-width="2.8" stroke-linecap="round" />
-                <circle cx="175" cy="128" r="5" fill="#486b3e" stroke="#f6f0e4" stroke-width="2.2" />
-                <circle cx="640" cy="128" r="5" fill="#486b3e" stroke="#f6f0e4" stroke-width="2.2" />
-                <line x1="408" y1="218" x2="408" y2="254" stroke="#b05c1c" stroke-width="1.3" opacity="0.85" />
-                <circle cx="408" cy="212" r="5.5" fill="#b05c1c" stroke="#f6f0e4" stroke-width="2.2" />
-                <text x="408" y="196" text-anchor="middle" font-family="'Zen Maru Gothic', sans-serif" font-size="12.5" font-weight="700" letter-spacing="0.06em" fill="#a85518">ここ注意</text>
-                <text x="408" y="272" text-anchor="middle" font-family="'Zen Maru Gothic', sans-serif" font-size="12.5" font-weight="700" letter-spacing="0.05em" fill="#a85518">梅雨・夏（6–8月）</text>
-                <text x="408" y="300" text-anchor="middle" font-family="'Shippori Mincho', serif" font-size="21" font-weight="700" letter-spacing="0.05em" fill="#2d1f16">直射・蒸れから守る</text>
-                <text x="408" y="324" text-anchor="middle" font-family="'Zen Maru Gothic', sans-serif" font-size="13.8" font-weight="500" fill="#5a493b">強い日差しを避け、風通しのよい日陰で水やりを減らす</text>
-                <line x1="852" y1="212" x2="852" y2="254" stroke="#3b6b8a" stroke-width="1.3" opacity="0.85" />
-                <circle cx="852" cy="206" r="5.5" fill="#3b6b8a" stroke="#f6f0e4" stroke-width="2.2" />
-                <text x="852" y="190" text-anchor="middle" font-family="'Zen Maru Gothic', sans-serif" font-size="12.5" font-weight="700" letter-spacing="0.06em" fill="#356280">ここ注意</text>
-                <text x="852" y="272" text-anchor="middle" font-family="'Zen Maru Gothic', sans-serif" font-size="12.5" font-weight="700" letter-spacing="0.05em" fill="#356280">冬（12–2月）</text>
-                <text x="852" y="300" text-anchor="middle" font-family="'Shippori Mincho', serif" font-size="21" font-weight="700" letter-spacing="0.05em" fill="#2d1f16">寒さから守る</text>
-                <text x="852" y="324" text-anchor="middle" font-family="'Zen Maru Gothic', sans-serif" font-size="13.8" font-weight="500" fill="#5a493b">明るい窓辺で霜を避け、水やりを減らす</text>
-              </svg>
-            </div>
-
-            <div class="chart-footer">
-              <div class="chart-footer-links">
-                <a href="sim.html?type=shade-main&from=type" class="subtle-sim-link" id="simJumpBtnSubtle">
-                  <span>このタイプの光・風・水を試す</span>
-                  <span class="subtle-sim-arrow" aria-hidden="true">›</span>
-                </a>
-                <span class="subtle-link-sep" aria-hidden="true"></span>
-                <a href="basics.html" class="subtle-sim-link" id="basicsJumpBtnSubtle">
-                  <span>5つの基本にもどる</span>
-                  <span class="subtle-sim-arrow" aria-hidden="true">›</span>
-                </a>
-              </div>
-            </div>
-          </section>
-        </div>
-      </div>
-
-    </main>
-  </div>
-
-  <script>
+<div class="viewport-wrapper">
+<main class="canvas" id="appCanvas">
+<header class="page-header">
+<div class="header-left">
+<div class="header-nav-group">
+<button class="back-btn" id="backBtn" type="button">
+<span aria-hidden="true" class="back-arrow">‹</span>
+<span>もどる</span>
+</button>
+<button class="home-btn" id="topHomeBtn" type="button">
+<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24">
+<path d="M3 10.5 12 3l9 7.5"></path>
+<path d="M5.5 9.5V20h13V9.5"></path>
+</svg>
+<span>表紙</span>
+</button>
+</div>
+<div class="title-wrap">
+<span aria-hidden="true" class="header-type-dot"></span>
+<h1 class="page-title">やさしい光タイプ</h1>
+<span class="header-species">ハオルチア・ガステリア・ハオルチオプシス など</span>
+</div>
+</div>
+</header>
+<div class="scroll-area" id="scrollArea">
+<div class="first-view">
+<section aria-label="やさしい光タイプの特徴" class="hero-spread">
+<h2 class="hero-catch">強い日差しは苦手<br/>やわらかな光を好む</h2>
+<div aria-hidden="true" class="hero-art-box">
+<img alt="" class="hero-art" src="images/detail_soft_light_01.png"/>
+</div>
+</section>
+<section aria-label="1年の成長リズムと注意点" class="chart-board">
+<div class="chart-heading"><h2>1年の成長リズム</h2><span>気温や品種によって変わる目安</span></div>
+<div class="chart-svg-wrap">
+<svg aria-label="春と秋にやさしい光で育ち、夏は直射と蒸れを避け、冬は明るい窓辺で過ごす成長リズムの模式図" class="chart-svg" role="img" viewbox="0 0 1000 342">
+<defs>
+<lineargradient id="curveAreaSoft" x1="0" x2="0" y1="0" y2="1">
+<stop offset="0%" stop-color="#5d7d52" stop-opacity="0.18"></stop>
+<stop offset="65%" stop-color="#5d7d52" stop-opacity="0.06"></stop>
+<stop offset="100%" stop-color="#5d7d52" stop-opacity="0.00"></stop>
+</lineargradient>
+</defs>
+<path d="M 175 124 L 175 46 L 310 46" fill="none" opacity="0.72" stroke="#537349" stroke-width="1.2"></path>
+<path d="M 640 124 L 640 46 L 506 46" fill="none" opacity="0.72" stroke="#537349" stroke-width="1.2"></path>
+<text fill="#46693c" font-family="'Zen Maru Gothic', sans-serif" font-size="12.5" font-weight="700" letter-spacing="0.05em" text-anchor="middle" x="175" y="34">春（3–5月）</text>
+<text fill="#46693c" font-family="'Zen Maru Gothic', sans-serif" font-size="12.5" font-weight="700" letter-spacing="0.05em" text-anchor="middle" x="640" y="34">秋（9–11月）</text>
+<text fill="#2d1f16" font-family="'Shippori Mincho', serif" font-size="22" font-weight="700" letter-spacing="0.06em" text-anchor="middle" x="408" y="52">育てる季節</text>
+<text fill="#5a493b" font-family="'Zen Maru Gothic', sans-serif" font-size="13.8" font-weight="500" text-anchor="middle" x="408" y="78">やさしい光のもとで、植え替えや株分けに適した時期</text>
+<line stroke="#cbbba2" stroke-width="1.1" x1="34" x2="966" y1="226" y2="226"></line>
+<text fill="#8f7d6b" font-family="'Zen Maru Gothic', sans-serif" font-size="11" font-weight="500" x="36" y="130">成長が活発</text>
+<text fill="#8f7d6b" font-family="'Zen Maru Gothic', sans-serif" font-size="11" font-weight="500" x="36" y="218">ゆるやか</text>
+<path d="M 54 198 C 98 166, 134 128, 175 128 C 238 128, 316 212, 408 212 C 500 212, 574 128, 640 128 C 706 128, 768 206, 852 206 C 896 206, 926 198, 948 188 L 948 226 L 54 226 Z" fill="url(#curveAreaSoft)"></path>
+<path d="M 54 198 C 98 166, 134 128, 175 128 C 238 128, 316 212, 408 212 C 500 212, 574 128, 640 128 C 706 128, 768 206, 852 206 C 896 206, 926 198, 948 188" fill="none" stroke="#486b3e" stroke-linecap="round" stroke-width="2.8"></path>
+<circle cx="175" cy="128" fill="#486b3e" r="5" stroke="#f6f0e4" stroke-width="2.2"></circle>
+<circle cx="640" cy="128" fill="#486b3e" r="5" stroke="#f6f0e4" stroke-width="2.2"></circle>
+<line opacity="0.85" stroke="#b05c1c" stroke-width="1.3" x1="408" x2="408" y1="218" y2="254"></line>
+<circle cx="408" cy="212" fill="#b05c1c" r="5.5" stroke="#f6f0e4" stroke-width="2.2"></circle>
+<text fill="#a85518" font-family="'Zen Maru Gothic', sans-serif" font-size="12.5" font-weight="700" letter-spacing="0.06em" text-anchor="middle" x="408" y="196">ここ注意</text>
+<text fill="#a85518" font-family="'Zen Maru Gothic', sans-serif" font-size="12.5" font-weight="700" letter-spacing="0.05em" text-anchor="middle" x="408" y="272">梅雨・夏（6–8月）</text>
+<text fill="#2d1f16" font-family="'Shippori Mincho', serif" font-size="21" font-weight="700" letter-spacing="0.05em" text-anchor="middle" x="408" y="300">直射・蒸れから守る</text>
+<text fill="#5a493b" font-family="'Zen Maru Gothic', sans-serif" font-size="13.8" font-weight="500" text-anchor="middle" x="408" y="324">強い日差しを避け、風通しのよい日陰で水やりを減らす</text>
+<line opacity="0.85" stroke="#3b6b8a" stroke-width="1.3" x1="852" x2="852" y1="212" y2="254"></line>
+<circle cx="852" cy="206" fill="#3b6b8a" r="5.5" stroke="#f6f0e4" stroke-width="2.2"></circle>
+<text fill="#356280" font-family="'Zen Maru Gothic', sans-serif" font-size="12.5" font-weight="700" letter-spacing="0.06em" text-anchor="middle" x="852" y="190">ここ注意</text>
+<text fill="#356280" font-family="'Zen Maru Gothic', sans-serif" font-size="12.5" font-weight="700" letter-spacing="0.05em" text-anchor="middle" x="852" y="272">冬（12–2月）</text>
+<text fill="#2d1f16" font-family="'Shippori Mincho', serif" font-size="21" font-weight="700" letter-spacing="0.05em" text-anchor="middle" x="852" y="300">寒さから守る</text>
+<text fill="#5a493b" font-family="'Zen Maru Gothic', sans-serif" font-size="13.8" font-weight="500" text-anchor="middle" x="852" y="324">明るい窓辺で霜を避け、水やりを減らす</text>
+</svg>
+</div>
+<div class="chart-footer">
+<div class="chart-footer-links">
+<a class="subtle-sim-link" href="sim.html?type=shade-main&amp;from=type" id="simJumpBtnSubtle">
+<span>このタイプの育て方を試してみよう</span>
+<span aria-hidden="true" class="subtle-sim-arrow">›</span>
+</a>
+</div>
+</div>
+</section>
+</div>
+<div class="second-view" id="moreSection">
+<section aria-labelledby="practicalTitle" class="care-editorial">
+<div class="section-intro"><h2 id="practicalTitle">このタイプを上手に育てるには</h2><span>光の強さと、根の状態に目を向ける</span></div>
+<article class="care-story">
+<div class="story-art"><img alt="レースカーテン越しのハオルチア" src="images/detail_soft_light_02.webp"></div>
+<div class="story-copy"><span class="story-kicker grow">光の加減と置き場所</span><h3>明るい日陰から始めよう</h3><p>ハオルチアなどは、レースカーテン越しのやわらかな光が届く場所から始めましょう。夏は遮光していても窓辺に熱がこもることがあります。強い光や蒸れを避け、風の通る場所へ。秋に日差しを戻すときも少しずつ。</p><p class="story-tip">暗い場所が好きという意味ではありません。光・温度・風通しを一緒に確認しましょう。</p></div>
+</article>
+<article class="care-story reverse">
+<div class="story-art"><img alt="鉢から抜いたハオルチアの太い根" src="images/detail_soft_light_03.webp"></div>
+<div class="story-copy"><span class="story-kicker grow">根のお手入れ</span><h3>葉が元気でも、土の乾きに注意</h3><p>ハオルチアには太い根を持つ種類があり、鉢の中が長く湿ったままだと根を傷めることがあります。鉢の重さや土の乾き方を確認し、乾きにくいときは鉢や用土、置き場所を見直しましょう。植え替えは気候が穏やかな頃に。</p><p class="story-tip">水やりの間隔は日数だけで決めない。</p></div>
+</article>
+<article class="care-story">
+<div class="story-art"><img alt="外側の葉が赤褐色に色づいたハオルチア" src="images/detail_soft_light_04.webp"></div>
+<div class="story-copy"><span class="story-kicker summer">葉の変化を観察する</span><h3>葉の色や形から光の加減を知る</h3><p>光が強いと葉が赤褐色に色づくことがあり、光が足りないと葉が細長く伸びることがあります。もともとの葉色や季節による変化もあるので、色だけで判断せず、葉の張りや新しい葉の形を見ながら光を少しずつ調整しましょう。</p><p class="story-tip">赤褐色になること自体は必ずしも異常ではありません。</p></div>
+</article>
+</section>
+<section aria-labelledby="enjoyTitle" class="care-editorial extra-section">
+<div class="section-intro"><h2 id="enjoyTitle">育てる楽しみ</h2><span>小さな変化をゆっくり楽しむ</span></div>
+<div class="enjoy-grid">
+<article class="enjoy-item"><div class="enjoy-art"><div class="division-figure"><img alt="親株と子株のつながりと株分けの切断位置" src="images/detail_soft_light_05.webp"><svg viewBox="0 0 1247 1247" aria-hidden="true"><path d="M704 739 L660 811" fill="none" stroke="#a34b3d" stroke-width="12" stroke-dasharray="20 12" stroke-linecap="round"/></svg></div></div><h3>子株を分けて増やす</h3><p>株元から子株が育つ種類なら、十分に大きくなり根がついたものを分けて育てることができます。つながった茎を切る場合は、親株と子株の根を傷めないように（絵の破線が目安）。株分けは成長しやすい時期に。</p></article>
+<article class="enjoy-item"><div class="enjoy-art"><img alt="ハオルチアの透明な葉先の拡大" src="images/detail_soft_light_06.webp"></div><h3>葉の模様や透明感</h3><p>ハオルチアの中には、葉先が透けるような種類も。ガステリアなどの模様や葉の質感も魅力です。強い光を当てすぎず、じっくり眺めて楽しみましょう。</p></article>
+</div>
+</section>
+<aside aria-label="次のステップ" class="footer-action-bar">
+<div class="footer-action-copy"><p class="footer-action-title">光・風・水のバランスを試してみよう</p><p class="footer-action-desc">季節ごとのちょうどいい加減を、動かして体験できます。</p></div>
+<div class="footer-action-btns"><a class="cta-sim" href="sim.html?type=shade-main&amp;from=type" id="simJumpBtn">このタイプの育て方を試す <span class="cta-arrow">›</span></a><a class="cta-sub" href="basics.html" id="basicsJumpBtn">5つの基本にもどる <span class="cta-arrow">›</span></a></div>
+</aside>
+</div>
+</div>
+</main>
+</div>
+<script>
     function fitCanvas() {
       const canvas = document.getElementById("appCanvas");
       const scale = Math.min(window.innerWidth / 1080, window.innerHeight / 786);
@@ -211,6 +292,7 @@
     window.addEventListener("orientationchange", fitCanvas);
     fitCanvas();
 
+
     const params = new URLSearchParams(window.location.search);
     const qMonth = params.get("month");
 
@@ -224,10 +306,14 @@
     });
 
     if (qMonth) {
-      const simEl = document.getElementById("simJumpBtnSubtle");
-      if (simEl) simEl.setAttribute("href", `sim.html?type=shade-main&from=type&month=${encodeURIComponent(qMonth)}`);
-      const basicsEl = document.getElementById("basicsJumpBtnSubtle");
-      if (basicsEl) basicsEl.setAttribute("href", `basics.html?month=${encodeURIComponent(qMonth)}`);
+      ["simJumpBtnSubtle", "simJumpBtn"].forEach((id) => {
+        const el = document.getElementById(id);
+        if (el) el.setAttribute("href", `sim.html?type=shade-main&from=type&month=${encodeURIComponent(qMonth)}`);
+      });
+      ["basicsJumpBtnSubtle", "basicsJumpBtn"].forEach((id) => {
+        const el = document.getElementById(id);
+        if (el) el.setAttribute("href", `basics.html?month=${encodeURIComponent(qMonth)}`);
+      });
     }
 
     const AUTO_RETURN_MS = 0;
