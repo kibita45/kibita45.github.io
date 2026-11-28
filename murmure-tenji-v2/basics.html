@@ -4,11 +4,12 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
   <!-- =========================================================================
-       保木平珈琲 Murmure｜展示用iPad Webアプリ「多肉の育て方」（v2・5つの基本 全公開版）
-       - sim.html と完全統一した「温かいクリーム紙 × こげ茶インク × 淡面＋枠線 × 左ガイドレーン」
-       - base64埋め込み画像を外部参照（images/）へ戻して軽量化
-       - ステップ1：5つの基本すべて公開（basics_wind.html / basics_light.html / basics_water.html / basics_soil.html / basics_fertilizer.html へ遷移）
-       - ステップ2に「※わからないときは、お気軽にスタッフまで」を追記
+    保木平珈琲 Murmure｜展示用iPad Webアプリ「多肉の育て方」（v2・5つの基本 全公開＆導線改善版）
+    - sim.html と完全統一した「温かいクリーム紙 × こげ茶インク × 淡面＋枠線 × 左ガイドレーン」
+    - base64埋め込み画像を外部参照（images/）へ戻して軽量化
+    - ステップ1：5つの基本すべて公開（basics_wind.html / basics_light.html / basics_water.html / basics_soil.html / basics_fertilizer.html へ遷移）
+    - ステップ2に「※わからないときは、お気軽にスタッフまで」を追記
+    - シミュレーター（sim.html）への遷移時に from=basics を付与し、「もどる」で本ページへ復帰対応
   ========================================================================= -->
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
@@ -960,7 +961,7 @@
               </a>
             </div>
             <div class="sim-cta-wrap">
-              <a class="sim-cta" href="sim.html" id="simCtaLink">
+              <a class="sim-cta" href="sim.html?from=basics" id="simCtaLink">
                 <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.9" viewBox="0 0 24 24">
                   <path d="M4 7h16M4 12h16M4 17h16"></path>
                   <circle cx="9" cy="7" fill="currentColor" r="2"></circle>
@@ -1055,8 +1056,17 @@
       window.location.href = qMonth ? `index.html?month=${encodeURIComponent(qMonth)}` : "index.html";
     });
 
+    const simCta = document.getElementById("simCtaLink");
+    if (simCta) {
+      const simParams = new URLSearchParams();
+      simParams.set("from", "basics");
+      if (qMonth) simParams.set("month", qMonth);
+      simCta.setAttribute("href", `sim.html?${simParams.toString()}`);
+    }
+
     if (qMonth) {
       document.querySelectorAll("a[href]").forEach((a) => {
+        if (a.id === "simCtaLink") return;
         const href = a.getAttribute("href");
         if (href && href.endsWith(".html")) {
           a.setAttribute("href", `${href}?month=${encodeURIComponent(qMonth)}`);

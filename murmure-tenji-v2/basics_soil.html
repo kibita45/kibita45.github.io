@@ -109,12 +109,39 @@ svg{display:block;width:100%;height:auto}
 </div>
 </aside>
 <!-- 参考: https://yardandgarden.extension.iastate.edu/how-to/growing-succulents-indoors ; https://extension.illinois.edu/container-gardens/soil ; https://extension.illinois.edu/container-gardens/container-drainage-options ; https://extension.illinois.edu/blogs/good-growing/2022-04-08-helpful-tips-creating-successful-container-garden -->
-</div></main></div><script>
+</div></main></div>
+<script>
 // 既存の展示用キャンバスと同じ比率。作業中は自動復帰を無効化。
-const canvas=document.getElementById('appCanvas');function fitCanvas(){const scale=Math.min(innerWidth/1080,innerHeight/786);if(window.CSS&&CSS.supports('zoom','1')){canvas.style.zoom=scale;canvas.style.transform='none'}
-else{canvas.style.transform=`scale(${scale})`}}
+const PAGE_ID='basics_soil';
+const canvas=document.getElementById('appCanvas');function fitCanvas(){const scale=Math.min(innerWidth/1080,innerHeight/786);if(window.CSS&&CSS.supports('zoom','1')){canvas.style.zoom=scale;canvas.style.transform='none'}else{canvas.style.transform=`scale(${scale})`}}
 addEventListener('resize',fitCanvas);addEventListener('orientationchange',fitCanvas);fitCanvas();
-const month=new URLSearchParams(location.search).get('month');if(month&&/^([1-9]|1[0-2])$/.test(month)){document.querySelectorAll('a[href$=".html"]').forEach(a=>{const u=new URL(a.getAttribute('href'),location.href);u.searchParams.set('month',month);a.setAttribute('href',u.pathname.split('/').pop()+u.search)})}
+const params=new URLSearchParams(location.search);
+const month=params.get('month');
+const validMonth=month&&/^([1-9]|1[0-2])$/.test(month)?month:'';
+if(params.get('from')==='sos'){
+  const backLink=document.querySelector('.nav a:first-child');
+  if(backLink){
+    const next=new URLSearchParams();
+    const sosFrom=params.get('sosFrom');
+    if(sosFrom)next.set('from',sosFrom);
+    ['sym','choice','type','season','light','wind','water','month'].forEach(k=>{const v=params.get(k);if(v)next.set(k,v)});
+    const qs=next.toString();
+    backLink.setAttribute('href',qs?`sos.html?${qs}`:'sos.html');
+  }
+}
+document.querySelectorAll('a[href]').forEach(a=>{
+  const raw=a.getAttribute('href');
+  if(!raw||raw.startsWith('#')||raw.startsWith('http'))return;
+  const u=new URL(raw,location.href);
+  const file=u.pathname.split('/').pop();
+  if(!a.closest('.nav')&&(file==='sos.html'||file==='sim.html')&&!u.searchParams.has('from')){
+    u.searchParams.set('from',PAGE_ID);
+  }
+  if(validMonth&&!u.searchParams.has('month')){
+    u.searchParams.set('month',validMonth);
+  }
+  a.setAttribute('href',file+u.search);
+});
 const AUTO_RETURN_MS=0;if(AUTO_RETURN_MS){let idle;const reset=()=>{clearTimeout(idle);idle=setTimeout(()=>location.href='index.html',AUTO_RETURN_MS)};['pointerdown','touchstart','keydown','scroll'].forEach(e=>document.addEventListener(e,reset,{passive:true,capture:true}));reset()}
 </script>
 </body>

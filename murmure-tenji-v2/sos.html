@@ -5,13 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
 
   <!-- =========================================================================
-    保木平珈琲 Murmure｜展示用iPad Webアプリ「困ったときのSOS」（v2・図鑑トーン統一版）
+    保木平珈琲 Murmure｜展示用iPad Webアプリ「困ったときのSOS」（v2・表現＆導線改善版）
     - basics.html / sim.html / index.html と完全統一した「温かいクリーム紙 × こげ茶インク × 明朝見出し × 淡面＋枠線」
     - ヘッダー寸法（上14px・左右24px・ボタン高さ40px・明朝25px・下線1px）を全ページ完全一致
-    - 1問チェック対象（シワシワ／急に透けてぶよぶよ／下の葉）は「未選択」で開き、
-      回答前は「まず確かめること」を上詰めで表示。タップ後に対処・NG行動を表示する
-    - 「葉が急に透けて、ぶよぶよ」で凍害（冷え込んだ翌朝）と蒸れ・腐敗を分離
-    - 関連ガイド（basics.html / sim.html）との往復時に症状・回答を引き継ぎ
+    - シワシワ（乾いている側）の断定をやわらげ、根の確認を追記／害虫予防を新株チェックへ更新
+    - 関連ガイドを5つの基本ページ（basics_water / basics_light / basics_wind / basics_soil）へ直リンク化
+    - 5つの基本ページ（basics_*）からの「もどる」復帰に対応
   ========================================================================= -->
 
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -1035,8 +1034,8 @@
               label: "中まで乾いている",
               tone: "normal",
               causeLabel: "考えられる原因",
-              causeTitle: "お水が足りていないサインです（水不足）",
-              causeDesc: "葉にためていた水分を使って、しぼんでいる状態です。まずは落ち着いて今の季節の育て方を確認しましょう。",
+              causeTitle: "水不足の可能性があります",
+              causeDesc: "葉にためていた水分を使って、しぼんでいる可能性があります。前回の水やり後も張りが戻らず、しぼみ続けるときは根の状態も確認しましょう。",
               dos: [
                 "<strong>今のタイプ・季節のおすすめを確認して</strong>、「乾いたらたっぷり」の時期なら株元の土に鉢底から水が出るまであげます。",
                 "<strong>控えめ・少量の時期なら</strong>、夏は夕方・冬は暖かい午前に少量で様子を見ましょう。"
@@ -1061,7 +1060,7 @@
           ]
         },
         related: [
-          { tag: "竹串チェック", label: "多肉の育て方を見る", nav: "basics.html", primary: true },
+          { tag: "竹串チェック", label: "水やりのきほんを見る", nav: "basics_water.html", primary: true },
           { tag: "タイプ別", label: "光・風・水を試す", nav: "sim.html", primary: false }
         ]
       },
@@ -1083,7 +1082,7 @@
         ngDesc: "暗い場所にいた株を急に強い光へ出すと、葉焼けしてしまいます。やわらかな光から慣らしてあげましょう。",
         related: [
           { tag: "光と風の目安", label: "光・風・水を試す", nav: "sim.html", primary: true },
-          { tag: "置き場所", label: "多肉の育て方を見る", nav: "basics.html", primary: false }
+          { tag: "置き場所", label: "光のきほんを見る", nav: "basics_light.html", primary: false }
         ]
       },
       {
@@ -1129,7 +1128,7 @@
         },
         related: [
           { tag: "季節の目安", label: "光・風・水を試す", nav: "sim.html", primary: true },
-          { tag: "乾きやすい土", label: "多肉の育て方を見る", nav: "basics.html", primary: false }
+          { tag: "乾きやすい土", label: "土と鉢のきほんを見る", nav: "basics_soil.html", primary: false }
         ]
       },
       {
@@ -1150,7 +1149,7 @@
         ngDesc: "少し焼けた程度なら株自体は生きています。無理に葉を取ると株の体力が落ちてしまいます。",
         related: [
           { tag: "タイプ別の光", label: "光・風・水を試す", nav: "sim.html", primary: true },
-          { tag: "置き場所", label: "多肉の育て方を見る", nav: "basics.html", primary: false }
+          { tag: "置き場所", label: "光のきほんを見る", nav: "basics_light.html", primary: false }
         ]
       },
       {
@@ -1195,7 +1194,7 @@
           ]
         },
         related: [
-          { tag: "水やり判断", label: "多肉の育て方を見る", nav: "basics.html", primary: true },
+          { tag: "水やり判断", label: "水やりのきほんを見る", nav: "basics_water.html", primary: true },
           { tag: "季節の目安", label: "光・風・水を試す", nav: "sim.html", primary: false }
         ]
       },
@@ -1214,9 +1213,9 @@
           "くり返し出るときは、<strong>その植物と虫に使えることをラベルで確認</strong>した市販スプレーを使い、風通しを良くしましょう。"
         ],
         ngMain: "ほかの鉢と密着させたまま放置する",
-        ngDesc: "気づかないうちに隣の鉢へどんどん広がります。株元の枯れ葉掃除と風通しがいちばんの予防になります。",
+        ngDesc: "気づかないうちに隣の鉢へどんどん広がります。新しく迎えた鉢は、並べる前に葉の付け根を見てみましょう。",
         related: [
-          { tag: "風通しのコツ", label: "多肉の育て方を見る", nav: "basics.html", primary: true },
+          { tag: "風通しのコツ", label: "風通しのきほんを見る", nav: "basics_wind.html", primary: true },
           { tag: "環境の見直し", label: "光・風・水を試す", nav: "sim.html", primary: false }
         ]
       }
@@ -1339,6 +1338,13 @@
 
     const pageParams = new URLSearchParams(window.location.search);
     const fromPage = pageParams.get("from") || "";
+    const ALLOWED_BASICS_PAGES = new Set([
+      "basics_wind",
+      "basics_light",
+      "basics_water",
+      "basics_soil",
+      "basics_fertilizer"
+    ]);
 
     function buildHomeUrl() {
       const qMonth = pageParams.get("month");
@@ -1362,10 +1368,13 @@
     }
 
     function buildBackUrl() {
+      const qMonth = pageParams.get("month");
       if (fromPage === "sim") return buildSimUrl(false);
       if (fromPage === "basics") {
-        const qMonth = pageParams.get("month");
         return qMonth ? `basics.html?month=${encodeURIComponent(qMonth)}` : "basics.html";
+      }
+      if (ALLOWED_BASICS_PAGES.has(fromPage)) {
+        return qMonth ? `${fromPage}.html?month=${encodeURIComponent(qMonth)}` : `${fromPage}.html`;
       }
       return buildHomeUrl();
     }

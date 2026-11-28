@@ -5,11 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
 
   <!-- =========================================================================
-    保木平珈琲 Murmure｜展示用iPad Webアプリ「光・風・水でどう変わる？」（v2・図鑑トーン統一版）
+    保木平珈琲 Murmure｜展示用iPad Webアプリ「光・風・水でどう変わる？」（v2・表現＆導線改善版）
     - basics.html と完全に揃えた「温かいクリーム紙 × こげ茶インク × 明朝見出し × 控えめな枠」
-    - 水やり波グラフ＆左レーンの水やりピンを削除し、5季節カードと12ヶ月帯をゆとりある配置へ
-    - 「おすすめ」タグの枠外飛び出し・結果カードの枠の入れ子・濃いベタ塗りを引き算
-    - 全5季節（全13枚）の水彩1枚絵・全960通り判定を完全維持
+    - ハオルチア夏・アエオニウム夏・カランコエ春の表現を詳細ページと整合
+    - 結果状態に応じた SOS 症状（sym）自動引き継ぎに対応
+    - 5つの基本ページ（basics_*）からの「もどる」復帰に対応
   ========================================================================= -->
 
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -541,7 +541,7 @@
     }
 
     .season-card[data-season="spring"] { --s-border: var(--season-spring); --s-soft: var(--season-spring-soft); --s-dark: var(--season-spring-dark); }
-    .season-card[data-season="rain"]   { --s-border: var(--season-rain);   --s-soft: var(--season-rain-soft);   --s-dark: var(--season-rain-dark); }
+    .season-card[data-season="rain"] { --s-border: var(--season-rain); --s-soft: var(--season-rain-soft); --s-dark: var(--season-rain-dark); }
     .season-card[data-season="summer"] { --s-border: var(--season-summer); --s-soft: var(--season-summer-soft); --s-dark: var(--season-summer-dark); }
     .season-card[data-season="autumn"] { --s-border: var(--season-autumn); --s-soft: var(--season-autumn-soft); --s-dark: var(--season-autumn-dark); }
     .season-card[data-season="winter"] { --s-border: var(--season-winter); --s-soft: var(--season-winter-soft); --s-dark: var(--season-winter-dark); }
@@ -686,7 +686,7 @@
     }
 
     .season-card[data-season="spring"] .season-bubble { --bub-accent: var(--season-spring-dark); --bub-border: rgba(191, 107, 126, 0.42); }
-    .season-card[data-season="rain"]   .season-bubble { --bub-accent: var(--season-rain-dark);   --bub-border: rgba(85, 126, 150, 0.42); padding: 4px 8px 4.5px; }
+    .season-card[data-season="rain"] .season-bubble { --bub-accent: var(--season-rain-dark); --bub-border: rgba(85, 126, 150, 0.42); padding: 4px 8px 4.5px; }
     .season-card[data-season="summer"] .season-bubble { --bub-accent: var(--season-summer-dark); --bub-border: rgba(86, 128, 75, 0.42); }
     .season-card[data-season="autumn"] .season-bubble { --bub-accent: var(--season-autumn-dark); --bub-border: rgba(179, 102, 57, 0.42); }
     .season-card[data-season="winter"] .season-bubble { --bub-accent: var(--season-winter-dark); --bub-border: rgba(78, 111, 140, 0.42); }
@@ -894,7 +894,7 @@
     }
 
     .ctrl-icon.is-light { background: var(--sun-soft); color: var(--sun-color); border: 1.2px solid var(--sun-bd); }
-    .ctrl-icon.is-wind  { background: var(--wind-soft); color: var(--wind-color); border: 1.2px solid var(--wind-bd); }
+    .ctrl-icon.is-wind { background: var(--wind-soft); color: var(--wind-color); border: 1.2px solid var(--wind-bd); }
     .ctrl-icon.is-water { background: var(--water-soft); color: var(--water-color); border: 1.2px solid var(--water-bd); }
     .ctrl-icon svg { width: 16px; height: 16px; }
 
@@ -994,11 +994,11 @@
     .result-card.is-pop { animation: resultPop 0.18s ease; }
     @keyframes resultPop { 0% { opacity: 0.86; } 100% { opacity: 1; } }
 
-    .result-card.state-good   { --res-color: #3a5e31; --res-tint: #f4f8f1; --res-bd: rgba(86, 128, 75, 0.36); --res-icon-bg: rgba(86, 128, 75, 0.14); }
-    .result-card.state-sleep  { --res-color: #4f5c4c; --res-tint: #f5f5f0; --res-bd: rgba(114, 126, 110, 0.36); --res-icon-bg: rgba(114, 126, 110, 0.14); }
-    .result-card.state-warn   { --res-color: #965410; --res-tint: #fcf6ec; --res-bd: rgba(186, 118, 36, 0.38); --res-icon-bg: rgba(186, 118, 36, 0.13); }
-    .result-card.state-dry    { --res-color: #7a5524; --res-tint: #faf4ea; --res-bd: rgba(158, 114, 56, 0.36); --res-icon-bg: rgba(158, 114, 56, 0.13); }
-    .result-card.state-rot    { --res-color: #9e3326; --res-tint: #fdf3f1; --res-bd: rgba(184, 78, 66, 0.38); --res-icon-bg: rgba(184, 78, 66, 0.12); }
+    .result-card.state-good { --res-color: #3a5e31; --res-tint: #f4f8f1; --res-bd: rgba(86, 128, 75, 0.36); --res-icon-bg: rgba(86, 128, 75, 0.14); }
+    .result-card.state-sleep { --res-color: #4f5c4c; --res-tint: #f5f5f0; --res-bd: rgba(114, 126, 110, 0.36); --res-icon-bg: rgba(114, 126, 110, 0.14); }
+    .result-card.state-warn { --res-color: #965410; --res-tint: #fcf6ec; --res-bd: rgba(186, 118, 36, 0.38); --res-icon-bg: rgba(186, 118, 36, 0.13); }
+    .result-card.state-dry { --res-color: #7a5524; --res-tint: #faf4ea; --res-bd: rgba(158, 114, 56, 0.36); --res-icon-bg: rgba(158, 114, 56, 0.13); }
+    .result-card.state-rot { --res-color: #9e3326; --res-tint: #fdf3f1; --res-bd: rgba(184, 78, 66, 0.38); --res-icon-bg: rgba(184, 78, 66, 0.12); }
     .result-card.state-freeze { --res-color: #2b5975; --res-tint: #f0f6fa; --res-bd: rgba(74, 126, 158, 0.38); --res-icon-bg: rgba(74, 126, 158, 0.13); }
 
     .result-mark-row {
@@ -1409,10 +1409,10 @@
   <script>
     const WATERCOLOR_SCENES = {
       spring: { default: "images/cal_wc_spring_happy.jpg", byType: { "shade-main": "images/cal_wc_spring_shade.jpg" } },
-      rain:   { default: "images/cal_wc_rain_humid.jpg",   byType: { "sun-cool": "images/cal_wc_rain_rest.jpg" } },
-      summer: { default: "images/cal_wc_summer_hot.jpg",   byType: { "sun-main": "images/cal_wc_summer_hot.jpg", "sun-cool": "images/cal_wc_summer_rest.jpg", "sun-warm": "images/cal_wc_summer_happy.jpg", "shade-main": "images/cal_wc_summer_shade.jpg" } },
+      rain: { default: "images/cal_wc_rain_humid.jpg", byType: { "sun-cool": "images/cal_wc_rain_rest.jpg" } },
+      summer: { default: "images/cal_wc_summer_hot.jpg", byType: { "sun-main": "images/cal_wc_summer_hot.jpg", "sun-cool": "images/cal_wc_summer_rest.jpg", "sun-warm": "images/cal_wc_summer_happy.jpg", "shade-main": "images/cal_wc_summer_shade.jpg" } },
       autumn: { default: "images/cal_wc_autumn_happy.jpg", byType: { "shade-main": "images/cal_wc_autumn_shade.jpg" } },
-      winter: { default: "images/cal_wc_winter_cold.jpg",  byType: { "sun-main": "images/cal_wc_winter_cold.jpg", "sun-cool": "images/cal_wc_winter_happy.jpg", "sun-warm": "images/cal_wc_winter_indoor.jpg", "shade-main": "images/cal_wc_winter_indoor.jpg" } }
+      winter: { default: "images/cal_wc_winter_cold.jpg", byType: { "sun-main": "images/cal_wc_winter_cold.jpg", "sun-cool": "images/cal_wc_winter_happy.jpg", "sun-warm": "images/cal_wc_winter_indoor.jpg", "shade-main": "images/cal_wc_winter_indoor.jpg" } }
     };
 
     const state = { type: "sun-main", season: "spring", light: 3, wind: 2, water: 3, manualSeason: false };
@@ -1436,7 +1436,7 @@
 
       if (type === "shade-main") {
         if (season === "summer") {
-          if (water === 3) return { mood: "rot", icon: "×", title: "蒸れて腐りやすい", comment: "真夏のたっぷり水はNG！根が休む時期だよ" };
+          if (water === 3) return { mood: "rot", icon: "×", title: "蒸れて腐りやすい", comment: "猛暑で生長が止まり、鉢が乾きにくいときは水を控えよう" };
           if (wind === 1 && water >= 2) return { mood: "rot", icon: "×", title: "蒸れて腐りやすい", comment: "無風＋お水は危険！まず風の通る日陰へ" };
           if (wind === 1) return { mood: "rot", icon: "×", title: "熱がこもりやすい", comment: "まず風の通る明るい日陰へ移してあげよう" };
           if (light >= 3 && water >= 2) return { mood: "rot", icon: "×", title: "煮えてジュレる！", comment: "直射＋水は鉢が蒸し風呂に！涼しい日陰へ" };
@@ -1478,15 +1478,15 @@
 
       if (type === "sun-cool") {
         if (season === "summer") {
-          if (water >= 3) return { mood: "rot", icon: "×", title: "休眠中に腐る！", comment: "夏は眠る時期！お水で一気に傷みます" };
+          if (water >= 3) return { mood: "rot", icon: "×", title: "蒸れて傷みやすい", comment: "暑さで葉を閉じ、生長が止まった株は水をぐっと控えよう" };
           if (wind === 1 && water >= 2) return { mood: "rot", icon: "×", title: "蒸れて腐りやすい", comment: "無風＋お水は危険！まず風の通る日陰へ" };
           if (wind === 1) return { mood: "rot", icon: "×", title: "熱がこもりやすい", comment: "まず風の通る明るい日陰へ移してあげよう" };
           if (light >= 3 && water >= 2) return { mood: "rot", icon: "×", title: "煮えてジュレる！", comment: "直射＋水は鉢が蒸し風呂に！涼しい日陰へ" };
           if (light >= 3) return { mood: "warn", icon: "×", title: "直射で傷む", comment: "涼しい日陰でそっと休ませてあげよう" };
           if (light === 1) return { mood: "warn", icon: "△", title: "暗すぎるよ", comment: "真っ暗よりほんのり明るい日陰が安心" };
           if (wind === 3) return { mood: "warn", icon: "△", title: "強風に注意", comment: "鉢が倒れないよう風の強い日は避難して" };
-          if (water === 2) return { mood: "warn", icon: "△", title: "蒸れ・ジュレ注意", comment: "真夏はほぼ断水でも大丈夫だよ" };
-          return { mood: "sleep", icon: "◎", title: "すやすや休眠！", comment: "日陰＋風＋断水ぎみで上手に夏越し" };
+          if (water === 2) return { mood: "warn", icon: "△", title: "蒸れ・ジュレ注意", comment: "暑さで葉が閉じていたら、水はごく控えめに" };
+          return { mood: "sleep", icon: "◎", title: "すやすや夏越し！", comment: "日陰＋風＋断水ぎみで上手に夏越し" };
         }
         if (season === "winter") {
           if (wind === 3) return { mood: "freeze", icon: "×", title: "霜・冷風NG", comment: "氷点下や霜は避けて軒下・室内へ！" };
@@ -1500,11 +1500,11 @@
         if (season === "rain") {
           if (wind === 1 && water === 1) return { mood: "rot", icon: "×", title: "蒸れに注意！", comment: "空気がこもるよ。雨を避けて風の通る場所へ" };
           if (wind === 1) return { mood: "rot", icon: "×", title: "湿気で腐る！", comment: "休眠前の無風は一気に弱るよ。風を通して！" };
-          if (water === 3) return { mood: "rot", icon: "×", title: "水減らして！", comment: "そろそろ休眠準備。水は控えめにしよう" };
+          if (water === 3) return { mood: "rot", icon: "×", title: "水減らして！", comment: "そろそろお休み準備。水は控えめにしよう" };
           if (light === 1) return { mood: "warn", icon: "×", title: "光不足で徒長", comment: "雨よけしつつ明るい場所へ置こう" };
           if (light === 4) return { mood: "warn", icon: "△", title: "強日差し注意", comment: "暑くなる前はやわらかい光が安心" };
           if (wind === 3) return { mood: "warn", icon: "△", title: "強風に注意", comment: "雨の吹き込みや鉢の転倒に気をつけて" };
-          return { mood: "good", icon: "◎", title: "休眠準備OK！", comment: "雨よけ＋風通しで夏休みモードへ" };
+          return { mood: "good", icon: "◎", title: "夏越し準備OK！", comment: "雨よけ＋風通しで夏休みモードへ" };
         }
         if (light === 1) return { mood: "warn", icon: "×", title: "ヒョロヒョロ徒長", comment: "暗いと茎が伸びすぎるよ。明るい場所へ！" };
         if (wind === 1) return { mood: "warn", icon: "△", title: "ムレやすい", comment: "風通しのよい屋外が大好きです" };
@@ -1557,6 +1557,7 @@
         if (light === 4) return { mood: "warn", icon: "△", title: "日差し強すぎ", comment: "強い西日は葉が焼けやすいです" };
         if (light === 2) return { mood: "warn", icon: "△", title: "もう少し光へ", comment: "春と秋はしっかり日向で元気に" };
         if (water === 2) return { mood: "warn", icon: "△", title: "もう少し水OK", comment: "乾いたらたっぷりお水をあげてOK" };
+        if (season === "spring") return { mood: "good", icon: "◎", title: "ぐんぐん元気！", comment: "夜の冷え込みを確認しつつ、外の光は少しずつ慣らそう" };
         return { mood: "good", icon: "◎", title: "ぐんぐん元気！", comment: "お日様と風とお水でいきいき育ちます" };
       }
 
@@ -1599,6 +1600,16 @@
       if (light === 4) return { mood: "warn", icon: "△", title: "強光に注意", comment: "冬の穏やかな日向がいちばん心地いい" };
       if (water === 2) return { mood: "warn", icon: "△", title: "冷える夜に注意", comment: "あげるなら暖かい日の昼間にほんの少し" };
       return { mood: "good", icon: "◎", title: "安心の冬越し！", comment: "霜よけ＋明るい場所＋控えめ水でOK" };
+    }
+
+    function detectSosSymptom(res) {
+      if (!res || res.mood === "good" || res.mood === "sleep") return "";
+      const text = `${res.title || ""} ${res.comment || ""}`;
+      if (/焼|日差し|眩し|強光|直射で傷む/.test(text)) return "burn";
+      if (/徒長|暗/.test(text)) return "stretch";
+      if (res.mood === "rot" || res.mood === "freeze") return "jelly";
+      if (res.mood === "dry") return "wrinkle";
+      return "";
     }
 
     const IMAGE_BASE_PREFIXES = ["", "多肉の育て方｜操作できる試作/", "../", "../version1/"];
@@ -1716,7 +1727,7 @@
       const isWarm = (type === "sun-warm");
       const ranges = {
         spring: { left: 0, width: 25, color: "var(--season-spring)" },
-        rain:   { left: 25, width: 12.5, color: "var(--season-rain)" },
+        rain: { left: 25, width: 12.5, color: "var(--season-rain)" },
         summer: { left: 37.5, width: 16.67, color: "var(--season-summer)" },
         autumn: { left: 54.17, width: isWarm ? 12.5 : 20.83, color: "var(--season-autumn)" },
         winter: { left: isWarm ? 66.67 : 75, width: isWarm ? 33.33 : 25, color: "var(--season-winter)" }
@@ -1838,6 +1849,14 @@
       setControls(l, w, wa, true);
     });
 
+    const ALLOWED_BASICS_PAGES = new Set([
+      "basics_wind",
+      "basics_light",
+      "basics_water",
+      "basics_soil",
+      "basics_fertilizer"
+    ]);
+
     document.getElementById("backHomeBtn").addEventListener("click", () => {
       const params = new URLSearchParams(window.location.search);
       const qMonth = params.get("month");
@@ -1848,6 +1867,10 @@
       }
       if (from === "basics") {
         window.location.href = qMonth ? `basics.html?month=${encodeURIComponent(qMonth)}` : "basics.html";
+        return;
+      }
+      if (from && ALLOWED_BASICS_PAGES.has(from)) {
+        window.location.href = qMonth ? `${from}.html?month=${encodeURIComponent(qMonth)}` : `${from}.html`;
         return;
       }
       if (from === "sos") {
@@ -1871,7 +1894,7 @@
       window.location.href = qMonth ? `index.html?month=${encodeURIComponent(qMonth)}` : "index.html";
     });
 
-    function buildSimStateQuery() {
+    function buildSimStateQuery(extraParams = {}) {
       const params = new URLSearchParams(window.location.search);
       const next = new URLSearchParams();
       next.set("from", "sim");
@@ -1880,6 +1903,9 @@
       next.set("light", String(state.light));
       next.set("wind", String(state.wind));
       next.set("water", String(state.water));
+      Object.entries(extraParams).forEach(([k, v]) => {
+        if (v) next.set(k, v);
+      });
       const qMonth = params.get("month");
       if (qMonth) next.set("month", qMonth);
       return next.toString();
@@ -1890,7 +1916,9 @@
     });
 
     document.getElementById("jumpSosBtn").addEventListener("click", () => {
-      window.location.href = `sos.html?${buildSimStateQuery()}`;
+      const res = evaluate(state.type, state.season, state);
+      const sym = detectSosSymptom(res);
+      window.location.href = `sos.html?${buildSimStateQuery(sym ? { sym } : {})}`;
     });
 
     function initFromParams() {
