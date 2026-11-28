@@ -5,11 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
 
   <!-- =========================================================================
-    保木平珈琲 Murmure｜展示用iPad Webアプリ「困ったときのSOS」（v2・縦スクロール＆引き算版）
-    - 左リスト：アイコン＋症状名のみのすっきりリスト
-    - 右紙面：1問チェック → 結論（質問と同じ明朝見出し＋1行補足）→ 行動リスト（見出しなし）→ これはNG（淡赤ゾーン）
-    - 右カード内を縦スクロール対応にし、下端で「これはNG」が見切れてスクロール可能と伝わる設計
-    - 5つの基本ページ直リンク・sim.html からの症状引き継ぎ・戻り導線を完全維持
+    保木平珈琲 Murmure｜展示用iPad Webアプリ「困ったときのSOS」（v2・v1視認性ハイブリッド版）
+    - v2の良い引き算を維持：補足なしのすっきり左リスト／一本道の1問チェック／行動見出し2段構成／縦スクロール
+    - v1のわかりやすさを復元：役割ごとの色付き枠＆見出しラベル（1問チェック／原因／今すぐやること／これはNG）＋丁寧な説明文
+    - basics.html / sim.html / index.html と完全統一した共通ヘッダー・5つの基本直リンク・戻り導線・自動復帰（5分）を維持
   ========================================================================= -->
 
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -34,8 +33,8 @@
       --card-paper: #fffdf8;
       --surface-muted: #f7f1e5;
       --ink-main: #2d1f16;
-      --ink-sub: #4f3f33;
-      --ink-muted: #786758;
+      --ink-sub: #4a3a2e;
+      --ink-muted: #726152;
       --line-soft: #d7c7ad;
       --line-strong: #c2ae8e;
       --line-hair: rgba(168, 148, 120, 0.42);
@@ -45,16 +44,26 @@
       --axis-soft: #f2eadc;
       --axis-fill: #ebe0cc;
 
-      --sos-color: #a63d28;
-      --sos-deep: #7d2918;
-      --sos-tint: #fcf3f0;
-      --sos-bd: rgba(166, 61, 40, 0.28);
+      /* 役割ごとの落ち着いた図鑑カラー（v1の視認性 × v2の紙色トーン） */
+      --sos-color: #b0412c;
+      --sos-deep: #802817;
+      --sos-tint: #fcf2ef;
+      --sos-bd: rgba(176, 65, 44, 0.34);
 
-      --ok-color: #3f632d;
-      --ok-deep: #2c4a1e;
+      --ok-color: #466b32;
+      --ok-deep: #2d4a1e;
+      --ok-tint: #f3f7ef;
+      --ok-bd: rgba(70, 107, 50, 0.34);
 
-      --check-color: #3a6882;
-      --check-deep: #26495e;
+      --check-color: #3a6b86;
+      --check-deep: #23495e;
+      --check-tint: #f0f6f9;
+      --check-bd: rgba(58, 107, 134, 0.34);
+
+      --amber-color: #a15a16;
+      --amber-deep: #783f0a;
+      --amber-tint: #faf5eb;
+      --amber-bd: rgba(161, 90, 22, 0.32);
 
       --shadow-soft: 0 2px 10px rgba(72, 54, 38, 0.055);
       --font-serif: "Shippori Mincho", "Hiragino Mincho ProN", "Yu Mincho", serif;
@@ -135,7 +144,7 @@
       opacity: 0.7;
     }
 
-    /* ================= 1. 共通ヘッダー ================= */
+    /* ================= 1. 共通ヘッダー（全ページ完全一致） ================= */
     .page-header {
       position: relative;
       z-index: 2;
@@ -295,7 +304,7 @@
     .symptom-btn {
       flex: 1 1 0;
       width: 100%;
-      background: rgba(255, 253, 248, 0.78);
+      background: rgba(255, 253, 248, 0.82);
       border: 1px solid var(--line-soft);
       border-bottom: 2px solid var(--line-strong);
       border-radius: 12px;
@@ -369,14 +378,14 @@
       color: var(--sos-color);
     }
 
-    /* ================= 4. 右カラム：縦スクロール対応の一本道紙面 ================= */
+    /* ================= 4. 右カラム：役割がひと目でわかる縦スクロール紙面 ================= */
     .detail-card {
       flex: 1 1 auto;
       background: var(--card-paper);
       border: 1px solid var(--line-soft);
       border-bottom: 2px solid var(--line-strong);
       border-radius: 16px;
-      padding: 20px 0 0;
+      padding: 18px 0 0;
       box-shadow: var(--shadow-soft);
       display: flex;
       flex-direction: column;
@@ -388,8 +397,8 @@
       display: flex;
       align-items: center;
       gap: 14px;
-      margin: 0 28px;
-      padding-bottom: 13px;
+      margin: 0 24px;
+      padding-bottom: 12px;
       border-bottom: 1px solid var(--line-hair);
       flex-shrink: 0;
     }
@@ -410,7 +419,7 @@
 
     .detail-title {
       font-family: var(--font-serif);
-      font-size: 25px;
+      font-size: 24px;
       font-weight: 700;
       letter-spacing: 0.04em;
       color: var(--ink-main);
@@ -422,10 +431,10 @@
       min-height: 0;
       overflow-y: auto;
       overflow-x: hidden;
-      padding: 18px 28px 26px;
+      padding: 16px 24px 24px;
       display: flex;
       flex-direction: column;
-      gap: 20px;
+      gap: 14px;
       -webkit-overflow-scrolling: touch;
       touch-action: pan-y;
       scrollbar-color: #c2ae8e transparent;
@@ -435,53 +444,76 @@
     .detail-scroll::-webkit-scrollbar { width: 6px; }
     .detail-scroll::-webkit-scrollbar-thumb { background: #cbbba6; border-radius: 6px; }
 
-    /* 1問チェック：大きい質問 → 聞く理由（1行） → 2択ボタン */
+    /* ① 1問チェック：水色トーンの枠で「まず選ぶ場所」を明確化（一本道構成） */
     .check-box {
-      padding-bottom: 18px;
-      border-bottom: 1px solid var(--line-hair);
+      background: var(--check-tint);
+      border: 1.2px solid var(--check-bd);
+      border-radius: 13px;
+      padding: 15px 18px 16px;
       display: flex;
       flex-direction: column;
-      gap: 6px;
+      gap: 7px;
       flex-shrink: 0;
     }
 
     .check-box.is-hidden { display: none; }
-    .check-box.is-unanswered { border-bottom: none; padding-bottom: 0; }
+
+    .check-q-head {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      flex-wrap: wrap;
+    }
+
+    .check-q-badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 2.5px 10px;
+      border-radius: 999px;
+      background: var(--check-color);
+      color: #fffdf8;
+      font-family: var(--font-ui);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
 
     .check-q-text {
       font-family: var(--font-serif);
-      font-size: 21px;
+      font-size: 19.5px;
       font-weight: 700;
       letter-spacing: 0.02em;
-      color: var(--ink-main);
-      line-height: 1.38;
+      color: var(--check-deep);
+      line-height: 1.35;
     }
 
     .check-reason {
       font-family: var(--font-ui);
-      font-size: 14px;
+      font-size: 13.8px;
       font-weight: 500;
-      color: var(--ink-muted);
-      line-height: 1.45;
-      margin-bottom: 8px;
+      color: var(--ink-sub);
+      line-height: 1.5;
+      margin-bottom: 5px;
     }
 
     .check-btn-row {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 12px;
+      gap: 11px;
     }
 
     .check-choice-btn {
-      min-height: 50px;
-      padding: 10px 14px;
+      min-height: 48px;
+      padding: 9px 14px;
       border-radius: 10px;
-      background: var(--surface-muted);
-      border: 1.2px solid var(--line-strong);
-      border-bottom: 2.4px solid #b39f86;
-      font-size: 15.5px;
+      background: var(--card-paper);
+      border: 1.3px solid rgba(58, 107, 134, 0.38);
+      border-bottom: 2.5px solid rgba(58, 107, 134, 0.56);
+      font-size: 15.2px;
       font-weight: 700;
-      color: var(--ink-main);
+      color: var(--check-deep);
       cursor: pointer;
       display: flex;
       align-items: center;
@@ -492,8 +524,8 @@
     }
 
     .check-choice-btn:hover:not(.is-selected) {
-      background: #f2eadc;
-      border-color: var(--axis);
+      background: #f8fbfd;
+      border-color: var(--check-color);
     }
 
     .check-choice-btn:active { transform: translateY(1px); }
@@ -501,34 +533,65 @@
     .check-choice-btn.is-selected {
       background: var(--check-color);
       border: 1.6px solid var(--check-deep);
-      border-bottom: 2.6px solid #1b384a;
+      border-bottom: 2.6px solid #173445;
       color: #fffdf8;
-      box-shadow: 0 2px 8px rgba(41, 78, 99, 0.18);
+      box-shadow: 0 2px 8px rgba(35, 73, 94, 0.2);
     }
 
-    /* 診断結果エリア：縦一本道（結論 → 行動リスト → これはNG） */
+    /* 診断結果エリア：原因 → 今すぐやること → これはNG を役割ごとの色枠で整理 */
     .result-body {
       display: flex;
       flex-direction: column;
-      gap: 20px;
+      gap: 14px;
     }
 
     .result-body.is-hidden { display: none; }
 
-    /* 結論：上の質問と同じ書き方（大きい明朝見出し＋1行補足） */
+    /* ② 原因ボックス（v1のわかりやすさ：左アクセント線＋ラベル＋丁寧な説明） */
     .cause-box {
+      --c-accent: var(--amber-color);
+      --c-deep: var(--amber-deep);
+      --c-tint: var(--amber-tint);
+      --c-bd: var(--amber-bd);
+      background: var(--c-tint);
+      border: 1.2px solid var(--c-bd);
+      border-left: 5px solid var(--c-accent);
+      border-radius: 12px;
+      padding: 13px 17px 14px;
       display: flex;
       flex-direction: column;
-      gap: 6px;
+      gap: 5px;
+    }
+
+    .cause-box.is-urgent {
+      --c-accent: var(--sos-color);
+      --c-deep: var(--sos-deep);
+      --c-tint: var(--sos-tint);
+      --c-bd: var(--sos-bd);
+    }
+
+    .cause-box.is-safe {
+      --c-accent: var(--ok-color);
+      --c-deep: var(--ok-deep);
+      --c-tint: var(--ok-tint);
+      --c-bd: var(--ok-bd);
+    }
+
+    .cause-label {
+      font-family: var(--font-ui);
+      font-size: 12.2px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      color: var(--c-deep);
     }
 
     .cause-title {
       font-family: var(--font-serif);
-      font-size: 21px;
+      font-size: 19.5px;
       font-weight: 700;
       letter-spacing: 0.02em;
       color: var(--ink-main);
-      line-height: 1.38;
+      line-height: 1.35;
     }
 
     .cause-box.is-urgent .cause-title { color: var(--sos-deep); }
@@ -536,34 +599,58 @@
 
     .cause-desc {
       font-family: var(--font-ui);
-      font-size: 14px;
+      font-size: 14.4px;
       font-weight: 500;
-      color: var(--ink-muted);
-      line-height: 1.5;
+      color: var(--ink-sub);
+      line-height: 1.58;
     }
 
-    /* 行動リスト（見出しなし・全幅でゆったり） */
+    /* ③ 今すぐやること（緑トーンの枠＋見出しピル＋行動見出し＆補足） */
+    .do-card {
+      background: var(--ok-tint);
+      border: 1.2px solid var(--ok-bd);
+      border-top: 3.5px solid var(--ok-color);
+      border-radius: 13px;
+      padding: 15px 18px 17px;
+      display: flex;
+      flex-direction: column;
+      gap: 13px;
+    }
+
+    .box-head-pill {
+      align-self: flex-start;
+      display: inline-flex;
+      align-items: center;
+      padding: 3px 12px;
+      border-radius: 999px;
+      font-family: var(--font-ui);
+      font-size: 12.6px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      background: var(--ok-color);
+      color: #fffdf8;
+    }
+
     .do-list {
       list-style: none;
       display: flex;
       flex-direction: column;
-      gap: 18px;
-      padding: 2px 0 4px;
+      gap: 14px;
     }
 
     .do-item {
       display: flex;
       align-items: flex-start;
-      gap: 13px;
+      gap: 12px;
     }
 
     .do-num {
-      width: 28px;
-      height: 28px;
+      width: 26px;
+      height: 26px;
       border-radius: 50%;
       background: var(--ok-color);
       color: #fffdf8;
-      font-size: 14px;
+      font-size: 13.5px;
       font-weight: 700;
       display: inline-flex;
       align-items: center;
@@ -575,64 +662,56 @@
     .do-text {
       display: flex;
       flex-direction: column;
-      gap: 5px;
+      gap: 4px;
       min-width: 0;
     }
 
     .do-head {
       font-family: var(--font-ui);
-      font-size: 18px;
+      font-size: 16.8px;
       font-weight: 700;
-      color: var(--ink-main);
+      color: var(--ok-deep);
       line-height: 1.35;
-      letter-spacing: 0.01em;
     }
 
     .do-sub {
       font-family: var(--font-ui);
-      font-size: 14px;
+      font-size: 14.2px;
       font-weight: 500;
-      color: var(--ink-sub);
-      line-height: 1.6;
+      color: var(--ink-main);
+      line-height: 1.58;
     }
 
-    /* これはNG：下に配置し、初期表示で上端が見切れてスクロールに気づく設計 */
+    /* ④ これはNG（赤トーンの枠＋見出しピル＋はっきりした理由説明） */
     .ng-card {
-      margin-top: 4px;
       background: var(--sos-tint);
-      border: 1px solid var(--sos-bd);
-      border-top: 3px solid var(--sos-color);
-      border-radius: 12px;
-      padding: 15px 18px;
+      border: 1.2px solid var(--sos-bd);
+      border-top: 3.5px solid var(--sos-color);
+      border-radius: 13px;
+      padding: 15px 18px 16px;
       display: flex;
       flex-direction: column;
-      gap: 8px;
+      gap: 9px;
     }
 
-    .ng-label {
-      align-self: flex-start;
-      font-size: 12.8px;
-      font-weight: 700;
-      letter-spacing: 0.08em;
-      color: var(--sos-deep);
-      padding-bottom: 3px;
-      border-bottom: 2px solid var(--sos-color);
+    .ng-card .box-head-pill {
+      background: var(--sos-color);
     }
 
     .ng-main {
       font-family: var(--font-ui);
-      font-size: 17.5px;
+      font-size: 17px;
       font-weight: 700;
       color: var(--sos-deep);
-      line-height: 1.4;
-      margin-top: 2px;
+      line-height: 1.38;
     }
 
     .ng-desc {
-      font-size: 14px;
+      font-family: var(--font-ui);
+      font-size: 14.2px;
       font-weight: 500;
-      color: #5c362e;
-      line-height: 1.6;
+      color: #542d25;
+      line-height: 1.58;
     }
 
     /* ================= 5. 下部関連リンク ================= */
@@ -753,21 +832,28 @@
 
             <div class="detail-scroll" id="detailScroll">
               <div class="check-box is-hidden" id="checkBox">
-                <p class="check-q-text" id="checkQuestion"></p>
+                <div class="check-q-head">
+                  <span class="check-q-badge">1問チェック</span>
+                  <p class="check-q-text" id="checkQuestion"></p>
+                </div>
                 <p class="check-reason" id="checkReason"></p>
                 <div class="check-btn-row" id="checkChoices"></div>
               </div>
 
               <div class="result-body" id="resultBody">
                 <div class="cause-box" id="causeBox">
+                  <span class="cause-label" id="causeLabel">考えられる原因</span>
                   <p class="cause-title" id="causeTitle"></p>
                   <p class="cause-desc" id="causeDesc"></p>
                 </div>
 
-                <ol class="do-list" id="doList"></ol>
+                <div class="do-card">
+                  <span class="box-head-pill">今すぐやること</span>
+                  <ol class="do-list" id="doList"></ol>
+                </div>
 
                 <div class="ng-card">
-                  <span class="ng-label">これはNG</span>
+                  <span class="box-head-pill">これはNG</span>
                   <p class="ng-main" id="ngMain"></p>
                   <p class="ng-desc" id="ngDesc"></p>
                 </div>
@@ -831,37 +917,39 @@
         icon: ICONS.wrinkle,
         check: {
           question: "鉢の中の土は乾いていますか？",
-          reason: "土の乾き具合で対処が真逆です。（竹串や鉢の重さで確かめましょう）",
+          reason: "水不足でも根の不調でも葉は同じようにしぼむため、土の乾き具合で対処が真逆になります。（竹串や鉢の重さでチェック）",
           choices: [
             {
               id: "dry",
               label: "中まで乾いている",
               tone: "normal",
+              causeLabel: "考えられる原因",
               causeTitle: "水不足の可能性があります",
-              causeDesc: "",
+              causeDesc: "葉にためていた水分を使ってしぼんでいる状態です。前回の水やり後も張りが戻らずしぼみ続けるときは、根の状態も確認しましょう。",
               dos: [
                 {
                   head: "季節に合わせて水をあげる",
-                  sub: "たっぷりの時期は株元の土に鉢底から出るまで。控えめの時期は夏は夕方・冬は暖かい午前に少量で様子を見ます。"
+                  sub: "「乾いたらたっぷり」の時期なら、株元の土に鉢底から水が出るまで。控えめの時期は、夏は夕方・冬は暖かい午前に少量で様子を見ます。"
                 },
                 {
                   head: "数日たっても張りが戻らなければ、根も確かめる",
                   sub: "水をあげてもしぼみ続けるときは、根が弱って水を吸えていないことがあります。"
                 }
               ],
-              ngMain: "暑い日中・冷える夜にたっぷりあげる",
-              ngDesc: "気温が厳しい時間帯の水やりは、蒸れや凍結でかえって株を傷めます。"
+              ngMain: "暑い日中や冷え込む夜にたっぷりあげる",
+              ngDesc: "気温が厳しい時間帯に水を与えると、蒸れや凍結でかえって株が傷んでしまいます。"
             },
             {
               id: "wet",
               label: "土が湿っている",
               tone: "urgent",
-              causeTitle: "給水直後か、根が吸えていないかも",
-              causeDesc: "水をあげた直後なら数日でハリが戻ります。湿った状態が長く続くのにしぼむなら、根の不調を考えましょう。",
+              causeLabel: "要注意のサイン",
+              causeTitle: "まだ水やり直後か、根が水を吸えていないかも",
+              causeDesc: "水をあげた直後なら数日でハリが戻ることもあります。湿った状態が長く続くのにしぼむなら、根の不調を考えましょう。",
               dos: [
                 {
-                  head: "水を足さず、風通しのよい日陰で乾かす",
-                  sub: ""
+                  head: "今は水を足さず、風通しのよい明るい日陰で乾かす",
+                  sub: "まずは土の中の湿気を抜くのが最優先です。数日様子を見て、葉や茎に変化がないか確認します。"
                 },
                 {
                   head: "茎が柔らかくなってきたら、元気な部分をカット",
@@ -883,20 +971,21 @@
         title: "ひょろひょろ伸びた",
         icon: ICONS.stretch,
         tone: "normal",
+        causeLabel: "考えられる原因",
         causeTitle: "光が足りず、お日様を探して伸びています（徒長）",
-        causeDesc: "",
+        causeDesc: "日照不足の状態で水やりや肥料が続くと、茎が細長く伸びて葉と葉の間が開き、色も薄くなりやすくなります。",
         dos: [
           {
             head: "数日かけて、少しずつ明るい場所へ移す",
-            sub: "いまより明るい窓辺や風通しのよい屋外へ、急に直射へ出さず慣らしながら移動します。"
+            sub: "いまより明るい窓辺や屋外の風通しがよい場所へ、急に直射へ出さず慣らしながら移動します。"
           },
           {
-            head: "これから出る葉の間隔を見る",
-            sub: "新しい葉と葉の間隔が詰まってくればOK。光が弱いままなら水やり間隔を長めにします。"
+            head: "これから出る葉と葉の間隔を見てみる",
+            sub: "新しい葉の間隔が詰まってくればOK。光が弱い場所のままなら、水やりの間隔を今より長めにしましょう。"
           }
         ],
         ngMain: "いきなり強い直射日光に出す",
-        ngDesc: "暗い場所にいた株を急に強い光へ出すと葉焼けします。やわらかな光から慣らしましょう。",
+        ngDesc: "暗い場所にいた株を急に強い光へ出すと葉焼けしてしまいます。やわらかな光から慣らしてあげましょう。",
         related: [
           { tag: "光と風の目安", label: "光・風・水を試す", nav: "sim.html", primary: true },
           { tag: "置き場所", label: "光のきほんを見る", nav: "basics_light.html", primary: false }
@@ -908,45 +997,47 @@
         icon: ICONS.jelly,
         check: {
           question: "どんなタイミングで急に変わりましたか？",
-          reason: "冷え込みか蒸れかで、最初にやる動きが変わります。（※ハオルチアの「窓」とは別です）",
+          reason: "冷え込みか蒸れかで、最初にやる動きが変わります。（※ハオルチアなど生まれつき透明な「窓」がある種類とは別です）",
           choices: [
             {
               id: "freeze",
               label: "冷え込んだ翌朝に急に変わった",
               tone: "normal",
-              causeTitle: "寒さで葉が傷んだ可能性（低温障害・凍害）",
-              causeDesc: "強い冷え込みや冷風に当たると、凍る手前でも葉が透けることがあります。まずは慌てて切らずに傷みの範囲を見ます。",
+              causeLabel: "考えられる原因",
+              causeTitle: "寒さで葉が傷んだ可能性があります（低温障害・凍害）",
+              causeDesc: "強い冷え込みや冷たい風に当たると、凍る手前でも葉が傷んで透けたようになります。まずは慌てて切らずに傷みの範囲を見ます。",
               dos: [
                 {
                   head: "凍らない明るい室内へ移して見守る",
-                  sub: "暖房の風が直接当たらない場所へ置き、数日かけて傷みの範囲を確認します。"
+                  sub: "暖房の風が直接当たらない場所へ置き、数日かけてどこまで傷んでいるか様子を見ます。"
                 },
                 {
-                  head: "崩れた葉だけ取り除き、水はお休み",
-                  sub: ""
+                  head: "溶けて崩れた葉だけ取り除き、水はお休み",
+                  sub: "崩れた葉をそっと取り、土がしっかり乾くまで水やりを控えて回復を待ちましょう。"
                 }
               ],
-              ngMain: "すぐ全体を切る・急激に温める",
-              ngDesc: "お湯や直射に当てたり慌てて切ったりすると、助かる茎や成長点まで傷みます。"
+              ngMain: "すぐ全体を切る・暖かいお湯や直射に当てる",
+              ngDesc: "急激に温めたり慌てて切ったりすると、助かるはずの茎や成長点まで傷んでしまいます。"
             },
             {
               id: "rot",
               label: "暖かい時期・株元が黒く柔らかい",
               tone: "urgent",
-              causeTitle: "高温と湿気による「蒸れ・腐敗」の疑い",
-              causeDesc: "",
+              causeLabel: "急いで対応",
+              causeTitle: "高温と湿気による「蒸れ・腐敗」が疑われます",
+              causeDesc: "鉢の中に熱と湿気がこもると、株元や葉が煮えたように傷んで腐りが広がりやすくなります。",
               dos: [
                 {
-                  head: "透けた葉をすぐ取り、涼しい日陰で乾かす",
-                  sub: ""
+                  head: "透けた葉をすぐ取り、風通しのよい涼しい日陰で乾かす",
+                  sub: "傷んだ葉を残すと周囲に広がるため、早めに取り除いて鉢の湿気をしっかり抜きます。"
                 },
                 {
-                  head: "株元が黒く柔らかければ、緑の部分でカット",
-                  sub: "腐りが広がっているときは、元気な緑の部分まで切り分けて切り口を乾かします。"
+                  head: "株元の黒く柔らかい部分が広がるなら、緑の部分でカット",
+                  sub: "元気な緑色の部分まで清潔なハサミで切り分け、切り口を乾かして仕立て直しましょう。"
                 }
               ],
               ngMain: "そのまま放置する・水をあげる",
-              ngDesc: "元気な茎や葉まで一気に腐りが広がってしまいます。"
+              ngDesc: "傷んだ部分をそのままにすると、元気な茎や葉まで一気に腐りが広がってしまいます。"
             }
           ]
         },
@@ -960,20 +1051,21 @@
         title: "葉が茶色く焼けた",
         icon: ICONS.burn,
         tone: "normal",
+        causeLabel: "考えられる原因",
         causeTitle: "急な強い日差しや、真夏の西日に当たりました（葉焼け）",
-        causeDesc: "",
+        causeDesc: "室内にいた株を急に外へ出したり、強い日差しが当たり続けると、日が当たる側だけ茶色や白っぽくカサカサに焼けます。",
         dos: [
           {
-            head: "直射の当たらない涼しい場所へ移す",
-            sub: "レースカーテン越しや明るい日陰など、やわらかな光の場所へ避難します。"
+            head: "直射日光の当たらない涼しい場所へ移す",
+            sub: "レースカーテン越しや明るい日陰など、やわらかな光の場所へ避難して株を休ませます。"
           },
           {
             head: "新しい葉が生え変わるのを見守る",
-            sub: "焼けた部分は元に戻りませんが、株が元気なら新しい葉が生え変わって目立たなくなります。"
+            sub: "焼けた部分は元に戻りませんが、株が元気なら新しい葉が生え変わってだんだん目立たなくなります。"
           }
         ],
         ngMain: "焼けた葉を無理に全部ちぎる",
-        ngDesc: "少し焼けた程度なら株は生きています。無理に葉を取ると体力が落ちてしまいます。",
+        ngDesc: "少し焼けた程度なら株自体は生きています。無理に葉を取ると株の体力が落ちてしまいます。",
         related: [
           { tag: "タイプ別の光", label: "光・風・水を試す", nav: "sim.html", primary: true },
           { tag: "置き場所", label: "光のきほんを見る", nav: "basics_light.html", primary: false }
@@ -985,45 +1077,47 @@
         icon: ICONS.drop,
         check: {
           question: "下の葉は、どんなふうに枯れていますか？",
-          reason: "枯れ方で、自然な生え変わりか、蒸れかが見分けられます。",
+          reason: "枯れ方で、自然な生え変わり（安心）か、蒸れ（要注意）かが見分けられます。",
           choices: [
             {
               id: "dryleaf",
               label: "カラカラに乾いて枯れる",
               tone: "safe",
+              causeLabel: "安心してください",
               causeTitle: "自然な生え変わり（新陳代謝）のことが多いです",
-              causeDesc: "下の古い葉だけが少しずつ乾き、中心の葉にハリがあれば大丈夫。古い葉の水分を使って新しい葉を育てています。",
+              causeDesc: "下の古い葉だけが少しずつ乾き、中心の葉に張りがあれば大丈夫。古い葉から水分を使って新しい葉を育てています。",
               dos: [
                 {
-                  head: "カリカリになった枯れ葉だけ取る",
-                  sub: ""
+                  head: "完全にカリカリになった枯れ葉だけ取る",
+                  sub: "まだ水分が残る葉は無理に引かず、乾ききった葉だけピンセットなどでそっと取り除きます。"
                 },
                 {
                   head: "株元の風通しをすっきり保つ",
-                  sub: "枯れ葉をためないでおくと、蒸れや害虫の予防にもなります。"
+                  sub: "株元に枯れ葉がたまらないようにしておくと、蒸れや害虫の予防にもなります。"
                 }
               ],
               ngMain: "慌てて毎日水をあげる",
-              ngDesc: "水不足と勘違いして水をやりすぎると、かえって根腐れの原因になります。"
+              ngDesc: "自然な生え変わりを水不足と勘違いして水をやりすぎると、かえって根腐れの原因になります。"
             },
             {
               id: "wetleaf",
               label: "緑のまま・ブヨブヨ落ちる",
               tone: "urgent",
+              causeLabel: "要注意のサイン",
               causeTitle: "水のやりすぎ・蒸れで弱っています",
-              causeDesc: "",
+              causeDesc: "乾いていないのに葉がポロポロ落ちたり、付け根が黒っぽいときは、土が湿りすぎているサインです。",
               dos: [
                 {
-                  head: "水やりを止めて、明るい日陰で乾かす",
-                  sub: ""
+                  head: "すぐ水やりを止め、明るい日陰でしっかり乾かす",
+                  sub: "風通しのよい場所へ移し、鉢の中がしっかり乾くまで水やりをお休みします。"
                 },
                 {
-                  head: "鉢底穴と受け皿をチェックする",
-                  sub: "鉢底の穴がふさがっていないか、受け皿に水がたまっていないか確認します。"
+                  head: "鉢底の穴と受け皿をチェックする",
+                  sub: "鉢底の穴がふさがっていないか、受け皿に水がたまったままになっていないかも確認しましょう。"
                 }
               ],
               ngMain: "受け皿に水をためたままにする",
-              ngDesc: "鉢の中がずっと湿り続け、根が窒息して株全体が傷んでしまいます。"
+              ngDesc: "鉢の中がずっと湿った状態になり、根が窒息して株全体が傷んでしまいます。"
             }
           ]
         },
@@ -1037,20 +1131,21 @@
         title: "白い綿・小さな虫がついた",
         icon: ICONS.bug,
         tone: "urgent",
-        causeTitle: "カイガラムシ・アブラムシなどの虫がついています",
+        causeLabel: "考えられる原因",
+        causeTitle: "風通しが弱い場所や、枯れ葉の陰につきやすい虫です",
         causeDesc: "葉全体に均一な白い粉がつく品種もありますが、葉の付け根に「白い綿のかたまり」があればカイガラムシなどのサインです。",
         dos: [
           {
-            head: "ほかの鉢から離し、綿棒などで取り除く",
-            sub: "葉の付け根をよく見て、白い綿や虫を綿棒やピンセットでやさしく拭き取ります。"
+            head: "ほかの鉢から離し、綿棒やピンセットで取り除く",
+            sub: "葉の付け根に白い綿のかたまりや虫がないかよく見て、見つけたものをやさしく取り除きます。"
           },
           {
             head: "くり返すときは適合スプレー＋風通し改善",
-            sub: "その植物と虫に使えることをラベルで確認したスプレーを使い、風通しを良くします。"
+            sub: "その植物と虫に使えることをラベルで確認した市販スプレーを使い、風通しを良くしましょう。"
           }
         ],
         ngMain: "ほかの鉢と密着させたまま放置する",
-        ngDesc: "隣の鉢へどんどん広がります。新しく迎えた鉢は、並べる前に葉の付け根を見てみましょう。",
+        ngDesc: "気づかないうちに隣の鉢へどんどん広がります。新しく迎えた鉢は、並べる前に葉の付け根を見てみましょう。",
         related: [
           { tag: "風通しのコツ", label: "風通しのきほんを見る", nav: "basics_wind.html", primary: true },
           { tag: "環境の見直し", label: "光・風・水を試す", nav: "sim.html", primary: false }
@@ -1071,6 +1166,7 @@
     const checkChoicesEl = document.getElementById("checkChoices");
     const resultBodyEl = document.getElementById("resultBody");
     const causeBoxEl = document.getElementById("causeBox");
+    const causeLabelEl = document.getElementById("causeLabel");
     const causeTitleEl = document.getElementById("causeTitle");
     const causeDescEl = document.getElementById("causeDesc");
     const doListEl = document.getElementById("doList");
@@ -1125,7 +1221,6 @@
           button.classList.toggle("is-selected", button.dataset.choice === selectedId);
         }
         activeData = s.check.choices.find((choice) => choice.id === selectedId);
-        checkBoxEl.classList.toggle("is-unanswered", !activeData);
       }
       resultBodyEl.classList.toggle("is-hidden", !activeData);
       if (!activeData) return;
@@ -1134,6 +1229,7 @@
       if (activeData.tone === "urgent") causeBoxEl.classList.add("is-urgent");
       if (activeData.tone === "safe") causeBoxEl.classList.add("is-safe");
 
+      causeLabelEl.textContent = activeData.causeLabel || "考えられる原因";
       causeTitleEl.textContent = activeData.causeTitle;
       causeDescEl.textContent = activeData.causeDesc || "";
       causeDescEl.style.display = activeData.causeDesc ? "" : "none";
