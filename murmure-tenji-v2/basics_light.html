@@ -121,30 +121,30 @@ const params=new URLSearchParams(location.search);
 const month=params.get('month');
 const validMonth=month&&/^([1-9]|1[0-2])$/.test(month)?month:'';
 if(params.get('from')==='sos'){
-  const backLink=document.querySelector('.nav a:first-child');
-  if(backLink){
-    const next=new URLSearchParams();
-    const sosFrom=params.get('sosFrom');
-    if(sosFrom)next.set('from',sosFrom);
-    ['sym','choice','type','season','light','wind','water','month'].forEach(k=>{const v=params.get(k);if(v)next.set(k,v)});
-    const qs=next.toString();
-    backLink.setAttribute('href',qs?`sos.html?${qs}`:'sos.html');
-  }
+ const backLink=document.querySelector('.nav a:first-child');
+ if(backLink){
+ const next=new URLSearchParams();
+ const sosFrom=params.get('sosFrom');
+ if(sosFrom)next.set('from',sosFrom);
+ ['sym','choice','type','season','light','wind','water','month'].forEach(k=>{const v=params.get(k);if(v)next.set(k,v)});
+ const qs=next.toString();
+ backLink.setAttribute('href',qs?`sos.html?${qs}`:'sos.html');
+ }
 }
 document.querySelectorAll('a[href]').forEach(a=>{
-  const raw=a.getAttribute('href');
-  if(!raw||raw.startsWith('#')||raw.startsWith('http'))return;
-  const u=new URL(raw,location.href);
-  const file=u.pathname.split('/').pop();
-  if(!a.closest('.nav')&&(file==='sos.html'||file==='sim.html')&&!u.searchParams.has('from')){
-    u.searchParams.set('from',PAGE_ID);
-  }
-  if(validMonth&&!u.searchParams.has('month')){
-    u.searchParams.set('month',validMonth);
-  }
-  a.setAttribute('href',file+u.search);
+ const raw=a.getAttribute('href');
+ if(!raw||raw.startsWith('#')||raw.startsWith('http'))return;
+ const u=new URL(raw,location.href);
+ const file=u.pathname.split('/').pop();
+ if(!a.closest('.nav')&&(file==='sos.html'||file==='sim.html')&&!u.searchParams.has('from')){
+ u.searchParams.set('from',PAGE_ID);
+ }
+ if(validMonth&&!u.searchParams.has('month')){
+ u.searchParams.set('month',validMonth);
+ }
+ a.setAttribute('href',file+u.search);
 });
-const AUTO_RETURN_MS=0;if(AUTO_RETURN_MS){let idle;const reset=()=>{clearTimeout(idle);idle=setTimeout(()=>location.href='index.html',AUTO_RETURN_MS)};['pointerdown','touchstart','keydown','scroll'].forEach(e=>document.addEventListener(e,reset,{passive:true,capture:true}));reset()}
+const AUTO_RETURN_MS=300000;if(AUTO_RETURN_MS){let idle;const reset=()=>{clearTimeout(idle);idle=setTimeout(()=>location.href='index.html',AUTO_RETURN_MS)};['pointerdown','touchstart','keydown','scroll'].forEach(e=>document.addEventListener(e,reset,{passive:true,capture:true}));reset()}
 </script>
 </body>
 </html>

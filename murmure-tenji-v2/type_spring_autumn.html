@@ -1,336 +1,336 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+ <meta charset="UTF-8" />
+ <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
 
-  <!-- =========================================================================
-    保木平珈琲 Murmure｜展示用iPad Webアプリ「タイプ別ガイド：春秋元気タイプ」（v2・表記統一版）
-    - ヘッダー固定（basics.html / sim.html 統一・英語削除・タイプ横に代表品種）
-    - 関連リンク表記を「光・風・水を試す」へ統一
-  ========================================================================= -->
+ <!-- =========================================================================
+ 保木平珈琲 Murmure｜展示用iPad Webアプリ「タイプ別ガイド：春秋元気タイプ」（v2・表記統一版）
+ - ヘッダー固定（basics.html / sim.html 統一・英語削除・タイプ横に代表品種）
+ - 関連リンク表記を「光・風・水を試す」へ統一
+ ========================================================================= -->
 
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-  <meta name="apple-mobile-web-app-title" content="多肉の育て方" />
-  <meta name="theme-color" content="#f6f0e4" />
-  <meta name="format-detection" content="telephone=no" />
-  <link rel="manifest" href="manifest.json" />
+ <meta name="apple-mobile-web-app-capable" content="yes" />
+ <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+ <meta name="apple-mobile-web-app-title" content="多肉の育て方" />
+ <meta name="theme-color" content="#f6f0e4" />
+ <meta name="format-detection" content="telephone=no" />
+ <link rel="manifest" href="manifest.json" />
 
-  <link rel="apple-touch-icon" sizes="180x180" href="images/apple-touch-icon.png" />
-  <link rel="icon" type="image/png" sizes="512x512" href="images/icon-512.png" />
+ <link rel="apple-touch-icon" sizes="180x180" href="images/apple-touch-icon.png" />
+ <link rel="icon" type="image/png" sizes="512x512" href="images/icon-512.png" />
 
-  <title>Murmure｜春秋元気タイプ（エケベリア・セダム・グラプトペタルム など）</title>
+ <title>Murmure｜春秋元気タイプ（エケベリア・セダム・グラプトペタルム など）</title>
 
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;600;700&family=Zen+Maru+Gothic:wght@400;500;700&display=swap" rel="stylesheet" />
+ <link rel="preconnect" href="https://fonts.googleapis.com" />
+ <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+ <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;600;700&family=Zen+Maru+Gothic:wght@400;500;700&display=swap" rel="stylesheet" />
 
-  <style>
-    :root {
-      --bg-outer: #e9dfd0;
-      --bg-paper: #f6f0e4;
-      --card-paper: #fffdf8;
-      --surface-muted: #f7f2e7;
-      --ink-main: #2d1f16;
-      --ink-sub: #4e3d30;
-      --ink-muted: #6e5c4d;
-      --line-soft: #d7c7ad;
-      --line-strong: #c2ae8e;
+ <style>
+ :root {
+ --bg-outer: #e9dfd0;
+ --bg-paper: #f6f0e4;
+ --card-paper: #fffdf8;
+ --surface-muted: #f7f2e7;
+ --ink-main: #2d1f16;
+ --ink-sub: #4e3d30;
+ --ink-muted: #6e5c4d;
+ --line-soft: #d7c7ad;
+ --line-strong: #c2ae8e;
 
-      --axis: #5e4736;
-      --axis-dark: #453326;
-      --axis-soft: #f2eadc;
-      --axis-fill: #ebe0cc;
+ --axis: #5e4736;
+ --axis-dark: #453326;
+ --axis-soft: #f2eadc;
+ --axis-fill: #ebe0cc;
 
-      --type-color: #b8566d;
-      --type-dark: #8a394c;
-      --type-soft: rgba(184, 86, 109, 0.10);
-      --type-bd: rgba(184, 86, 109, 0.34);
+ --type-color: #b8566d;
+ --type-dark: #8a394c;
+ --type-soft: rgba(184, 86, 109, 0.10);
+ --type-bd: rgba(184, 86, 109, 0.34);
 
-      --s-grow: #486e3e;
-      --s-grow-dark: #385930;
-      --s-summer: #b05c1c;
-      --s-summer-dark: #8f4510;
-      --s-winter: #3b6b8a;
-      --s-winter-dark: #2b5570;
+ --s-grow: #486e3e;
+ --s-grow-dark: #385930;
+ --s-summer: #b05c1c;
+ --s-summer-dark: #8f4510;
+ --s-winter: #3b6b8a;
+ --s-winter-dark: #2b5570;
 
-      --shadow-soft: 0 2px 10px rgba(72, 54, 38, 0.06);
+ --shadow-soft: 0 2px 10px rgba(72, 54, 38, 0.06);
 
-      --font-serif: "Shippori Mincho", "Hiragino Mincho ProN", "Yu Mincho", serif;
-      --font-ui: "Zen Maru Gothic", "Hiragino Maru Gothic ProN", sans-serif;
-    }
+ --font-serif: "Shippori Mincho", "Hiragino Mincho ProN", "Yu Mincho", serif;
+ --font-ui: "Zen Maru Gothic", "Hiragino Maru Gothic ProN", sans-serif;
+ }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
-    a, button { font: inherit; color: inherit; text-decoration: none; touch-action: manipulation; }
-    a:focus-visible, button:focus-visible { outline: 3px solid #ab542c; outline-offset: -3px; }
-    svg { display: block; flex-shrink: 0; }
+ * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
+ a, button { font: inherit; color: inherit; text-decoration: none; touch-action: manipulation; }
+ a:focus-visible, button:focus-visible { outline: 3px solid #ab542c; outline-offset: -3px; }
+ svg { display: block; flex-shrink: 0; }
 
-    html, body { width: 100%; height: 100%; overflow: hidden; background: var(--bg-outer); font-family: var(--font-ui); color: var(--ink-main); }
-    .viewport-wrapper { position: fixed; inset: 0; width: 100vw; height: 100vh; height: 100dvh; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+ html, body { width: 100%; height: 100%; overflow: hidden; background: var(--bg-outer); font-family: var(--font-ui); color: var(--ink-main); }
+ .viewport-wrapper { position: fixed; inset: 0; width: 100vw; height: 100vh; height: 100dvh; overflow: hidden; display: flex; align-items: center; justify-content: center; }
 
-    .canvas { position: relative; width: 1080px; height: 786px; min-width: 1080px; min-height: 786px; background: linear-gradient(135deg, #f9f5e9, #f2ead9); transform-origin: center center; display: flex; flex-direction: column; box-shadow: 0 12px 36px rgba(59, 45, 35, 0.14); overflow: hidden; }
-    .canvas::before { content: ""; position: absolute; inset: 0; pointer-events: none; background-image: radial-gradient(rgba(110, 88, 66, 0.045) 1px, transparent 0); background-size: 16px 16px; opacity: 0.7; }
+ .canvas { position: relative; width: 1080px; height: 786px; min-width: 1080px; min-height: 786px; background: linear-gradient(135deg, #f9f5e9, #f2ead9); transform-origin: center center; display: flex; flex-direction: column; box-shadow: 0 12px 36px rgba(59, 45, 35, 0.14); overflow: hidden; }
+ .canvas::before { content: ""; position: absolute; inset: 0; pointer-events: none; background-image: radial-gradient(rgba(110, 88, 66, 0.045) 1px, transparent 0); background-size: 16px 16px; opacity: 0.7; }
 
-    .page-header { position: relative; z-index: 10; display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-shrink: 0; margin: 0 24px; padding: 14px 0 8px; border-bottom: 1px solid var(--line-soft); background: transparent; }
-    .header-left { display: flex; align-items: center; gap: 16px; min-width: 0; }
-    .header-nav-group { display: inline-flex; align-items: center; gap: 8px; flex-shrink: 0; }
+ .page-header { position: relative; z-index: 10; display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-shrink: 0; margin: 0 24px; padding: 14px 0 8px; border-bottom: 1px solid var(--line-soft); background: transparent; }
+ .header-left { display: flex; align-items: center; gap: 16px; min-width: 0; }
+ .header-nav-group { display: inline-flex; align-items: center; gap: 8px; flex-shrink: 0; }
 
-    .back-btn, .home-btn { display: inline-flex; align-items: center; gap: 6px; height: 40px; padding: 0 15px; background: var(--card-paper); border: 1px solid var(--line-soft); border-bottom: 2px solid var(--line-strong); border-radius: 10px; font-family: var(--font-ui); font-size: 14.5px; font-weight: 700; color: var(--ink-main); cursor: pointer; flex-shrink: 0; transition: background-color 0.12s ease, transform 0.08s ease; }
-    .home-btn { background: var(--axis-soft); border-color: #cbbba6; border-bottom-color: #b39f86; color: var(--axis); }
-    .back-btn:active, .home-btn:active { transform: translateY(1px); background: #ebe4d5; }
-    .back-arrow { font-size: 19px; line-height: 1; color: var(--axis); }
-    .home-btn svg { width: 15px; height: 15px; color: var(--axis); }
+ .back-btn, .home-btn { display: inline-flex; align-items: center; gap: 6px; height: 40px; padding: 0 15px; background: var(--card-paper); border: 1px solid var(--line-soft); border-bottom: 2px solid var(--line-strong); border-radius: 10px; font-family: var(--font-ui); font-size: 14.5px; font-weight: 700; color: var(--ink-main); cursor: pointer; flex-shrink: 0; transition: background-color 0.12s ease, transform 0.08s ease; }
+ .home-btn { background: var(--axis-soft); border-color: #cbbba6; border-bottom-color: #b39f86; color: var(--axis); }
+ .back-btn:active, .home-btn:active { transform: translateY(1px); background: #ebe4d5; }
+ .back-arrow { font-size: 19px; line-height: 1; color: var(--axis); }
+ .home-btn svg { width: 15px; height: 15px; color: var(--axis); }
 
-    .title-wrap { display: flex; align-items: center; gap: 11px; min-width: 0; }
-    .header-type-dot { width: 14px; height: 14px; border-radius: 50%; background: var(--type-color); flex-shrink: 0; }
-    .page-title { font-family: var(--font-serif); font-size: 25px; font-weight: 700; letter-spacing: 0.06em; line-height: 1.12; color: var(--ink-main); white-space: nowrap; }
-    .header-species { font-family: var(--font-ui); font-size: 13.5px; font-weight: 500; color: var(--ink-muted); padding-left: 12px; border-left: 1.5px solid var(--line-strong); line-height: 1.2; white-space: nowrap; }
+ .title-wrap { display: flex; align-items: center; gap: 11px; min-width: 0; }
+ .header-type-dot { width: 14px; height: 14px; border-radius: 50%; background: var(--type-color); flex-shrink: 0; }
+ .page-title { font-family: var(--font-serif); font-size: 25px; font-weight: 700; letter-spacing: 0.06em; line-height: 1.12; color: var(--ink-main); white-space: nowrap; }
+ .header-species { font-family: var(--font-ui); font-size: 13.5px; font-weight: 500; color: var(--ink-muted); padding-left: 12px; border-left: 1.5px solid var(--line-strong); line-height: 1.2; white-space: nowrap; }
 
-    .scroll-area { position: relative; z-index: 2; flex: 1 1 auto; min-height: 0; overflow-y: auto; overflow-x: hidden; -webkit-overflow-scrolling: touch; touch-action: pan-y; scroll-behavior: smooth; padding: 12px 28px 36px; }
-    .scroll-area::-webkit-scrollbar { width: 7px; }
-    .scroll-area::-webkit-scrollbar-track { background: transparent; }
-    .scroll-area::-webkit-scrollbar-thumb { background: rgba(110, 92, 77, 0.34); border-radius: 999px; }
+ .scroll-area { position: relative; z-index: 2; flex: 1 1 auto; min-height: 0; overflow-y: auto; overflow-x: hidden; -webkit-overflow-scrolling: touch; touch-action: pan-y; scroll-behavior: smooth; padding: 12px 28px 36px; }
+ .scroll-area::-webkit-scrollbar { width: 7px; }
+ .scroll-area::-webkit-scrollbar-track { background: transparent; }
+ .scroll-area::-webkit-scrollbar-thumb { background: rgba(110, 92, 77, 0.34); border-radius: 999px; }
 
-    .first-view { display: flex; flex-direction: column; gap: 0px; }
-    .hero-spread { position: relative; display: flex; align-items: center; height: 196px; padding: 10px 440px 14px 68px; margin: -12px -28px 0; overflow: hidden; }
-    .hero-catch { position: relative; z-index: 2; font-family: var(--font-serif); font-size: 39px; font-weight: 700; line-height: 1.36; color: var(--ink-main); letter-spacing: 0.05em; text-shadow: 0 1px 10px rgba(246, 240, 228, 0.92); }
-    .hero-art-box { position: absolute; inset: 0; z-index: 0; pointer-events: none; }
-    .hero-art { width: 100%; height: 100%; object-fit: cover; object-position: right center; -webkit-mask-image: linear-gradient(180deg, #000 0%, #000 86%, transparent 100%); mask-image: linear-gradient(180deg, #000 0%, #000 86%, transparent 100%); pointer-events: none; }
+ .first-view { display: flex; flex-direction: column; gap: 0px; }
+ .hero-spread { position: relative; display: flex; align-items: center; height: 196px; padding: 10px 440px 14px 68px; margin: -12px -28px 0; overflow: hidden; }
+ .hero-catch { position: relative; z-index: 2; font-family: var(--font-serif); font-size: 39px; font-weight: 700; line-height: 1.36; color: var(--ink-main); letter-spacing: 0.05em; text-shadow: 0 1px 10px rgba(246, 240, 228, 0.92); }
+ .hero-art-box { position: absolute; inset: 0; z-index: 0; pointer-events: none; }
+ .hero-art { width: 100%; height: 100%; object-fit: cover; object-position: right center; -webkit-mask-image: linear-gradient(180deg, #000 0%, #000 86%, transparent 100%); mask-image: linear-gradient(180deg, #000 0%, #000 86%, transparent 100%); pointer-events: none; }
 
-    .chart-board { position: relative; z-index: 2; margin-top: 2px; padding: 10px 8px 4px; display: flex; flex-direction: column; gap: 12px; }
-    .chart-svg-wrap { width: 100%; display: block; }
-    .chart-svg { width: 100%; height: auto; display: block; overflow: visible; }
-    .chart-footer { display: flex; align-items: center; justify-content: flex-end; gap: 16px; padding: 0 6px; }
-    .chart-footer-links { display: inline-flex; align-items: center; gap: 8px; flex-shrink: 0; }
-    .subtle-sim-link { display: inline-flex; align-items: center; gap: 5px; padding: 4px 10px; border-radius: 999px; background: transparent; border: 1px solid transparent; font-family: var(--font-ui); font-size: 13px; font-weight: 700; color: var(--axis); white-space: nowrap; transition: background-color 0.14s ease, border-color 0.14s ease; }
-    .subtle-sim-link:hover { background: var(--axis-soft); border-color: var(--line-soft); }
-    .subtle-sim-link:active { background: var(--axis-fill); }
-    .subtle-sim-arrow { font-size: 15px; line-height: 1; color: var(--axis); }
+ .chart-board { position: relative; z-index: 2; margin-top: 2px; padding: 10px 8px 4px; display: flex; flex-direction: column; gap: 12px; }
+ .chart-svg-wrap { width: 100%; display: block; }
+ .chart-svg { width: 100%; height: auto; display: block; overflow: visible; }
+ .chart-footer { display: flex; align-items: center; justify-content: flex-end; gap: 16px; padding: 0 6px; }
+ .chart-footer-links { display: inline-flex; align-items: center; gap: 8px; flex-shrink: 0; }
+ .subtle-sim-link { display: inline-flex; align-items: center; gap: 5px; padding: 4px 10px; border-radius: 999px; background: transparent; border: 1px solid transparent; font-family: var(--font-ui); font-size: 13px; font-weight: 700; color: var(--axis); white-space: nowrap; transition: background-color 0.14s ease, border-color 0.14s ease; }
+ .subtle-sim-link:hover { background: var(--axis-soft); border-color: var(--line-soft); }
+ .subtle-sim-link:active { background: var(--axis-fill); }
+ .subtle-sim-arrow { font-size: 15px; line-height: 1; color: var(--axis); }
 
-    .second-view { margin-top: 20px; padding-top: 18px; border-top: 1.5px dashed var(--line-strong); display: flex; flex-direction: column; gap: 28px; }
+ .second-view { margin-top: 20px; padding-top: 18px; border-top: 1.5px dashed var(--line-strong); display: flex; flex-direction: column; gap: 28px; }
 
-    .footer-action-bar { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 18px 24px; background: var(--surface-muted); border: 1.4px solid var(--line-strong); border-radius: 14px; box-shadow: var(--shadow-soft); }
-    .footer-action-copy { display: flex; flex-direction: column; gap: 4px; }
-    .footer-action-title { font-family: var(--font-serif); font-size: 17.5px; font-weight: 700; color: var(--ink-main); }
-    .footer-action-desc { font-size: 13.5px; font-weight: 500; color: var(--ink-sub); }
-    .footer-action-btns { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
+ .footer-action-bar { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 18px 24px; background: var(--surface-muted); border: 1.4px solid var(--line-strong); border-radius: 14px; box-shadow: var(--shadow-soft); }
+ .footer-action-copy { display: flex; flex-direction: column; gap: 4px; }
+ .footer-action-title { font-family: var(--font-serif); font-size: 17.5px; font-weight: 700; color: var(--ink-main); }
+ .footer-action-desc { font-size: 13.5px; font-weight: 500; color: var(--ink-sub); }
+ .footer-action-btns { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
 
-    .cta-sim { display: inline-flex; align-items: center; gap: 9px; height: 46px; padding: 0 22px; background: var(--axis-fill); border: 1.8px solid var(--axis); border-bottom: 3px solid var(--axis-dark); border-radius: 999px; font-family: var(--font-ui); font-size: 14.5px; font-weight: 700; color: var(--ink-main); box-shadow: 0 2px 7px rgba(59, 45, 35, 0.10); white-space: nowrap; transition: background-color 0.14s ease, transform 0.08s ease; }
-    .cta-sim:hover { background: #e3d4bb; }
-    .cta-sim:active { transform: translateY(1px); }
-    .cta-sim svg { width: 16px; height: 16px; color: var(--axis); }
-    .cta-arrow { font-size: 17px; font-weight: 700; color: var(--axis); }
+ .cta-sim { display: inline-flex; align-items: center; gap: 9px; height: 46px; padding: 0 22px; background: var(--axis-fill); border: 1.8px solid var(--axis); border-bottom: 3px solid var(--axis-dark); border-radius: 999px; font-family: var(--font-ui); font-size: 14.5px; font-weight: 700; color: var(--ink-main); box-shadow: 0 2px 7px rgba(59, 45, 35, 0.10); white-space: nowrap; transition: background-color 0.14s ease, transform 0.08s ease; }
+ .cta-sim:hover { background: #e3d4bb; }
+ .cta-sim:active { transform: translateY(1px); }
+ .cta-sim svg { width: 16px; height: 16px; color: var(--axis); }
+ .cta-arrow { font-size: 17px; font-weight: 700; color: var(--axis); }
 
-    .cta-sub { display: inline-flex; align-items: center; gap: 7px; height: 46px; padding: 0 18px; background: var(--card-paper); border: 1.2px solid var(--line-soft); border-bottom: 2px solid var(--line-strong); border-radius: 999px; font-family: var(--font-ui); font-size: 14px; font-weight: 700; color: var(--ink-sub); white-space: nowrap; transition: background-color 0.12s ease, transform 0.08s ease; }
-    .cta-sub:hover { background: #fdf9f0; }
-    .cta-sub:active { transform: translateY(1px); }
-  
-    /* Scrollable care guide prototype — header and existing hero/graph retained. */
-    .chart-board { padding: 8px 8px 0; gap: 4px; }
-    .chart-heading { display:flex; align-items:baseline; gap:16px; padding:0 6px; }
-    .chart-heading h2 { font:700 21px/1.35 var(--font-serif); letter-spacing:.04em; }
-    .chart-heading span { font:500 13px var(--font-ui); color:var(--ink-muted); }
-    .chart-svg-wrap { height:286px; }
-    .chart-svg { width:100%; height:100%; }
-    .chart-footer { padding: 0 6px 4px; }
-    .second-view { margin-top:16px; border-top:1px solid var(--line-strong); padding-top:16px; gap:28px; }
-    .section-intro { display:flex; align-items:baseline; gap:17px; padding:0 6px 12px; }
-    .section-intro h2 { font:700 25px/1.3 var(--font-serif); letter-spacing:.04em; }
-    .section-intro span { font-size:14px; color:var(--ink-muted); }
-    .care-story { display:grid; grid-template-columns:230px 1fr; align-items:center; gap:30px; padding:12px 16px 24px; min-height:218px; border-bottom:1px solid var(--line-soft); }
-    .care-story.reverse { grid-template-columns:1fr 230px; }
-    .care-story.reverse .story-art { order:2; }
-    .story-art { display:flex; align-items:center; justify-content:center; height:180px; overflow:hidden; border-radius:13px; }
-    .story-art img { width:180px; height:180px; object-fit:cover; mix-blend-mode:multiply; border-radius:13px; }
-    .story-art svg { width:100%; height:100%; }
-    .story-copy { display:flex; flex-direction:column; align-items:flex-start; gap:9px; }
-    .story-kicker { font:700 13px var(--font-ui); letter-spacing:.06em; color:var(--type-dark); }
-    .story-kicker.grow { color:var(--s-grow-dark); } .story-kicker.summer { color:var(--s-summer-dark); } .story-kicker.winter { color:var(--s-winter-dark); }
-    .story-copy h3, .enjoy-item h3 { font:700 23px/1.35 var(--font-serif); letter-spacing:.025em; }
-    .story-copy p, .enjoy-item p { font:500 16px/1.75 var(--font-ui); color:var(--ink-sub); }
-    .story-copy .story-tip { color:var(--ink-muted); font-size:14px; padding-left:12px; border-left:3px solid var(--line-strong); }
-    .enjoy-grid { display:grid; grid-template-columns:1fr 1fr; gap:24px; }
-    .enjoy-item { padding:16px 20px 20px; border:1px solid var(--line-soft); border-radius:14px; background:rgba(255,253,248,.55); display:flex; flex-direction:column; gap:9px; }
-    .enjoy-art { height:180px; display:flex; justify-content:center; align-items:center; overflow:hidden; }
-    .enjoy-art img { width:180px; height:180px; object-fit:contain; mix-blend-mode:multiply; }
-    .enjoy-art svg { height:100%; width:100%; }
-    .scroll-area { padding-bottom:36px; }
+ .cta-sub { display: inline-flex; align-items: center; gap: 7px; height: 46px; padding: 0 18px; background: var(--card-paper); border: 1.2px solid var(--line-soft); border-bottom: 2px solid var(--line-strong); border-radius: 999px; font-family: var(--font-ui); font-size: 14px; font-weight: 700; color: var(--ink-sub); white-space: nowrap; transition: background-color 0.12s ease, transform 0.08s ease; }
+ .cta-sub:hover { background: #fdf9f0; }
+ .cta-sub:active { transform: translateY(1px); }
+ 
+/* Scrollable care guide prototype — header and existing hero/graph retained. */
+ .chart-board { padding: 8px 8px 0; gap: 4px; }
+ .chart-heading { display:flex; align-items:baseline; gap:16px; padding:0 6px; }
+ .chart-heading h2 { font:700 21px/1.35 var(--font-serif); letter-spacing:.04em; }
+ .chart-heading span { font:500 13px var(--font-ui); color:var(--ink-muted); }
+ .chart-svg-wrap { height:286px; }
+ .chart-svg { width:100%; height:100%; }
+ .chart-footer { padding: 0 6px 4px; }
+ .second-view { margin-top:16px; border-top:1px solid var(--line-strong); padding-top:16px; gap:28px; }
+ .section-intro { display:flex; align-items:baseline; gap:17px; padding:0 6px 12px; }
+ .section-intro h2 { font:700 25px/1.3 var(--font-serif); letter-spacing:.04em; }
+ .section-intro span { font-size:14px; color:var(--ink-muted); }
+ .care-story { display:grid; grid-template-columns:230px 1fr; align-items:center; gap:30px; padding:12px 16px 24px; min-height:218px; border-bottom:1px solid var(--line-soft); }
+ .care-story.reverse { grid-template-columns:1fr 230px; }
+ .care-story.reverse .story-art { order:2; }
+ .story-art { display:flex; align-items:center; justify-content:center; height:180px; overflow:hidden; border-radius:13px; }
+ .story-art img { width:180px; height:180px; object-fit:cover; mix-blend-mode:multiply; border-radius:13px; }
+ .story-art svg { width:100%; height:100%; }
+ .story-copy { display:flex; flex-direction:column; align-items:flex-start; gap:9px; }
+ .story-kicker { font:700 13px var(--font-ui); letter-spacing:.06em; color:var(--type-dark); }
+ .story-kicker.grow { color:var(--s-grow-dark); } .story-kicker.summer { color:var(--s-summer-dark); } .story-kicker.winter { color:var(--s-winter-dark); }
+ .story-copy h3, .enjoy-item h3 { font:700 23px/1.35 var(--font-serif); letter-spacing:.025em; }
+ .story-copy p, .enjoy-item p { font:500 16px/1.75 var(--font-ui); color:var(--ink-sub); }
+ .story-copy .story-tip { color:var(--ink-muted); font-size:14px; padding-left:12px; border-left:3px solid var(--line-strong); }
+ .enjoy-grid { display:grid; grid-template-columns:1fr 1fr; gap:24px; }
+ .enjoy-item { padding:16px 20px 20px; border:1px solid var(--line-soft); border-radius:14px; background:rgba(255,253,248,.55); display:flex; flex-direction:column; gap:9px; }
+ .enjoy-art { height:180px; display:flex; justify-content:center; align-items:center; overflow:hidden; }
+ .enjoy-art img { width:180px; height:180px; object-fit:contain; mix-blend-mode:multiply; }
+ .enjoy-art svg { height:100%; width:100%; }
+ .scroll-area { padding-bottom:36px; }
 
-  
-    /* 育てる楽しみ：水彩の縁を紙面に溶かし、余白を中心にトリミング */
-    .enjoy-art { height:246px; overflow:hidden; -webkit-mask-image:linear-gradient(to bottom,transparent 0%,#000 7%,#000 93%,transparent 100%); mask-image:linear-gradient(to bottom,transparent 0%,#000 7%,#000 93%,transparent 100%); }
-    .enjoy-item:nth-child(1) .enjoy-art { --art-size:275px; }
-    .enjoy-item:nth-child(2) .enjoy-art { --art-size:350px; }
-    .enjoy-art img { width:var(--art-size); height:var(--art-size); max-width:none; flex:none; object-fit:contain; mix-blend-mode:multiply; -webkit-mask-image:linear-gradient(to right,transparent,#000 9%,#000 91%,transparent),linear-gradient(to bottom,transparent,#000 9%,#000 91%,transparent); -webkit-mask-composite:source-in; mask-image:linear-gradient(to right,transparent,#000 9%,#000 91%,transparent),linear-gradient(to bottom,transparent,#000 9%,#000 91%,transparent); mask-composite:intersect; }
-    .enjoy-art .division-figure { width:var(--art-size); height:var(--art-size); }</style>
+ 
+/* 育てる楽しみ：水彩の縁を紙面に溶かし、余白を中心にトリミング */
+ .enjoy-art { height:246px; overflow:hidden; -webkit-mask-image:linear-gradient(to bottom,transparent 0%,#000 7%,#000 93%,transparent 100%); mask-image:linear-gradient(to bottom,transparent 0%,#000 7%,#000 93%,transparent 100%); }
+ .enjoy-item:nth-child(1) .enjoy-art { --art-size:275px; }
+ .enjoy-item:nth-child(2) .enjoy-art { --art-size:350px; }
+ .enjoy-art img { width:var(--art-size); height:var(--art-size); max-width:none; flex:none; object-fit:contain; mix-blend-mode:multiply; -webkit-mask-image:linear-gradient(to right,transparent,#000 9%,#000 91%,transparent),linear-gradient(to bottom,transparent,#000 9%,#000 91%,transparent); -webkit-mask-composite:source-in; mask-image:linear-gradient(to right,transparent,#000 9%,#000 91%,transparent),linear-gradient(to bottom,transparent,#000 9%,#000 91%,transparent); mask-composite:intersect; }
+ .enjoy-art .division-figure { width:var(--art-size); height:var(--art-size); }</style>
 </head>
 <body>
-  <div class="viewport-wrapper">
-    <main class="canvas" id="appCanvas">
+ <div class="viewport-wrapper">
+ <main class="canvas" id="appCanvas">
 
-      <header class="page-header">
-        <div class="header-left">
-          <div class="header-nav-group">
-            <button class="back-btn" type="button" id="backBtn">
-              <span class="back-arrow" aria-hidden="true">‹</span>
-              <span>もどる</span>
-            </button>
-            <button class="home-btn" type="button" id="topHomeBtn">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <path d="M3 10.5 12 3l9 7.5" />
-                <path d="M5.5 9.5V20h13V9.5" />
-              </svg>
-              <span>表紙</span>
-            </button>
-          </div>
-          <div class="title-wrap">
-            <span class="header-type-dot" aria-hidden="true"></span>
-            <h1 class="page-title">春秋元気タイプ</h1>
-            <span class="header-species">エケベリア・セダム・グラプトペタルム など</span>
-          </div>
-        </div>
-      </header>
+ <header class="page-header">
+ <div class="header-left">
+ <div class="header-nav-group">
+ <button class="back-btn" type="button" id="backBtn">
+ <span class="back-arrow" aria-hidden="true">‹</span>
+ <span>もどる</span>
+ </button>
+ <button class="home-btn" type="button" id="topHomeBtn">
+ <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+ <path d="M3 10.5 12 3l9 7.5" />
+ <path d="M5.5 9.5V20h13V9.5" />
+ </svg>
+ <span>表紙</span>
+ </button>
+ </div>
+ <div class="title-wrap">
+ <span class="header-type-dot" aria-hidden="true"></span>
+ <h1 class="page-title">春秋元気タイプ</h1>
+ <span class="header-species">エケベリア・セダム・グラプトペタルム など</span>
+ </div>
+ </div>
+ </header>
 
-      <div class="scroll-area" id="scrollArea">
-        <div class="first-view">
-          <section class="hero-spread" aria-label="春秋元気タイプの特徴">
-            <h2 class="hero-catch">春と秋は育て、<br />夏と冬は守る</h2>
-            <div class="hero-art-box" aria-hidden="true">
-              <img class="hero-art" src="images/detail_spring_autumn_01.png" alt="" />
-            </div>
-          </section>
+ <div class="scroll-area" id="scrollArea">
+ <div class="first-view">
+ <section class="hero-spread" aria-label="春秋元気タイプの特徴">
+ <h2 class="hero-catch">春と秋は育て、<br />夏と冬は守る</h2>
+ <div class="hero-art-box" aria-hidden="true">
+ <img class="hero-art" src="images/detail_spring_autumn_01.png" alt="" />
+ </div>
+ </section>
 
-          <section class="chart-board" aria-label="1年の成長リズムと注意点">
-            <div class="chart-heading"><h2>1年の成長リズム</h2><span>気温や品種によって変わる目安</span></div>
-            <div class="chart-svg-wrap">
-              <svg class="chart-svg" viewBox="0 0 1000 342" role="img" aria-label="春と秋が成長の山、梅雨・夏と冬が守る谷になる成長リズムの模式図">
-                <defs>
-                  <linearGradient id="curveAreaGrad" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stop-color="#5d7d52" stop-opacity="0.18" />
-                    <stop offset="65%" stop-color="#5d7d52" stop-opacity="0.06" />
-                    <stop offset="100%" stop-color="#5d7d52" stop-opacity="0.00" />
-                  </linearGradient>
-                </defs>
-                <path d="M 175 124 L 175 46 L 310 46" fill="none" stroke="#537349" stroke-width="1.2" opacity="0.72" />
-                <path d="M 640 124 L 640 46 L 506 46" fill="none" stroke="#537349" stroke-width="1.2" opacity="0.72" />
-                <text x="175" y="34" text-anchor="middle" font-family="'Zen Maru Gothic', sans-serif" font-size="12.5" font-weight="700" letter-spacing="0.05em" fill="#46693c">春（3–5月）</text>
-                <text x="640" y="34" text-anchor="middle" font-family="'Zen Maru Gothic', sans-serif" font-size="12.5" font-weight="700" letter-spacing="0.05em" fill="#46693c">秋（9–11月）</text>
-                <text x="408" y="52" text-anchor="middle" font-family="'Shippori Mincho', serif" font-size="22" font-weight="700" letter-spacing="0.06em" fill="#2d1f16">育てる季節</text>
-                <text x="408" y="78" text-anchor="middle" font-family="'Zen Maru Gothic', sans-serif" font-size="13.8" font-weight="500" fill="#5a493b">植え替えや葉挿しに適した時期</text>
-                <line x1="34" y1="226" x2="966" y2="226" stroke="#cbbba2" stroke-width="1.1" />
-                <text x="36" y="130" font-family="'Zen Maru Gothic', sans-serif" font-size="11" font-weight="500" fill="#8f7d6b">成長が活発</text>
-                <text x="36" y="218" font-family="'Zen Maru Gothic', sans-serif" font-size="11" font-weight="500" fill="#8f7d6b">ゆるやか</text>
-                <path d="M 54 198 C 98 164, 134 128, 175 128 C 238 128, 316 212, 408 212 C 500 212, 574 128, 640 128 C 706 128, 768 212, 852 212 C 896 212, 926 202, 948 190 L 948 226 L 54 226 Z" fill="url(#curveAreaGrad)" />
-                <path d="M 54 198 C 98 164, 134 128, 175 128 C 238 128, 316 212, 408 212 C 500 212, 574 128, 640 128 C 706 128, 768 212, 852 212 C 896 212, 926 202, 948 190" fill="none" stroke="#486b3e" stroke-width="2.8" stroke-linecap="round" />
-                <circle cx="175" cy="128" r="5" fill="#486b3e" stroke="#f6f0e4" stroke-width="2.2" />
-                <circle cx="640" cy="128" r="5" fill="#486b3e" stroke="#f6f0e4" stroke-width="2.2" />
-                <line x1="408" y1="218" x2="408" y2="254" stroke="#b05c1c" stroke-width="1.3" opacity="0.8" />
-                <circle cx="408" cy="212" r="5.5" fill="#b05c1c" stroke="#f6f0e4" stroke-width="2.2" />
-                <text x="408" y="196" text-anchor="middle" font-family="'Zen Maru Gothic', sans-serif" font-size="12.5" font-weight="700" letter-spacing="0.06em" fill="#a85518">ここ注意</text>
-                <text x="408" y="272" text-anchor="middle" font-family="'Zen Maru Gothic', sans-serif" font-size="12.5" font-weight="700" letter-spacing="0.05em" fill="#a85518">梅雨・夏（6–8月）</text>
-                <text x="408" y="300" text-anchor="middle" font-family="'Shippori Mincho', serif" font-size="21" font-weight="700" letter-spacing="0.05em" fill="#2d1f16">暑さから守る</text>
-                <text x="408" y="324" text-anchor="middle" font-family="'Zen Maru Gothic', sans-serif" font-size="13.8" font-weight="500" fill="#5a493b">雨や強い日差しを避け、水やりを減らす</text>
-                <line x1="852" y1="218" x2="852" y2="254" stroke="#3b6b8a" stroke-width="1.3" opacity="0.8" />
-                <circle cx="852" cy="212" r="5.5" fill="#3b6b8a" stroke="#f6f0e4" stroke-width="2.2" />
-                <text x="852" y="196" text-anchor="middle" font-family="'Zen Maru Gothic', sans-serif" font-size="12.5" font-weight="700" letter-spacing="0.06em" fill="#356280">ここ注意</text>
-                <text x="852" y="272" text-anchor="middle" font-family="'Zen Maru Gothic', sans-serif" font-size="12.5" font-weight="700" letter-spacing="0.05em" fill="#356280">冬（12–2月）</text>
-                <text x="852" y="300" text-anchor="middle" font-family="'Shippori Mincho', serif" font-size="21" font-weight="700" letter-spacing="0.05em" fill="#2d1f16">凍結から守る</text>
-                <text x="852" y="324" text-anchor="middle" font-family="'Zen Maru Gothic', sans-serif" font-size="13.8" font-weight="500" fill="#5a493b">霜を避け、水やりを減らす</text>
-              </svg>
-            </div>
+ <section class="chart-board" aria-label="1年の成長リズムと注意点">
+ <div class="chart-heading"><h2>1年の成長リズム</h2><span>気温や品種によって変わる目安</span></div>
+ <div class="chart-svg-wrap">
+ <svg class="chart-svg" viewBox="0 0 1000 342" role="img" aria-label="春と秋が成長の山、梅雨・夏と冬が守る谷になる成長リズムの模式図">
+ <defs>
+ <linearGradient id="curveAreaGrad" x1="0" y1="0" x2="0" y2="1">
+ <stop offset="0%" stop-color="#5d7d52" stop-opacity="0.18" />
+ <stop offset="65%" stop-color="#5d7d52" stop-opacity="0.06" />
+ <stop offset="100%" stop-color="#5d7d52" stop-opacity="0.00" />
+ </linearGradient>
+ </defs>
+ <path d="M 175 124 L 175 46 L 310 46" fill="none" stroke="#537349" stroke-width="1.2" opacity="0.72" />
+ <path d="M 640 124 L 640 46 L 506 46" fill="none" stroke="#537349" stroke-width="1.2" opacity="0.72" />
+ <text x="175" y="34" text-anchor="middle" font-family="'Zen Maru Gothic', sans-serif" font-size="12.5" font-weight="700" letter-spacing="0.05em" fill="#46693c">春（3–5月）</text>
+ <text x="640" y="34" text-anchor="middle" font-family="'Zen Maru Gothic', sans-serif" font-size="12.5" font-weight="700" letter-spacing="0.05em" fill="#46693c">秋（9–11月）</text>
+ <text x="408" y="52" text-anchor="middle" font-family="'Shippori Mincho', serif" font-size="22" font-weight="700" letter-spacing="0.06em" fill="#2d1f16">育てる季節</text>
+ <text x="408" y="78" text-anchor="middle" font-family="'Zen Maru Gothic', sans-serif" font-size="13.8" font-weight="500" fill="#5a493b">植え替えや葉挿しに適した時期</text>
+ <line x1="34" y1="226" x2="966" y2="226" stroke="#cbbba2" stroke-width="1.1" />
+ <text x="36" y="130" font-family="'Zen Maru Gothic', sans-serif" font-size="11" font-weight="500" fill="#8f7d6b">成長が活発</text>
+ <text x="36" y="218" font-family="'Zen Maru Gothic', sans-serif" font-size="11" font-weight="500" fill="#8f7d6b">ゆるやか</text>
+ <path d="M 54 198 C 98 164, 134 128, 175 128 C 238 128, 316 212, 408 212 C 500 212, 574 128, 640 128 C 706 128, 768 212, 852 212 C 896 212, 926 202, 948 190 L 948 226 L 54 226 Z" fill="url(#curveAreaGrad)" />
+ <path d="M 54 198 C 98 164, 134 128, 175 128 C 238 128, 316 212, 408 212 C 500 212, 574 128, 640 128 C 706 128, 768 212, 852 212 C 896 212, 926 202, 948 190" fill="none" stroke="#486b3e" stroke-width="2.8" stroke-linecap="round" />
+ <circle cx="175" cy="128" r="5" fill="#486b3e" stroke="#f6f0e4" stroke-width="2.2" />
+ <circle cx="640" cy="128" r="5" fill="#486b3e" stroke="#f6f0e4" stroke-width="2.2" />
+ <line x1="408" y1="218" x2="408" y2="254" stroke="#b05c1c" stroke-width="1.3" opacity="0.8" />
+ <circle cx="408" cy="212" r="5.5" fill="#b05c1c" stroke="#f6f0e4" stroke-width="2.2" />
+ <text x="408" y="196" text-anchor="middle" font-family="'Zen Maru Gothic', sans-serif" font-size="12.5" font-weight="700" letter-spacing="0.06em" fill="#a85518">ここ注意</text>
+ <text x="408" y="272" text-anchor="middle" font-family="'Zen Maru Gothic', sans-serif" font-size="12.5" font-weight="700" letter-spacing="0.05em" fill="#a85518">梅雨・夏（6–8月）</text>
+ <text x="408" y="300" text-anchor="middle" font-family="'Shippori Mincho', serif" font-size="21" font-weight="700" letter-spacing="0.05em" fill="#2d1f16">暑さから守る</text>
+ <text x="408" y="324" text-anchor="middle" font-family="'Zen Maru Gothic', sans-serif" font-size="13.8" font-weight="500" fill="#5a493b">雨や強い日差しを避け、水やりを減らす</text>
+ <line x1="852" y1="218" x2="852" y2="254" stroke="#3b6b8a" stroke-width="1.3" opacity="0.8" />
+ <circle cx="852" cy="212" r="5.5" fill="#3b6b8a" stroke="#f6f0e4" stroke-width="2.2" />
+ <text x="852" y="196" text-anchor="middle" font-family="'Zen Maru Gothic', sans-serif" font-size="12.5" font-weight="700" letter-spacing="0.06em" fill="#356280">ここ注意</text>
+ <text x="852" y="272" text-anchor="middle" font-family="'Zen Maru Gothic', sans-serif" font-size="12.5" font-weight="700" letter-spacing="0.05em" fill="#356280">冬（12–2月）</text>
+ <text x="852" y="300" text-anchor="middle" font-family="'Shippori Mincho', serif" font-size="21" font-weight="700" letter-spacing="0.05em" fill="#2d1f16">凍結から守る</text>
+ <text x="852" y="324" text-anchor="middle" font-family="'Zen Maru Gothic', sans-serif" font-size="13.8" font-weight="500" fill="#5a493b">霜を避け、水やりを減らす</text>
+ </svg>
+ </div>
 
-            <div class="chart-footer">
-              <div class="chart-footer-links">
-                <a href="sim.html?type=sun-main&from=type" class="subtle-sim-link" id="simJumpBtnSubtle">
-                  <span>このタイプの育て方を試してみよう</span>
-                  <span class="subtle-sim-arrow" aria-hidden="true">›</span>
-                </a>
-              </div>
-            </div>
-          </section>
-        </div>
+ <div class="chart-footer">
+ <div class="chart-footer-links">
+ <a href="sim.html?type=sun-main&from=type" class="subtle-sim-link" id="simJumpBtnSubtle">
+ <span>このタイプの育て方を試してみよう</span>
+ <span class="subtle-sim-arrow" aria-hidden="true">›</span>
+ </a>
+ </div>
+ </div>
+ </section>
+ </div>
 
-        <div class="second-view" id="moreSection">
-          <section class="care-editorial" aria-labelledby="practicalTitle">
-            <div class="section-intro"><h2 id="practicalTitle">このタイプを上手に育てるには</h2><span>季節の変わり目に、ひと手間</span></div>
-            <article class="care-story">
-              <div class="story-art"><img alt="エケベリアの植え替え" src="images/detail_spring_autumn_02.webp"></div>
-              <div class="story-copy"><span class="story-kicker grow">春・秋のお手入れ</span><h3>植え替えは、根が育つ季節に</h3><p>根が鉢いっぱいに回ったり、土が固くなって乾きにくくなったりしたら、植え替えのサイン。春や秋の穏やかな時期を選びましょう。</p><p class="story-tip">根を傷めたときは、傷口が乾くまで水やりを急がない。</p></div>
-            </article>
-            <article class="care-story reverse">
-              <div class="story-art"><img alt="すだれで夏の日差しを和らげるエケベリア" src="images/detail_spring_autumn_03.webp"></div>
-              <div class="story-copy"><span class="story-kicker summer">夏を迎える前に</span><h3>暑くなる前に、置き場所を整える</h3><p>風が通り、雨が吹き込みにくい場所を確保。強い日差しは遮光で和らげます。鉢が熱くなりやすいコンクリートの上に直置きしない工夫も。</p><p class="story-tip">夏の終わりは、少しずつ日差しに慣らす。</p></div>
-            </article>
-            <article class="care-story">
-              <div class="story-art"><img src="images/detail_spring_autumn_04.jpg" alt="冷え込む冬のたにく丸" /></div>
-              <div class="story-copy"><span class="story-kicker winter">冷え込みに備える</span><h3>霜が降りる夜は、冷えを避ける</h3><p>耐寒性は種類によって異なります。霜や凍結のおそれがある夜は、軒下や凍らない明るい場所への移動を検討しましょう。小さな鉢は特に冷えやすいので注意。</p><p class="story-tip">水やりは暖かい時間帯に。冷え込む直前は避ける。</p></div>
-            </article>
-          </section>
-          <section class="care-editorial extra-section" aria-labelledby="enjoyTitle">
-            <div class="section-intro"><h2 id="enjoyTitle">育てる楽しみ</h2><span>成長期と季節の変化を楽しむ</span></div>
-            <div class="enjoy-grid">
-              <article class="enjoy-item"><div class="enjoy-art"><img alt="葉挿しで育つ小さな芽と根" src="images/detail_spring_autumn_05.webp"></div><h3>葉っぱ一枚から増やす</h3><p>葉挿しに向く種類なら、健康な葉を根元から外して乾いた土の上へ。根や芽が出る様子を観察できます。種類や状態によって成功しやすさは異なります。</p></article>
-              <article class="enjoy-item"><div class="enjoy-art"><img alt="緑と赤い葉色のエケベリア" src="images/detail_spring_autumn_06.webp"></div><h3>葉の色の変化を楽しむ</h3><p>日照や気温の変化で、葉の色が赤やピンクに変わる種類も。色づき方は品種によって違います。紅葉のために極端な乾燥や低温を与えないようにしましょう。</p></article>
-            </div>
-          </section>
-          <aside class="footer-action-bar" aria-label="次のステップ">
-            <div class="footer-action-copy"><p class="footer-action-title">光・風・水のバランスを試してみよう</p><p class="footer-action-desc">季節ごとのちょうどいい加減を、動かして体験できます。</p></div>
-            <div class="footer-action-btns"><a href="sim.html?type=sun-main&amp;from=type" class="cta-sim" id="simJumpBtn">このタイプの育て方を試す <span class="cta-arrow">›</span></a><a href="basics.html" class="cta-sub" id="basicsJumpBtn">5つの基本にもどる <span class="cta-arrow">›</span></a></div>
-          </aside>
-        </div>
-      </div>
+ <div class="second-view" id="moreSection">
+ <section class="care-editorial" aria-labelledby="practicalTitle">
+ <div class="section-intro"><h2 id="practicalTitle">このタイプを上手に育てるには</h2><span>季節の変わり目に、ひと手間</span></div>
+ <article class="care-story">
+ <div class="story-art"><img alt="エケベリアの植え替え" src="images/detail_spring_autumn_02.webp"></div>
+ <div class="story-copy"><span class="story-kicker grow">春・秋のお手入れ</span><h3>植え替えは、根が育つ季節に</h3><p>根が鉢いっぱいに回ったり、土が固くなって乾きにくくなったりしたら、植え替えのサイン。春や秋の穏やかな時期を選びましょう。</p><p class="story-tip">根を傷めたときは、傷口が乾くまで水やりを急がない。</p></div>
+ </article>
+ <article class="care-story reverse">
+ <div class="story-art"><img alt="すだれで夏の日差しを和らげるエケベリア" src="images/detail_spring_autumn_03.webp"></div>
+ <div class="story-copy"><span class="story-kicker summer">夏を迎える前に</span><h3>暑くなる前に、置き場所を整える</h3><p>風が通り、雨が吹き込みにくい場所を確保。強い日差しは遮光で和らげます。鉢が熱くなりやすいコンクリートの上に直置きしない工夫も。</p><p class="story-tip">夏の終わりは、少しずつ日差しに慣らす。</p></div>
+ </article>
+ <article class="care-story">
+ <div class="story-art"><img src="images/detail_spring_autumn_04.jpg" alt="冷え込む冬のたにく丸" /></div>
+ <div class="story-copy"><span class="story-kicker winter">冷え込みに備える</span><h3>霜が降りる夜は、冷えを避ける</h3><p>耐寒性は種類によって異なります。霜や凍結のおそれがある夜は、軒下や凍らない明るい場所への移動を検討しましょう。小さな鉢は特に冷えやすいので注意。</p><p class="story-tip">水やりは暖かい時間帯に。冷え込む直前は避ける。</p></div>
+ </article>
+ </section>
+ <section class="care-editorial extra-section" aria-labelledby="enjoyTitle">
+ <div class="section-intro"><h2 id="enjoyTitle">育てる楽しみ</h2><span>成長期と季節の変化を楽しむ</span></div>
+ <div class="enjoy-grid">
+ <article class="enjoy-item"><div class="enjoy-art"><img alt="葉挿しで育つ小さな芽と根" src="images/detail_spring_autumn_05.webp"></div><h3>葉っぱ一枚から増やす</h3><p>葉挿しに向く種類なら、健康な葉を根元から外して乾いた土の上へ。根や芽が出る様子を観察できます。種類や状態によって成功しやすさは異なります。</p></article>
+ <article class="enjoy-item"><div class="enjoy-art"><img alt="緑と赤い葉色のエケベリア" src="images/detail_spring_autumn_06.webp"></div><h3>葉の色の変化を楽しむ</h3><p>日照や気温の変化で、葉の色が赤やピンクに変わる種類も。色づき方は品種によって違います。紅葉のために極端な乾燥や低温を与えないようにしましょう。</p></article>
+ </div>
+ </section>
+ <aside class="footer-action-bar" aria-label="次のステップ">
+ <div class="footer-action-copy"><p class="footer-action-title">光・風・水のバランスを試してみよう</p><p class="footer-action-desc">季節ごとのちょうどいい加減を、動かして体験できます。</p></div>
+ <div class="footer-action-btns"><a href="sim.html?type=sun-main&amp;from=type" class="cta-sim" id="simJumpBtn">このタイプの育て方を試す <span class="cta-arrow">›</span></a><a href="basics.html" class="cta-sub" id="basicsJumpBtn">5つの基本にもどる <span class="cta-arrow">›</span></a></div>
+ </aside>
+ </div>
+ </div>
 
-    </main>
-  </div>
+ </main>
+ </div>
 
-  <script>
-    function fitCanvas() {
-      const canvas = document.getElementById("appCanvas");
-      const scale = Math.min(window.innerWidth / 1080, window.innerHeight / 786);
-      if (window.CSS && CSS.supports && CSS.supports("zoom", "1")) {
-        canvas.style.zoom = scale;
-        canvas.style.transform = "none";
-      } else {
-        canvas.style.zoom = "";
-        canvas.style.transform = `scale(${scale})`;
-      }
-    }
-    window.addEventListener("resize", fitCanvas);
-    window.addEventListener("orientationchange", fitCanvas);
-    fitCanvas();
+ <script>
+ function fitCanvas() {
+ const canvas = document.getElementById("appCanvas");
+ const scale = Math.min(window.innerWidth / 1080, window.innerHeight / 786);
+ if (window.CSS && CSS.supports && CSS.supports("zoom", "1")) {
+ canvas.style.zoom = scale;
+ canvas.style.transform = "none";
+ } else {
+ canvas.style.zoom = "";
+ canvas.style.transform = `scale(${scale})`;
+ }
+ }
+ window.addEventListener("resize", fitCanvas);
+ window.addEventListener("orientationchange", fitCanvas);
+ fitCanvas();
 
 
-    const params = new URLSearchParams(window.location.search);
-    const qMonth = params.get("month");
+ const params = new URLSearchParams(window.location.search);
+ const qMonth = params.get("month");
 
-    document.getElementById("backBtn").addEventListener("click", () => {
-      if (window.history.length > 1 && document.referrer) { window.history.back(); return; }
-      window.location.href = qMonth ? `basics.html?month=${encodeURIComponent(qMonth)}` : "basics.html";
-    });
+ document.getElementById("backBtn").addEventListener("click", () => {
+ if (window.history.length > 1 && document.referrer) { window.history.back(); return; }
+ window.location.href = qMonth ? `basics.html?month=${encodeURIComponent(qMonth)}` : "basics.html";
+ });
 
-    document.getElementById("topHomeBtn").addEventListener("click", () => {
-      window.location.href = qMonth ? `index.html?month=${encodeURIComponent(qMonth)}` : "index.html";
-    });
+ document.getElementById("topHomeBtn").addEventListener("click", () => {
+ window.location.href = qMonth ? `index.html?month=${encodeURIComponent(qMonth)}` : "index.html";
+ });
 
-    if (qMonth) {
-      ["simJumpBtnSubtle", "simJumpBtn"].forEach((id) => {
-        const el = document.getElementById(id);
-        if (el) el.setAttribute("href", `sim.html?type=sun-main&from=type&month=${encodeURIComponent(qMonth)}`);
-      });
-      ["basicsJumpBtnSubtle", "basicsJumpBtn"].forEach((id) => {
-        const el = document.getElementById(id);
-        if (el) el.setAttribute("href", `basics.html?month=${encodeURIComponent(qMonth)}`);
-      });
-    }
+ if (qMonth) {
+ ["simJumpBtnSubtle", "simJumpBtn"].forEach((id) => {
+ const el = document.getElementById(id);
+ if (el) el.setAttribute("href", `sim.html?type=sun-main&from=type&month=${encodeURIComponent(qMonth)}`);
+ });
+ ["basicsJumpBtnSubtle", "basicsJumpBtn"].forEach((id) => {
+ const el = document.getElementById(id);
+ if (el) el.setAttribute("href", `basics.html?month=${encodeURIComponent(qMonth)}`);
+ });
+ }
 
-    const AUTO_RETURN_MS = 0;
-    if (AUTO_RETURN_MS) {
-      let idleTimer = null;
-      function resetIdleTimer() { clearTimeout(idleTimer); idleTimer = setTimeout(() => { window.location.href = "index.html"; }, AUTO_RETURN_MS); }
-      ["pointerdown", "touchstart", "click", "keydown", "scroll"].forEach((ev) => { window.addEventListener(ev, resetIdleTimer, { passive: true }); });
-      resetIdleTimer();
-    }
-  </script>
+ const AUTO_RETURN_MS = 300000;
+ if (AUTO_RETURN_MS) {
+ let idleTimer = null;
+ function resetIdleTimer() { clearTimeout(idleTimer); idleTimer = setTimeout(() => { window.location.href = "index.html"; }, AUTO_RETURN_MS); }
+ ["pointerdown", "touchstart", "click", "keydown", "scroll"].forEach((ev) => { window.addEventListener(ev, resetIdleTimer, { passive: true }); });
+ resetIdleTimer();
+ }
+ </script>
 </body>
 </html>

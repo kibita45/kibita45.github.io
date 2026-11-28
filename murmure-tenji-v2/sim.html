@@ -1,1973 +1,1973 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
-
-  <!-- =========================================================================
-    保木平珈琲 Murmure｜展示用iPad Webアプリ「光・風・水でどう変わる？」（v2・表現＆導線改善版）
-    - basics.html と完全に揃えた「温かいクリーム紙 × こげ茶インク × 明朝見出し × 控えめな枠」
-    - ハオルチア夏・アエオニウム夏・カランコエ春の表現を詳細ページと整合
-    - 結果状態に応じた SOS 症状（sym）自動引き継ぎに対応
-    - 5つの基本ページ（basics_*）からの「もどる」復帰に対応
-  ========================================================================= -->
-
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-  <meta name="apple-mobile-web-app-title" content="多肉の育て方" />
-  <meta name="theme-color" content="#f6f0e4" />
-  <meta name="format-detection" content="telephone=no" />
-  <link rel="manifest" href="manifest.json" />
-  <link rel="apple-touch-icon" sizes="180x180" href="images/apple-touch-icon.png" />
-  <link rel="icon" type="image/png" sizes="512x512" href="images/icon-512.png" />
-
-  <title>Murmure｜光・風・水でどう変わる？</title>
-
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=Shippori+Mincho:wght@500;600;700&family=Zen+Maru+Gothic:wght@400;500;700&display=swap" rel="stylesheet" />
-
-  <style>
-    :root {
-      /* basics.html と完全統一：温かいカフェ図鑑トーン */
-      --bg-outer: #e9dfd0;
-      --bg-paper: #f6f0e4;
-      --card-paper: #fffdf8;
-      --surface-muted: #faf6ed;
-      --ink-main: #2d1f16;
-      --ink-sub: #4e3d30;
-      --ink-muted: #6e5c4d;
-      --line-soft: #d7c7ad;
-      --line-strong: #c2ae8e;
-
-      --axis: #5e4736;
-      --axis-dark: #453326;
-      --axis-soft: #f2eadc;
-      --axis-fill: #ebe0cc;
-      --rail-color: #78604e;
-      --rail-line: #d4c6b4;
-
-      /* 光・風・水の丸アイコン色（basics.html と完全統一） */
-      --wind-color: #5e784a;
-      --wind-soft: rgba(105, 129, 84, 0.14);
-      --wind-bd: rgba(105, 129, 84, 0.34);
-
-      --sun-color: #9e5612;
-      --sun-soft: rgba(186, 108, 28, 0.13);
-      --sun-bd: rgba(186, 108, 28, 0.36);
-
-      --water-color: #467b96;
-      --water-soft: rgba(79, 132, 158, 0.14);
-      --water-bd: rgba(79, 132, 158, 0.34);
-
-      /* 4タイプ識別カラー */
-      --tag-1: #b8566d;
-      --tag-2: #3d7699;
-      --tag-3: #b05712;
-      --tag-4: #4d6b38;
-
-      /* 季節カラー（控えめで品のあるニュアンスへ調整） */
-      --season-spring: #bf6b7e;
-      --season-spring-dark: #944456;
-      --season-spring-soft: #f7e3e8;
-      --season-rain: #557e96;
-      --season-rain-dark: #385c73;
-      --season-rain-soft: #e0ebf2;
-      --season-summer: #56804b;
-      --season-summer-dark: #3a5e31;
-      --season-summer-soft: #e1eedc;
-      --season-autumn: #b36639;
-      --season-autumn-dark: #874720;
-      --season-autumn-soft: #f4e3d5;
-      --season-winter: #4e6f8c;
-      --season-winter-dark: #335069;
-      --season-winter-soft: #dfe8f0;
-
-      --shadow-soft: 0 2px 10px rgba(72, 54, 38, 0.055);
-      --font-serif: "Shippori Mincho", "Hiragino Mincho ProN", "Yu Mincho", serif;
-      --font-ui: "Zen Maru Gothic", "Hiragino Maru Gothic ProN", sans-serif;
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      -webkit-tap-highlight-color: transparent;
-      -webkit-user-select: none;
-      user-select: none;
-      -webkit-touch-callout: none;
-    }
-
-    button { touch-action: manipulation; }
-    button:focus-visible { outline: 3px solid #ab542c; outline-offset: -3px; }
-    svg { display: block; flex-shrink: 0; }
-
-    html, body {
-      width: 100%;
-      height: 100%;
-      overflow: hidden;
-      background: var(--bg-outer);
-      font-family: var(--font-ui);
-      color: var(--ink-main);
-    }
-
-    .viewport-wrapper {
-      position: fixed;
-      inset: 0;
-      width: 100vw;
-      height: 100vh;
-      height: 100dvh;
-      overflow: hidden;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .canvas {
-      position: relative;
-      width: 1080px;
-      height: 786px;
-      min-width: 1080px;
-      min-height: 786px;
-      background: linear-gradient(135deg, #f9f5e9, #f2ead9);
-      transform-origin: center center;
-      padding: 14px 24px 16px;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      box-shadow: 0 12px 36px rgba(59, 45, 35, 0.14);
-      overflow: hidden;
-    }
-
-    .canvas::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-      background-image: radial-gradient(rgba(110, 88, 66, 0.045) 1px, transparent 0);
-      background-size: 16px 16px;
-      opacity: 0.7;
-    }
-
-    /* ================= 1. 上部ヘッダー（basics.html と完全統一） ================= */
-    .sim-header {
-      position: relative;
-      z-index: 2;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 14px;
-      flex-shrink: 0;
-      border-bottom: 1px solid var(--line-soft);
-      padding-bottom: 8px;
-    }
-
-    .header-left {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-    }
-
-    .header-nav-group {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      flex-shrink: 0;
-    }
-
-    .back-btn,
-    .home-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      height: 40px;
-      padding: 0 15px;
-      background: var(--card-paper);
-      border: 1px solid var(--line-soft);
-      border-bottom: 2px solid var(--line-strong);
-      border-radius: 10px;
-      font-family: var(--font-ui);
-      font-size: 14.5px;
-      font-weight: 700;
-      color: var(--ink-main);
-      cursor: pointer;
-      flex-shrink: 0;
-      transition: background-color 0.12s ease, transform 0.08s ease;
-    }
-
-    .home-btn {
-      background: var(--axis-soft);
-      border-color: #cbbba6;
-      border-bottom-color: #b39f86;
-      color: var(--axis);
-    }
-
-    .back-btn:active,
-    .home-btn:active {
-      transform: translateY(1px);
-      background: #ebe4d5;
-    }
-
-    .back-arrow {
-      font-size: 19px;
-      line-height: 1;
-      color: var(--axis);
-    }
-
-    .home-btn svg {
-      width: 15px;
-      height: 15px;
-      color: var(--axis);
-    }
-
-    .title-wrap {
-      display: flex;
-      align-items: baseline;
-      gap: 12px;
-    }
-
-    .page-title {
-      font-family: var(--font-serif);
-      font-size: 25px;
-      font-weight: 700;
-      letter-spacing: 0.06em;
-      line-height: 1.12;
-      color: var(--ink-main);
-    }
-
-    .page-en {
-      font-family: "Cormorant Garamond", Georgia, serif;
-      font-style: italic;
-      font-size: 16px;
-      font-weight: 600;
-      color: var(--ink-muted);
-    }
-
-    /* ================= 2. 全体3ステップ・グリッド（basics.html と同じゆとり） ================= */
-    .flow-workspace {
-      position: relative;
-      z-index: 2;
-      flex: 1 1 auto;
-      min-height: 0;
-      display: grid;
-      grid-template-columns: 38px 1fr;
-      grid-template-rows: auto auto auto;
-      align-content: space-between;
-      column-gap: 12px;
-      row-gap: 18px;
-      padding: 4px 0 2px;
-    }
-
-    .rail-cell {
-      position: relative;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .rail-cell.is-step2,
-    .rail-cell.is-step3 {
-      align-items: flex-start;
-    }
-
-    .rail-cell.is-step1::after {
-      content: "";
-      position: absolute;
-      left: 50%;
-      top: 50%;
-      bottom: -44px;
-      width: 2px;
-      background: var(--rail-line);
-      transform: translateX(-50%);
-      z-index: 0;
-    }
-
-    .rail-cell.is-step2::before {
-      content: "";
-      position: absolute;
-      left: 50%;
-      top: -44px;
-      bottom: -44px;
-      width: 2px;
-      background: var(--rail-line);
-      transform: translateX(-50%);
-      z-index: 0;
-    }
-
-    .rail-cell.is-step3::before {
-      content: "";
-      position: absolute;
-      left: 50%;
-      top: -44px;
-      height: 58px;
-      width: 2px;
-      background: var(--rail-line);
-      transform: translateX(-50%);
-      z-index: 0;
-    }
-
-    .step-badge {
-      position: relative;
-      z-index: 2;
-      width: 28px;
-      height: 28px;
-      border-radius: 50%;
-      background: var(--rail-color);
-      border: 2px solid var(--bg-paper);
-      color: #fff;
-      font-family: var(--font-ui);
-      font-size: 14px;
-      font-weight: 700;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-    }
-
-    .step-section-head {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      min-height: 28px;
-      padding: 0 2px;
-      margin-bottom: 8px;
-      gap: 12px;
-    }
-
-    .step-section-head.is-sim-head {
-      display: grid;
-      grid-template-columns: 1fr 316px;
-      gap: 14px;
-      align-items: center;
-    }
-
-    .step-head-left {
-      display: flex;
-      align-items: baseline;
-      gap: 12px;
-      min-width: 0;
-    }
-
-    .step-head-bar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-      min-width: 0;
-    }
-
-    /* basics.html と同じ明朝見出しへ統一 */
-    .step-head-title {
-      font-family: var(--font-serif);
-      font-size: 18.5px;
-      font-weight: 700;
-      letter-spacing: 0.04em;
-      color: var(--ink-main);
-      line-height: 1.25;
-      white-space: nowrap;
-    }
-
-    .step-head-desc {
-      font-family: var(--font-ui);
-      font-size: 13px;
-      font-weight: 500;
-      color: var(--ink-muted);
-      line-height: 1.25;
-      white-space: nowrap;
-    }
-
-    /* ================= Row 1：① タイプをえらぶ帯（位置そのまま・明朝で品よく） ================= */
-    .type-picker-bar {
-      background: transparent;
-      border: none;
-      padding: 2px 0 2px 2px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      min-width: 0;
-    }
-
-    .step-heading-inline {
-      position: relative;
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-      flex-shrink: 0;
-      width: 122px;
-      justify-content: center;
-    }
-
-    .step-title {
-      font-family: var(--font-serif);
-      font-size: 17.5px;
-      font-weight: 700;
-      letter-spacing: 0.03em;
-      color: var(--ink-main);
-      line-height: 1.2;
-      white-space: nowrap;
-    }
-
-    .step-staff-note {
-      position: absolute;
-      top: calc(100% + 4px);
-      left: 0;
-      font-family: var(--font-ui);
-      font-size: 10.8px;
-      font-weight: 500;
-      color: var(--ink-muted);
-      line-height: 1.25;
-      white-space: nowrap;
-    }
-
-    .type-tabs {
-      flex: 1;
-      min-width: 0;
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 10px;
-    }
-
-    .type-tab {
-      min-height: 54px;
-      background: rgba(255, 253, 248, 0.92);
-      border: 1.2px solid var(--line-soft);
-      border-bottom: 2px solid var(--line-strong);
-      border-radius: 12px;
-      padding: 5px 8px 6px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 3px;
-      text-align: center;
-      cursor: pointer;
-      color: var(--ink-main);
-      box-shadow: var(--shadow-soft);
-      transition: background-color 0.14s ease, border-color 0.14s ease, box-shadow 0.14s ease, transform 0.08s ease;
-    }
-
-    .type-tab-main {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 7px;
-    }
-
-    .tab-name {
-      font-family: var(--font-serif);
-      font-size: 15.8px;
-      font-weight: 700;
-      letter-spacing: 0.03em;
-      color: var(--ink-main);
-      line-height: 1.2;
-      white-space: nowrap;
-    }
-
-    .tab-species {
-      font-family: var(--font-ui);
-      font-size: 11px;
-      font-weight: 500;
-      color: var(--ink-muted);
-      line-height: 1.15;
-      letter-spacing: 0.01em;
-      white-space: nowrap;
-    }
-
-    .type-tab.is-active .tab-species { color: var(--ink-sub); }
-    .type-tab:hover:not(.is-active) { background: #fffdf8; border-color: #b49f83; }
-    .type-tab:active { transform: translateY(1px); }
-
-    .type-tab[data-type="sun-main"] { --tab-color: var(--tag-1); }
-    .type-tab[data-type="sun-cool"] { --tab-color: var(--tag-2); }
-    .type-tab[data-type="sun-warm"] { --tab-color: var(--tag-3); }
-    .type-tab[data-type="shade-main"] { --tab-color: var(--tag-4); }
-
-    .type-dot {
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      background: var(--tab-color);
-      flex-shrink: 0;
-    }
-
-    .type-tab.is-active {
-      background: var(--axis-fill);
-      border: 1.8px solid var(--axis);
-      border-bottom: 2.8px solid var(--axis-dark);
-      box-shadow: 0 2px 8px rgba(59, 45, 35, 0.1);
-    }
-
-    /* ================= Row 2：② 季節をえらぶ（水やり波なし・5枚水彩カード＋軽やか12ヶ月帯） ================= */
-    .calendar-stack {
-      position: relative;
-      z-index: 2;
-      min-height: 0;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .calendar-main {
-      position: relative;
-      height: 294px;
-      flex-shrink: 0;
-      display: flex;
-      flex-direction: column;
-      gap: 9px;
-    }
-
-    .season-cards-grid {
-      flex: 1 1 auto;
-      min-height: 0;
-      display: grid;
-      grid-template-columns: repeat(5, 1fr);
-      gap: 10px;
-    }
-
-    .season-card {
-      --s-border: var(--season-spring);
-      --s-soft: var(--season-spring-soft);
-      --s-dark: var(--season-spring-dark);
-      position: relative;
-      display: flex;
-      flex-direction: column;
-      border-radius: 14px;
-      border: 1.2px solid var(--line-soft);
-      border-bottom: 2px solid var(--line-strong);
-      background: var(--card-paper);
-      overflow: hidden;
-      cursor: pointer;
-      box-shadow: var(--shadow-soft);
-      transition: border-color 0.16s ease, box-shadow 0.16s ease, transform 0.1s ease;
-    }
-
-    .season-card[data-season="spring"] { --s-border: var(--season-spring); --s-soft: var(--season-spring-soft); --s-dark: var(--season-spring-dark); }
-    .season-card[data-season="rain"] { --s-border: var(--season-rain); --s-soft: var(--season-rain-soft); --s-dark: var(--season-rain-dark); }
-    .season-card[data-season="summer"] { --s-border: var(--season-summer); --s-soft: var(--season-summer-soft); --s-dark: var(--season-summer-dark); }
-    .season-card[data-season="autumn"] { --s-border: var(--season-autumn); --s-soft: var(--season-autumn-soft); --s-dark: var(--season-autumn-dark); }
-    .season-card[data-season="winter"] { --s-border: var(--season-winter); --s-soft: var(--season-winter-soft); --s-dark: var(--season-winter-dark); }
-
-    .season-card:hover:not(.is-active) { border-color: #b49f83; }
-
-    .season-card.is-active {
-      border: 1.8px solid var(--s-border);
-      border-bottom: 2.8px solid var(--s-border);
-      box-shadow: 0 4px 14px rgba(59, 45, 35, 0.11);
-      z-index: 3;
-    }
-
-    .season-pick-btn {
-      width: 100%;
-      flex-shrink: 0;
-      background: rgba(255, 253, 248, 0.96);
-      border: none;
-      border-bottom: 1px solid #ece3d2;
-      padding: 7px 6px 6px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-      cursor: pointer;
-      color: var(--ink-muted);
-      transition: background-color 0.14s ease, color 0.14s ease;
-    }
-
-    .season-card:hover:not(.is-active) .season-pick-btn {
-      color: var(--ink-main);
-      background: #faf5ea;
-    }
-
-    .season-card.is-active .season-pick-btn {
-      color: var(--s-dark);
-      background: var(--s-soft);
-      border-bottom-color: rgba(94, 71, 54, 0.1);
-    }
-
-    .season-pick-name {
-      font-family: var(--font-serif);
-      font-size: 17px;
-      font-weight: 700;
-      line-height: 1.1;
-      letter-spacing: 0.08em;
-    }
-
-    .season-now-badge {
-      display: none;
-      font-family: var(--font-ui);
-      font-size: 10px;
-      font-weight: 700;
-      padding: 1.5px 7px;
-      border-radius: 999px;
-      background: rgba(94, 71, 54, 0.09);
-      color: var(--ink-sub);
-      line-height: 1.25;
-    }
-
-    .season-pick-btn.is-current-season .season-now-badge { display: inline-block; }
-    .season-card.is-active .season-now-badge {
-      background: rgba(255, 253, 248, 0.92);
-      color: var(--s-dark);
-      border: 1px solid rgba(94, 71, 54, 0.14);
-    }
-
-    .season-card-stage {
-      position: relative;
-      flex: 1 1 auto;
-      min-height: 0;
-      overflow: hidden;
-      background: #f5efe2;
-    }
-
-    .diorama-panel {
-      position: absolute;
-      inset: 0;
-      overflow: hidden;
-      transition: opacity 0.2s ease, filter 0.2s ease;
-    }
-
-    .diorama-panel.is-dim {
-      opacity: 0.62;
-      filter: saturate(0.72) brightness(1.03);
-    }
-
-    .diorama-panel img.dio-base-img {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      object-position: center bottom;
-      display: block;
-      opacity: 0;
-      transition: opacity 0.22s ease;
-      z-index: 1;
-    }
-
-    .diorama-panel.is-loaded img.dio-base-img { opacity: 1; }
-
-    .fixed-spot {
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 9px 6px 0;
-      z-index: 6;
-      pointer-events: none;
-      transition: opacity 0.2s ease;
-    }
-
-    .fixed-spot.is-dim .season-bubble { opacity: 0.72; }
-    .fixed-spot.is-active .season-bubble {
-      opacity: 1;
-      background: rgba(255, 253, 248, 0.96);
-      box-shadow: 0 3px 10px rgba(59, 45, 35, 0.11);
-    }
-
-    .season-bubble {
-      --bub-bg: rgba(255, 253, 248, 0.9);
-      --bub-border: rgba(194, 174, 142, 0.55);
-      --bub-accent: var(--ink-main);
-      position: relative;
-      background: var(--bub-bg);
-      border: 1px solid var(--bub-border);
-      border-radius: 10px;
-      padding: 4px 10px 4.5px;
-      font-family: var(--font-ui);
-      text-align: center;
-      box-shadow: 0 2px 6px rgba(60, 44, 30, 0.06);
-      white-space: nowrap;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 1.5px;
-      transition: opacity 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
-    }
-
-    .season-card[data-season="spring"] .season-bubble { --bub-accent: var(--season-spring-dark); --bub-border: rgba(191, 107, 126, 0.42); }
-    .season-card[data-season="rain"] .season-bubble { --bub-accent: var(--season-rain-dark); --bub-border: rgba(85, 126, 150, 0.42); padding: 4px 8px 4.5px; }
-    .season-card[data-season="summer"] .season-bubble { --bub-accent: var(--season-summer-dark); --bub-border: rgba(86, 128, 75, 0.42); }
-    .season-card[data-season="autumn"] .season-bubble { --bub-accent: var(--season-autumn-dark); --bub-border: rgba(179, 102, 57, 0.42); }
-    .season-card[data-season="winter"] .season-bubble { --bub-accent: var(--season-winter-dark); --bub-border: rgba(78, 111, 140, 0.42); }
-
-    .bubble-phase {
-      font-size: 13.5px;
-      font-weight: 700;
-      line-height: 1.18;
-      color: var(--bub-accent);
-      letter-spacing: 0.03em;
-    }
-
-    .bubble-note {
-      font-size: 12px;
-      font-weight: 500;
-      line-height: 1.22;
-      color: var(--ink-sub);
-    }
-
-    .season-card[data-season="rain"] .bubble-phase { font-size: 13px; }
-    .season-card[data-season="rain"] .bubble-note { font-size: 11.6px; }
-
-    .season-bubble::after {
-      content: "";
-      position: absolute;
-      left: 50%;
-      bottom: -4px;
-      width: 7px;
-      height: 7px;
-      background: var(--bub-bg);
-      border-right: 1px solid var(--bub-border);
-      border-bottom: 1px solid var(--bub-border);
-      transform: translateX(-50%) rotate(45deg);
-    }
-
-    .stage-hit-btn {
-      position: absolute;
-      inset: 0;
-      z-index: 7;
-      background: transparent;
-      border: none;
-      cursor: pointer;
-    }
-
-    /* 下段：スリムで上品な12ヶ月ガイド帯（水やり波を削除） */
-    .calendar-timeline-card {
-      flex-shrink: 0;
-      border-radius: 10px;
-      border: 1px solid var(--line-soft);
-      background: var(--card-paper);
-      overflow: hidden;
-      box-shadow: var(--shadow-soft);
-    }
-
-    .cal-months-band {
-      position: relative;
-      z-index: 3;
-      display: grid;
-      grid-template-columns: repeat(12, 1fr);
-      align-items: center;
-      height: 30px;
-      background: #f8f3e8;
-      overflow: hidden;
-      transition: background 0.2s ease;
-    }
-
-    .months-dim-left,
-    .months-dim-right {
-      position: absolute;
-      top: 0;
-      bottom: 0;
-      z-index: 1;
-      pointer-events: none;
-      background: rgba(246, 240, 228, 0.7);
-      transition: left 0.2s ease, width 0.2s ease;
-    }
-
-    .months-dim-left { left: 0; width: 0%; }
-    .months-dim-right { left: 100%; right: 0; }
-
-    .cal-m {
-      position: relative;
-      z-index: 2;
-      font-family: var(--font-ui);
-      text-align: center;
-      font-size: 12.6px;
-      font-weight: 700;
-      color: var(--ink-main);
-      line-height: 1;
-      letter-spacing: -0.01em;
-      pointer-events: none;
-      transition: opacity 0.2s ease;
-    }
-
-    .cal-m.is-dim { opacity: 0.42; font-weight: 500; }
-
-    /* 囲み枠をやめ、下辺の繊細なアクセントバーで上品に強調 */
-    .months-active-frame {
-      position: absolute;
-      left: 0%;
-      width: 25%;
-      bottom: 0;
-      height: 3px;
-      z-index: 3;
-      pointer-events: none;
-      background: var(--season-spring);
-      transition: left 0.2s ease, width 0.2s ease, background-color 0.2s ease;
-    }
-
-    /* ================= Row 3：③ 光・風・水を試す ＆ 結果を見る ================= */
-    .sim-stack {
-      position: relative;
-      z-index: 10;
-      display: flex;
-      flex-direction: column;
-      min-width: 0;
-    }
-
-    .sim-bar {
-      position: relative;
-      z-index: 10;
-      height: 212px;
-      display: grid;
-      grid-template-columns: 1fr 316px;
-      gap: 14px;
-      min-width: 0;
-    }
-
-    .controls-card {
-      position: relative;
-      z-index: 10;
-      background: rgba(255, 253, 248, 0.94);
-      border: 1.2px solid var(--line-soft);
-      border-bottom: 2px solid var(--line-strong);
-      border-radius: 16px;
-      padding: 14px 16px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      box-shadow: var(--shadow-soft);
-      min-width: 0;
-    }
-
-    .reset-ideal-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      padding: 4px 13px;
-      background: var(--axis-soft);
-      border: 1px solid #cbbba6;
-      border-bottom: 2px solid #b39f86;
-      border-radius: 999px;
-      font-family: var(--font-ui);
-      font-size: 12.8px;
-      font-weight: 700;
-      color: var(--axis);
-      cursor: pointer;
-      white-space: nowrap;
-      flex-shrink: 0;
-      transition: transform 0.1s ease, opacity 0.15s ease, background-color 0.12s ease;
-    }
-
-    .reset-ideal-btn:active { transform: translateY(1px); }
-    .reset-ideal-btn.is-already-ideal {
-      opacity: 0.45;
-      background: transparent;
-      border-color: var(--line-soft);
-      border-bottom-color: var(--line-soft);
-      color: var(--ink-muted);
-    }
-
-    .control-rows {
-      display: flex;
-      flex-direction: column;
-      gap: 11px;
-      flex: 1;
-      justify-content: center;
-    }
-
-    .ctrl-row {
-      display: grid;
-      grid-template-columns: 64px 1fr;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .ctrl-label {
-      font-family: var(--font-serif);
-      display: flex;
-      align-items: center;
-      gap: 7px;
-      font-size: 16.5px;
-      font-weight: 700;
-      color: var(--ink-main);
-    }
-
-    .ctrl-icon {
-      width: 30px;
-      height: 30px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-    }
-
-    .ctrl-icon.is-light { background: var(--sun-soft); color: var(--sun-color); border: 1.2px solid var(--sun-bd); }
-    .ctrl-icon.is-wind { background: var(--wind-soft); color: var(--wind-color); border: 1.2px solid var(--wind-bd); }
-    .ctrl-icon.is-water { background: var(--water-soft); color: var(--water-color); border: 1.2px solid var(--water-bd); }
-    .ctrl-icon svg { width: 16px; height: 16px; }
-
-    .seg-group { display: grid; gap: 8px; }
-    .seg-group.cols-4 { grid-template-columns: repeat(4, 1fr); }
-    .seg-group.cols-3 { grid-template-columns: repeat(3, 1fr); }
-
-    /* おすすめタグの枠外飛び出しを廃止し、ボタン内に美しく収める設計 */
-    .seg-btn {
-      position: relative;
-      z-index: 2;
-      width: 100%;
-      height: 50px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 1px;
-      border: 1px solid #e2d5c1;
-      border-bottom: 1.8px solid #d1c0a5;
-      background: var(--surface-muted);
-      border-radius: 10px;
-      padding: 4px 4px;
-      font-family: var(--font-ui);
-      font-size: 13.8px;
-      font-weight: 700;
-      letter-spacing: -0.02em;
-      color: var(--ink-sub);
-      cursor: pointer;
-      white-space: nowrap;
-      transition: background-color 0.12s ease, color 0.12s ease, border-color 0.12s ease, box-shadow 0.12s ease;
-    }
-
-    .seg-btn:hover:not(.is-active) { background: #f3ecde; border-color: var(--line-strong); }
-    .seg-btn:active { background: #ebe1cf; }
-
-    .seg-group[data-control] .seg-btn.is-active {
-      color: var(--ink-main);
-      background: var(--axis-fill);
-      border: 1.8px solid var(--axis);
-      border-bottom: 2.6px solid var(--axis-dark);
-      box-shadow: 0 2px 6px rgba(59, 45, 35, 0.09);
-    }
-
-    .seg-group[data-control] .seg-btn.is-ideal:not(.is-active) {
-      border: 1.4px dashed #a89378;
-      background: #fdfaf3;
-    }
-
-    .seg-group[data-control] .seg-btn.is-ideal::before {
-      content: "おすすめ";
-      font-family: var(--font-ui);
-      font-size: 9.2px;
-      font-weight: 700;
-      line-height: 1;
-      letter-spacing: 0.04em;
-      color: #826953;
-      margin-bottom: 2px;
-    }
-
-    .seg-group[data-control] .seg-btn.is-ideal.is-active::before {
-      color: var(--axis-dark);
-    }
-
-    /* ================= 判定結果カード（入れ子廃止・図鑑トーンへ刷新） ================= */
-    .result-col {
-      display: flex;
-      flex-direction: column;
-      gap: 9px;
-      min-height: 0;
-      min-width: 0;
-    }
-
-    .result-card {
-      --res-color: #3a5e31;
-      --res-tint: #f4f8f1;
-      --res-bd: rgba(94, 128, 75, 0.36);
-      --res-icon-bg: rgba(94, 128, 75, 0.14);
-      flex: 1 1 auto;
-      min-height: 0;
-      background: var(--res-tint);
-      border: 1.2px solid var(--res-bd);
-      border-left: 5px solid var(--res-color);
-      border-radius: 14px;
-      padding: 14px 16px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      gap: 10px;
-      text-align: left;
-      box-shadow: var(--shadow-soft);
-      transition: background-color 0.2s ease, border-color 0.2s ease;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .result-card.is-pop { animation: resultPop 0.18s ease; }
-    @keyframes resultPop { 0% { opacity: 0.86; } 100% { opacity: 1; } }
-
-    .result-card.state-good { --res-color: #3a5e31; --res-tint: #f4f8f1; --res-bd: rgba(86, 128, 75, 0.36); --res-icon-bg: rgba(86, 128, 75, 0.14); }
-    .result-card.state-sleep { --res-color: #4f5c4c; --res-tint: #f5f5f0; --res-bd: rgba(114, 126, 110, 0.36); --res-icon-bg: rgba(114, 126, 110, 0.14); }
-    .result-card.state-warn { --res-color: #965410; --res-tint: #fcf6ec; --res-bd: rgba(186, 118, 36, 0.38); --res-icon-bg: rgba(186, 118, 36, 0.13); }
-    .result-card.state-dry { --res-color: #7a5524; --res-tint: #faf4ea; --res-bd: rgba(158, 114, 56, 0.36); --res-icon-bg: rgba(158, 114, 56, 0.13); }
-    .result-card.state-rot { --res-color: #9e3326; --res-tint: #fdf3f1; --res-bd: rgba(184, 78, 66, 0.38); --res-icon-bg: rgba(184, 78, 66, 0.12); }
-    .result-card.state-freeze { --res-color: #2b5975; --res-tint: #f0f6fa; --res-bd: rgba(74, 126, 158, 0.38); --res-icon-bg: rgba(74, 126, 158, 0.13); }
-
-    .result-mark-row {
-      display: flex;
-      align-items: center;
-      gap: 11px;
-    }
-
-    /* basics.html とお揃いの淡面＋枠線の丸アイコン */
-    .result-icon-circle {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      background: var(--res-icon-bg);
-      border: 1.6px solid var(--res-bd);
-      color: var(--res-color);
-      font-family: var(--font-ui);
-      font-size: 21px;
-      font-weight: 700;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-    }
-
-    .result-status-text {
-      font-family: var(--font-serif);
-      font-size: 21px;
-      font-weight: 700;
-      letter-spacing: 0.03em;
-      color: var(--res-color);
-      line-height: 1.22;
-    }
-
-    /* 白箱の入れ子をやめ、繊細な区切り線で直接紙面に配置 */
-    .result-comment {
-      font-family: var(--font-ui);
-      font-size: 14px;
-      font-weight: 500;
-      line-height: 1.5;
-      color: var(--ink-main);
-      padding-top: 9px;
-      border-top: 1px dashed var(--res-bd);
-    }
-
-    .result-links-row {
-      flex: 0 0 44px;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 9px;
-    }
-
-    .result-link-btn {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 6px;
-      padding: 0 10px 0 9px;
-      background: var(--card-paper);
-      border: 1.2px solid var(--line-soft);
-      border-bottom: 2px solid var(--line-strong);
-      border-radius: 11px;
-      font-family: var(--font-ui);
-      font-size: 13.2px;
-      font-weight: 700;
-      color: var(--ink-main);
-      cursor: pointer;
-      white-space: nowrap;
-      box-shadow: var(--shadow-soft);
-      transition: transform 0.08s ease, background-color 0.12s ease, border-color 0.12s ease;
-    }
-
-    .result-link-btn:hover { background: #fdf9f0; border-color: #b49f83; }
-    .result-link-btn:active { transform: translateY(1px); background: var(--axis-fill); }
-    .result-link-left { display: inline-flex; align-items: center; gap: 6px; min-width: 0; }
-
-    .result-link-icon {
-      width: 24px;
-      height: 24px;
-      border-radius: 50%;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-    }
-
-    .result-link-icon.is-rules {
-      background: var(--wind-soft);
-      border: 1px solid var(--wind-bd);
-      color: var(--wind-color);
-    }
-
-    .result-link-icon.is-sos {
-      background: rgba(168, 77, 59, 0.12);
-      border: 1px solid rgba(168, 77, 59, 0.3);
-      color: #a84d3b;
-      font-family: sans-serif;
-      font-size: 8.8px;
-      font-weight: 800;
-      letter-spacing: 0.01em;
-    }
-
-    .result-link-icon svg { width: 13.5px; height: 13.5px; }
-
-    .result-link-arrow {
-      width: 20px;
-      height: 20px;
-      border-radius: 50%;
-      background: var(--axis-soft);
-      border: 1px solid rgba(94, 71, 54, 0.28);
-      color: var(--axis-dark);
-      font-size: 14px;
-      font-weight: 700;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-      padding-left: 1px;
-      padding-bottom: 1px;
-    }
-  </style>
+ <meta charset="UTF-8" />
+ <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+
+ <!-- =========================================================================
+ 保木平珈琲 Murmure｜展示用iPad Webアプリ「光・風・水でどう変わる？」（v2・表現＆導線改善版）
+ - basics.html と完全に揃えた「温かいクリーム紙 × こげ茶インク × 明朝見出し × 控えめな枠」
+ - ハオルチア夏・アエオニウム夏・カランコエ春の表現を詳細ページと整合
+ - 結果状態に応じた SOS 症状（sym）自動引き継ぎに対応
+ - 5つの基本ページ（basics_*）からの「もどる」復帰に対応
+ ========================================================================= -->
+
+ <meta name="apple-mobile-web-app-capable" content="yes" />
+ <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+ <meta name="apple-mobile-web-app-title" content="多肉の育て方" />
+ <meta name="theme-color" content="#f6f0e4" />
+ <meta name="format-detection" content="telephone=no" />
+ <link rel="manifest" href="manifest.json" />
+ <link rel="apple-touch-icon" sizes="180x180" href="images/apple-touch-icon.png" />
+ <link rel="icon" type="image/png" sizes="512x512" href="images/icon-512.png" />
+
+ <title>Murmure｜光・風・水でどう変わる？</title>
+
+ <link rel="preconnect" href="https://fonts.googleapis.com" />
+ <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+ <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=Shippori+Mincho:wght@500;600;700&family=Zen+Maru+Gothic:wght@400;500;700&display=swap" rel="stylesheet" />
+
+ <style>
+ :root {
+ /* basics.html と完全統一：温かいカフェ図鑑トーン */
+ --bg-outer: #e9dfd0;
+ --bg-paper: #f6f0e4;
+ --card-paper: #fffdf8;
+ --surface-muted: #faf6ed;
+ --ink-main: #2d1f16;
+ --ink-sub: #4e3d30;
+ --ink-muted: #6e5c4d;
+ --line-soft: #d7c7ad;
+ --line-strong: #c2ae8e;
+
+ --axis: #5e4736;
+ --axis-dark: #453326;
+ --axis-soft: #f2eadc;
+ --axis-fill: #ebe0cc;
+ --rail-color: #78604e;
+ --rail-line: #d4c6b4;
+
+ /* 光・風・水の丸アイコン色（basics.html と完全統一） */
+ --wind-color: #5e784a;
+ --wind-soft: rgba(105, 129, 84, 0.14);
+ --wind-bd: rgba(105, 129, 84, 0.34);
+
+ --sun-color: #9e5612;
+ --sun-soft: rgba(186, 108, 28, 0.13);
+ --sun-bd: rgba(186, 108, 28, 0.36);
+
+ --water-color: #467b96;
+ --water-soft: rgba(79, 132, 158, 0.14);
+ --water-bd: rgba(79, 132, 158, 0.34);
+
+ /* 4タイプ識別カラー */
+ --tag-1: #b8566d;
+ --tag-2: #3d7699;
+ --tag-3: #b05712;
+ --tag-4: #4d6b38;
+
+ /* 季節カラー（控えめで品のあるニュアンスへ調整） */
+ --season-spring: #bf6b7e;
+ --season-spring-dark: #944456;
+ --season-spring-soft: #f7e3e8;
+ --season-rain: #557e96;
+ --season-rain-dark: #385c73;
+ --season-rain-soft: #e0ebf2;
+ --season-summer: #56804b;
+ --season-summer-dark: #3a5e31;
+ --season-summer-soft: #e1eedc;
+ --season-autumn: #b36639;
+ --season-autumn-dark: #874720;
+ --season-autumn-soft: #f4e3d5;
+ --season-winter: #4e6f8c;
+ --season-winter-dark: #335069;
+ --season-winter-soft: #dfe8f0;
+
+ --shadow-soft: 0 2px 10px rgba(72, 54, 38, 0.055);
+ --font-serif: "Shippori Mincho", "Hiragino Mincho ProN", "Yu Mincho", serif;
+ --font-ui: "Zen Maru Gothic", "Hiragino Maru Gothic ProN", sans-serif;
+ }
+
+ * {
+ box-sizing: border-box;
+ margin: 0;
+ padding: 0;
+ -webkit-tap-highlight-color: transparent;
+ -webkit-user-select: none;
+ user-select: none;
+ -webkit-touch-callout: none;
+ }
+
+ button { touch-action: manipulation; }
+ button:focus-visible { outline: 3px solid #ab542c; outline-offset: -3px; }
+ svg { display: block; flex-shrink: 0; }
+
+ html, body {
+ width: 100%;
+ height: 100%;
+ overflow: hidden;
+ background: var(--bg-outer);
+ font-family: var(--font-ui);
+ color: var(--ink-main);
+ }
+
+ .viewport-wrapper {
+ position: fixed;
+ inset: 0;
+ width: 100vw;
+ height: 100vh;
+ height: 100dvh;
+ overflow: hidden;
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ }
+
+ .canvas {
+ position: relative;
+ width: 1080px;
+ height: 786px;
+ min-width: 1080px;
+ min-height: 786px;
+ background: linear-gradient(135deg, #f9f5e9, #f2ead9);
+ transform-origin: center center;
+ padding: 14px 24px 16px;
+ display: flex;
+ flex-direction: column;
+ gap: 12px;
+ box-shadow: 0 12px 36px rgba(59, 45, 35, 0.14);
+ overflow: hidden;
+ }
+
+ .canvas::before {
+ content: "";
+ position: absolute;
+ inset: 0;
+ pointer-events: none;
+ background-image: radial-gradient(rgba(110, 88, 66, 0.045) 1px, transparent 0);
+ background-size: 16px 16px;
+ opacity: 0.7;
+ }
+
+ /* ================= 1. 上部ヘッダー（basics.html と完全統一） ================= */
+ .sim-header {
+ position: relative;
+ z-index: 2;
+ display: flex;
+ align-items: center;
+ justify-content: space-between;
+ gap: 14px;
+ flex-shrink: 0;
+ border-bottom: 1px solid var(--line-soft);
+ padding-bottom: 8px;
+ }
+
+ .header-left {
+ display: flex;
+ align-items: center;
+ gap: 16px;
+ }
+
+ .header-nav-group {
+ display: inline-flex;
+ align-items: center;
+ gap: 8px;
+ flex-shrink: 0;
+ }
+
+ .back-btn,
+ .home-btn {
+ display: inline-flex;
+ align-items: center;
+ gap: 6px;
+ height: 40px;
+ padding: 0 15px;
+ background: var(--card-paper);
+ border: 1px solid var(--line-soft);
+ border-bottom: 2px solid var(--line-strong);
+ border-radius: 10px;
+ font-family: var(--font-ui);
+ font-size: 14.5px;
+ font-weight: 700;
+ color: var(--ink-main);
+ cursor: pointer;
+ flex-shrink: 0;
+ transition: background-color 0.12s ease, transform 0.08s ease;
+ }
+
+ .home-btn {
+ background: var(--axis-soft);
+ border-color: #cbbba6;
+ border-bottom-color: #b39f86;
+ color: var(--axis);
+ }
+
+ .back-btn:active,
+ .home-btn:active {
+ transform: translateY(1px);
+ background: #ebe4d5;
+ }
+
+ .back-arrow {
+ font-size: 19px;
+ line-height: 1;
+ color: var(--axis);
+ }
+
+ .home-btn svg {
+ width: 15px;
+ height: 15px;
+ color: var(--axis);
+ }
+
+ .title-wrap {
+ display: flex;
+ align-items: baseline;
+ gap: 12px;
+ }
+
+ .page-title {
+ font-family: var(--font-serif);
+ font-size: 25px;
+ font-weight: 700;
+ letter-spacing: 0.06em;
+ line-height: 1.12;
+ color: var(--ink-main);
+ }
+
+ .page-en {
+ font-family: "Cormorant Garamond", Georgia, serif;
+ font-style: italic;
+ font-size: 16px;
+ font-weight: 600;
+ color: var(--ink-muted);
+ }
+
+ /* ================= 2. 全体3ステップ・グリッド（basics.html と同じゆとり） ================= */
+ .flow-workspace {
+ position: relative;
+ z-index: 2;
+ flex: 1 1 auto;
+ min-height: 0;
+ display: grid;
+ grid-template-columns: 38px 1fr;
+ grid-template-rows: auto auto auto;
+ align-content: space-between;
+ column-gap: 12px;
+ row-gap: 18px;
+ padding: 4px 0 2px;
+ }
+
+ .rail-cell {
+ position: relative;
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ }
+
+ .rail-cell.is-step2,
+ .rail-cell.is-step3 {
+ align-items: flex-start;
+ }
+
+ .rail-cell.is-step1::after {
+ content: "";
+ position: absolute;
+ left: 50%;
+ top: 50%;
+ bottom: -44px;
+ width: 2px;
+ background: var(--rail-line);
+ transform: translateX(-50%);
+ z-index: 0;
+ }
+
+ .rail-cell.is-step2::before {
+ content: "";
+ position: absolute;
+ left: 50%;
+ top: -44px;
+ bottom: -44px;
+ width: 2px;
+ background: var(--rail-line);
+ transform: translateX(-50%);
+ z-index: 0;
+ }
+
+ .rail-cell.is-step3::before {
+ content: "";
+ position: absolute;
+ left: 50%;
+ top: -44px;
+ height: 58px;
+ width: 2px;
+ background: var(--rail-line);
+ transform: translateX(-50%);
+ z-index: 0;
+ }
+
+ .step-badge {
+ position: relative;
+ z-index: 2;
+ width: 28px;
+ height: 28px;
+ border-radius: 50%;
+ background: var(--rail-color);
+ border: 2px solid var(--bg-paper);
+ color: #fff;
+ font-family: var(--font-ui);
+ font-size: 14px;
+ font-weight: 700;
+ display: inline-flex;
+ align-items: center;
+ justify-content: center;
+ flex-shrink: 0;
+ }
+
+ .step-section-head {
+ display: flex;
+ align-items: center;
+ justify-content: space-between;
+ min-height: 28px;
+ padding: 0 2px;
+ margin-bottom: 8px;
+ gap: 12px;
+ }
+
+ .step-section-head.is-sim-head {
+ display: grid;
+ grid-template-columns: 1fr 316px;
+ gap: 14px;
+ align-items: center;
+ }
+
+ .step-head-left {
+ display: flex;
+ align-items: baseline;
+ gap: 12px;
+ min-width: 0;
+ }
+
+ .step-head-bar {
+ display: flex;
+ align-items: center;
+ justify-content: space-between;
+ gap: 10px;
+ min-width: 0;
+ }
+
+ /* basics.html と同じ明朝見出しへ統一 */
+ .step-head-title {
+ font-family: var(--font-serif);
+ font-size: 18.5px;
+ font-weight: 700;
+ letter-spacing: 0.04em;
+ color: var(--ink-main);
+ line-height: 1.25;
+ white-space: nowrap;
+ }
+
+ .step-head-desc {
+ font-family: var(--font-ui);
+ font-size: 13px;
+ font-weight: 500;
+ color: var(--ink-muted);
+ line-height: 1.25;
+ white-space: nowrap;
+ }
+
+ /* ================= Row 1：① タイプをえらぶ帯（位置そのまま・明朝で品よく） ================= */
+ .type-picker-bar {
+ background: transparent;
+ border: none;
+ padding: 2px 0 2px 2px;
+ display: flex;
+ align-items: center;
+ gap: 12px;
+ min-width: 0;
+ }
+
+ .step-heading-inline {
+ position: relative;
+ display: flex;
+ flex-direction: column;
+ gap: 2px;
+ flex-shrink: 0;
+ width: 122px;
+ justify-content: center;
+ }
+
+ .step-title {
+ font-family: var(--font-serif);
+ font-size: 17.5px;
+ font-weight: 700;
+ letter-spacing: 0.03em;
+ color: var(--ink-main);
+ line-height: 1.2;
+ white-space: nowrap;
+ }
+
+ .step-staff-note {
+ position: absolute;
+ top: calc(100% + 4px);
+ left: 0;
+ font-family: var(--font-ui);
+ font-size: 10.8px;
+ font-weight: 500;
+ color: var(--ink-muted);
+ line-height: 1.25;
+ white-space: nowrap;
+ }
+
+ .type-tabs {
+ flex: 1;
+ min-width: 0;
+ display: grid;
+ grid-template-columns: repeat(4, 1fr);
+ gap: 10px;
+ }
+
+ .type-tab {
+ min-height: 54px;
+ background: rgba(255, 253, 248, 0.92);
+ border: 1.2px solid var(--line-soft);
+ border-bottom: 2px solid var(--line-strong);
+ border-radius: 12px;
+ padding: 5px 8px 6px;
+ display: flex;
+ flex-direction: column;
+ align-items: center;
+ justify-content: center;
+ gap: 3px;
+ text-align: center;
+ cursor: pointer;
+ color: var(--ink-main);
+ box-shadow: var(--shadow-soft);
+ transition: background-color 0.14s ease, border-color 0.14s ease, box-shadow 0.14s ease, transform 0.08s ease;
+ }
+
+ .type-tab-main {
+ display: inline-flex;
+ align-items: center;
+ justify-content: center;
+ gap: 7px;
+ }
+
+ .tab-name {
+ font-family: var(--font-serif);
+ font-size: 15.8px;
+ font-weight: 700;
+ letter-spacing: 0.03em;
+ color: var(--ink-main);
+ line-height: 1.2;
+ white-space: nowrap;
+ }
+
+ .tab-species {
+ font-family: var(--font-ui);
+ font-size: 11px;
+ font-weight: 500;
+ color: var(--ink-muted);
+ line-height: 1.15;
+ letter-spacing: 0.01em;
+ white-space: nowrap;
+ }
+
+ .type-tab.is-active .tab-species { color: var(--ink-sub); }
+ .type-tab:hover:not(.is-active) { background: #fffdf8; border-color: #b49f83; }
+ .type-tab:active { transform: translateY(1px); }
+
+ .type-tab[data-type="sun-main"] { --tab-color: var(--tag-1); }
+ .type-tab[data-type="sun-cool"] { --tab-color: var(--tag-2); }
+ .type-tab[data-type="sun-warm"] { --tab-color: var(--tag-3); }
+ .type-tab[data-type="shade-main"] { --tab-color: var(--tag-4); }
+
+ .type-dot {
+ width: 10px;
+ height: 10px;
+ border-radius: 50%;
+ background: var(--tab-color);
+ flex-shrink: 0;
+ }
+
+ .type-tab.is-active {
+ background: var(--axis-fill);
+ border: 1.8px solid var(--axis);
+ border-bottom: 2.8px solid var(--axis-dark);
+ box-shadow: 0 2px 8px rgba(59, 45, 35, 0.1);
+ }
+
+ /* ================= Row 2：② 季節をえらぶ（水やり波なし・5枚水彩カード＋軽やか12ヶ月帯） ================= */
+ .calendar-stack {
+ position: relative;
+ z-index: 2;
+ min-height: 0;
+ display: flex;
+ flex-direction: column;
+ }
+
+ .calendar-main {
+ position: relative;
+ height: 294px;
+ flex-shrink: 0;
+ display: flex;
+ flex-direction: column;
+ gap: 9px;
+ }
+
+ .season-cards-grid {
+ flex: 1 1 auto;
+ min-height: 0;
+ display: grid;
+ grid-template-columns: repeat(5, 1fr);
+ gap: 10px;
+ }
+
+ .season-card {
+ --s-border: var(--season-spring);
+ --s-soft: var(--season-spring-soft);
+ --s-dark: var(--season-spring-dark);
+ position: relative;
+ display: flex;
+ flex-direction: column;
+ border-radius: 14px;
+ border: 1.2px solid var(--line-soft);
+ border-bottom: 2px solid var(--line-strong);
+ background: var(--card-paper);
+ overflow: hidden;
+ cursor: pointer;
+ box-shadow: var(--shadow-soft);
+ transition: border-color 0.16s ease, box-shadow 0.16s ease, transform 0.1s ease;
+ }
+
+ .season-card[data-season="spring"] { --s-border: var(--season-spring); --s-soft: var(--season-spring-soft); --s-dark: var(--season-spring-dark); }
+ .season-card[data-season="rain"] { --s-border: var(--season-rain); --s-soft: var(--season-rain-soft); --s-dark: var(--season-rain-dark); }
+ .season-card[data-season="summer"] { --s-border: var(--season-summer); --s-soft: var(--season-summer-soft); --s-dark: var(--season-summer-dark); }
+ .season-card[data-season="autumn"] { --s-border: var(--season-autumn); --s-soft: var(--season-autumn-soft); --s-dark: var(--season-autumn-dark); }
+ .season-card[data-season="winter"] { --s-border: var(--season-winter); --s-soft: var(--season-winter-soft); --s-dark: var(--season-winter-dark); }
+
+ .season-card:hover:not(.is-active) { border-color: #b49f83; }
+
+ .season-card.is-active {
+ border: 1.8px solid var(--s-border);
+ border-bottom: 2.8px solid var(--s-border);
+ box-shadow: 0 4px 14px rgba(59, 45, 35, 0.11);
+ z-index: 3;
+ }
+
+ .season-pick-btn {
+ width: 100%;
+ flex-shrink: 0;
+ background: rgba(255, 253, 248, 0.96);
+ border: none;
+ border-bottom: 1px solid #ece3d2;
+ padding: 7px 6px 6px;
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ gap: 6px;
+ cursor: pointer;
+ color: var(--ink-muted);
+ transition: background-color 0.14s ease, color 0.14s ease;
+ }
+
+ .season-card:hover:not(.is-active) .season-pick-btn {
+ color: var(--ink-main);
+ background: #faf5ea;
+ }
+
+ .season-card.is-active .season-pick-btn {
+ color: var(--s-dark);
+ background: var(--s-soft);
+ border-bottom-color: rgba(94, 71, 54, 0.1);
+ }
+
+ .season-pick-name {
+ font-family: var(--font-serif);
+ font-size: 17px;
+ font-weight: 700;
+ line-height: 1.1;
+ letter-spacing: 0.08em;
+ }
+
+ .season-now-badge {
+ display: none;
+ font-family: var(--font-ui);
+ font-size: 10px;
+ font-weight: 700;
+ padding: 1.5px 7px;
+ border-radius: 999px;
+ background: rgba(94, 71, 54, 0.09);
+ color: var(--ink-sub);
+ line-height: 1.25;
+ }
+
+ .season-pick-btn.is-current-season .season-now-badge { display: inline-block; }
+ .season-card.is-active .season-now-badge {
+ background: rgba(255, 253, 248, 0.92);
+ color: var(--s-dark);
+ border: 1px solid rgba(94, 71, 54, 0.14);
+ }
+
+ .season-card-stage {
+ position: relative;
+ flex: 1 1 auto;
+ min-height: 0;
+ overflow: hidden;
+ background: #f5efe2;
+ }
+
+ .diorama-panel {
+ position: absolute;
+ inset: 0;
+ overflow: hidden;
+ transition: opacity 0.2s ease, filter 0.2s ease;
+ }
+
+ .diorama-panel.is-dim {
+ opacity: 0.62;
+ filter: saturate(0.72) brightness(1.03);
+ }
+
+ .diorama-panel img.dio-base-img {
+ position: absolute;
+ inset: 0;
+ width: 100%;
+ height: 100%;
+ object-fit: cover;
+ object-position: center bottom;
+ display: block;
+ opacity: 0;
+ transition: opacity 0.22s ease;
+ z-index: 1;
+ }
+
+ .diorama-panel.is-loaded img.dio-base-img { opacity: 1; }
+
+ .fixed-spot {
+ position: absolute;
+ top: 0;
+ left: 0;
+ right: 0;
+ display: flex;
+ flex-direction: column;
+ align-items: center;
+ padding: 9px 6px 0;
+ z-index: 6;
+ pointer-events: none;
+ transition: opacity 0.2s ease;
+ }
+
+ .fixed-spot.is-dim .season-bubble { opacity: 0.72; }
+ .fixed-spot.is-active .season-bubble {
+ opacity: 1;
+ background: rgba(255, 253, 248, 0.96);
+ box-shadow: 0 3px 10px rgba(59, 45, 35, 0.11);
+ }
+
+ .season-bubble {
+ --bub-bg: rgba(255, 253, 248, 0.9);
+ --bub-border: rgba(194, 174, 142, 0.55);
+ --bub-accent: var(--ink-main);
+ position: relative;
+ background: var(--bub-bg);
+ border: 1px solid var(--bub-border);
+ border-radius: 10px;
+ padding: 4px 10px 4.5px;
+ font-family: var(--font-ui);
+ text-align: center;
+ box-shadow: 0 2px 6px rgba(60, 44, 30, 0.06);
+ white-space: nowrap;
+ display: flex;
+ flex-direction: column;
+ align-items: center;
+ gap: 1.5px;
+ transition: opacity 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+ }
+
+ .season-card[data-season="spring"] .season-bubble { --bub-accent: var(--season-spring-dark); --bub-border: rgba(191, 107, 126, 0.42); }
+ .season-card[data-season="rain"] .season-bubble { --bub-accent: var(--season-rain-dark); --bub-border: rgba(85, 126, 150, 0.42); padding: 4px 8px 4.5px; }
+ .season-card[data-season="summer"] .season-bubble { --bub-accent: var(--season-summer-dark); --bub-border: rgba(86, 128, 75, 0.42); }
+ .season-card[data-season="autumn"] .season-bubble { --bub-accent: var(--season-autumn-dark); --bub-border: rgba(179, 102, 57, 0.42); }
+ .season-card[data-season="winter"] .season-bubble { --bub-accent: var(--season-winter-dark); --bub-border: rgba(78, 111, 140, 0.42); }
+
+ .bubble-phase {
+ font-size: 13.5px;
+ font-weight: 700;
+ line-height: 1.18;
+ color: var(--bub-accent);
+ letter-spacing: 0.03em;
+ }
+
+ .bubble-note {
+ font-size: 12px;
+ font-weight: 500;
+ line-height: 1.22;
+ color: var(--ink-sub);
+ }
+
+ .season-card[data-season="rain"] .bubble-phase { font-size: 13px; }
+ .season-card[data-season="rain"] .bubble-note { font-size: 11.6px; }
+
+ .season-bubble::after {
+ content: "";
+ position: absolute;
+ left: 50%;
+ bottom: -4px;
+ width: 7px;
+ height: 7px;
+ background: var(--bub-bg);
+ border-right: 1px solid var(--bub-border);
+ border-bottom: 1px solid var(--bub-border);
+ transform: translateX(-50%) rotate(45deg);
+ }
+
+ .stage-hit-btn {
+ position: absolute;
+ inset: 0;
+ z-index: 7;
+ background: transparent;
+ border: none;
+ cursor: pointer;
+ }
+
+ /* 下段：スリムで上品な12ヶ月ガイド帯（水やり波を削除） */
+ .calendar-timeline-card {
+ flex-shrink: 0;
+ border-radius: 10px;
+ border: 1px solid var(--line-soft);
+ background: var(--card-paper);
+ overflow: hidden;
+ box-shadow: var(--shadow-soft);
+ }
+
+ .cal-months-band {
+ position: relative;
+ z-index: 3;
+ display: grid;
+ grid-template-columns: repeat(12, 1fr);
+ align-items: center;
+ height: 30px;
+ background: #f8f3e8;
+ overflow: hidden;
+ transition: background 0.2s ease;
+ }
+
+ .months-dim-left,
+ .months-dim-right {
+ position: absolute;
+ top: 0;
+ bottom: 0;
+ z-index: 1;
+ pointer-events: none;
+ background: rgba(246, 240, 228, 0.7);
+ transition: left 0.2s ease, width 0.2s ease;
+ }
+
+ .months-dim-left { left: 0; width: 0%; }
+ .months-dim-right { left: 100%; right: 0; }
+
+ .cal-m {
+ position: relative;
+ z-index: 2;
+ font-family: var(--font-ui);
+ text-align: center;
+ font-size: 12.6px;
+ font-weight: 700;
+ color: var(--ink-main);
+ line-height: 1;
+ letter-spacing: -0.01em;
+ pointer-events: none;
+ transition: opacity 0.2s ease;
+ }
+
+ .cal-m.is-dim { opacity: 0.42; font-weight: 500; }
+
+ /* 囲み枠をやめ、下辺の繊細なアクセントバーで上品に強調 */
+ .months-active-frame {
+ position: absolute;
+ left: 0%;
+ width: 25%;
+ bottom: 0;
+ height: 3px;
+ z-index: 3;
+ pointer-events: none;
+ background: var(--season-spring);
+ transition: left 0.2s ease, width 0.2s ease, background-color 0.2s ease;
+ }
+
+ /* ================= Row 3：③ 光・風・水を試す ＆ 結果を見る ================= */
+ .sim-stack {
+ position: relative;
+ z-index: 10;
+ display: flex;
+ flex-direction: column;
+ min-width: 0;
+ }
+
+ .sim-bar {
+ position: relative;
+ z-index: 10;
+ height: 212px;
+ display: grid;
+ grid-template-columns: 1fr 316px;
+ gap: 14px;
+ min-width: 0;
+ }
+
+ .controls-card {
+ position: relative;
+ z-index: 10;
+ background: rgba(255, 253, 248, 0.94);
+ border: 1.2px solid var(--line-soft);
+ border-bottom: 2px solid var(--line-strong);
+ border-radius: 16px;
+ padding: 14px 16px;
+ display: flex;
+ flex-direction: column;
+ justify-content: center;
+ box-shadow: var(--shadow-soft);
+ min-width: 0;
+ }
+
+ .reset-ideal-btn {
+ display: inline-flex;
+ align-items: center;
+ gap: 5px;
+ padding: 4px 13px;
+ background: var(--axis-soft);
+ border: 1px solid #cbbba6;
+ border-bottom: 2px solid #b39f86;
+ border-radius: 999px;
+ font-family: var(--font-ui);
+ font-size: 12.8px;
+ font-weight: 700;
+ color: var(--axis);
+ cursor: pointer;
+ white-space: nowrap;
+ flex-shrink: 0;
+ transition: transform 0.1s ease, opacity 0.15s ease, background-color 0.12s ease;
+ }
+
+ .reset-ideal-btn:active { transform: translateY(1px); }
+ .reset-ideal-btn.is-already-ideal {
+ opacity: 0.45;
+ background: transparent;
+ border-color: var(--line-soft);
+ border-bottom-color: var(--line-soft);
+ color: var(--ink-muted);
+ }
+
+ .control-rows {
+ display: flex;
+ flex-direction: column;
+ gap: 11px;
+ flex: 1;
+ justify-content: center;
+ }
+
+ .ctrl-row {
+ display: grid;
+ grid-template-columns: 64px 1fr;
+ align-items: center;
+ gap: 10px;
+ }
+
+ .ctrl-label {
+ font-family: var(--font-serif);
+ display: flex;
+ align-items: center;
+ gap: 7px;
+ font-size: 16.5px;
+ font-weight: 700;
+ color: var(--ink-main);
+ }
+
+ .ctrl-icon {
+ width: 30px;
+ height: 30px;
+ border-radius: 50%;
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ flex-shrink: 0;
+ }
+
+ .ctrl-icon.is-light { background: var(--sun-soft); color: var(--sun-color); border: 1.2px solid var(--sun-bd); }
+ .ctrl-icon.is-wind { background: var(--wind-soft); color: var(--wind-color); border: 1.2px solid var(--wind-bd); }
+ .ctrl-icon.is-water { background: var(--water-soft); color: var(--water-color); border: 1.2px solid var(--water-bd); }
+ .ctrl-icon svg { width: 16px; height: 16px; }
+
+ .seg-group { display: grid; gap: 8px; }
+ .seg-group.cols-4 { grid-template-columns: repeat(4, 1fr); }
+ .seg-group.cols-3 { grid-template-columns: repeat(3, 1fr); }
+
+ /* おすすめタグの枠外飛び出しを廃止し、ボタン内に美しく収める設計 */
+ .seg-btn {
+ position: relative;
+ z-index: 2;
+ width: 100%;
+ height: 50px;
+ display: flex;
+ flex-direction: column;
+ align-items: center;
+ justify-content: center;
+ gap: 1px;
+ border: 1px solid #e2d5c1;
+ border-bottom: 1.8px solid #d1c0a5;
+ background: var(--surface-muted);
+ border-radius: 10px;
+ padding: 4px 4px;
+ font-family: var(--font-ui);
+ font-size: 13.8px;
+ font-weight: 700;
+ letter-spacing: -0.02em;
+ color: var(--ink-sub);
+ cursor: pointer;
+ white-space: nowrap;
+ transition: background-color 0.12s ease, color 0.12s ease, border-color 0.12s ease, box-shadow 0.12s ease;
+ }
+
+ .seg-btn:hover:not(.is-active) { background: #f3ecde; border-color: var(--line-strong); }
+ .seg-btn:active { background: #ebe1cf; }
+
+ .seg-group[data-control] .seg-btn.is-active {
+ color: var(--ink-main);
+ background: var(--axis-fill);
+ border: 1.8px solid var(--axis);
+ border-bottom: 2.6px solid var(--axis-dark);
+ box-shadow: 0 2px 6px rgba(59, 45, 35, 0.09);
+ }
+
+ .seg-group[data-control] .seg-btn.is-ideal:not(.is-active) {
+ border: 1.4px dashed #a89378;
+ background: #fdfaf3;
+ }
+
+ .seg-group[data-control] .seg-btn.is-ideal::before {
+ content: "おすすめ";
+ font-family: var(--font-ui);
+ font-size: 9.2px;
+ font-weight: 700;
+ line-height: 1;
+ letter-spacing: 0.04em;
+ color: #826953;
+ margin-bottom: 2px;
+ }
+
+ .seg-group[data-control] .seg-btn.is-ideal.is-active::before {
+ color: var(--axis-dark);
+ }
+
+ /* ================= 判定結果カード（入れ子廃止・図鑑トーンへ刷新） ================= */
+ .result-col {
+ display: flex;
+ flex-direction: column;
+ gap: 9px;
+ min-height: 0;
+ min-width: 0;
+ }
+
+ .result-card {
+ --res-color: #3a5e31;
+ --res-tint: #f4f8f1;
+ --res-bd: rgba(94, 128, 75, 0.36);
+ --res-icon-bg: rgba(94, 128, 75, 0.14);
+ flex: 1 1 auto;
+ min-height: 0;
+ background: var(--res-tint);
+ border: 1.2px solid var(--res-bd);
+ border-left: 5px solid var(--res-color);
+ border-radius: 14px;
+ padding: 14px 16px;
+ display: flex;
+ flex-direction: column;
+ justify-content: center;
+ gap: 10px;
+ text-align: left;
+ box-shadow: var(--shadow-soft);
+ transition: background-color 0.2s ease, border-color 0.2s ease;
+ position: relative;
+ overflow: hidden;
+ }
+
+ .result-card.is-pop { animation: resultPop 0.18s ease; }
+ @keyframes resultPop { 0% { opacity: 0.86; } 100% { opacity: 1; } }
+
+ .result-card.state-good { --res-color: #3a5e31; --res-tint: #f4f8f1; --res-bd: rgba(86, 128, 75, 0.36); --res-icon-bg: rgba(86, 128, 75, 0.14); }
+ .result-card.state-sleep { --res-color: #4f5c4c; --res-tint: #f5f5f0; --res-bd: rgba(114, 126, 110, 0.36); --res-icon-bg: rgba(114, 126, 110, 0.14); }
+ .result-card.state-warn { --res-color: #965410; --res-tint: #fcf6ec; --res-bd: rgba(186, 118, 36, 0.38); --res-icon-bg: rgba(186, 118, 36, 0.13); }
+ .result-card.state-dry { --res-color: #7a5524; --res-tint: #faf4ea; --res-bd: rgba(158, 114, 56, 0.36); --res-icon-bg: rgba(158, 114, 56, 0.13); }
+ .result-card.state-rot { --res-color: #9e3326; --res-tint: #fdf3f1; --res-bd: rgba(184, 78, 66, 0.38); --res-icon-bg: rgba(184, 78, 66, 0.12); }
+ .result-card.state-freeze { --res-color: #2b5975; --res-tint: #f0f6fa; --res-bd: rgba(74, 126, 158, 0.38); --res-icon-bg: rgba(74, 126, 158, 0.13); }
+
+ .result-mark-row {
+ display: flex;
+ align-items: center;
+ gap: 11px;
+ }
+
+ /* basics.html とお揃いの淡面＋枠線の丸アイコン */
+ .result-icon-circle {
+ width: 40px;
+ height: 40px;
+ border-radius: 50%;
+ background: var(--res-icon-bg);
+ border: 1.6px solid var(--res-bd);
+ color: var(--res-color);
+ font-family: var(--font-ui);
+ font-size: 21px;
+ font-weight: 700;
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ flex-shrink: 0;
+ }
+
+ .result-status-text {
+ font-family: var(--font-serif);
+ font-size: 21px;
+ font-weight: 700;
+ letter-spacing: 0.03em;
+ color: var(--res-color);
+ line-height: 1.22;
+ }
+
+ /* 白箱の入れ子をやめ、繊細な区切り線で直接紙面に配置 */
+ .result-comment {
+ font-family: var(--font-ui);
+ font-size: 14px;
+ font-weight: 500;
+ line-height: 1.5;
+ color: var(--ink-main);
+ padding-top: 9px;
+ border-top: 1px dashed var(--res-bd);
+ }
+
+ .result-links-row {
+ flex: 0 0 44px;
+ display: grid;
+ grid-template-columns: 1fr 1fr;
+ gap: 9px;
+ }
+
+ .result-link-btn {
+ display: flex;
+ align-items: center;
+ justify-content: space-between;
+ gap: 6px;
+ padding: 0 10px 0 9px;
+ background: var(--card-paper);
+ border: 1.2px solid var(--line-soft);
+ border-bottom: 2px solid var(--line-strong);
+ border-radius: 11px;
+ font-family: var(--font-ui);
+ font-size: 13.2px;
+ font-weight: 700;
+ color: var(--ink-main);
+ cursor: pointer;
+ white-space: nowrap;
+ box-shadow: var(--shadow-soft);
+ transition: transform 0.08s ease, background-color 0.12s ease, border-color 0.12s ease;
+ }
+
+ .result-link-btn:hover { background: #fdf9f0; border-color: #b49f83; }
+ .result-link-btn:active { transform: translateY(1px); background: var(--axis-fill); }
+ .result-link-left { display: inline-flex; align-items: center; gap: 6px; min-width: 0; }
+
+ .result-link-icon {
+ width: 24px;
+ height: 24px;
+ border-radius: 50%;
+ display: inline-flex;
+ align-items: center;
+ justify-content: center;
+ flex-shrink: 0;
+ }
+
+ .result-link-icon.is-rules {
+ background: var(--wind-soft);
+ border: 1px solid var(--wind-bd);
+ color: var(--wind-color);
+ }
+
+ .result-link-icon.is-sos {
+ background: rgba(168, 77, 59, 0.12);
+ border: 1px solid rgba(168, 77, 59, 0.3);
+ color: #a84d3b;
+ font-family: sans-serif;
+ font-size: 8.8px;
+ font-weight: 800;
+ letter-spacing: 0.01em;
+ }
+
+ .result-link-icon svg { width: 13.5px; height: 13.5px; }
+
+ .result-link-arrow {
+ width: 20px;
+ height: 20px;
+ border-radius: 50%;
+ background: var(--axis-soft);
+ border: 1px solid rgba(94, 71, 54, 0.28);
+ color: var(--axis-dark);
+ font-size: 14px;
+ font-weight: 700;
+ display: inline-flex;
+ align-items: center;
+ justify-content: center;
+ flex-shrink: 0;
+ padding-left: 1px;
+ padding-bottom: 1px;
+ }
+ </style>
 </head>
 <body>
-  <div class="viewport-wrapper">
-    <main class="canvas type-sun-main" id="appCanvas">
+ <div class="viewport-wrapper">
+ <main class="canvas type-sun-main" id="appCanvas">
 
-      <header class="sim-header">
-        <div class="header-left">
-          <div class="header-nav-group">
-            <button class="back-btn" type="button" id="backHomeBtn">
-              <span class="back-arrow" aria-hidden="true">‹</span>
-              <span>もどる</span>
-            </button>
-            <button class="home-btn" type="button" id="topHomeBtn">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <path d="M3 10.5 12 3l9 7.5" />
-                <path d="M5.5 9.5V20h13V9.5" />
-              </svg>
-              <span>表紙</span>
-            </button>
-          </div>
-          <div class="title-wrap">
-            <h1 class="page-title">光・風・水でどう変わる？</h1>
-            <span class="page-en">Light, Wind &amp; Water</span>
-          </div>
-        </div>
-      </header>
+ <header class="sim-header">
+ <div class="header-left">
+ <div class="header-nav-group">
+ <button class="back-btn" type="button" id="backHomeBtn">
+ <span class="back-arrow" aria-hidden="true">‹</span>
+ <span>もどる</span>
+ </button>
+ <button class="home-btn" type="button" id="topHomeBtn">
+ <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+ <path d="M3 10.5 12 3l9 7.5" />
+ <path d="M5.5 9.5V20h13V9.5" />
+ </svg>
+ <span>表紙</span>
+ </button>
+ </div>
+ <div class="title-wrap">
+ <h1 class="page-title">光・風・水でどう変わる？</h1>
+ <span class="page-en">Light, Wind &amp; Water</span>
+ </div>
+ </div>
+ </header>
 
-      <div class="flow-workspace">
-        <!-- ステップ1：タイプをえらぶ -->
-        <div class="rail-cell is-step1" aria-hidden="true">
-          <span class="step-badge">1</span>
-        </div>
-        <div class="type-picker-bar" aria-label="ステップ1：多肉のタイプを選ぶ">
-          <div class="step-heading-inline">
-            <span class="step-title">タイプをえらぶ</span>
-            <span class="step-staff-note">※迷ったらスタッフまで</span>
-          </div>
-          <nav class="type-tabs" aria-label="多肉のタイプを選ぶ">
-            <button class="type-tab is-active" type="button" data-type="sun-main">
-              <span class="type-tab-main">
-                <span class="type-dot" aria-hidden="true"></span>
-                <span class="tab-name">春秋元気タイプ</span>
-              </span>
-              <span class="tab-species">エケベリア・セダム など</span>
-            </button>
-            <button class="type-tab" type="button" data-type="sun-cool">
-              <span class="type-tab-main">
-                <span class="type-dot" aria-hidden="true"></span>
-                <span class="tab-name">夏お休みタイプ</span>
-              </span>
-              <span class="tab-species">アエオニウム など</span>
-            </button>
-            <button class="type-tab" type="button" data-type="sun-warm">
-              <span class="type-tab-main">
-                <span class="type-dot" aria-hidden="true"></span>
-                <span class="tab-name">寒さ苦手タイプ</span>
-              </span>
-              <span class="tab-species">カランコエ など</span>
-            </button>
-            <button class="type-tab" type="button" data-type="shade-main">
-              <span class="type-tab-main">
-                <span class="type-dot" aria-hidden="true"></span>
-                <span class="tab-name">やさしい光タイプ</span>
-              </span>
-              <span class="tab-species">ハオルチア・ガステリア など</span>
-            </button>
-          </nav>
-        </div>
+ <div class="flow-workspace">
+ <!-- ステップ1：タイプをえらぶ -->
+ <div class="rail-cell is-step1" aria-hidden="true">
+ <span class="step-badge">1</span>
+ </div>
+ <div class="type-picker-bar" aria-label="ステップ1：多肉のタイプを選ぶ">
+ <div class="step-heading-inline">
+ <span class="step-title">タイプをえらぶ</span>
+ <span class="step-staff-note">※迷ったらスタッフまで</span>
+ </div>
+ <nav class="type-tabs" aria-label="多肉のタイプを選ぶ">
+ <button class="type-tab is-active" type="button" data-type="sun-main">
+ <span class="type-tab-main">
+ <span class="type-dot" aria-hidden="true"></span>
+ <span class="tab-name">春秋元気タイプ</span>
+ </span>
+ <span class="tab-species">エケベリア・セダム など</span>
+ </button>
+ <button class="type-tab" type="button" data-type="sun-cool">
+ <span class="type-tab-main">
+ <span class="type-dot" aria-hidden="true"></span>
+ <span class="tab-name">夏お休みタイプ</span>
+ </span>
+ <span class="tab-species">アエオニウム など</span>
+ </button>
+ <button class="type-tab" type="button" data-type="sun-warm">
+ <span class="type-tab-main">
+ <span class="type-dot" aria-hidden="true"></span>
+ <span class="tab-name">寒さ苦手タイプ</span>
+ </span>
+ <span class="tab-species">カランコエ など</span>
+ </button>
+ <button class="type-tab" type="button" data-type="shade-main">
+ <span class="type-tab-main">
+ <span class="type-dot" aria-hidden="true"></span>
+ <span class="tab-name">やさしい光タイプ</span>
+ </span>
+ <span class="tab-species">ハオルチア・ガステリア など</span>
+ </button>
+ </nav>
+ </div>
 
-        <!-- ステップ2：季節をえらぶ（水やり波なし・5枚水彩カード＋12ヶ月帯） -->
-        <div class="rail-cell is-step2" aria-hidden="true">
-          <span class="step-badge">2</span>
-        </div>
-        <div class="calendar-stack">
-          <div class="step-section-head">
-            <div class="step-head-left">
-              <span class="step-head-title">季節をえらぶ</span>
-              <span class="step-head-desc">季節をタップすると、おすすめ設定が入ります</span>
-            </div>
-          </div>
+ <!-- ステップ2：季節をえらぶ（水やり波なし・5枚水彩カード＋12ヶ月帯） -->
+ <div class="rail-cell is-step2" aria-hidden="true">
+ <span class="step-badge">2</span>
+ </div>
+ <div class="calendar-stack">
+ <div class="step-section-head">
+ <div class="step-head-left">
+ <span class="step-head-title">季節をえらぶ</span>
+ <span class="step-head-desc">季節をタップすると、おすすめ設定が入ります</span>
+ </div>
+ </div>
 
-          <section class="calendar-main" aria-label="ステップ2：季節をえらぶ＆1年のようす">
-            <div class="season-cards-grid" role="tablist" aria-label="季節をえらぶ">
-              <div class="season-card is-active" data-season="spring" id="card-spring">
-                <button class="season-pick-btn is-active" type="button" data-season="spring">
-                  <span class="season-pick-name">春</span>
-                  <span class="season-now-badge">いま</span>
-                </button>
-                <div class="season-card-stage">
-                  <div class="diorama-panel" id="dio-spring">
-                    <img class="dio-base-img" id="dio-img-spring" alt="" />
-                  </div>
-                  <div class="fixed-spot is-active" id="spot-spring">
-                    <div class="season-bubble" id="bubble-spring"></div>
-                  </div>
-                  <button class="stage-hit-btn is-active" type="button" data-season="spring" aria-label="春を選ぶ"></button>
-                </div>
-              </div>
+ <section class="calendar-main" aria-label="ステップ2：季節をえらぶ＆1年のようす">
+ <div class="season-cards-grid" role="tablist" aria-label="季節をえらぶ">
+ <div class="season-card is-active" data-season="spring" id="card-spring">
+ <button class="season-pick-btn is-active" type="button" data-season="spring">
+ <span class="season-pick-name">春</span>
+ <span class="season-now-badge">いま</span>
+ </button>
+ <div class="season-card-stage">
+ <div class="diorama-panel" id="dio-spring">
+ <img class="dio-base-img" id="dio-img-spring" alt="" />
+ </div>
+ <div class="fixed-spot is-active" id="spot-spring">
+ <div class="season-bubble" id="bubble-spring"></div>
+ </div>
+ <button class="stage-hit-btn is-active" type="button" data-season="spring" aria-label="春を選ぶ"></button>
+ </div>
+ </div>
 
-              <div class="season-card" data-season="rain" id="card-rain">
-                <button class="season-pick-btn" type="button" data-season="rain">
-                  <span class="season-pick-name">梅雨</span>
-                  <span class="season-now-badge">いま</span>
-                </button>
-                <div class="season-card-stage">
-                  <div class="diorama-panel" id="dio-rain">
-                    <img class="dio-base-img" id="dio-img-rain" alt="" />
-                  </div>
-                  <div class="fixed-spot" id="spot-rain">
-                    <div class="season-bubble" id="bubble-rain"></div>
-                  </div>
-                  <button class="stage-hit-btn" type="button" data-season="rain" aria-label="梅雨を選ぶ"></button>
-                </div>
-              </div>
+ <div class="season-card" data-season="rain" id="card-rain">
+ <button class="season-pick-btn" type="button" data-season="rain">
+ <span class="season-pick-name">梅雨</span>
+ <span class="season-now-badge">いま</span>
+ </button>
+ <div class="season-card-stage">
+ <div class="diorama-panel" id="dio-rain">
+ <img class="dio-base-img" id="dio-img-rain" alt="" />
+ </div>
+ <div class="fixed-spot" id="spot-rain">
+ <div class="season-bubble" id="bubble-rain"></div>
+ </div>
+ <button class="stage-hit-btn" type="button" data-season="rain" aria-label="梅雨を選ぶ"></button>
+ </div>
+ </div>
 
-              <div class="season-card" data-season="summer" id="card-summer">
-                <button class="season-pick-btn" type="button" data-season="summer">
-                  <span class="season-pick-name">夏</span>
-                  <span class="season-now-badge">いま</span>
-                </button>
-                <div class="season-card-stage">
-                  <div class="diorama-panel" id="dio-summer">
-                    <img class="dio-base-img" id="dio-img-summer" alt="" />
-                  </div>
-                  <div class="fixed-spot" id="spot-summer">
-                    <div class="season-bubble" id="bubble-summer"></div>
-                  </div>
-                  <button class="stage-hit-btn" type="button" data-season="summer" aria-label="夏を選ぶ"></button>
-                </div>
-              </div>
+ <div class="season-card" data-season="summer" id="card-summer">
+ <button class="season-pick-btn" type="button" data-season="summer">
+ <span class="season-pick-name">夏</span>
+ <span class="season-now-badge">いま</span>
+ </button>
+ <div class="season-card-stage">
+ <div class="diorama-panel" id="dio-summer">
+ <img class="dio-base-img" id="dio-img-summer" alt="" />
+ </div>
+ <div class="fixed-spot" id="spot-summer">
+ <div class="season-bubble" id="bubble-summer"></div>
+ </div>
+ <button class="stage-hit-btn" type="button" data-season="summer" aria-label="夏を選ぶ"></button>
+ </div>
+ </div>
 
-              <div class="season-card" data-season="autumn" id="card-autumn">
-                <button class="season-pick-btn" type="button" data-season="autumn">
-                  <span class="season-pick-name">秋</span>
-                  <span class="season-now-badge">いま</span>
-                </button>
-                <div class="season-card-stage">
-                  <div class="diorama-panel" id="dio-autumn">
-                    <img class="dio-base-img" id="dio-img-autumn" alt="" />
-                  </div>
-                  <div class="fixed-spot" id="spot-autumn">
-                    <div class="season-bubble" id="bubble-autumn"></div>
-                  </div>
-                  <button class="stage-hit-btn" type="button" data-season="autumn" aria-label="秋を選ぶ"></button>
-                </div>
-              </div>
+ <div class="season-card" data-season="autumn" id="card-autumn">
+ <button class="season-pick-btn" type="button" data-season="autumn">
+ <span class="season-pick-name">秋</span>
+ <span class="season-now-badge">いま</span>
+ </button>
+ <div class="season-card-stage">
+ <div class="diorama-panel" id="dio-autumn">
+ <img class="dio-base-img" id="dio-img-autumn" alt="" />
+ </div>
+ <div class="fixed-spot" id="spot-autumn">
+ <div class="season-bubble" id="bubble-autumn"></div>
+ </div>
+ <button class="stage-hit-btn" type="button" data-season="autumn" aria-label="秋を選ぶ"></button>
+ </div>
+ </div>
 
-              <div class="season-card" data-season="winter" id="card-winter">
-                <button class="season-pick-btn" type="button" data-season="winter">
-                  <span class="season-pick-name">冬</span>
-                  <span class="season-now-badge">いま</span>
-                </button>
-                <div class="season-card-stage">
-                  <div class="diorama-panel" id="dio-winter">
-                    <img class="dio-base-img" id="dio-img-winter" alt="" />
-                  </div>
-                  <div class="fixed-spot" id="spot-winter">
-                    <div class="season-bubble" id="bubble-winter"></div>
-                  </div>
-                  <button class="stage-hit-btn" type="button" data-season="winter" aria-label="冬を選ぶ"></button>
-                </div>
-              </div>
-            </div>
+ <div class="season-card" data-season="winter" id="card-winter">
+ <button class="season-pick-btn" type="button" data-season="winter">
+ <span class="season-pick-name">冬</span>
+ <span class="season-now-badge">いま</span>
+ </button>
+ <div class="season-card-stage">
+ <div class="diorama-panel" id="dio-winter">
+ <img class="dio-base-img" id="dio-img-winter" alt="" />
+ </div>
+ <div class="fixed-spot" id="spot-winter">
+ <div class="season-bubble" id="bubble-winter"></div>
+ </div>
+ <button class="stage-hit-btn" type="button" data-season="winter" aria-label="冬を選ぶ"></button>
+ </div>
+ </div>
+ </div>
 
-            <div class="calendar-timeline-card">
-              <div class="cal-months-band" id="seasonMonthsBar" aria-label="12ヶ月の季節のめやす">
-                <div class="months-dim-left" id="monthsDimLeft" aria-hidden="true"></div>
-                <div class="months-dim-right" id="monthsDimRight" aria-hidden="true"></div>
-                <div class="months-active-frame" id="monthsActiveFrame" aria-hidden="true"></div>
-                <div class="cal-m">3月</div><div class="cal-m">4月</div><div class="cal-m">5月</div>
-                <div class="cal-m">6月</div><div class="cal-m">7月</div><div class="cal-m">8月</div>
-                <div class="cal-m">9月</div><div class="cal-m">10月</div><div class="cal-m">11月</div>
-                <div class="cal-m">12月</div><div class="cal-m">1月</div><div class="cal-m">2月</div>
-              </div>
-            </div>
-          </section>
-        </div>
+ <div class="calendar-timeline-card">
+ <div class="cal-months-band" id="seasonMonthsBar" aria-label="12ヶ月の季節のめやす">
+ <div class="months-dim-left" id="monthsDimLeft" aria-hidden="true"></div>
+ <div class="months-dim-right" id="monthsDimRight" aria-hidden="true"></div>
+ <div class="months-active-frame" id="monthsActiveFrame" aria-hidden="true"></div>
+ <div class="cal-m">3月</div><div class="cal-m">4月</div><div class="cal-m">5月</div>
+ <div class="cal-m">6月</div><div class="cal-m">7月</div><div class="cal-m">8月</div>
+ <div class="cal-m">9月</div><div class="cal-m">10月</div><div class="cal-m">11月</div>
+ <div class="cal-m">12月</div><div class="cal-m">1月</div><div class="cal-m">2月</div>
+ </div>
+ </div>
+ </section>
+ </div>
 
-        <!-- ステップ3：光・風・水を試す -->
-        <div class="rail-cell is-step3" aria-hidden="true">
-          <span class="step-badge">3</span>
-        </div>
-        <div class="sim-stack">
-          <div class="step-section-head is-sim-head">
-            <div class="step-head-bar">
-              <div class="step-head-left">
-                <h2 class="step-head-title">光・風・水をさわって試す</h2>
-                <span class="step-head-desc">ボタンを押すと右の反応が変わります</span>
-              </div>
-              <button class="reset-ideal-btn is-already-ideal" type="button" id="resetIdealBtn">
-                <span>↺</span>
-                <span>おすすめに戻す</span>
-              </button>
-            </div>
-            <div></div>
-          </div>
+ <!-- ステップ3：光・風・水を試す -->
+ <div class="rail-cell is-step3" aria-hidden="true">
+ <span class="step-badge">3</span>
+ </div>
+ <div class="sim-stack">
+ <div class="step-section-head is-sim-head">
+ <div class="step-head-bar">
+ <div class="step-head-left">
+ <h2 class="step-head-title">光・風・水をさわって試す</h2>
+ <span class="step-head-desc">ボタンを押すと右の反応が変わります</span>
+ </div>
+ <button class="reset-ideal-btn is-already-ideal" type="button" id="resetIdealBtn">
+ <span>↺</span>
+ <span>おすすめに戻す</span>
+ </button>
+ </div>
+ <div></div>
+ </div>
 
-          <section class="sim-bar" aria-label="ステップ3：光・風・水を試す">
-            <div class="controls-card">
-              <div class="control-rows">
-                <div class="ctrl-row">
-                  <div class="ctrl-label">
-                    <span class="ctrl-icon is-light">
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="4.2"/><line x1="12" y1="2.5" x2="12" y2="5"/><line x1="12" y1="19" x2="12" y2="21.5"/><line x1="2.5" y1="12" x2="5" y2="12"/><line x1="19" y1="12" x2="21.5" y2="12"/></svg>
-                    </span>
-                    <span>光</span>
-                  </div>
-                  <div class="seg-group cols-4" data-control="light">
-                    <button class="seg-btn" type="button" data-val="1">暗い（室内奥）</button>
-                    <button class="seg-btn" type="button" data-val="2">やわらかい光</button>
-                    <button class="seg-btn is-active" type="button" data-val="3">しっかり日向</button>
-                    <button class="seg-btn" type="button" data-val="4">強い直射・西日</button>
-                  </div>
-                </div>
+ <section class="sim-bar" aria-label="ステップ3：光・風・水を試す">
+ <div class="controls-card">
+ <div class="control-rows">
+ <div class="ctrl-row">
+ <div class="ctrl-label">
+ <span class="ctrl-icon is-light">
+ <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="4.2"/><line x1="12" y1="2.5" x2="12" y2="5"/><line x1="12" y1="19" x2="12" y2="21.5"/><line x1="2.5" y1="12" x2="5" y2="12"/><line x1="19" y1="12" x2="21.5" y2="12"/></svg>
+ </span>
+ <span>光</span>
+ </div>
+ <div class="seg-group cols-4" data-control="light">
+ <button class="seg-btn" type="button" data-val="1">暗い（室内奥）</button>
+ <button class="seg-btn" type="button" data-val="2">やわらかい光</button>
+ <button class="seg-btn is-active" type="button" data-val="3">しっかり日向</button>
+ <button class="seg-btn" type="button" data-val="4">強い直射・西日</button>
+ </div>
+ </div>
 
-                <div class="ctrl-row">
-                  <div class="ctrl-label">
-                    <span class="ctrl-icon is-wind">
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 9h11a2.5 2.5 0 1 0-2.5-2.5"/><path d="M3 14h15a2.5 2.5 0 1 1-2.5 2.5"/></svg>
-                    </span>
-                    <span>風</span>
-                  </div>
-                  <div class="seg-group cols-3" data-control="wind">
-                    <button class="seg-btn" type="button" data-val="1">無風（こもる）</button>
-                    <button class="seg-btn is-active" type="button" data-val="2">風が通る</button>
-                    <button class="seg-btn" type="button" data-val="3">強風・冷たい風</button>
-                  </div>
-                </div>
+ <div class="ctrl-row">
+ <div class="ctrl-label">
+ <span class="ctrl-icon is-wind">
+ <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 9h11a2.5 2.5 0 1 0-2.5-2.5"/><path d="M3 14h15a2.5 2.5 0 1 1-2.5 2.5"/></svg>
+ </span>
+ <span>風</span>
+ </div>
+ <div class="seg-group cols-3" data-control="wind">
+ <button class="seg-btn" type="button" data-val="1">無風（こもる）</button>
+ <button class="seg-btn is-active" type="button" data-val="2">風が通る</button>
+ <button class="seg-btn" type="button" data-val="3">強風・冷たい風</button>
+ </div>
+ </div>
 
-                <div class="ctrl-row">
-                  <div class="ctrl-label">
-                    <span class="ctrl-icon is-water">
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 3.5C12 3.5 6 10.2 6 14.5a6 6 0 0 0 12 0C18 10.2 12 3.5 12 3.5Z"/></svg>
-                    </span>
-                    <span>水</span>
-                  </div>
-                  <div class="seg-group cols-4" data-control="water">
-                    <button class="seg-btn" type="button" data-val="1">ほぼあげない</button>
-                    <button class="seg-btn" type="button" data-val="2">乾いて少量</button>
-                    <button class="seg-btn is-active" type="button" data-val="3">乾いたらたっぷり</button>
-                    <button class="seg-btn" type="button" data-val="4">毎日・常に湿ってる</button>
-                  </div>
-                </div>
-              </div>
-            </div>
+ <div class="ctrl-row">
+ <div class="ctrl-label">
+ <span class="ctrl-icon is-water">
+ <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 3.5C12 3.5 6 10.2 6 14.5a6 6 0 0 0 12 0C18 10.2 12 3.5 12 3.5Z"/></svg>
+ </span>
+ <span>水</span>
+ </div>
+ <div class="seg-group cols-4" data-control="water">
+ <button class="seg-btn" type="button" data-val="1">ほぼあげない</button>
+ <button class="seg-btn" type="button" data-val="2">乾いて少量</button>
+ <button class="seg-btn is-active" type="button" data-val="3">乾いたらたっぷり</button>
+ <button class="seg-btn" type="button" data-val="4">毎日・常に湿ってる</button>
+ </div>
+ </div>
+ </div>
+ </div>
 
-            <div class="result-col">
-              <div class="result-card state-good" id="resultCard" aria-live="polite">
-                <div class="result-mark-row">
-                  <div class="result-icon-circle" id="resultIcon">◎</div>
-                  <div class="result-status-text" id="resultStatus">ぐんぐん元気！</div>
-                </div>
-                <p class="result-comment" id="resultComment">土が乾いたら、鉢底から水が出るまであげてね</p>
-              </div>
+ <div class="result-col">
+ <div class="result-card state-good" id="resultCard" aria-live="polite">
+ <div class="result-mark-row">
+ <div class="result-icon-circle" id="resultIcon">◎</div>
+ <div class="result-status-text" id="resultStatus">ぐんぐん元気！</div>
+ </div>
+ <p class="result-comment" id="resultComment">土が乾いたら、鉢底から水が出るまであげてね</p>
+ </div>
 
-              <div class="result-links-row" aria-label="関連ガイドへのリンク">
-                <button class="result-link-btn" type="button" id="jumpRulesBtn" data-guide="rules">
-                  <span class="result-link-left">
-                    <span class="result-link-icon is-rules" aria-hidden="true">
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M12 20v-8" />
-                        <path d="M12 12c0-4.2-3.2-6.5-7-6.5 0 3.8 2.3 6.5 7 6.5Z" />
-                        <path d="M12 14c0-3.8 2.8-6 6.5-6 0 3.5-2 6-6.5 6Z" />
-                      </svg>
-                    </span>
-                    <span>多肉の育て方</span>
-                  </span>
-                  <span class="result-link-arrow" aria-hidden="true">›</span>
-                </button>
+ <div class="result-links-row" aria-label="関連ガイドへのリンク">
+ <button class="result-link-btn" type="button" id="jumpRulesBtn" data-guide="rules">
+ <span class="result-link-left">
+ <span class="result-link-icon is-rules" aria-hidden="true">
+ <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+ <path d="M12 20v-8" />
+ <path d="M12 12c0-4.2-3.2-6.5-7-6.5 0 3.8 2.3 6.5 7 6.5Z" />
+ <path d="M12 14c0-3.8 2.8-6 6.5-6 0 3.5-2 6-6.5 6Z" />
+ </svg>
+ </span>
+ <span>多肉の育て方</span>
+ </span>
+ <span class="result-link-arrow" aria-hidden="true">›</span>
+ </button>
 
-                <button class="result-link-btn" type="button" id="jumpSosBtn" data-guide="sos">
-                  <span class="result-link-left">
-                    <span class="result-link-icon is-sos" aria-hidden="true">SOS</span>
-                    <span>困ったSOS</span>
-                  </span>
-                  <span class="result-link-arrow" aria-hidden="true">›</span>
-                </button>
-              </div>
-            </div>
-          </section>
-        </div>
-      </div>
-    </main>
-  </div>
+ <button class="result-link-btn" type="button" id="jumpSosBtn" data-guide="sos">
+ <span class="result-link-left">
+ <span class="result-link-icon is-sos" aria-hidden="true">SOS</span>
+ <span>困ったSOS</span>
+ </span>
+ <span class="result-link-arrow" aria-hidden="true">›</span>
+ </button>
+ </div>
+ </div>
+ </section>
+ </div>
+ </div>
+ </main>
+ </div>
 
-  <script src="calendar-data.js"></script>
-  <script>
-    const WATERCOLOR_SCENES = {
-      spring: { default: "images/cal_wc_spring_happy.jpg", byType: { "shade-main": "images/cal_wc_spring_shade.jpg" } },
-      rain: { default: "images/cal_wc_rain_humid.jpg", byType: { "sun-cool": "images/cal_wc_rain_rest.jpg" } },
-      summer: { default: "images/cal_wc_summer_hot.jpg", byType: { "sun-main": "images/cal_wc_summer_hot.jpg", "sun-cool": "images/cal_wc_summer_rest.jpg", "sun-warm": "images/cal_wc_summer_happy.jpg", "shade-main": "images/cal_wc_summer_shade.jpg" } },
-      autumn: { default: "images/cal_wc_autumn_happy.jpg", byType: { "shade-main": "images/cal_wc_autumn_shade.jpg" } },
-      winter: { default: "images/cal_wc_winter_cold.jpg", byType: { "sun-main": "images/cal_wc_winter_cold.jpg", "sun-cool": "images/cal_wc_winter_happy.jpg", "sun-warm": "images/cal_wc_winter_indoor.jpg", "shade-main": "images/cal_wc_winter_indoor.jpg" } }
-    };
+ <script src="calendar-data.js"></script>
+ <script>
+ const WATERCOLOR_SCENES = {
+ spring: { default: "images/cal_wc_spring_happy.jpg", byType: { "shade-main": "images/cal_wc_spring_shade.jpg" } },
+ rain: { default: "images/cal_wc_rain_humid.jpg", byType: { "sun-cool": "images/cal_wc_rain_rest.jpg" } },
+ summer: { default: "images/cal_wc_summer_hot.jpg", byType: { "sun-main": "images/cal_wc_summer_hot.jpg", "sun-cool": "images/cal_wc_summer_rest.jpg", "sun-warm": "images/cal_wc_summer_happy.jpg", "shade-main": "images/cal_wc_summer_shade.jpg" } },
+ autumn: { default: "images/cal_wc_autumn_happy.jpg", byType: { "shade-main": "images/cal_wc_autumn_shade.jpg" } },
+ winter: { default: "images/cal_wc_winter_cold.jpg", byType: { "sun-main": "images/cal_wc_winter_cold.jpg", "sun-cool": "images/cal_wc_winter_happy.jpg", "sun-warm": "images/cal_wc_winter_indoor.jpg", "shade-main": "images/cal_wc_winter_indoor.jpg" } }
+ };
 
-    const state = { type: "sun-main", season: "spring", light: 3, wind: 2, water: 3, manualSeason: false };
+ const state = { type: "sun-main", season: "spring", light: 3, wind: 2, water: 3, manualSeason: false };
 
-    function evaluate(type, season, { light, wind, water }) {
-      if (water === 4) {
-        if (season === "winter") {
-          if (wind === 3) return { mood: "freeze", icon: "×", title: "冷え込みに注意！", comment: "まず霜と冷風の当たらない場所へ" };
-          return { mood: "rot", icon: "×", title: "土が湿りっぱなし", comment: "次の水やりは土が乾いてからにしよう" };
-        }
-        if (season === "rain") {
-          if (wind === 1) return { mood: "rot", icon: "×", title: "根腐れに注意", comment: "湿った土＋無風は危険。すぐ風の通る場所へ！" };
-          return { mood: "rot", icon: "×", title: "根腐れに注意", comment: "次の水やりは、土が乾くまで待ってね" };
-        }
-        if (season === "summer") {
-          if (wind === 1) return { mood: "rot", icon: "×", title: "蒸れて腐りやすい", comment: "湿気と暑さで一気に傷むよ。すぐ風通しへ！" };
-          return { mood: "rot", icon: "×", title: "蒸れて腐りやすい", comment: "次の水やりは、土が乾くまで待ってね" };
-        }
-        return { mood: "rot", icon: "×", title: "根腐れ・徒長！", comment: "乾かないと根が窒息するよ。土が乾くまで待って！" };
-      }
+ function evaluate(type, season, { light, wind, water }) {
+ if (water === 4) {
+ if (season === "winter") {
+ if (wind === 3) return { mood: "freeze", icon: "×", title: "冷え込みに注意！", comment: "まず霜と冷風の当たらない場所へ" };
+ return { mood: "rot", icon: "×", title: "土が湿りっぱなし", comment: "次の水やりは土が乾いてからにしよう" };
+ }
+ if (season === "rain") {
+ if (wind === 1) return { mood: "rot", icon: "×", title: "根腐れに注意", comment: "湿った土＋無風は危険。すぐ風の通る場所へ！" };
+ return { mood: "rot", icon: "×", title: "根腐れに注意", comment: "次の水やりは、土が乾くまで待ってね" };
+ }
+ if (season === "summer") {
+ if (wind === 1) return { mood: "rot", icon: "×", title: "蒸れて腐りやすい", comment: "湿気と暑さで一気に傷むよ。すぐ風通しへ！" };
+ return { mood: "rot", icon: "×", title: "蒸れて腐りやすい", comment: "次の水やりは、土が乾くまで待ってね" };
+ }
+ return { mood: "rot", icon: "×", title: "根腐れ・徒長！", comment: "乾かないと根が窒息するよ。土が乾くまで待って！" };
+ }
 
-      if (type === "shade-main") {
-        if (season === "summer") {
-          if (water === 3) return { mood: "rot", icon: "×", title: "蒸れて腐りやすい", comment: "猛暑で生長が止まり、鉢が乾きにくいときは水を控えよう" };
-          if (wind === 1 && water >= 2) return { mood: "rot", icon: "×", title: "蒸れて腐りやすい", comment: "無風＋お水は危険！まず風の通る日陰へ" };
-          if (wind === 1) return { mood: "rot", icon: "×", title: "熱がこもりやすい", comment: "まず風の通る明るい日陰へ移してあげよう" };
-          if (light >= 3 && water >= 2) return { mood: "rot", icon: "×", title: "煮えてジュレる！", comment: "直射＋水は鉢が蒸し風呂に！涼しい日陰へ" };
-          if (light === 4) return { mood: "warn", icon: "×", title: "葉焼けで茶色に", comment: "直射日光はNG！すぐレース越し・日陰へ" };
-          if (light === 3) return { mood: "warn", icon: "×", title: "日差しが強すぎ", comment: "直射で焼けてしまいます。涼しい日陰へ" };
-          if (light === 1) return { mood: "warn", icon: "×", title: "暗くて徒長", comment: "真っ暗はNG。明るい日陰や窓辺へ置こう" };
-          if (wind === 3) return { mood: "warn", icon: "△", title: "強風に注意", comment: "鉢が倒れたり葉が乾きすぎないよう注意" };
-          if (water === 2) return { mood: "good", icon: "◎", title: "涼しく夏越し！", comment: "鉢の中まで乾いたら、涼しい夕方に少し" };
-          return { mood: "good", icon: "◎", title: "涼しく夏越し！", comment: "明るい日陰＋風＋断水ぎみで安心" };
-        }
-        if (season === "rain") {
-          if (wind === 1 && water === 1) return { mood: "rot", icon: "×", title: "蒸れに注意！", comment: "空気がこもるよ。雨を避けて風の通る場所へ" };
-          if (wind === 1) return { mood: "rot", icon: "×", title: "蒸れて根腐れ", comment: "室内でも無風は蒸れやすいよ。風を通して！" };
-          if (water === 3) return { mood: "rot", icon: "×", title: "梅雨は乾かない", comment: "湿気の多い時期は水を控えめにしよう" };
-          if (light >= 3) return { mood: "warn", icon: "×", title: "日差しが強すぎ", comment: "直射で焼けてしまいます。レース越しへ" };
-          if (light === 1) return { mood: "warn", icon: "×", title: "暗くて徒長", comment: "真っ暗はNG。明るい窓辺へ置こう" };
-          if (wind === 3) return { mood: "warn", icon: "△", title: "強風に注意", comment: "雨の吹き込みや鉢の転倒に気をつけて" };
-          return { mood: "good", icon: "◎", title: "梅雨も快適！", comment: "やさしい光と風通しで蒸れ知らず" };
-        }
-        if (season === "winter") {
-          if (wind === 3) return { mood: "freeze", icon: "×", title: "冷たい風NG", comment: "冬の冷風や霜は傷む原因。室内へ避難して！" };
-          if (water === 3) return { mood: "freeze", icon: "×", title: "冬にたっぷりNG", comment: "寒い時期の水やりはごく控えめにしよう" };
-          if (light === 4) return { mood: "warn", icon: "×", title: "葉焼けで茶色に", comment: "強い直射はNG！レース越しへ置こう" };
-          if (light === 3) return { mood: "warn", icon: "△", title: "すこし眩しすぎ", comment: "強い日差しを避けて、明るい窓辺へ" };
-          if (light === 1) return { mood: "warn", icon: "×", title: "暗くて徒長", comment: "真っ暗はNG。明るい窓辺へ置こう" };
-          if (wind === 1) return { mood: "warn", icon: "△", title: "空気がこもる", comment: "窓辺でもときどき風を通すと元気に" };
-          if (water === 2) return { mood: "good", icon: "◎", title: "窓辺で安心！", comment: "鉢の中まで乾いたら、暖かい日の午前に少し" };
-          return { mood: "good", icon: "◎", title: "窓辺で安心！", comment: "やさしい光＋控えめ水で元気に冬越し" };
-        }
-        if (light === 4) return { mood: "warn", icon: "×", title: "葉焼けで茶色に", comment: "直射日光はNG！レース越しへ置こう" };
-        if (light === 3) return { mood: "warn", icon: "△", title: "すこし眩しすぎ", comment: "強い日差しを避けて、明るい窓辺へ" };
-        if (light === 1) return { mood: "warn", icon: "×", title: "暗くて徒長", comment: "真っ暗はNG。明るい窓辺へ置こう" };
-        if (wind === 1) return { mood: "warn", icon: "△", title: "空気がこもる", comment: "窓辺でも風を通すと元気に育ちます" };
-        if (wind === 3) return { mood: "warn", icon: "△", title: "強風に注意", comment: "鉢が倒れたり葉が乾きすぎないよう注意" };
-        if (water === 1) return { mood: "dry", icon: "△", title: "葉がへこむ", comment: "成長期は土が乾いたらたっぷりOK" };
-        if (water === 2) return { mood: "warn", icon: "△", title: "もう少し水OK", comment: "春と秋はしっかりお水をあげてOK" };
-        return { mood: "good", icon: "◎", title: "キラキラ元気！", comment: "やさしい光とお水で絶好調です" };
-      }
+ if (type === "shade-main") {
+ if (season === "summer") {
+ if (water === 3) return { mood: "rot", icon: "×", title: "蒸れて腐りやすい", comment: "猛暑で生長が止まり、鉢が乾きにくいときは水を控えよう" };
+ if (wind === 1 && water >= 2) return { mood: "rot", icon: "×", title: "蒸れて腐りやすい", comment: "無風＋お水は危険！まず風の通る日陰へ" };
+ if (wind === 1) return { mood: "rot", icon: "×", title: "熱がこもりやすい", comment: "まず風の通る明るい日陰へ移してあげよう" };
+ if (light >= 3 && water >= 2) return { mood: "rot", icon: "×", title: "煮えてジュレる！", comment: "直射＋水は鉢が蒸し風呂に！涼しい日陰へ" };
+ if (light === 4) return { mood: "warn", icon: "×", title: "葉焼けで茶色に", comment: "直射日光はNG！すぐレース越し・日陰へ" };
+ if (light === 3) return { mood: "warn", icon: "×", title: "日差しが強すぎ", comment: "直射で焼けてしまいます。涼しい日陰へ" };
+ if (light === 1) return { mood: "warn", icon: "×", title: "暗くて徒長", comment: "真っ暗はNG。明るい日陰や窓辺へ置こう" };
+ if (wind === 3) return { mood: "warn", icon: "△", title: "強風に注意", comment: "鉢が倒れたり葉が乾きすぎないよう注意" };
+ if (water === 2) return { mood: "good", icon: "◎", title: "涼しく夏越し！", comment: "鉢の中まで乾いたら、涼しい夕方に少し" };
+ return { mood: "good", icon: "◎", title: "涼しく夏越し！", comment: "明るい日陰＋風＋断水ぎみで安心" };
+ }
+ if (season === "rain") {
+ if (wind === 1 && water === 1) return { mood: "rot", icon: "×", title: "蒸れに注意！", comment: "空気がこもるよ。雨を避けて風の通る場所へ" };
+ if (wind === 1) return { mood: "rot", icon: "×", title: "蒸れて根腐れ", comment: "室内でも無風は蒸れやすいよ。風を通して！" };
+ if (water === 3) return { mood: "rot", icon: "×", title: "梅雨は乾かない", comment: "湿気の多い時期は水を控えめにしよう" };
+ if (light >= 3) return { mood: "warn", icon: "×", title: "日差しが強すぎ", comment: "直射で焼けてしまいます。レース越しへ" };
+ if (light === 1) return { mood: "warn", icon: "×", title: "暗くて徒長", comment: "真っ暗はNG。明るい窓辺へ置こう" };
+ if (wind === 3) return { mood: "warn", icon: "△", title: "強風に注意", comment: "雨の吹き込みや鉢の転倒に気をつけて" };
+ return { mood: "good", icon: "◎", title: "梅雨も快適！", comment: "やさしい光と風通しで蒸れ知らず" };
+ }
+ if (season === "winter") {
+ if (wind === 3) return { mood: "freeze", icon: "×", title: "冷たい風NG", comment: "冬の冷風や霜は傷む原因。室内へ避難して！" };
+ if (water === 3) return { mood: "freeze", icon: "×", title: "冬にたっぷりNG", comment: "寒い時期の水やりはごく控えめにしよう" };
+ if (light === 4) return { mood: "warn", icon: "×", title: "葉焼けで茶色に", comment: "強い直射はNG！レース越しへ置こう" };
+ if (light === 3) return { mood: "warn", icon: "△", title: "すこし眩しすぎ", comment: "強い日差しを避けて、明るい窓辺へ" };
+ if (light === 1) return { mood: "warn", icon: "×", title: "暗くて徒長", comment: "真っ暗はNG。明るい窓辺へ置こう" };
+ if (wind === 1) return { mood: "warn", icon: "△", title: "空気がこもる", comment: "窓辺でもときどき風を通すと元気に" };
+ if (water === 2) return { mood: "good", icon: "◎", title: "窓辺で安心！", comment: "鉢の中まで乾いたら、暖かい日の午前に少し" };
+ return { mood: "good", icon: "◎", title: "窓辺で安心！", comment: "やさしい光＋控えめ水で元気に冬越し" };
+ }
+ if (light === 4) return { mood: "warn", icon: "×", title: "葉焼けで茶色に", comment: "直射日光はNG！レース越しへ置こう" };
+ if (light === 3) return { mood: "warn", icon: "△", title: "すこし眩しすぎ", comment: "強い日差しを避けて、明るい窓辺へ" };
+ if (light === 1) return { mood: "warn", icon: "×", title: "暗くて徒長", comment: "真っ暗はNG。明るい窓辺へ置こう" };
+ if (wind === 1) return { mood: "warn", icon: "△", title: "空気がこもる", comment: "窓辺でも風を通すと元気に育ちます" };
+ if (wind === 3) return { mood: "warn", icon: "△", title: "強風に注意", comment: "鉢が倒れたり葉が乾きすぎないよう注意" };
+ if (water === 1) return { mood: "dry", icon: "△", title: "葉がへこむ", comment: "成長期は土が乾いたらたっぷりOK" };
+ if (water === 2) return { mood: "warn", icon: "△", title: "もう少し水OK", comment: "春と秋はしっかりお水をあげてOK" };
+ return { mood: "good", icon: "◎", title: "キラキラ元気！", comment: "やさしい光とお水で絶好調です" };
+ }
 
-      if (type === "sun-cool") {
-        if (season === "summer") {
-          if (water >= 3) return { mood: "rot", icon: "×", title: "蒸れて傷みやすい", comment: "暑さで葉を閉じ、生長が止まった株は水をぐっと控えよう" };
-          if (wind === 1 && water >= 2) return { mood: "rot", icon: "×", title: "蒸れて腐りやすい", comment: "無風＋お水は危険！まず風の通る日陰へ" };
-          if (wind === 1) return { mood: "rot", icon: "×", title: "熱がこもりやすい", comment: "まず風の通る明るい日陰へ移してあげよう" };
-          if (light >= 3 && water >= 2) return { mood: "rot", icon: "×", title: "煮えてジュレる！", comment: "直射＋水は鉢が蒸し風呂に！涼しい日陰へ" };
-          if (light >= 3) return { mood: "warn", icon: "×", title: "直射で傷む", comment: "涼しい日陰でそっと休ませてあげよう" };
-          if (light === 1) return { mood: "warn", icon: "△", title: "暗すぎるよ", comment: "真っ暗よりほんのり明るい日陰が安心" };
-          if (wind === 3) return { mood: "warn", icon: "△", title: "強風に注意", comment: "鉢が倒れないよう風の強い日は避難して" };
-          if (water === 2) return { mood: "warn", icon: "△", title: "蒸れ・ジュレ注意", comment: "暑さで葉が閉じていたら、水はごく控えめに" };
-          return { mood: "sleep", icon: "◎", title: "すやすや夏越し！", comment: "日陰＋風＋断水ぎみで上手に夏越し" };
-        }
-        if (season === "winter") {
-          if (wind === 3) return { mood: "freeze", icon: "×", title: "霜・冷風NG", comment: "氷点下や霜は避けて軒下・室内へ！" };
-          if (light === 1) return { mood: "warn", icon: "×", title: "暗くて徒長", comment: "冬も成長期！お日様が大好きです" };
-          if (water === 3) return { mood: "warn", icon: "△", title: "冷える夜注意", comment: "凍結を避けて乾いて少量にしよう" };
-          if (wind === 1) return { mood: "warn", icon: "△", title: "空気がこもる", comment: "風通しがあると元気に育ちます" };
-          if (light === 4) return { mood: "warn", icon: "△", title: "強光に注意", comment: "冬の穏やかな日向がいちばん快適" };
-          if (water === 1) return { mood: "dry", icon: "△", title: "すこし水不足", comment: "暖かい日の昼間に少しあげてOK" };
-          return { mood: "good", icon: "◎", title: "冬も元気！", comment: "霜を避けて日向と少量水ですくすく" };
-        }
-        if (season === "rain") {
-          if (wind === 1 && water === 1) return { mood: "rot", icon: "×", title: "蒸れに注意！", comment: "空気がこもるよ。雨を避けて風の通る場所へ" };
-          if (wind === 1) return { mood: "rot", icon: "×", title: "湿気で腐る！", comment: "休眠前の無風は一気に弱るよ。風を通して！" };
-          if (water === 3) return { mood: "rot", icon: "×", title: "水減らして！", comment: "そろそろお休み準備。水は控えめにしよう" };
-          if (light === 1) return { mood: "warn", icon: "×", title: "光不足で徒長", comment: "雨よけしつつ明るい場所へ置こう" };
-          if (light === 4) return { mood: "warn", icon: "△", title: "強日差し注意", comment: "暑くなる前はやわらかい光が安心" };
-          if (wind === 3) return { mood: "warn", icon: "△", title: "強風に注意", comment: "雨の吹き込みや鉢の転倒に気をつけて" };
-          return { mood: "good", icon: "◎", title: "夏越し準備OK！", comment: "雨よけ＋風通しで夏休みモードへ" };
-        }
-        if (light === 1) return { mood: "warn", icon: "×", title: "ヒョロヒョロ徒長", comment: "暗いと茎が伸びすぎるよ。明るい場所へ！" };
-        if (wind === 1) return { mood: "warn", icon: "△", title: "ムレやすい", comment: "風通しのよい屋外が大好きです" };
-        if (wind === 3) return { mood: "warn", icon: "△", title: "強風に注意", comment: "背が高い株は倒れやすいので注意して" };
-        if (water === 1) return { mood: "dry", icon: "△", title: "水不足で落葉", comment: "成長期！土が乾いたらたっぷりOK" };
-        if (light === 4) return { mood: "warn", icon: "△", title: "日差し強すぎ", comment: "強い西日だと葉が焦げやすいです" };
-        if (light === 2) return { mood: "warn", icon: "△", title: "もう少し光へ", comment: "しっかり日向で葉色も綺麗に育ちます" };
-        if (water === 2) {
-          if (season === "autumn") return { mood: "good", icon: "◎", title: "目覚めて元気！", comment: "中心の葉が開き始めたら、少しずつお水を" };
-          return { mood: "warn", icon: "△", title: "もう少し水OK", comment: "乾いたらたっぷりお水をあげてOK" };
-        }
-        return { mood: "good", icon: "◎", title: "ぐんぐん元気！", comment: "涼しい季節がいちばん輝くタイプです" };
-      }
+ if (type === "sun-cool") {
+ if (season === "summer") {
+ if (water >= 3) return { mood: "rot", icon: "×", title: "蒸れて傷みやすい", comment: "暑さで葉を閉じ、生長が止まった株は水をぐっと控えよう" };
+ if (wind === 1 && water >= 2) return { mood: "rot", icon: "×", title: "蒸れて腐りやすい", comment: "無風＋お水は危険！まず風の通る日陰へ" };
+ if (wind === 1) return { mood: "rot", icon: "×", title: "熱がこもりやすい", comment: "まず風の通る明るい日陰へ移してあげよう" };
+ if (light >= 3 && water >= 2) return { mood: "rot", icon: "×", title: "煮えてジュレる！", comment: "直射＋水は鉢が蒸し風呂に！涼しい日陰へ" };
+ if (light >= 3) return { mood: "warn", icon: "×", title: "直射で傷む", comment: "涼しい日陰でそっと休ませてあげよう" };
+ if (light === 1) return { mood: "warn", icon: "△", title: "暗すぎるよ", comment: "真っ暗よりほんのり明るい日陰が安心" };
+ if (wind === 3) return { mood: "warn", icon: "△", title: "強風に注意", comment: "鉢が倒れないよう風の強い日は避難して" };
+ if (water === 2) return { mood: "warn", icon: "△", title: "蒸れ・ジュレ注意", comment: "暑さで葉が閉じていたら、水はごく控えめに" };
+ return { mood: "sleep", icon: "◎", title: "すやすや夏越し！", comment: "日陰＋風＋断水ぎみで上手に夏越し" };
+ }
+ if (season === "winter") {
+ if (wind === 3) return { mood: "freeze", icon: "×", title: "霜・冷風NG", comment: "氷点下や霜は避けて軒下・室内へ！" };
+ if (light === 1) return { mood: "warn", icon: "×", title: "暗くて徒長", comment: "冬も成長期！お日様が大好きです" };
+ if (water === 3) return { mood: "warn", icon: "△", title: "冷える夜注意", comment: "凍結を避けて乾いて少量にしよう" };
+ if (wind === 1) return { mood: "warn", icon: "△", title: "空気がこもる", comment: "風通しがあると元気に育ちます" };
+ if (light === 4) return { mood: "warn", icon: "△", title: "強光に注意", comment: "冬の穏やかな日向がいちばん快適" };
+ if (water === 1) return { mood: "dry", icon: "△", title: "すこし水不足", comment: "暖かい日の昼間に少しあげてOK" };
+ return { mood: "good", icon: "◎", title: "冬も元気！", comment: "霜を避けて日向と少量水ですくすく" };
+ }
+ if (season === "rain") {
+ if (wind === 1 && water === 1) return { mood: "rot", icon: "×", title: "蒸れに注意！", comment: "空気がこもるよ。雨を避けて風の通る場所へ" };
+ if (wind === 1) return { mood: "rot", icon: "×", title: "湿気で腐る！", comment: "休眠前の無風は一気に弱るよ。風を通して！" };
+ if (water === 3) return { mood: "rot", icon: "×", title: "水減らして！", comment: "そろそろお休み準備。水は控えめにしよう" };
+ if (light === 1) return { mood: "warn", icon: "×", title: "光不足で徒長", comment: "雨よけしつつ明るい場所へ置こう" };
+ if (light === 4) return { mood: "warn", icon: "△", title: "強日差し注意", comment: "暑くなる前はやわらかい光が安心" };
+ if (wind === 3) return { mood: "warn", icon: "△", title: "強風に注意", comment: "雨の吹き込みや鉢の転倒に気をつけて" };
+ return { mood: "good", icon: "◎", title: "夏越し準備OK！", comment: "雨よけ＋風通しで夏休みモードへ" };
+ }
+ if (light === 1) return { mood: "warn", icon: "×", title: "ヒョロヒョロ徒長", comment: "暗いと茎が伸びすぎるよ。明るい場所へ！" };
+ if (wind === 1) return { mood: "warn", icon: "△", title: "ムレやすい", comment: "風通しのよい屋外が大好きです" };
+ if (wind === 3) return { mood: "warn", icon: "△", title: "強風に注意", comment: "背が高い株は倒れやすいので注意して" };
+ if (water === 1) return { mood: "dry", icon: "△", title: "水不足で落葉", comment: "成長期！土が乾いたらたっぷりOK" };
+ if (light === 4) return { mood: "warn", icon: "△", title: "日差し強すぎ", comment: "強い西日だと葉が焦げやすいです" };
+ if (light === 2) return { mood: "warn", icon: "△", title: "もう少し光へ", comment: "しっかり日向で葉色も綺麗に育ちます" };
+ if (water === 2) {
+ if (season === "autumn") return { mood: "good", icon: "◎", title: "目覚めて元気！", comment: "中心の葉が開き始めたら、少しずつお水を" };
+ return { mood: "warn", icon: "△", title: "もう少し水OK", comment: "乾いたらたっぷりお水をあげてOK" };
+ }
+ return { mood: "good", icon: "◎", title: "ぐんぐん元気！", comment: "涼しい季節がいちばん輝くタイプです" };
+ }
 
-      if (type === "sun-warm") {
-        if (season === "winter") {
-          if (wind === 3) return { mood: "freeze", icon: "×", title: "寒さで枯れる！", comment: "外置きや冷たい風は一発でNG。室内へ！" };
-          if (water >= 3) return { mood: "freeze", icon: "×", title: "冷えて根傷み", comment: "冬は室内でもお水はごく控えめにしよう" };
-          if (light === 1) return { mood: "warn", icon: "×", title: "暗くて弱る", comment: "室内でも明るい窓辺へ置いてあげよう" };
-          if (wind === 1) return { mood: "warn", icon: "△", title: "空気がこもる", comment: "暖かい日中は空気を動かしてあげよう" };
-          if (light === 4) return { mood: "warn", icon: "△", title: "強光に注意", comment: "窓辺のやわらかい光がいちばん安心" };
-          if (water === 2) return { mood: "good", icon: "◎", title: "室内ぬくぬく！", comment: "鉢の中まで乾いたら、暖かい日の午前に少し" };
-          return { mood: "good", icon: "◎", title: "室内ぬくぬく！", comment: "暖かい窓辺＋控えめ水で安心の冬越し" };
-        }
-        if (season === "summer") {
-          if (wind === 1 && water >= 2) return { mood: "rot", icon: "×", title: "蒸れて腐りやすい", comment: "無風＋お水は蒸し風呂状態！まず風を通して" };
-          if (wind === 1) return { mood: "rot", icon: "×", title: "熱がこもりやすい", comment: "暑さに強めでも無風は危険。風の通る場所へ" };
-          if (light === 4 && water >= 2) return { mood: "rot", icon: "×", title: "煮えてジュレる！", comment: "強い直射＋水は鉢が煮えるよ。日陰へ！" };
-          if (light === 4) return { mood: "warn", icon: "×", title: "強直射で焼け", comment: "真夏の西日はやわらかい光へ避けよう" };
-          if (light === 1) return { mood: "warn", icon: "×", title: "暗くて徒長", comment: "遮光しすぎると間延びしてしまいます" };
-          if (water === 3) return { mood: "warn", icon: "△", title: "暑さと育ち方を見て", comment: "新芽が伸びる株は乾いたら。猛暑で休んだら控えめに" };
-          if (wind === 3) return { mood: "warn", icon: "△", title: "強風に注意", comment: "鉢が倒れたり土がすぐ乾くので注意" };
-          if (water === 1) return { mood: "dry", icon: "△", title: "すこし水不足", comment: "暑さに強め。夕方に少しあげてOK" };
-          return { mood: "good", icon: "◎", title: "夏も元気！", comment: "強い西日だけ避けて風通しよく" };
-        }
-        if (season === "rain") {
-          if (wind === 1 && water === 1) return { mood: "rot", icon: "×", title: "蒸れに注意！", comment: "空気がこもるよ。雨を避けて風の通る場所へ" };
-          if (wind === 1) return { mood: "rot", icon: "×", title: "湿気で腐る！", comment: "雨よけ＋風通しを最優先にしよう" };
-          if (light === 1) return { mood: "warn", icon: "×", title: "光不足で徒長", comment: "暗い場所だと間延びしてしまいます" };
-          if (light === 4) return { mood: "warn", icon: "△", title: "葉焼け注意", comment: "急な強い直射日光に気をつけて" };
-          if (wind === 3) return { mood: "warn", icon: "△", title: "強風に注意", comment: "雨の吹き込みや鉢の転倒に気をつけて" };
-          if (water === 3) return { mood: "warn", icon: "△", title: "乾き具合を見て", comment: "雨を避けて鉢の中まで乾いてからあげよう" };
-          if (water === 1) return { mood: "dry", icon: "△", title: "少し水不足", comment: "鉢の中まで乾いたら、お水をあげよう" };
-          return { mood: "good", icon: "◎", title: "梅雨OK！", comment: "雨よけ＋風＋乾いて少量で安心" };
-        }
-        if (light === 1) return { mood: "warn", icon: "×", title: "ヒョロヒョロ徒長", comment: "暗いと光を探して間延びしてしまいます" };
-        if (wind === 1) return { mood: "warn", icon: "△", title: "ムレやすい", comment: "風通しのよい明るい場所へ置こう" };
-        if (wind === 3) return { mood: "warn", icon: "△", title: "強風に注意", comment: "鉢が倒れないよう気をつけてあげよう" };
-        if (water === 1) return { mood: "dry", icon: "△", title: "シワシワ水不足", comment: "成長期は土が乾いたらたっぷりOK" };
-        if (light === 4) return { mood: "warn", icon: "△", title: "日差し強すぎ", comment: "強い西日は葉が焼けやすいです" };
-        if (light === 2) return { mood: "warn", icon: "△", title: "もう少し光へ", comment: "春と秋はしっかり日向で元気に" };
-        if (water === 2) return { mood: "warn", icon: "△", title: "もう少し水OK", comment: "乾いたらたっぷりお水をあげてOK" };
-        if (season === "spring") return { mood: "good", icon: "◎", title: "ぐんぐん元気！", comment: "夜の冷え込みを確認しつつ、外の光は少しずつ慣らそう" };
-        return { mood: "good", icon: "◎", title: "ぐんぐん元気！", comment: "お日様と風とお水でいきいき育ちます" };
-      }
+ if (type === "sun-warm") {
+ if (season === "winter") {
+ if (wind === 3) return { mood: "freeze", icon: "×", title: "寒さで枯れる！", comment: "外置きや冷たい風は一発でNG。室内へ！" };
+ if (water >= 3) return { mood: "freeze", icon: "×", title: "冷えて根傷み", comment: "冬は室内でもお水はごく控えめにしよう" };
+ if (light === 1) return { mood: "warn", icon: "×", title: "暗くて弱る", comment: "室内でも明るい窓辺へ置いてあげよう" };
+ if (wind === 1) return { mood: "warn", icon: "△", title: "空気がこもる", comment: "暖かい日中は空気を動かしてあげよう" };
+ if (light === 4) return { mood: "warn", icon: "△", title: "強光に注意", comment: "窓辺のやわらかい光がいちばん安心" };
+ if (water === 2) return { mood: "good", icon: "◎", title: "室内ぬくぬく！", comment: "鉢の中まで乾いたら、暖かい日の午前に少し" };
+ return { mood: "good", icon: "◎", title: "室内ぬくぬく！", comment: "暖かい窓辺＋控えめ水で安心の冬越し" };
+ }
+ if (season === "summer") {
+ if (wind === 1 && water >= 2) return { mood: "rot", icon: "×", title: "蒸れて腐りやすい", comment: "無風＋お水は蒸し風呂状態！まず風を通して" };
+ if (wind === 1) return { mood: "rot", icon: "×", title: "熱がこもりやすい", comment: "暑さに強めでも無風は危険。風の通る場所へ" };
+ if (light === 4 && water >= 2) return { mood: "rot", icon: "×", title: "煮えてジュレる！", comment: "強い直射＋水は鉢が煮えるよ。日陰へ！" };
+ if (light === 4) return { mood: "warn", icon: "×", title: "強直射で焼け", comment: "真夏の西日はやわらかい光へ避けよう" };
+ if (light === 1) return { mood: "warn", icon: "×", title: "暗くて徒長", comment: "遮光しすぎると間延びしてしまいます" };
+ if (water === 3) return { mood: "warn", icon: "△", title: "暑さと育ち方を見て", comment: "新芽が伸びる株は乾いたら。猛暑で休んだら控えめに" };
+ if (wind === 3) return { mood: "warn", icon: "△", title: "強風に注意", comment: "鉢が倒れたり土がすぐ乾くので注意" };
+ if (water === 1) return { mood: "dry", icon: "△", title: "すこし水不足", comment: "暑さに強め。夕方に少しあげてOK" };
+ return { mood: "good", icon: "◎", title: "夏も元気！", comment: "強い西日だけ避けて風通しよく" };
+ }
+ if (season === "rain") {
+ if (wind === 1 && water === 1) return { mood: "rot", icon: "×", title: "蒸れに注意！", comment: "空気がこもるよ。雨を避けて風の通る場所へ" };
+ if (wind === 1) return { mood: "rot", icon: "×", title: "湿気で腐る！", comment: "雨よけ＋風通しを最優先にしよう" };
+ if (light === 1) return { mood: "warn", icon: "×", title: "光不足で徒長", comment: "暗い場所だと間延びしてしまいます" };
+ if (light === 4) return { mood: "warn", icon: "△", title: "葉焼け注意", comment: "急な強い直射日光に気をつけて" };
+ if (wind === 3) return { mood: "warn", icon: "△", title: "強風に注意", comment: "雨の吹き込みや鉢の転倒に気をつけて" };
+ if (water === 3) return { mood: "warn", icon: "△", title: "乾き具合を見て", comment: "雨を避けて鉢の中まで乾いてからあげよう" };
+ if (water === 1) return { mood: "dry", icon: "△", title: "少し水不足", comment: "鉢の中まで乾いたら、お水をあげよう" };
+ return { mood: "good", icon: "◎", title: "梅雨OK！", comment: "雨よけ＋風＋乾いて少量で安心" };
+ }
+ if (light === 1) return { mood: "warn", icon: "×", title: "ヒョロヒョロ徒長", comment: "暗いと光を探して間延びしてしまいます" };
+ if (wind === 1) return { mood: "warn", icon: "△", title: "ムレやすい", comment: "風通しのよい明るい場所へ置こう" };
+ if (wind === 3) return { mood: "warn", icon: "△", title: "強風に注意", comment: "鉢が倒れないよう気をつけてあげよう" };
+ if (water === 1) return { mood: "dry", icon: "△", title: "シワシワ水不足", comment: "成長期は土が乾いたらたっぷりOK" };
+ if (light === 4) return { mood: "warn", icon: "△", title: "日差し強すぎ", comment: "強い西日は葉が焼けやすいです" };
+ if (light === 2) return { mood: "warn", icon: "△", title: "もう少し光へ", comment: "春と秋はしっかり日向で元気に" };
+ if (water === 2) return { mood: "warn", icon: "△", title: "もう少し水OK", comment: "乾いたらたっぷりお水をあげてOK" };
+ if (season === "spring") return { mood: "good", icon: "◎", title: "ぐんぐん元気！", comment: "夜の冷え込みを確認しつつ、外の光は少しずつ慣らそう" };
+ return { mood: "good", icon: "◎", title: "ぐんぐん元気！", comment: "お日様と風とお水でいきいき育ちます" };
+ }
 
-      if (season === "spring" || season === "autumn") {
-        if (light === 1) return { mood: "warn", icon: "×", title: "ヒョロヒョロ徒長", comment: "暗いと光を探して間延びしてしまいます" };
-        if (wind === 1) return { mood: "warn", icon: "△", title: "ムレやすい", comment: "空気がこもると土が乾かず弱ります" };
-        if (wind === 3) return { mood: "warn", icon: "△", title: "強風に注意", comment: "鉢が倒れたり土がすぐ乾くので注意" };
-        if (water === 1) return { mood: "dry", icon: "△", title: "シワシワ水不足", comment: "成長期は土が乾いたらたっぷりOK" };
-        if (light === 4) return { mood: "warn", icon: "△", title: "日差し強すぎ", comment: "強い西日は葉焼けのもとになります" };
-        if (light === 2) return { mood: "warn", icon: "△", title: "もう少し光へ", comment: "しっかり日向で締まって育ちます" };
-        if (water === 2) return { mood: "warn", icon: "△", title: "少し水不足", comment: "乾いたらたっぷりお水をあげてOK" };
-        return { mood: "good", icon: "◎", title: "ぐんぐん元気！", comment: "土が乾いたら、鉢底から水が出るまであげてね" };
-      }
-      if (season === "rain") {
-        if (wind === 1 && water === 1) return { mood: "rot", icon: "×", title: "蒸れに注意！", comment: "空気がこもるよ。雨を避けて風の通る場所へ" };
-        if (wind === 1) return { mood: "rot", icon: "×", title: "湿気で腐る！", comment: "梅雨の無風がいちばん危険。風を通して！" };
-        if (water === 3) return { mood: "rot", icon: "×", title: "根腐れ注意", comment: "湿気の多い時期はお水を控えて" };
-        if (light === 1) return { mood: "warn", icon: "×", title: "光不足で徒長", comment: "暗い室内奥はすぐ間延びします" };
-        if (light === 4) return { mood: "warn", icon: "△", title: "葉焼け注意", comment: "晴れ間の強い直射に気をつけて" };
-        if (wind === 3) return { mood: "warn", icon: "△", title: "強風に注意", comment: "雨の吹き込みや鉢の転倒に気をつけて" };
-        return { mood: "good", icon: "◎", title: "梅雨OK！", comment: "雨よけ＋風＋控えめ水で安心です" };
-      }
-      if (season === "summer") {
-        if (water === 3 && light === 4 && wind === 1) return { mood: "rot", icon: "×", title: "煮えてジュレる！", comment: "まず西日を避けて、風の通る明るい日陰へ" };
-        if (water === 3) return { mood: "rot", icon: "×", title: "蒸れて腐りやすい", comment: "次は鉢の中まで乾くのを待って、涼しい夕方に少し" };
-        if (wind === 1 && water >= 2) return { mood: "rot", icon: "×", title: "蒸れて腐りやすい", comment: "無風＋お水は危険！まず風の通る日陰へ" };
-        if (wind === 1) return { mood: "rot", icon: "×", title: "熱がこもりやすい", comment: "まず風の通る明るい日陰へ移してあげよう" };
-        if (light === 4 && water >= 2) return { mood: "rot", icon: "×", title: "煮えてジュレる！", comment: "鉢が熱くなるよ。西日を避けて" };
-        if (light === 4) return { mood: "warn", icon: "×", title: "葉焼け注意！", comment: "鉢が熱くなるよ。西日を避けて" };
-        if (light === 3) return { mood: "warn", icon: "△", title: "午後は明るい日陰へ", comment: "午前だけの日向ならOK。午後の強い日差しは避けて" };
-        if (light === 1) return { mood: "warn", icon: "△", title: "暗すぎ注意", comment: "真っ暗は苦手。明るい日陰へ置こう" };
-        if (wind === 3) return { mood: "warn", icon: "△", title: "強風に注意", comment: "鉢が倒れないよう風の強い日は避難して" };
-        if (water === 2) return { mood: "good", icon: "◎", title: "上手に夏越し！", comment: "鉢の中まで乾いたら、涼しい夕方に少し" };
-        return { mood: "good", icon: "◎", title: "上手に夏越し！", comment: "やわらかい光＋風＋断水ぎみで安心" };
-      }
-      if (wind === 3) return { mood: "freeze", icon: "×", title: "冷たい強風NG", comment: "冷風や霜に当たると凍るよ。軒下・室内へ！" };
-      if (water === 3) return { mood: "rot", icon: "×", title: "冬は水が多すぎる", comment: "冷え込む前は水を控えてね" };
-      if (light === 1) return { mood: "warn", icon: "△", title: "暗くて弱る", comment: "冬でも明るい窓辺で光を当てて" };
-      if (wind === 1) return { mood: "warn", icon: "△", title: "空気がこもる", comment: "室内でもときどき風を通してあげよう" };
-      if (light === 4) return { mood: "warn", icon: "△", title: "強光に注意", comment: "冬の穏やかな日向がいちばん心地いい" };
-      if (water === 2) return { mood: "warn", icon: "△", title: "冷える夜に注意", comment: "あげるなら暖かい日の昼間にほんの少し" };
-      return { mood: "good", icon: "◎", title: "安心の冬越し！", comment: "霜よけ＋明るい場所＋控えめ水でOK" };
-    }
+ if (season === "spring" || season === "autumn") {
+ if (light === 1) return { mood: "warn", icon: "×", title: "ヒョロヒョロ徒長", comment: "暗いと光を探して間延びしてしまいます" };
+ if (wind === 1) return { mood: "warn", icon: "△", title: "ムレやすい", comment: "空気がこもると土が乾かず弱ります" };
+ if (wind === 3) return { mood: "warn", icon: "△", title: "強風に注意", comment: "鉢が倒れたり土がすぐ乾くので注意" };
+ if (water === 1) return { mood: "dry", icon: "△", title: "シワシワ水不足", comment: "成長期は土が乾いたらたっぷりOK" };
+ if (light === 4) return { mood: "warn", icon: "△", title: "日差し強すぎ", comment: "強い西日は葉焼けのもとになります" };
+ if (light === 2) return { mood: "warn", icon: "△", title: "もう少し光へ", comment: "しっかり日向で締まって育ちます" };
+ if (water === 2) return { mood: "warn", icon: "△", title: "少し水不足", comment: "乾いたらたっぷりお水をあげてOK" };
+ return { mood: "good", icon: "◎", title: "ぐんぐん元気！", comment: "土が乾いたら、鉢底から水が出るまであげてね" };
+ }
+ if (season === "rain") {
+ if (wind === 1 && water === 1) return { mood: "rot", icon: "×", title: "蒸れに注意！", comment: "空気がこもるよ。雨を避けて風の通る場所へ" };
+ if (wind === 1) return { mood: "rot", icon: "×", title: "湿気で腐る！", comment: "梅雨の無風がいちばん危険。風を通して！" };
+ if (water === 3) return { mood: "rot", icon: "×", title: "根腐れ注意", comment: "湿気の多い時期はお水を控えて" };
+ if (light === 1) return { mood: "warn", icon: "×", title: "光不足で徒長", comment: "暗い室内奥はすぐ間延びします" };
+ if (light === 4) return { mood: "warn", icon: "△", title: "葉焼け注意", comment: "晴れ間の強い直射に気をつけて" };
+ if (wind === 3) return { mood: "warn", icon: "△", title: "強風に注意", comment: "雨の吹き込みや鉢の転倒に気をつけて" };
+ return { mood: "good", icon: "◎", title: "梅雨OK！", comment: "雨よけ＋風＋控えめ水で安心です" };
+ }
+ if (season === "summer") {
+ if (water === 3 && light === 4 && wind === 1) return { mood: "rot", icon: "×", title: "煮えてジュレる！", comment: "まず西日を避けて、風の通る明るい日陰へ" };
+ if (water === 3) return { mood: "rot", icon: "×", title: "蒸れて腐りやすい", comment: "次は鉢の中まで乾くのを待って、涼しい夕方に少し" };
+ if (wind === 1 && water >= 2) return { mood: "rot", icon: "×", title: "蒸れて腐りやすい", comment: "無風＋お水は危険！まず風の通る日陰へ" };
+ if (wind === 1) return { mood: "rot", icon: "×", title: "熱がこもりやすい", comment: "まず風の通る明るい日陰へ移してあげよう" };
+ if (light === 4 && water >= 2) return { mood: "rot", icon: "×", title: "煮えてジュレる！", comment: "鉢が熱くなるよ。西日を避けて" };
+ if (light === 4) return { mood: "warn", icon: "×", title: "葉焼け注意！", comment: "鉢が熱くなるよ。西日を避けて" };
+ if (light === 3) return { mood: "warn", icon: "△", title: "午後は明るい日陰へ", comment: "午前だけの日向ならOK。午後の強い日差しは避けて" };
+ if (light === 1) return { mood: "warn", icon: "△", title: "暗すぎ注意", comment: "真っ暗は苦手。明るい日陰へ置こう" };
+ if (wind === 3) return { mood: "warn", icon: "△", title: "強風に注意", comment: "鉢が倒れないよう風の強い日は避難して" };
+ if (water === 2) return { mood: "good", icon: "◎", title: "上手に夏越し！", comment: "鉢の中まで乾いたら、涼しい夕方に少し" };
+ return { mood: "good", icon: "◎", title: "上手に夏越し！", comment: "やわらかい光＋風＋断水ぎみで安心" };
+ }
+ if (wind === 3) return { mood: "freeze", icon: "×", title: "冷たい強風NG", comment: "冷風や霜に当たると凍るよ。軒下・室内へ！" };
+ if (water === 3) return { mood: "rot", icon: "×", title: "冬は水が多すぎる", comment: "冷え込む前は水を控えてね" };
+ if (light === 1) return { mood: "warn", icon: "△", title: "暗くて弱る", comment: "冬でも明るい窓辺で光を当てて" };
+ if (wind === 1) return { mood: "warn", icon: "△", title: "空気がこもる", comment: "室内でもときどき風を通してあげよう" };
+ if (light === 4) return { mood: "warn", icon: "△", title: "強光に注意", comment: "冬の穏やかな日向がいちばん心地いい" };
+ if (water === 2) return { mood: "warn", icon: "△", title: "冷える夜に注意", comment: "あげるなら暖かい日の昼間にほんの少し" };
+ return { mood: "good", icon: "◎", title: "安心の冬越し！", comment: "霜よけ＋明るい場所＋控えめ水でOK" };
+ }
 
-    function detectSosSymptom(res) {
-      if (!res || res.mood === "good" || res.mood === "sleep") return "";
-      const text = `${res.title || ""} ${res.comment || ""}`;
-      if (/焼|日差し|眩し|強光|直射で傷む/.test(text)) return "burn";
-      if (/徒長|暗/.test(text)) return "stretch";
-      if (res.mood === "rot" || res.mood === "freeze") return "jelly";
-      if (res.mood === "dry") return "wrinkle";
-      return "";
-    }
+ function detectSosSymptom(res) {
+ if (!res || res.mood === "good" || res.mood === "sleep") return "";
+ const text = `${res.title || ""} ${res.comment || ""}`;
+ if (/焼|日差し|眩し|強光|直射で傷む/.test(text)) return "burn";
+ if (/徒長|暗/.test(text)) return "stretch";
+ if (res.mood === "rot" || res.mood === "freeze") return "jelly";
+ if (res.mood === "dry") return "wrinkle";
+ return "";
+ }
 
-    const IMAGE_BASE_PREFIXES = ["", "多肉の育て方｜操作できる試作/", "../", "../version1/"];
+ const IMAGE_BASE_PREFIXES = ["", "多肉の育て方｜操作できる試作/", "../", "../version1/"];
 
-    function setImageWithParentFallback(image, relPath) {
-      let idx = 0;
-      function tryNext() {
-        if (idx >= IMAGE_BASE_PREFIXES.length) {
-          image.onerror = null;
-          return;
-        }
-        image.onerror = tryNext;
-        image.src = IMAGE_BASE_PREFIXES[idx++] + relPath;
-      }
-      tryNext();
-    }
+ function setImageWithParentFallback(image, relPath) {
+ let idx = 0;
+ function tryNext() {
+ if (idx >= IMAGE_BASE_PREFIXES.length) {
+ image.onerror = null;
+ return;
+ }
+ image.onerror = tryNext;
+ image.src = IMAGE_BASE_PREFIXES[idx++] + relPath;
+ }
+ tryNext();
+ }
 
-    function getWatercolorScene(type, season) {
-      const entry = WATERCOLOR_SCENES[season];
-      if (!entry) return "";
-      if (entry.byType && entry.byType[type]) return entry.byType[type];
-      return entry.default || "";
-    }
+ function getWatercolorScene(type, season) {
+ const entry = WATERCOLOR_SCENES[season];
+ if (!entry) return "";
+ if (entry.byType && entry.byType[type]) return entry.byType[type];
+ return entry.default || "";
+ }
 
-    function updateDioramaImage(season) {
-      const panel = document.getElementById(`dio-${season}`);
-      const img = document.getElementById(`dio-img-${season}`);
-      const wcSrc = getWatercolorScene(state.type, season);
-      if (!wcSrc || !img) return;
-      if (img.dataset.currentSrc !== wcSrc || !panel.classList.contains("is-loaded")) {
-        img.dataset.currentSrc = wcSrc;
-        const markLoaded = () => {
-          if (img.dataset.currentSrc !== wcSrc) return;
-          panel.classList.add("is-loaded");
-        };
-        img.onload = markLoaded;
-        setImageWithParentFallback(img, wcSrc);
-        if (img.complete && img.naturalWidth > 0) markLoaded();
-      }
-    }
+ function updateDioramaImage(season) {
+ const panel = document.getElementById(`dio-${season}`);
+ const img = document.getElementById(`dio-img-${season}`);
+ const wcSrc = getWatercolorScene(state.type, season);
+ if (!wcSrc || !img) return;
+ if (img.dataset.currentSrc !== wcSrc || !panel.classList.contains("is-loaded")) {
+ img.dataset.currentSrc = wcSrc;
+ const markLoaded = () => {
+ if (img.dataset.currentSrc !== wcSrc) return;
+ panel.classList.add("is-loaded");
+ };
+ img.onload = markLoaded;
+ setImageWithParentFallback(img, wcSrc);
+ if (img.complete && img.naturalWidth > 0) markLoaded();
+ }
+ }
 
-    function renderFixedCalendar() {
-      const cfg = TYPE_CONFIGS[state.type];
-      const canvas = document.getElementById("appCanvas");
-      canvas.classList.toggle("theme-shade", cfg.theme === "shade");
-      canvas.classList.toggle("type-sun-main", state.type === "sun-main");
-      canvas.classList.toggle("type-sun-warm", state.type === "sun-warm");
-      canvas.classList.toggle("type-sun-cool", state.type === "sun-cool");
+ function renderFixedCalendar() {
+ const cfg = TYPE_CONFIGS[state.type];
+ const canvas = document.getElementById("appCanvas");
+ canvas.classList.toggle("theme-shade", cfg.theme === "shade");
+ canvas.classList.toggle("type-sun-main", state.type === "sun-main");
+ canvas.classList.toggle("type-sun-warm", state.type === "sun-warm");
+ canvas.classList.toggle("type-sun-cool", state.type === "sun-cool");
 
-      const currentSeason = detectCurrentSeason(state.type);
-      document.querySelectorAll(".season-pick-btn").forEach((btn) => {
-        btn.classList.toggle("is-current-season", btn.dataset.season === currentSeason);
-      });
+ const currentSeason = detectCurrentSeason(state.type);
+ document.querySelectorAll(".season-pick-btn").forEach((btn) => {
+ btn.classList.toggle("is-current-season", btn.dataset.season === currentSeason);
+ });
 
-      ["spring", "rain", "summer", "autumn", "winter"].forEach((s) => {
-        const b = cfg.bubbles[s];
-        const bubEl = document.getElementById(`bubble-${s}`);
-        bubEl.className = `season-bubble ${b.tone}`;
-        bubEl.innerHTML = `<span class="bubble-phase">${b.phase}</span><span class="bubble-note">${b.note}</span>`;
-        updateDioramaImage(s);
-      });
+ ["spring", "rain", "summer", "autumn", "winter"].forEach((s) => {
+ const b = cfg.bubbles[s];
+ const bubEl = document.getElementById(`bubble-${s}`);
+ bubEl.className = `season-bubble ${b.tone}`;
+ bubEl.innerHTML = `<span class="bubble-phase">${b.phase}</span><span class="bubble-note">${b.note}</span>`;
+ updateDioramaImage(s);
+ });
 
-      const monthsBar = document.getElementById("seasonMonthsBar");
-      if (monthsBar) {
-        const isWarm = (state.type === "sun-warm");
-        const autumnEnd = isWarm ? 66.67 : 75;
-        monthsBar.style.background = `linear-gradient(90deg, ` +
-          `var(--season-spring-soft) 0%, var(--season-spring-soft) 24.5%, ` +
-          `var(--season-rain-soft) 25.5%, var(--season-rain-soft) 37%, ` +
-          `var(--season-summer-soft) 38%, var(--season-summer-soft) 53.7%, ` +
-          `var(--season-autumn-soft) 54.7%, var(--season-autumn-soft) ${(autumnEnd - 0.5).toFixed(2)}%, ` +
-          `var(--season-winter-soft) ${(autumnEnd + 0.5).toFixed(2)}%, var(--season-winter-soft) 100%)`;
-      }
+ const monthsBar = document.getElementById("seasonMonthsBar");
+ if (monthsBar) {
+ const isWarm = (state.type === "sun-warm");
+ const autumnEnd = isWarm ? 66.67 : 75;
+ monthsBar.style.background = `linear-gradient(90deg, ` +
+ `var(--season-spring-soft) 0%, var(--season-spring-soft) 24.5%, ` +
+ `var(--season-rain-soft) 25.5%, var(--season-rain-soft) 37%, ` +
+ `var(--season-summer-soft) 38%, var(--season-summer-soft) 53.7%, ` +
+ `var(--season-autumn-soft) 54.7%, var(--season-autumn-soft) ${(autumnEnd - 0.5).toFixed(2)}%, ` +
+ `var(--season-winter-soft) ${(autumnEnd + 0.5).toFixed(2)}%, var(--season-winter-soft) 100%)`;
+ }
 
-      document.querySelectorAll(".type-tab").forEach((tab) => {
-        tab.classList.toggle("is-active", tab.dataset.type === state.type);
-      });
-    }
+ document.querySelectorAll(".type-tab").forEach((tab) => {
+ tab.classList.toggle("is-active", tab.dataset.type === state.type);
+ });
+ }
 
-    function updateResultView(animate = true) {
-      const res = evaluate(state.type, state.season, state);
-      const card = document.getElementById("resultCard");
-      card.className = `result-card state-${res.mood}`;
-      if (animate) {
-        void card.offsetWidth;
-        card.classList.add("is-pop");
-      }
-      document.getElementById("resultIcon").textContent = res.icon;
-      document.getElementById("resultStatus").textContent = res.title;
-      document.getElementById("resultComment").textContent = res.comment;
+ function updateResultView(animate = true) {
+ const res = evaluate(state.type, state.season, state);
+ const card = document.getElementById("resultCard");
+ card.className = `result-card state-${res.mood}`;
+ if (animate) {
+ void card.offsetWidth;
+ card.classList.add("is-pop");
+ }
+ document.getElementById("resultIcon").textContent = res.icon;
+ document.getElementById("resultStatus").textContent = res.title;
+ document.getElementById("resultComment").textContent = res.comment;
 
-      const [il, iw, iwa] = TYPE_CONFIGS[state.type].ideals[state.season];
-      const isIdeal = (state.light === il && state.wind === iw && state.water === iwa);
-      document.getElementById("resetIdealBtn").classList.toggle("is-already-ideal", isIdeal);
-    }
+ const [il, iw, iwa] = TYPE_CONFIGS[state.type].ideals[state.season];
+ const isIdeal = (state.light === il && state.wind === iw && state.water === iwa);
+ document.getElementById("resetIdealBtn").classList.toggle("is-already-ideal", isIdeal);
+ }
 
-    function setControls(light, wind, water, animate = true) {
-      state.light = light;
-      state.wind = wind;
-      state.water = water;
-      document.querySelectorAll(".seg-group").forEach((group) => {
-        const key = group.dataset.control;
-        group.querySelectorAll(".seg-btn").forEach((btn) => {
-          btn.classList.toggle("is-active", parseInt(btn.dataset.val, 10) === state[key]);
-        });
-      });
-      updateResultView(animate);
-    }
+ function setControls(light, wind, water, animate = true) {
+ state.light = light;
+ state.wind = wind;
+ state.water = water;
+ document.querySelectorAll(".seg-group").forEach((group) => {
+ const key = group.dataset.control;
+ group.querySelectorAll(".seg-btn").forEach((btn) => {
+ btn.classList.toggle("is-active", parseInt(btn.dataset.val, 10) === state[key]);
+ });
+ });
+ updateResultView(animate);
+ }
 
-    function updateMonthsActiveFrame(type, season) {
-      const frame = document.getElementById("monthsActiveFrame");
-      const dimLeft = document.getElementById("monthsDimLeft");
-      const dimRight = document.getElementById("monthsDimRight");
-      if (!frame) return;
-      const isWarm = (type === "sun-warm");
-      const ranges = {
-        spring: { left: 0, width: 25, color: "var(--season-spring)" },
-        rain: { left: 25, width: 12.5, color: "var(--season-rain)" },
-        summer: { left: 37.5, width: 16.67, color: "var(--season-summer)" },
-        autumn: { left: 54.17, width: isWarm ? 12.5 : 20.83, color: "var(--season-autumn)" },
-        winter: { left: isWarm ? 66.67 : 75, width: isWarm ? 33.33 : 25, color: "var(--season-winter)" }
-      };
-      const r = ranges[season] || ranges.spring;
-      const rightEdge = Math.min(100, r.left + r.width);
+ function updateMonthsActiveFrame(type, season) {
+ const frame = document.getElementById("monthsActiveFrame");
+ const dimLeft = document.getElementById("monthsDimLeft");
+ const dimRight = document.getElementById("monthsDimRight");
+ if (!frame) return;
+ const isWarm = (type === "sun-warm");
+ const ranges = {
+ spring: { left: 0, width: 25, color: "var(--season-spring)" },
+ rain: { left: 25, width: 12.5, color: "var(--season-rain)" },
+ summer: { left: 37.5, width: 16.67, color: "var(--season-summer)" },
+ autumn: { left: 54.17, width: isWarm ? 12.5 : 20.83, color: "var(--season-autumn)" },
+ winter: { left: isWarm ? 66.67 : 75, width: isWarm ? 33.33 : 25, color: "var(--season-winter)" }
+ };
+ const r = ranges[season] || ranges.spring;
+ const rightEdge = Math.min(100, r.left + r.width);
 
-      frame.style.left = `${r.left}%`;
-      frame.style.width = `${r.width}%`;
-      frame.style.backgroundColor = r.color;
+ frame.style.left = `${r.left}%`;
+ frame.style.width = `${r.width}%`;
+ frame.style.backgroundColor = r.color;
 
-      if (dimLeft) dimLeft.style.width = `${r.left}%`;
-      if (dimRight) dimRight.style.left = `${rightEdge}%`;
+ if (dimLeft) dimLeft.style.width = `${r.left}%`;
+ if (dimRight) dimRight.style.left = `${rightEdge}%`;
 
-      document.querySelectorAll("#seasonMonthsBar .cal-m").forEach((cell, idx) => {
-        const cellStart = (idx * 100) / 12;
-        const cellEnd = ((idx + 1) * 100) / 12;
-        const overlap = Math.min(cellEnd, rightEdge) - Math.max(cellStart, r.left);
-        cell.classList.toggle("is-dim", overlap < 1.0);
-      });
-    }
+ document.querySelectorAll("#seasonMonthsBar .cal-m").forEach((cell, idx) => {
+ const cellStart = (idx * 100) / 12;
+ const cellEnd = ((idx + 1) * 100) / 12;
+ const overlap = Math.min(cellEnd, rightEdge) - Math.max(cellStart, r.left);
+ cell.classList.toggle("is-dim", overlap < 1.0);
+ });
+ }
 
-    function selectSeason(season, animate = true) {
-      state.season = season;
-      ["spring", "rain", "summer", "autumn", "winter"].forEach((s) => {
-        const isSel = (s === season);
-        const card = document.getElementById(`card-${s}`);
-        const dio = document.getElementById(`dio-${s}`);
-        const spot = document.getElementById(`spot-${s}`);
-        if (card) card.classList.toggle("is-active", isSel);
-        if (dio) dio.classList.toggle("is-dim", !isSel);
-        if (spot) {
-          spot.classList.toggle("is-dim", !isSel);
-          spot.classList.toggle("is-active", isSel);
-        }
-      });
-      document.querySelectorAll(".season-pick-btn, .stage-hit-btn").forEach((btn) => {
-        btn.classList.toggle("is-active", btn.dataset.season === season);
-      });
-      updateMonthsActiveFrame(state.type, season);
-      const [l, w, wa] = TYPE_CONFIGS[state.type].ideals[season];
-      const idealMap = { light: l, wind: w, water: wa };
-      document.querySelectorAll(".seg-group").forEach((group) => {
-        const key = group.dataset.control;
-        group.querySelectorAll(".seg-btn").forEach((btn) => {
-          btn.classList.toggle("is-ideal", parseInt(btn.dataset.val, 10) === idealMap[key]);
-        });
-      });
-      setControls(l, w, wa, animate);
-    }
+ function selectSeason(season, animate = true) {
+ state.season = season;
+ ["spring", "rain", "summer", "autumn", "winter"].forEach((s) => {
+ const isSel = (s === season);
+ const card = document.getElementById(`card-${s}`);
+ const dio = document.getElementById(`dio-${s}`);
+ const spot = document.getElementById(`spot-${s}`);
+ if (card) card.classList.toggle("is-active", isSel);
+ if (dio) dio.classList.toggle("is-dim", !isSel);
+ if (spot) {
+ spot.classList.toggle("is-dim", !isSel);
+ spot.classList.toggle("is-active", isSel);
+ }
+ });
+ document.querySelectorAll(".season-pick-btn, .stage-hit-btn").forEach((btn) => {
+ btn.classList.toggle("is-active", btn.dataset.season === season);
+ });
+ updateMonthsActiveFrame(state.type, season);
+ const [l, w, wa] = TYPE_CONFIGS[state.type].ideals[season];
+ const idealMap = { light: l, wind: w, water: wa };
+ document.querySelectorAll(".seg-group").forEach((group) => {
+ const key = group.dataset.control;
+ group.querySelectorAll(".seg-btn").forEach((btn) => {
+ btn.classList.toggle("is-ideal", parseInt(btn.dataset.val, 10) === idealMap[key]);
+ });
+ });
+ setControls(l, w, wa, animate);
+ }
 
-    document.querySelectorAll(".type-tab").forEach((tab) => {
-      tab.addEventListener("click", () => {
-        state.type = tab.dataset.type;
-        const targetSeason = state.manualSeason ? state.season : detectCurrentSeason(state.type);
-        renderFixedCalendar();
-        selectSeason(targetSeason, true);
-      });
-    });
+ document.querySelectorAll(".type-tab").forEach((tab) => {
+ tab.addEventListener("click", () => {
+ state.type = tab.dataset.type;
+ const targetSeason = state.manualSeason ? state.season : detectCurrentSeason(state.type);
+ renderFixedCalendar();
+ selectSeason(targetSeason, true);
+ });
+ });
 
-    document.querySelectorAll(".season-pick-btn, .stage-hit-btn").forEach((btn) => {
-      btn.addEventListener("click", () => {
-        state.manualSeason = true;
-        selectSeason(btn.dataset.season, true);
-      });
-    });
+ document.querySelectorAll(".season-pick-btn, .stage-hit-btn").forEach((btn) => {
+ btn.addEventListener("click", () => {
+ state.manualSeason = true;
+ selectSeason(btn.dataset.season, true);
+ });
+ });
 
-    function activateSegButton(btn) {
-      const group = btn.closest(".seg-group");
-      if (!group) return;
-      const key = group.dataset.control;
-      const val = parseInt(btn.dataset.val, 10);
-      if (!key || Number.isNaN(val)) return;
-      state[key] = val;
-      group.querySelectorAll(".seg-btn").forEach((b) => {
-        b.classList.toggle("is-active", b === btn);
-      });
-      updateResultView(true);
-    }
+ function activateSegButton(btn) {
+ const group = btn.closest(".seg-group");
+ if (!group) return;
+ const key = group.dataset.control;
+ const val = parseInt(btn.dataset.val, 10);
+ if (!key || Number.isNaN(val)) return;
+ state[key] = val;
+ group.querySelectorAll(".seg-btn").forEach((b) => {
+ b.classList.toggle("is-active", b === btn);
+ });
+ updateResultView(true);
+ }
 
-    const allSegButtons = Array.from(document.querySelectorAll(".seg-group .seg-btn"));
-    let lastSegPointerTs = 0;
+ const allSegButtons = Array.from(document.querySelectorAll(".seg-group .seg-btn"));
+ let lastSegPointerTs = 0;
 
-    function handleSegHitByCoords(clientX, clientY) {
-      for (const btn of allSegButtons) {
-        const rect = btn.getBoundingClientRect();
-        if (clientX >= rect.left && clientX <= rect.right && clientY >= rect.top && clientY <= rect.bottom) {
-          activateSegButton(btn);
-          return true;
-        }
-      }
-      return false;
-    }
+ function handleSegHitByCoords(clientX, clientY) {
+ for (const btn of allSegButtons) {
+ const rect = btn.getBoundingClientRect();
+ if (clientX >= rect.left && clientX <= rect.right && clientY >= rect.top && clientY <= rect.bottom) {
+ activateSegButton(btn);
+ return true;
+ }
+ }
+ return false;
+ }
 
-    document.addEventListener("pointerdown", (e) => {
-      if (e.pointerType === "mouse" && e.button !== 0) return;
-      const directBtn = e.target && e.target.closest ? e.target.closest(".seg-group .seg-btn") : null;
-      if (directBtn) {
-        activateSegButton(directBtn);
-        lastSegPointerTs = Date.now();
-        e.preventDefault();
-        return;
-      }
-      if (handleSegHitByCoords(e.clientX, e.clientY)) {
-        lastSegPointerTs = Date.now();
-        e.preventDefault();
-      }
-    }, { capture: true, passive: false });
+ document.addEventListener("pointerdown", (e) => {
+ if (e.pointerType === "mouse" && e.button !== 0) return;
+ const directBtn = e.target && e.target.closest ? e.target.closest(".seg-group .seg-btn") : null;
+ if (directBtn) {
+ activateSegButton(directBtn);
+ lastSegPointerTs = Date.now();
+ e.preventDefault();
+ return;
+ }
+ if (handleSegHitByCoords(e.clientX, e.clientY)) {
+ lastSegPointerTs = Date.now();
+ e.preventDefault();
+ }
+ }, { capture: true, passive: false });
 
-    allSegButtons.forEach((btn) => {
-      btn.addEventListener("click", () => {
-        if (Date.now() - lastSegPointerTs < 400) return;
-        activateSegButton(btn);
-      });
-    });
+ allSegButtons.forEach((btn) => {
+ btn.addEventListener("click", () => {
+ if (Date.now() - lastSegPointerTs < 400) return;
+ activateSegButton(btn);
+ });
+ });
 
-    document.getElementById("resetIdealBtn").addEventListener("click", () => {
-      const [l, w, wa] = TYPE_CONFIGS[state.type].ideals[state.season];
-      setControls(l, w, wa, true);
-    });
+ document.getElementById("resetIdealBtn").addEventListener("click", () => {
+ const [l, w, wa] = TYPE_CONFIGS[state.type].ideals[state.season];
+ setControls(l, w, wa, true);
+ });
 
-    const ALLOWED_BASICS_PAGES = new Set([
-      "basics_wind",
-      "basics_light",
-      "basics_water",
-      "basics_soil",
-      "basics_fertilizer"
-    ]);
+ const ALLOWED_BASICS_PAGES = new Set([
+ "basics_wind",
+ "basics_light",
+ "basics_water",
+ "basics_soil",
+ "basics_fertilizer"
+ ]);
 
-    document.getElementById("backHomeBtn").addEventListener("click", () => {
-      const params = new URLSearchParams(window.location.search);
-      const qMonth = params.get("month");
-      const from = params.get("from");
-      if (from === "type" && window.history.length > 1) {
-        window.history.back();
-        return;
-      }
-      if (from === "basics") {
-        window.location.href = qMonth ? `basics.html?month=${encodeURIComponent(qMonth)}` : "basics.html";
-        return;
-      }
-      if (from && ALLOWED_BASICS_PAGES.has(from)) {
-        window.location.href = qMonth ? `${from}.html?month=${encodeURIComponent(qMonth)}` : `${from}.html`;
-        return;
-      }
-      if (from === "sos") {
-        const next = new URLSearchParams();
-        const qSosFrom = params.get("sosFrom");
-        if (qSosFrom) next.set("from", qSosFrom);
-        ["sym", "choice", "type", "season", "light", "wind", "water", "month"].forEach((k) => {
-          const v = params.get(k);
-          if (v) next.set(k, v);
-        });
-        const qs = next.toString();
-        window.location.href = qs ? `sos.html?${qs}` : "sos.html";
-        return;
-      }
-      window.location.href = qMonth ? `index.html?month=${encodeURIComponent(qMonth)}` : "index.html";
-    });
+ document.getElementById("backHomeBtn").addEventListener("click", () => {
+ const params = new URLSearchParams(window.location.search);
+ const qMonth = params.get("month");
+ const from = params.get("from");
+ if (from === "type" && window.history.length > 1) {
+ window.history.back();
+ return;
+ }
+ if (from === "basics") {
+ window.location.href = qMonth ? `basics.html?month=${encodeURIComponent(qMonth)}` : "basics.html";
+ return;
+ }
+ if (from && ALLOWED_BASICS_PAGES.has(from)) {
+ window.location.href = qMonth ? `${from}.html?month=${encodeURIComponent(qMonth)}` : `${from}.html`;
+ return;
+ }
+ if (from === "sos") {
+ const next = new URLSearchParams();
+ const qSosFrom = params.get("sosFrom");
+ if (qSosFrom) next.set("from", qSosFrom);
+ ["sym", "choice", "type", "season", "light", "wind", "water", "month"].forEach((k) => {
+ const v = params.get(k);
+ if (v) next.set(k, v);
+ });
+ const qs = next.toString();
+ window.location.href = qs ? `sos.html?${qs}` : "sos.html";
+ return;
+ }
+ window.location.href = qMonth ? `index.html?month=${encodeURIComponent(qMonth)}` : "index.html";
+ });
 
-    document.getElementById("topHomeBtn").addEventListener("click", () => {
-      const params = new URLSearchParams(window.location.search);
-      const qMonth = params.get("month");
-      window.location.href = qMonth ? `index.html?month=${encodeURIComponent(qMonth)}` : "index.html";
-    });
+ document.getElementById("topHomeBtn").addEventListener("click", () => {
+ const params = new URLSearchParams(window.location.search);
+ const qMonth = params.get("month");
+ window.location.href = qMonth ? `index.html?month=${encodeURIComponent(qMonth)}` : "index.html";
+ });
 
-    function buildSimStateQuery(extraParams = {}) {
-      const params = new URLSearchParams(window.location.search);
-      const next = new URLSearchParams();
-      next.set("from", "sim");
-      next.set("type", state.type);
-      next.set("season", state.season);
-      next.set("light", String(state.light));
-      next.set("wind", String(state.wind));
-      next.set("water", String(state.water));
-      Object.entries(extraParams).forEach(([k, v]) => {
-        if (v) next.set(k, v);
-      });
-      const qMonth = params.get("month");
-      if (qMonth) next.set("month", qMonth);
-      return next.toString();
-    }
+ function buildSimStateQuery(extraParams = {}) {
+ const params = new URLSearchParams(window.location.search);
+ const next = new URLSearchParams();
+ next.set("from", "sim");
+ next.set("type", state.type);
+ next.set("season", state.season);
+ next.set("light", String(state.light));
+ next.set("wind", String(state.wind));
+ next.set("water", String(state.water));
+ Object.entries(extraParams).forEach(([k, v]) => {
+ if (v) next.set(k, v);
+ });
+ const qMonth = params.get("month");
+ if (qMonth) next.set("month", qMonth);
+ return next.toString();
+ }
 
-    document.getElementById("jumpRulesBtn").addEventListener("click", () => {
-      window.location.href = `basics.html?${buildSimStateQuery()}`;
-    });
+ document.getElementById("jumpRulesBtn").addEventListener("click", () => {
+ window.location.href = `basics.html?${buildSimStateQuery()}`;
+ });
 
-    document.getElementById("jumpSosBtn").addEventListener("click", () => {
-      const res = evaluate(state.type, state.season, state);
-      const sym = detectSosSymptom(res);
-      window.location.href = `sos.html?${buildSimStateQuery(sym ? { sym } : {})}`;
-    });
+ document.getElementById("jumpSosBtn").addEventListener("click", () => {
+ const res = evaluate(state.type, state.season, state);
+ const sym = detectSosSymptom(res);
+ window.location.href = `sos.html?${buildSimStateQuery(sym ? { sym } : {})}`;
+ });
 
-    function initFromParams() {
-      const params = new URLSearchParams(window.location.search);
-      const paramType = params.get("type");
-      if (paramType && TYPE_CONFIGS[paramType]) state.type = paramType;
-      const paramSeason = params.get("season");
-      if (paramSeason && SEASON_META[paramSeason]) state.manualSeason = true;
-      const initialSeason = (paramSeason && SEASON_META[paramSeason]) ? paramSeason : detectCurrentSeason(state.type);
+ function initFromParams() {
+ const params = new URLSearchParams(window.location.search);
+ const paramType = params.get("type");
+ if (paramType && TYPE_CONFIGS[paramType]) state.type = paramType;
+ const paramSeason = params.get("season");
+ if (paramSeason && SEASON_META[paramSeason]) state.manualSeason = true;
+ const initialSeason = (paramSeason && SEASON_META[paramSeason]) ? paramSeason : detectCurrentSeason(state.type);
 
-      renderFixedCalendar();
-      selectSeason(initialSeason, false);
-      const pLight = parseInt(params.get("light"), 10);
-      const pWind = parseInt(params.get("wind"), 10);
-      const pWater = parseInt(params.get("water"), 10);
-      if (pLight >= 1 && pLight <= 4 && pWind >= 1 && pWind <= 3 && pWater >= 1 && pWater <= 4) {
-        setControls(pLight, pWind, pWater, false);
-      }
-    }
+ renderFixedCalendar();
+ selectSeason(initialSeason, false);
+ const pLight = parseInt(params.get("light"), 10);
+ const pWind = parseInt(params.get("wind"), 10);
+ const pWater = parseInt(params.get("water"), 10);
+ if (pLight >= 1 && pLight <= 4 && pWind >= 1 && pWind <= 3 && pWater >= 1 && pWater <= 4) {
+ setControls(pLight, pWind, pWater, false);
+ }
+ }
 
-    const AUTO_RETURN_MS = 0;
-    if (AUTO_RETURN_MS) {
-      let idleTimer = null;
-      function resetIdleTimer() {
-        clearTimeout(idleTimer);
-        idleTimer = setTimeout(() => { window.location.href = "index.html"; }, AUTO_RETURN_MS);
-      }
-      ["pointerdown", "touchstart", "click", "keydown"].forEach((ev) => {
-        window.addEventListener(ev, resetIdleTimer, { passive: true });
-      });
-      resetIdleTimer();
-    }
+ const AUTO_RETURN_MS = 300000;
+ if (AUTO_RETURN_MS) {
+ let idleTimer = null;
+ function resetIdleTimer() {
+ clearTimeout(idleTimer);
+ idleTimer = setTimeout(() => { window.location.href = "index.html"; }, AUTO_RETURN_MS);
+ }
+ ["pointerdown", "touchstart", "click", "keydown"].forEach((ev) => {
+ window.addEventListener(ev, resetIdleTimer, { passive: true });
+ });
+ resetIdleTimer();
+ }
 
-    function fitCanvas() {
-      const canvas = document.getElementById("appCanvas");
-      const scale = Math.min(window.innerWidth / 1080, window.innerHeight / 786);
-      if (window.CSS && CSS.supports && CSS.supports("zoom", "1")) {
-        canvas.style.zoom = scale;
-        canvas.style.transform = "none";
-      } else {
-        canvas.style.zoom = "";
-        canvas.style.transform = `scale(${scale})`;
-      }
-    }
+ function fitCanvas() {
+ const canvas = document.getElementById("appCanvas");
+ const scale = Math.min(window.innerWidth / 1080, window.innerHeight / 786);
+ if (window.CSS && CSS.supports && CSS.supports("zoom", "1")) {
+ canvas.style.zoom = scale;
+ canvas.style.transform = "none";
+ } else {
+ canvas.style.zoom = "";
+ canvas.style.transform = `scale(${scale})`;
+ }
+ }
 
-    window.addEventListener("resize", fitCanvas);
-    window.addEventListener("orientationchange", fitCanvas);
-    initFromParams();
-    fitCanvas();
-  </script>
+ window.addEventListener("resize", fitCanvas);
+ window.addEventListener("orientationchange", fitCanvas);
+ initFromParams();
+ fitCanvas();
+ </script>
 </body>
 </html>

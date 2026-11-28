@@ -1,1108 +1,1108 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
-  <!-- =========================================================================
-    保木平珈琲 Murmure｜展示用iPad Webアプリ「多肉の育て方」（v2・5つの基本 全公開＆導線改善版）
-    - sim.html と完全統一した「温かいクリーム紙 × こげ茶インク × 淡面＋枠線 × 左ガイドレーン」
-    - base64埋め込み画像を外部参照（images/）へ戻して軽量化
-    - ステップ1：5つの基本すべて公開（basics_wind.html / basics_light.html / basics_water.html / basics_soil.html / basics_fertilizer.html へ遷移）
-    - ステップ2に「※わからないときは、お気軽にスタッフまで」を追記
-    - シミュレーター（sim.html）への遷移時に from=basics を付与し、「もどる」で本ページへ復帰対応
-  ========================================================================= -->
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-  <meta name="apple-mobile-web-app-title" content="多肉の育て方" />
-  <meta name="theme-color" content="#f6f0e4" />
-  <meta name="format-detection" content="telephone=no" />
-  <link rel="manifest" href="manifest.json" />
-  <link rel="apple-touch-icon" sizes="180x180" href="images/apple-touch-icon.png" />
-  <link rel="icon" type="image/png" sizes="512x512" href="images/icon-512.png" />
-
-  <title>Murmure｜多肉の育て方</title>
-
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=Shippori+Mincho:wght@500;600;700&family=Zen+Maru+Gothic:wght@400;500;700&display=swap" rel="stylesheet" />
-
-  <style>
-    :root {
-      --bg-outer: #e9dfd0;
-      --bg-paper: #f6f0e4;
-      --card-paper: #fffdf8;
-      --surface-muted: #f7f2e7;
-      --ink-main: #2d1f16;
-      --ink-sub: #4e3d30;
-      --ink-muted: #6e5c4d;
-      --line-soft: #d7c7ad;
-      --line-strong: #c2ae8e;
-
-      --axis: #5e4736;
-      --axis-dark: #453326;
-      --axis-soft: #f2eadc;
-      --axis-fill: #ebe0cc;
-      --rail-color: #78604e;
-      --rail-line: #d4c6b4;
-
-      --wind-color: #5e784a;
-      --wind-soft: rgba(105, 129, 84, 0.14);
-      --wind-bd: rgba(105, 129, 84, 0.34);
-
-      --sun-color: #9e5612;
-      --sun-soft: rgba(186, 108, 28, 0.13);
-      --sun-bd: rgba(186, 108, 28, 0.36);
-
-      --water-color: #467b96;
-      --water-soft: rgba(79, 132, 158, 0.14);
-      --water-bd: rgba(79, 132, 158, 0.34);
-
-      --earth-color: #825e3e;
-      --earth-soft: rgba(130, 94, 62, 0.13);
-      --earth-bd: rgba(130, 94, 62, 0.34);
-
-      --tag-1: #b8566d;
-      --tag-2: #3d7699;
-      --tag-3: #b05712;
-      --tag-4: #4d6b38;
-
-      --shadow-soft: 0 2px 10px rgba(72, 54, 38, 0.06);
-
-      --font-serif: "Shippori Mincho", "Hiragino Mincho ProN", "Yu Mincho", serif;
-      --font-ui: "Zen Maru Gothic", "Hiragino Maru Gothic ProN", sans-serif;
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      -webkit-tap-highlight-color: transparent;
-      -webkit-user-select: none;
-      user-select: none;
-      -webkit-touch-callout: none;
-    }
-
-    a, button {
-      font: inherit;
-      color: inherit;
-      text-decoration: none;
-      touch-action: manipulation;
-    }
-
-    a:focus-visible, button:focus-visible {
-      outline: 3px solid #ab542c;
-      outline-offset: -3px;
-    }
-
-    svg {
-      display: block;
-      flex-shrink: 0;
-    }
-
-    html, body {
-      width: 100%;
-      height: 100%;
-      overflow: hidden;
-      background: var(--bg-outer);
-      font-family: var(--font-ui);
-      color: var(--ink-main);
-    }
-
-    .viewport-wrapper {
-      position: fixed;
-      inset: 0;
-      width: 100vw;
-      height: 100vh;
-      height: 100dvh;
-      overflow: hidden;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .canvas {
-      position: relative;
-      width: 1080px;
-      height: 786px;
-      min-width: 1080px;
-      min-height: 786px;
-      background: linear-gradient(135deg, #f9f5e9, #f2ead9);
-      transform-origin: center center;
-      padding: 14px 24px 16px;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      box-shadow: 0 12px 36px rgba(59, 45, 35, 0.14);
-      overflow: hidden;
-    }
-
-    .canvas::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-      background-image: radial-gradient(rgba(110, 88, 66, 0.045) 1px, transparent 0);
-      background-size: 16px 16px;
-      opacity: 0.7;
-    }
-
-    /* ================= 1. 上部ヘッダー（sim.html と完全統一） ================= */
-    .page-header {
-      position: relative;
-      z-index: 2;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 14px;
-      flex-shrink: 0;
-      border-bottom: 1px solid var(--line-soft);
-      padding-bottom: 8px;
-    }
-
-    .header-left {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-    }
-
-    .header-nav-group {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      flex-shrink: 0;
-    }
-
-    .back-btn,
-    .home-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      height: 40px;
-      padding: 0 15px;
-      background: var(--card-paper);
-      border: 1px solid var(--line-soft);
-      border-bottom: 2px solid var(--line-strong);
-      border-radius: 10px;
-      font-family: var(--font-ui);
-      font-size: 14.5px;
-      font-weight: 700;
-      color: var(--ink-main);
-      cursor: pointer;
-      flex-shrink: 0;
-      transition: background-color 0.12s ease, transform 0.08s ease;
-    }
-
-    .home-btn {
-      background: var(--axis-soft);
-      border-color: #cbbba6;
-      border-bottom-color: #b39f86;
-      color: var(--axis);
-    }
-
-    .back-btn:active,
-    .home-btn:active {
-      transform: translateY(1px);
-      background: #ebe4d5;
-    }
-
-    .back-arrow {
-      font-size: 19px;
-      line-height: 1;
-      color: var(--axis);
-    }
-
-    .home-btn svg {
-      width: 15px;
-      height: 15px;
-      color: var(--axis);
-      display: block;
-      flex-shrink: 0;
-    }
-
-    .title-wrap {
-      display: flex;
-      align-items: baseline;
-      gap: 12px;
-    }
-
-    .page-title {
-      font-family: var(--font-serif);
-      font-size: 25px;
-      font-weight: 700;
-      letter-spacing: 0.06em;
-      line-height: 1.12;
-      color: var(--ink-main);
-    }
-
-    .page-en {
-      font-family: "Cormorant Garamond", Georgia, serif;
-      font-style: italic;
-      font-size: 16px;
-      font-weight: 600;
-      color: var(--ink-muted);
-    }
-
-    /* ================= 2. 全体2ステップ・グリッド ================= */
-    .flow-workspace {
-      position: relative;
-      z-index: 2;
-      flex: 1 1 auto;
-      min-height: 0;
-      display: grid;
-      grid-template-columns: 38px 1fr;
-      grid-template-rows: auto auto;
-      align-content: center;
-      column-gap: 12px;
-      row-gap: 20px;
-    }
-
-    .rail-cell {
-      position: relative;
-      display: flex;
-      align-items: flex-start;
-      justify-content: center;
-    }
-
-    .rail-cell.is-step1::after {
-      content: "";
-      position: absolute;
-      left: 50%;
-      top: 28px;
-      bottom: -36px;
-      width: 2px;
-      background: var(--rail-line);
-      transform: translateX(-50%);
-      z-index: 0;
-    }
-
-    .rail-cell.is-step2::before {
-      content: "";
-      position: absolute;
-      left: 50%;
-      top: -36px;
-      height: 44px;
-      width: 2px;
-      background: var(--rail-line);
-      transform: translateX(-50%);
-      z-index: 0;
-    }
-
-    .step-badge {
-      position: relative;
-      z-index: 2;
-      width: 28px;
-      height: 28px;
-      border-radius: 50%;
-      background: var(--rail-color);
-      border: 2px solid var(--bg-paper);
-      color: #fff;
-      font-family: var(--font-ui);
-      font-size: 14px;
-      font-weight: 700;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-    }
-
-    .step-section {
-      display: flex;
-      flex-direction: column;
-      min-width: 0;
-    }
-
-    .step-section-head {
-      display: flex;
-      align-items: baseline;
-      gap: 12px;
-      min-height: 28px;
-      padding: 0 2px;
-      margin-bottom: 8px;
-    }
-
-    .step-head-title {
-      font-family: var(--font-serif);
-      font-size: 19px;
-      font-weight: 700;
-      color: var(--ink-main);
-      letter-spacing: 0.04em;
-      line-height: 1.25;
-      white-space: nowrap;
-    }
-
-    .step-head-desc {
-      font-family: var(--font-ui);
-      font-size: 13.5px;
-      font-weight: 500;
-      color: var(--ink-muted);
-      line-height: 1.25;
-      white-space: nowrap;
-    }
-
-    .step-head-staff-note {
-      margin-left: auto;
-      font-family: var(--font-ui);
-      font-size: 12.8px;
-      font-weight: 500;
-      color: var(--ink-sub);
-      white-space: nowrap;
-    }
-
-    /* ================= 3. ステップ1：中央たにく丸＋5つの基本 ================= */
-    .care-map {
-      position: relative;
-      display: block;
-      height: 358px;
-      isolation: isolate;
-    }
-
-    .care-center {
-      position: absolute;
-      left: 50%;
-      top: 0;
-      transform: translateX(-50%);
-      width: 338px;
-      height: 290px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: flex-start;
-      z-index: 0;
-    }
-
-    .care-center img {
-      position: absolute;
-      top: -13px;
-      width: 326px;
-      height: 292px;
-      object-fit: cover;
-      object-position: center 60%;
-      mix-blend-mode: multiply;
-      mask-image: radial-gradient(ellipse 49% 49% at 50% 51%, #000 65%, transparent 100%);
-      -webkit-mask-image: radial-gradient(ellipse 49% 49% at 50% 51%, #000 65%, transparent 100%);
-    }
-
-    .care-lines {
-      position: absolute;
-      inset: 0;
-      z-index: 0;
-      pointer-events: none;
-    }
-
-    .care-lines svg {
-      width: 100%;
-      height: 100%;
-    }
-
-    .point-card {
-      position: absolute;
-      z-index: 1;
-      overflow: hidden;
-      width: 302px;
-      height: 116px;
-      display: flex;
-      align-items: center;
-      gap: 13px;
-      padding: 14px 32px 14px 17px;
-      background: rgba(255, 253, 248, 0.93);
-      border: 1.2px solid var(--line-soft);
-      border-bottom: 2.5px solid var(--line-strong);
-      border-radius: 16px;
-      box-shadow: var(--shadow-soft);
-      transition: background-color 0.14s ease, border-color 0.14s ease, transform 0.08s ease;
-    }
-
-    .point-card:hover {
-      background: #fffdf8;
-      border-color: #b49f83;
-    }
-
-    .point-card:active {
-      transform: translateY(1px);
-      background: var(--axis-fill);
-      border-color: var(--axis);
-    }
-
-    .point-card.is-wind { --acc: var(--wind-color); --acc-bg: var(--wind-soft); --acc-bd: var(--wind-bd); }
-    .point-card.is-light { --acc: var(--sun-color); --acc-bg: var(--sun-soft); --acc-bd: var(--sun-bd); }
-    .point-card.is-water { --acc: var(--water-color); --acc-bg: var(--water-soft); --acc-bd: var(--water-bd); }
-    .point-card.is-earth { --acc: var(--earth-color); --acc-bg: var(--earth-soft); --acc-bd: var(--earth-bd); }
-
-    .care-map .left-top { left: 0; top: 16px; }
-    .care-map .right-top { right: 0; top: 16px; }
-    .care-map .left-bottom { left: 0; top: 151px; }
-    .care-map .right-bottom { right: 0; top: 151px; }
-    .care-map .center-bottom { left: 50%; transform: translateX(-50%); top: 283px; width: 320px; height: 75px; border-radius: 14px; }
-    .care-map .center-bottom:active { transform: translate(-50%, 1px); }
-
-    .point-icon {
-      width: 58px;
-      height: 58px;
-      border-radius: 50%;
-      background: var(--acc-bg);
-      border: 1.5px solid var(--acc-bd);
-      color: var(--acc);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-    }
-
-    .point-icon svg {
-      width: 29px;
-      height: 29px;
-    }
-
-    .care-map .center-bottom .point-icon { width: 45px; height: 45px; }
-    .care-map .center-bottom .point-icon svg { width: 25px; height: 25px; }
-
-    .point-copy {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 7px;
-      min-width: 0;
-    }
-
-    .care-map .center-bottom .point-copy { gap: 3px; }
-
-    .point-name {
-      font-family: var(--font-serif);
-      font-size: 24px;
-      font-weight: 700;
-      color: var(--ink-main);
-      letter-spacing: 0.025em;
-      line-height: 1.18;
-      white-space: nowrap;
-    }
-
-    .care-map .center-bottom .point-name { font-size: 20px; }
-
-    .point-phrase {
-      font-family: var(--font-ui);
-      font-size: 14px;
-      font-weight: 500;
-      color: var(--ink-sub);
-      line-height: 1.45;
-    }
-
-    .point-arrow {
-      position: absolute;
-      top: 50%;
-      right: 10px;
-      transform: translateY(-50%);
-      width: 25px;
-      height: 25px;
-      border-radius: 50%;
-      background: var(--axis-soft);
-      border: 1.5px solid rgba(94, 71, 54, 0.34);
-      color: var(--axis-dark);
-      font-size: 17px;
-      font-weight: 700;
-      line-height: 1;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      padding-left: 1.5px;
-      padding-bottom: 1px;
-      box-shadow: 0 1px 4px rgba(59, 45, 35, 0.08);
-      pointer-events: none;
-    }
-
-    /* ================= 準備中 透かしスタンプ（広く薄く・奥の文字が読める設計） ================= */
-    .point-card.is-wip .point-arrow {
-      opacity: 0.45;
-    }
-
-    .wip-stamp {
-      position: absolute;
-      inset: 0;
-      z-index: 4;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      pointer-events: none;
-      overflow: hidden;
-    }
-
-    .wip-stamp-mark {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      min-width: 214px;
-      padding: 6px 24px;
-      transform: rotate(-10deg);
-      border: 2px solid rgba(152, 74, 48, 0.27);
-      outline: 1px solid rgba(152, 74, 48, 0.16);
-      outline-offset: 3px;
-      border-radius: 8px;
-      background: rgba(255, 253, 248, 0.18);
-      font-family: var(--font-serif);
-      font-size: 26px;
-      font-weight: 700;
-      letter-spacing: 0.40em;
-      padding-left: calc(24px + 0.40em);
-      line-height: 1.15;
-      color: rgba(152, 74, 48, 0.29);
-      white-space: nowrap;
-    }
-
-    .care-map .center-bottom .wip-stamp-mark {
-      min-width: 226px;
-      padding: 3px 22px;
-      transform: rotate(-6deg);
-      font-size: 21px;
-      letter-spacing: 0.42em;
-      padding-left: calc(22px + 0.42em);
-      outline-offset: 2px;
-    }
-
-    /* ================= 4. ステップ2：タイプと季節に合わせる ================= */
-    .season-area {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 18px;
-    }
-
-    .type-grid {
-      width: 100%;
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 12px;
-    }
-
-    .type-card {
-      position: relative;
-      overflow: hidden;
-      display: flex;
-      align-items: stretch;
-      justify-content: space-between;
-      gap: 4px;
-      height: 112px;
-      padding: 0;
-      background: var(--card-paper);
-      border: 1.2px solid var(--line-soft);
-      border-bottom: 2.5px solid var(--line-strong);
-      border-radius: 12px;
-      box-shadow: var(--shadow-soft);
-      transition: background-color 0.14s ease, border-color 0.14s ease, transform 0.08s ease;
-    }
-
-    .type-card:hover {
-      background: #fdf9f0;
-      border-color: #b49f83;
-    }
-
-    .type-card:active {
-      transform: translateY(1px);
-      border-color: var(--axis);
-    }
-
-    .type-card.t1 { --tone: var(--tag-1); }
-    .type-card.t2 { --tone: var(--tag-2); }
-    .type-card.t3 { --tone: var(--tag-3); }
-    .type-card.t4 { --tone: var(--tag-4); }
-
-    .type-body {
-      position: relative;
-      z-index: 2;
-      flex: 1 1 auto;
-      min-width: 0;
-      padding: 12px 34px 10px 14px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      gap: 5px;
-    }
-
-    .type-head {
-      display: flex;
-      align-items: center;
-      gap: 7px;
-    }
-
-    .type-dot {
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      background: var(--tone);
-      flex-shrink: 0;
-    }
-
-    .type-name {
-      font-family: var(--font-serif);
-      font-size: 17.2px;
-      font-weight: 700;
-      color: var(--ink-main);
-      letter-spacing: 0.02em;
-      line-height: 1.2;
-      white-space: nowrap;
-      text-shadow: 0 0 6px rgba(255, 253, 248, 0.95);
-    }
-
-    .type-species {
-      font-family: var(--font-ui);
-      font-size: 11.4px;
-      font-weight: 500;
-      color: var(--ink-muted);
-      letter-spacing: -0.02em;
-      line-height: 1.32;
-      min-height: 30px;
-      padding-left: 17px;
-      white-space: normal;
-      text-shadow: 0 0 6px rgba(255, 253, 248, 0.95);
-    }
-
-    .type-art-wrap {
-      position: absolute;
-      right: -36px;
-      bottom: -44px;
-      width: 120px;
-      height: 120px;
-      pointer-events: none;
-      z-index: 1;
-      display: flex;
-      align-items: flex-end;
-      justify-content: flex-end;
-    }
-
-    .type-card.t2 .type-art-wrap { width: 122px; height: 122px; right: -36px; bottom: -43px; }
-    .type-card.t3 .type-art-wrap { width: 120px; height: 120px; right: -40px; bottom: -45px; }
-    .type-card.t4 .type-art-wrap { width: 118px; height: 118px; right: -38px; bottom: -47px; }
-
-    .type-bg-photo {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-      object-position: center bottom;
-      display: block;
-      mix-blend-mode: multiply;
-      opacity: 0.8;
-      pointer-events: none;
-    }
-
-    .type-arrow {
-      position: absolute;
-      top: 9px;
-      right: 9px;
-      z-index: 3;
-      width: 26px;
-      height: 26px;
-      border-radius: 50%;
-      background: rgba(242, 234, 220, 0.94);
-      border: 1.5px solid rgba(94, 71, 54, 0.34);
-      color: var(--axis-dark);
-      font-size: 17px;
-      font-weight: 700;
-      line-height: 1;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      padding-left: 1.5px;
-      padding-bottom: 1px;
-      box-shadow: 0 1px 4px rgba(59, 45, 35, 0.1);
-      pointer-events: none;
-    }
-
-    .sim-cta-wrap {
-      display: flex;
-      justify-content: center;
-    }
-
-    .sim-cta {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      padding: 0 32px;
-      height: 48px;
-      background: var(--axis-fill);
-      border: 2px solid var(--axis);
-      border-bottom: 3px solid var(--axis-dark);
-      color: var(--ink-main);
-      border-radius: 999px;
-      font-family: var(--font-ui);
-      font-size: 15.5px;
-      font-weight: 700;
-      letter-spacing: 0.04em;
-      white-space: nowrap;
-      box-shadow: 0 3px 9px rgba(59, 45, 35, 0.12);
-      transition: background-color 0.14s ease, transform 0.08s ease;
-    }
-
-    .sim-cta:hover { background: #e3d4bb; }
-    .sim-cta:active { transform: translateY(1px); }
-    .sim-cta svg { width: 17px; height: 17px; color: var(--axis); }
-
-    .preview-dialog {
-      border: 1.2px solid var(--line-strong);
-      border-radius: 18px;
-      background: var(--card-paper);
-      color: var(--ink-main);
-      padding: 28px 36px;
-      margin: auto;
-      max-width: 86vw;
-      width: 420px;
-      box-shadow: 0 12px 48px rgba(45, 31, 22, 0.2);
-      text-align: center;
-    }
-
-    .preview-dialog::backdrop { background: rgba(45, 31, 22, 0.34); }
-    .preview-dialog h2 { font: 700 26px var(--font-serif); margin-bottom: 12px; color: var(--ink-main); }
-    .preview-dialog p { font-size: 16.5px; font-weight: 700; color: var(--ink-sub); margin: 8px 0; }
-    .preview-dialog small { font-size: 14px; line-height: 1.65; color: var(--ink-muted); display: block; margin: 14px 0 20px; }
-    .preview-dialog button {
-      padding: 10px 30px;
-      border-radius: 999px;
-      border: 1.5px solid var(--axis);
-      border-bottom: 2.5px solid var(--axis-dark);
-      background: var(--axis-fill);
-      color: var(--ink-main);
-      font-size: 14.5px;
-      font-weight: 700;
-      cursor: pointer;
-    }
-    .preview-dialog button:active { transform: translateY(1px); }
-  </style>
+ <meta charset="utf-8" />
+ <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+ <!-- =========================================================================
+ 保木平珈琲 Murmure｜展示用iPad Webアプリ「多肉の育て方」（v2・5つの基本 全公開＆導線改善版）
+ - sim.html と完全統一した「温かいクリーム紙 × こげ茶インク × 淡面＋枠線 × 左ガイドレーン」
+ - base64埋め込み画像を外部参照（images/）へ戻して軽量化
+ - ステップ1：5つの基本すべて公開（basics_wind.html / basics_light.html / basics_water.html / basics_soil.html / basics_fertilizer.html へ遷移）
+ - ステップ2に「※わからないときは、お気軽にスタッフまで」を追記
+ - シミュレーター（sim.html）への遷移時に from=basics を付与し、「もどる」で本ページへ復帰対応
+ ========================================================================= -->
+ <meta name="apple-mobile-web-app-capable" content="yes" />
+ <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+ <meta name="apple-mobile-web-app-title" content="多肉の育て方" />
+ <meta name="theme-color" content="#f6f0e4" />
+ <meta name="format-detection" content="telephone=no" />
+ <link rel="manifest" href="manifest.json" />
+ <link rel="apple-touch-icon" sizes="180x180" href="images/apple-touch-icon.png" />
+ <link rel="icon" type="image/png" sizes="512x512" href="images/icon-512.png" />
+
+ <title>Murmure｜多肉の育て方</title>
+
+ <link rel="preconnect" href="https://fonts.googleapis.com" />
+ <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+ <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=Shippori+Mincho:wght@500;600;700&family=Zen+Maru+Gothic:wght@400;500;700&display=swap" rel="stylesheet" />
+
+ <style>
+ :root {
+ --bg-outer: #e9dfd0;
+ --bg-paper: #f6f0e4;
+ --card-paper: #fffdf8;
+ --surface-muted: #f7f2e7;
+ --ink-main: #2d1f16;
+ --ink-sub: #4e3d30;
+ --ink-muted: #6e5c4d;
+ --line-soft: #d7c7ad;
+ --line-strong: #c2ae8e;
+
+ --axis: #5e4736;
+ --axis-dark: #453326;
+ --axis-soft: #f2eadc;
+ --axis-fill: #ebe0cc;
+ --rail-color: #78604e;
+ --rail-line: #d4c6b4;
+
+ --wind-color: #5e784a;
+ --wind-soft: rgba(105, 129, 84, 0.14);
+ --wind-bd: rgba(105, 129, 84, 0.34);
+
+ --sun-color: #9e5612;
+ --sun-soft: rgba(186, 108, 28, 0.13);
+ --sun-bd: rgba(186, 108, 28, 0.36);
+
+ --water-color: #467b96;
+ --water-soft: rgba(79, 132, 158, 0.14);
+ --water-bd: rgba(79, 132, 158, 0.34);
+
+ --earth-color: #825e3e;
+ --earth-soft: rgba(130, 94, 62, 0.13);
+ --earth-bd: rgba(130, 94, 62, 0.34);
+
+ --tag-1: #b8566d;
+ --tag-2: #3d7699;
+ --tag-3: #b05712;
+ --tag-4: #4d6b38;
+
+ --shadow-soft: 0 2px 10px rgba(72, 54, 38, 0.06);
+
+ --font-serif: "Shippori Mincho", "Hiragino Mincho ProN", "Yu Mincho", serif;
+ --font-ui: "Zen Maru Gothic", "Hiragino Maru Gothic ProN", sans-serif;
+ }
+
+ * {
+ box-sizing: border-box;
+ margin: 0;
+ padding: 0;
+ -webkit-tap-highlight-color: transparent;
+ -webkit-user-select: none;
+ user-select: none;
+ -webkit-touch-callout: none;
+ }
+
+ a, button {
+ font: inherit;
+ color: inherit;
+ text-decoration: none;
+ touch-action: manipulation;
+ }
+
+ a:focus-visible, button:focus-visible {
+ outline: 3px solid #ab542c;
+ outline-offset: -3px;
+ }
+
+ svg {
+ display: block;
+ flex-shrink: 0;
+ }
+
+ html, body {
+ width: 100%;
+ height: 100%;
+ overflow: hidden;
+ background: var(--bg-outer);
+ font-family: var(--font-ui);
+ color: var(--ink-main);
+ }
+
+ .viewport-wrapper {
+ position: fixed;
+ inset: 0;
+ width: 100vw;
+ height: 100vh;
+ height: 100dvh;
+ overflow: hidden;
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ }
+
+ .canvas {
+ position: relative;
+ width: 1080px;
+ height: 786px;
+ min-width: 1080px;
+ min-height: 786px;
+ background: linear-gradient(135deg, #f9f5e9, #f2ead9);
+ transform-origin: center center;
+ padding: 14px 24px 16px;
+ display: flex;
+ flex-direction: column;
+ gap: 12px;
+ box-shadow: 0 12px 36px rgba(59, 45, 35, 0.14);
+ overflow: hidden;
+ }
+
+ .canvas::before {
+ content: "";
+ position: absolute;
+ inset: 0;
+ pointer-events: none;
+ background-image: radial-gradient(rgba(110, 88, 66, 0.045) 1px, transparent 0);
+ background-size: 16px 16px;
+ opacity: 0.7;
+ }
+
+ /* ================= 1. 上部ヘッダー（sim.html と完全統一） ================= */
+ .page-header {
+ position: relative;
+ z-index: 2;
+ display: flex;
+ align-items: center;
+ justify-content: space-between;
+ gap: 14px;
+ flex-shrink: 0;
+ border-bottom: 1px solid var(--line-soft);
+ padding-bottom: 8px;
+ }
+
+ .header-left {
+ display: flex;
+ align-items: center;
+ gap: 16px;
+ }
+
+ .header-nav-group {
+ display: inline-flex;
+ align-items: center;
+ gap: 8px;
+ flex-shrink: 0;
+ }
+
+ .back-btn,
+ .home-btn {
+ display: inline-flex;
+ align-items: center;
+ gap: 6px;
+ height: 40px;
+ padding: 0 15px;
+ background: var(--card-paper);
+ border: 1px solid var(--line-soft);
+ border-bottom: 2px solid var(--line-strong);
+ border-radius: 10px;
+ font-family: var(--font-ui);
+ font-size: 14.5px;
+ font-weight: 700;
+ color: var(--ink-main);
+ cursor: pointer;
+ flex-shrink: 0;
+ transition: background-color 0.12s ease, transform 0.08s ease;
+ }
+
+ .home-btn {
+ background: var(--axis-soft);
+ border-color: #cbbba6;
+ border-bottom-color: #b39f86;
+ color: var(--axis);
+ }
+
+ .back-btn:active,
+ .home-btn:active {
+ transform: translateY(1px);
+ background: #ebe4d5;
+ }
+
+ .back-arrow {
+ font-size: 19px;
+ line-height: 1;
+ color: var(--axis);
+ }
+
+ .home-btn svg {
+ width: 15px;
+ height: 15px;
+ color: var(--axis);
+ display: block;
+ flex-shrink: 0;
+ }
+
+ .title-wrap {
+ display: flex;
+ align-items: baseline;
+ gap: 12px;
+ }
+
+ .page-title {
+ font-family: var(--font-serif);
+ font-size: 25px;
+ font-weight: 700;
+ letter-spacing: 0.06em;
+ line-height: 1.12;
+ color: var(--ink-main);
+ }
+
+ .page-en {
+ font-family: "Cormorant Garamond", Georgia, serif;
+ font-style: italic;
+ font-size: 16px;
+ font-weight: 600;
+ color: var(--ink-muted);
+ }
+
+ /* ================= 2. 全体2ステップ・グリッド ================= */
+ .flow-workspace {
+ position: relative;
+ z-index: 2;
+ flex: 1 1 auto;
+ min-height: 0;
+ display: grid;
+ grid-template-columns: 38px 1fr;
+ grid-template-rows: auto auto;
+ align-content: center;
+ column-gap: 12px;
+ row-gap: 20px;
+ }
+
+ .rail-cell {
+ position: relative;
+ display: flex;
+ align-items: flex-start;
+ justify-content: center;
+ }
+
+ .rail-cell.is-step1::after {
+ content: "";
+ position: absolute;
+ left: 50%;
+ top: 28px;
+ bottom: -36px;
+ width: 2px;
+ background: var(--rail-line);
+ transform: translateX(-50%);
+ z-index: 0;
+ }
+
+ .rail-cell.is-step2::before {
+ content: "";
+ position: absolute;
+ left: 50%;
+ top: -36px;
+ height: 44px;
+ width: 2px;
+ background: var(--rail-line);
+ transform: translateX(-50%);
+ z-index: 0;
+ }
+
+ .step-badge {
+ position: relative;
+ z-index: 2;
+ width: 28px;
+ height: 28px;
+ border-radius: 50%;
+ background: var(--rail-color);
+ border: 2px solid var(--bg-paper);
+ color: #fff;
+ font-family: var(--font-ui);
+ font-size: 14px;
+ font-weight: 700;
+ display: inline-flex;
+ align-items: center;
+ justify-content: center;
+ flex-shrink: 0;
+ }
+
+ .step-section {
+ display: flex;
+ flex-direction: column;
+ min-width: 0;
+ }
+
+ .step-section-head {
+ display: flex;
+ align-items: baseline;
+ gap: 12px;
+ min-height: 28px;
+ padding: 0 2px;
+ margin-bottom: 8px;
+ }
+
+ .step-head-title {
+ font-family: var(--font-serif);
+ font-size: 19px;
+ font-weight: 700;
+ color: var(--ink-main);
+ letter-spacing: 0.04em;
+ line-height: 1.25;
+ white-space: nowrap;
+ }
+
+ .step-head-desc {
+ font-family: var(--font-ui);
+ font-size: 13.5px;
+ font-weight: 500;
+ color: var(--ink-muted);
+ line-height: 1.25;
+ white-space: nowrap;
+ }
+
+ .step-head-staff-note {
+ margin-left: auto;
+ font-family: var(--font-ui);
+ font-size: 12.8px;
+ font-weight: 500;
+ color: var(--ink-sub);
+ white-space: nowrap;
+ }
+
+ /* ================= 3. ステップ1：中央たにく丸＋5つの基本 ================= */
+ .care-map {
+ position: relative;
+ display: block;
+ height: 358px;
+ isolation: isolate;
+ }
+
+ .care-center {
+ position: absolute;
+ left: 50%;
+ top: 0;
+ transform: translateX(-50%);
+ width: 338px;
+ height: 290px;
+ display: flex;
+ flex-direction: column;
+ align-items: center;
+ justify-content: flex-start;
+ z-index: 0;
+ }
+
+ .care-center img {
+ position: absolute;
+ top: -13px;
+ width: 326px;
+ height: 292px;
+ object-fit: cover;
+ object-position: center 60%;
+ mix-blend-mode: multiply;
+ mask-image: radial-gradient(ellipse 49% 49% at 50% 51%, #000 65%, transparent 100%);
+ -webkit-mask-image: radial-gradient(ellipse 49% 49% at 50% 51%, #000 65%, transparent 100%);
+ }
+
+ .care-lines {
+ position: absolute;
+ inset: 0;
+ z-index: 0;
+ pointer-events: none;
+ }
+
+ .care-lines svg {
+ width: 100%;
+ height: 100%;
+ }
+
+ .point-card {
+ position: absolute;
+ z-index: 1;
+ overflow: hidden;
+ width: 302px;
+ height: 116px;
+ display: flex;
+ align-items: center;
+ gap: 13px;
+ padding: 14px 32px 14px 17px;
+ background: rgba(255, 253, 248, 0.93);
+ border: 1.2px solid var(--line-soft);
+ border-bottom: 2.5px solid var(--line-strong);
+ border-radius: 16px;
+ box-shadow: var(--shadow-soft);
+ transition: background-color 0.14s ease, border-color 0.14s ease, transform 0.08s ease;
+ }
+
+ .point-card:hover {
+ background: #fffdf8;
+ border-color: #b49f83;
+ }
+
+ .point-card:active {
+ transform: translateY(1px);
+ background: var(--axis-fill);
+ border-color: var(--axis);
+ }
+
+ .point-card.is-wind { --acc: var(--wind-color); --acc-bg: var(--wind-soft); --acc-bd: var(--wind-bd); }
+ .point-card.is-light { --acc: var(--sun-color); --acc-bg: var(--sun-soft); --acc-bd: var(--sun-bd); }
+ .point-card.is-water { --acc: var(--water-color); --acc-bg: var(--water-soft); --acc-bd: var(--water-bd); }
+ .point-card.is-earth { --acc: var(--earth-color); --acc-bg: var(--earth-soft); --acc-bd: var(--earth-bd); }
+
+ .care-map .left-top { left: 0; top: 16px; }
+ .care-map .right-top { right: 0; top: 16px; }
+ .care-map .left-bottom { left: 0; top: 151px; }
+ .care-map .right-bottom { right: 0; top: 151px; }
+ .care-map .center-bottom { left: 50%; transform: translateX(-50%); top: 283px; width: 320px; height: 75px; border-radius: 14px; }
+ .care-map .center-bottom:active { transform: translate(-50%, 1px); }
+
+ .point-icon {
+ width: 58px;
+ height: 58px;
+ border-radius: 50%;
+ background: var(--acc-bg);
+ border: 1.5px solid var(--acc-bd);
+ color: var(--acc);
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ flex-shrink: 0;
+ }
+
+ .point-icon svg {
+ width: 29px;
+ height: 29px;
+ }
+
+ .care-map .center-bottom .point-icon { width: 45px; height: 45px; }
+ .care-map .center-bottom .point-icon svg { width: 25px; height: 25px; }
+
+ .point-copy {
+ display: flex;
+ flex-direction: column;
+ align-items: flex-start;
+ gap: 7px;
+ min-width: 0;
+ }
+
+ .care-map .center-bottom .point-copy { gap: 3px; }
+
+ .point-name {
+ font-family: var(--font-serif);
+ font-size: 24px;
+ font-weight: 700;
+ color: var(--ink-main);
+ letter-spacing: 0.025em;
+ line-height: 1.18;
+ white-space: nowrap;
+ }
+
+ .care-map .center-bottom .point-name { font-size: 20px; }
+
+ .point-phrase {
+ font-family: var(--font-ui);
+ font-size: 14px;
+ font-weight: 500;
+ color: var(--ink-sub);
+ line-height: 1.45;
+ }
+
+ .point-arrow {
+ position: absolute;
+ top: 50%;
+ right: 10px;
+ transform: translateY(-50%);
+ width: 25px;
+ height: 25px;
+ border-radius: 50%;
+ background: var(--axis-soft);
+ border: 1.5px solid rgba(94, 71, 54, 0.34);
+ color: var(--axis-dark);
+ font-size: 17px;
+ font-weight: 700;
+ line-height: 1;
+ display: inline-flex;
+ align-items: center;
+ justify-content: center;
+ padding-left: 1.5px;
+ padding-bottom: 1px;
+ box-shadow: 0 1px 4px rgba(59, 45, 35, 0.08);
+ pointer-events: none;
+ }
+
+ /* ================= 準備中 透かしスタンプ（広く薄く・奥の文字が読める設計） ================= */
+ .point-card.is-wip .point-arrow {
+ opacity: 0.45;
+ }
+
+ .wip-stamp {
+ position: absolute;
+ inset: 0;
+ z-index: 4;
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ pointer-events: none;
+ overflow: hidden;
+ }
+
+ .wip-stamp-mark {
+ display: inline-flex;
+ align-items: center;
+ justify-content: center;
+ min-width: 214px;
+ padding: 6px 24px;
+ transform: rotate(-10deg);
+ border: 2px solid rgba(152, 74, 48, 0.27);
+ outline: 1px solid rgba(152, 74, 48, 0.16);
+ outline-offset: 3px;
+ border-radius: 8px;
+ background: rgba(255, 253, 248, 0.18);
+ font-family: var(--font-serif);
+ font-size: 26px;
+ font-weight: 700;
+ letter-spacing: 0.40em;
+ padding-left: calc(24px + 0.40em);
+ line-height: 1.15;
+ color: rgba(152, 74, 48, 0.29);
+ white-space: nowrap;
+ }
+
+ .care-map .center-bottom .wip-stamp-mark {
+ min-width: 226px;
+ padding: 3px 22px;
+ transform: rotate(-6deg);
+ font-size: 21px;
+ letter-spacing: 0.42em;
+ padding-left: calc(22px + 0.42em);
+ outline-offset: 2px;
+ }
+
+ /* ================= 4. ステップ2：タイプと季節に合わせる ================= */
+ .season-area {
+ display: flex;
+ flex-direction: column;
+ align-items: center;
+ gap: 18px;
+ }
+
+ .type-grid {
+ width: 100%;
+ display: grid;
+ grid-template-columns: repeat(4, minmax(0, 1fr));
+ gap: 12px;
+ }
+
+ .type-card {
+ position: relative;
+ overflow: hidden;
+ display: flex;
+ align-items: stretch;
+ justify-content: space-between;
+ gap: 4px;
+ height: 112px;
+ padding: 0;
+ background: var(--card-paper);
+ border: 1.2px solid var(--line-soft);
+ border-bottom: 2.5px solid var(--line-strong);
+ border-radius: 12px;
+ box-shadow: var(--shadow-soft);
+ transition: background-color 0.14s ease, border-color 0.14s ease, transform 0.08s ease;
+ }
+
+ .type-card:hover {
+ background: #fdf9f0;
+ border-color: #b49f83;
+ }
+
+ .type-card:active {
+ transform: translateY(1px);
+ border-color: var(--axis);
+ }
+
+ .type-card.t1 { --tone: var(--tag-1); }
+ .type-card.t2 { --tone: var(--tag-2); }
+ .type-card.t3 { --tone: var(--tag-3); }
+ .type-card.t4 { --tone: var(--tag-4); }
+
+ .type-body {
+ position: relative;
+ z-index: 2;
+ flex: 1 1 auto;
+ min-width: 0;
+ padding: 12px 34px 10px 14px;
+ display: flex;
+ flex-direction: column;
+ justify-content: center;
+ gap: 5px;
+ }
+
+ .type-head {
+ display: flex;
+ align-items: center;
+ gap: 7px;
+ }
+
+ .type-dot {
+ width: 10px;
+ height: 10px;
+ border-radius: 50%;
+ background: var(--tone);
+ flex-shrink: 0;
+ }
+
+ .type-name {
+ font-family: var(--font-serif);
+ font-size: 17.2px;
+ font-weight: 700;
+ color: var(--ink-main);
+ letter-spacing: 0.02em;
+ line-height: 1.2;
+ white-space: nowrap;
+ text-shadow: 0 0 6px rgba(255, 253, 248, 0.95);
+ }
+
+ .type-species {
+ font-family: var(--font-ui);
+ font-size: 11.4px;
+ font-weight: 500;
+ color: var(--ink-muted);
+ letter-spacing: -0.02em;
+ line-height: 1.32;
+ min-height: 30px;
+ padding-left: 17px;
+ white-space: normal;
+ text-shadow: 0 0 6px rgba(255, 253, 248, 0.95);
+ }
+
+ .type-art-wrap {
+ position: absolute;
+ right: -36px;
+ bottom: -44px;
+ width: 120px;
+ height: 120px;
+ pointer-events: none;
+ z-index: 1;
+ display: flex;
+ align-items: flex-end;
+ justify-content: flex-end;
+ }
+
+ .type-card.t2 .type-art-wrap { width: 122px; height: 122px; right: -36px; bottom: -43px; }
+ .type-card.t3 .type-art-wrap { width: 120px; height: 120px; right: -40px; bottom: -45px; }
+ .type-card.t4 .type-art-wrap { width: 118px; height: 118px; right: -38px; bottom: -47px; }
+
+ .type-bg-photo {
+ width: 100%;
+ height: 100%;
+ object-fit: contain;
+ object-position: center bottom;
+ display: block;
+ mix-blend-mode: multiply;
+ opacity: 0.8;
+ pointer-events: none;
+ }
+
+ .type-arrow {
+ position: absolute;
+ top: 9px;
+ right: 9px;
+ z-index: 3;
+ width: 26px;
+ height: 26px;
+ border-radius: 50%;
+ background: rgba(242, 234, 220, 0.94);
+ border: 1.5px solid rgba(94, 71, 54, 0.34);
+ color: var(--axis-dark);
+ font-size: 17px;
+ font-weight: 700;
+ line-height: 1;
+ display: inline-flex;
+ align-items: center;
+ justify-content: center;
+ padding-left: 1.5px;
+ padding-bottom: 1px;
+ box-shadow: 0 1px 4px rgba(59, 45, 35, 0.1);
+ pointer-events: none;
+ }
+
+ .sim-cta-wrap {
+ display: flex;
+ justify-content: center;
+ }
+
+ .sim-cta {
+ display: inline-flex;
+ align-items: center;
+ gap: 10px;
+ padding: 0 32px;
+ height: 48px;
+ background: var(--axis-fill);
+ border: 2px solid var(--axis);
+ border-bottom: 3px solid var(--axis-dark);
+ color: var(--ink-main);
+ border-radius: 999px;
+ font-family: var(--font-ui);
+ font-size: 15.5px;
+ font-weight: 700;
+ letter-spacing: 0.04em;
+ white-space: nowrap;
+ box-shadow: 0 3px 9px rgba(59, 45, 35, 0.12);
+ transition: background-color 0.14s ease, transform 0.08s ease;
+ }
+
+ .sim-cta:hover { background: #e3d4bb; }
+ .sim-cta:active { transform: translateY(1px); }
+ .sim-cta svg { width: 17px; height: 17px; color: var(--axis); }
+
+ .preview-dialog {
+ border: 1.2px solid var(--line-strong);
+ border-radius: 18px;
+ background: var(--card-paper);
+ color: var(--ink-main);
+ padding: 28px 36px;
+ margin: auto;
+ max-width: 86vw;
+ width: 420px;
+ box-shadow: 0 12px 48px rgba(45, 31, 22, 0.2);
+ text-align: center;
+ }
+
+ .preview-dialog::backdrop { background: rgba(45, 31, 22, 0.34); }
+ .preview-dialog h2 { font: 700 26px var(--font-serif); margin-bottom: 12px; color: var(--ink-main); }
+ .preview-dialog p { font-size: 16.5px; font-weight: 700; color: var(--ink-sub); margin: 8px 0; }
+ .preview-dialog small { font-size: 14px; line-height: 1.65; color: var(--ink-muted); display: block; margin: 14px 0 20px; }
+ .preview-dialog button {
+ padding: 10px 30px;
+ border-radius: 999px;
+ border: 1.5px solid var(--axis);
+ border-bottom: 2.5px solid var(--axis-dark);
+ background: var(--axis-fill);
+ color: var(--ink-main);
+ font-size: 14.5px;
+ font-weight: 700;
+ cursor: pointer;
+ }
+ .preview-dialog button:active { transform: translateY(1px); }
+ </style>
 </head>
 <body>
-  <div class="viewport-wrapper">
-    <main class="canvas" id="appCanvas">
+ <div class="viewport-wrapper">
+ <main class="canvas" id="appCanvas">
 
-      <!-- 1. 上部ヘッダー（sim.html と完全統一） -->
-      <header class="page-header">
-        <div class="header-left">
-          <div class="header-nav-group">
-            <button class="back-btn" id="backBtn" type="button">
-              <span aria-hidden="true" class="back-arrow">‹</span>
-              <span>もどる</span>
-            </button>
-            <button class="home-btn" id="topHomeBtn" type="button">
-              <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24">
-                <path d="M3 10.5 12 3l9 7.5"></path>
-                <path d="M5.5 9.5V20h13V9.5"></path>
-              </svg>
-              <span>表紙</span>
-            </button>
-          </div>
-          <div class="title-wrap">
-            <h1 class="page-title">多肉の育て方</h1>
-            <span class="page-en">Basic Care Guide</span>
-          </div>
-        </div>
-      </header>
+ <!-- 1. 上部ヘッダー（sim.html と完全統一） -->
+ <header class="page-header">
+ <div class="header-left">
+ <div class="header-nav-group">
+ <button class="back-btn" id="backBtn" type="button">
+ <span aria-hidden="true" class="back-arrow">‹</span>
+ <span>もどる</span>
+ </button>
+ <button class="home-btn" id="topHomeBtn" type="button">
+ <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24">
+ <path d="M3 10.5 12 3l9 7.5"></path>
+ <path d="M5.5 9.5V20h13V9.5"></path>
+ </svg>
+ <span>表紙</span>
+ </button>
+ </div>
+ <div class="title-wrap">
+ <h1 class="page-title">多肉の育て方</h1>
+ <span class="page-en">Basic Care Guide</span>
+ </div>
+ </div>
+ </header>
 
-      <!-- 2. 左ガイドレーン付き 2ステップ構成 -->
-      <div class="flow-workspace">
-        <!-- ステップ1：基本の5つのポイント -->
-        <div aria-hidden="true" class="rail-cell is-step1">
-          <span class="step-badge">1</span>
-        </div>
-        <section aria-label="ステップ1：基本の5つのポイント" class="step-section">
-          <div class="step-section-head">
-            <h2 class="step-head-title">育て方の5つの基本</h2>
-            <span class="step-head-desc">どの多肉にも共通する大切なこと。気になる項目をタップしてご覧ください。</span>
-          </div>
-          <div class="basics-area care-map">
-            <div class="care-center">
-              <img alt="水彩のたにく丸" data-src="images/cal_wc_spring_happy.jpg" class="auto-img" />
-            </div>
-            <div aria-hidden="true" class="care-lines">
-              <svg preserveAspectRatio="none" viewBox="0 0 982 354">
-                <g fill="none" stroke="#b8a78e" stroke-dasharray="3 6" stroke-linecap="round" stroke-width="1.5">
-                  <path d="M290 70 Q345 70 392 128"></path>
-                  <path d="M692 70 Q637 70 590 128"></path>
-                  <path d="M290 211 Q345 211 392 185"></path>
-                  <path d="M692 211 Q637 211 590 185"></path>
-                  <path d="M491 262v25"></path>
-                </g>
-              </svg>
-            </div>
-            <a class="point-card is-wind left-top" href="basics_wind.html">
-              <div aria-hidden="true" class="point-icon">
-                <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewBox="0 0 24 24">
-                  <path d="M4 9h11a2.5 2.5 0 1 0-2.5-2.5"></path>
-                  <path d="M3 14h15a2.5 2.5 0 1 1-2.5 2.5"></path>
-                  <path d="M5 18h6"></path>
-                </svg>
-              </div>
-              <div class="point-copy">
-                <h3 class="point-name">風通し</h3>
-                <p class="point-phrase">空気がこもらない場所へ</p>
-              </div>
-              <span aria-hidden="true" class="point-arrow">›</span>
-            </a>
-            <a class="point-card is-light right-top" href="basics_light.html">
-              <div aria-hidden="true" class="point-icon">
-                <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewBox="0 0 24 24">
-                  <circle cx="12" cy="12" r="4.2"></circle>
-                  <line x1="12" x2="12" y1="2.5" y2="5"></line>
-                  <line x1="12" x2="12" y1="19" y2="21.5"></line>
-                  <line x1="2.5" x2="5" y1="12" y2="12"></line>
-                  <line x1="19" x2="21.5" y1="12" y2="12"></line>
-                  <line x1="5.3" x2="7.1" y1="5.3" y2="7.1"></line>
-                  <line x1="16.9" x2="18.7" y1="16.9" y2="18.7"></line>
-                  <line x1="18.7" x2="16.9" y1="5.3" y2="7.1"></line>
-                  <line x1="7.1" x2="5.3" y1="16.9" y2="18.7"></line>
-                </svg>
-              </div>
-              <div class="point-copy">
-                <h3 class="point-name">日当たり</h3>
-                <p class="point-phrase">明るさを確保する</p>
-              </div>
-              <span aria-hidden="true" class="point-arrow">›</span>
-            </a>
-            <a class="point-card is-water left-bottom" href="basics_water.html">
-              <div aria-hidden="true" class="point-icon">
-                <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewBox="0 0 24 24">
-                  <path d="M12 3.5C12 3.5 6 10.2 6 14.5a6 6 0 0 0 12 0C18 10.2 12 3.5 12 3.5Z"></path>
-                  <path d="M9.5 15a2.5 2.5 0 0 0 2.5 2.5"></path>
-                </svg>
-              </div>
-              <div class="point-copy">
-                <h3 class="point-name">水やり</h3>
-                <p class="point-phrase">土の乾きと葉のサインで</p>
-              </div>
-              <span aria-hidden="true" class="point-arrow">›</span>
-            </a>
-            <a class="point-card is-earth right-bottom" href="basics_soil.html">
-              <div aria-hidden="true" class="point-icon">
-                <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewBox="0 0 24 24">
-                  <path d="M5 9h14l-1.5 10.5a1.5 1.5 0 0 1-1.5 1.3H8a1.5 1.5 0 0 1-1.5-1.3L5 9Z"></path>
-                  <path d="M4 9h16"></path>
-                  <path d="M7.5 9c1-2.5 3-3.5 4.5-3.5S15.5 6.5 16.5 9"></path>
-                </svg>
-              </div>
-              <div class="point-copy">
-                <h3 class="point-name">土と鉢</h3>
-                <p class="point-phrase">環境に合う乾きやすさを</p>
-              </div>
-              <span aria-hidden="true" class="point-arrow">›</span>
-            </a>
-            <a class="point-card is-earth center-bottom" href="basics_fertilizer.html">
-              <div aria-hidden="true" class="point-icon">
-                <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewBox="0 0 24 24">
-                  <path d="M12 20v-8"></path>
-                  <path d="M12 12c0-4.2-3.2-6.5-7-6.5 0 3.8 2.3 6.5 7 6.5Z"></path>
-                  <path d="M12 14c0-3.8 2.8-6 6.5-6 0 3.5-2 6-6.5 6Z"></path>
-                </svg>
-              </div>
-              <div class="point-copy">
-                <h3 class="point-name">肥料・活力剤</h3>
-                <p class="point-phrase">必要なときに、控えめに</p>
-              </div>
-              <span aria-hidden="true" class="point-arrow">›</span>
-            </a>
-          </div>
-        </section>
+ <!-- 2. 左ガイドレーン付き 2ステップ構成 -->
+ <div class="flow-workspace">
+ <!-- ステップ1：基本の5つのポイント -->
+ <div aria-hidden="true" class="rail-cell is-step1">
+ <span class="step-badge">1</span>
+ </div>
+ <section aria-label="ステップ1：基本の5つのポイント" class="step-section">
+ <div class="step-section-head">
+ <h2 class="step-head-title">育て方の5つの基本</h2>
+ <span class="step-head-desc">どの多肉にも共通する大切なこと。気になる項目をタップしてご覧ください。</span>
+ </div>
+ <div class="basics-area care-map">
+ <div class="care-center">
+ <img alt="水彩のたにく丸" data-src="images/cal_wc_spring_happy.jpg" class="auto-img" />
+ </div>
+ <div aria-hidden="true" class="care-lines">
+ <svg preserveAspectRatio="none" viewBox="0 0 982 354">
+ <g fill="none" stroke="#b8a78e" stroke-dasharray="3 6" stroke-linecap="round" stroke-width="1.5">
+ <path d="M290 70 Q345 70 392 128"></path>
+ <path d="M692 70 Q637 70 590 128"></path>
+ <path d="M290 211 Q345 211 392 185"></path>
+ <path d="M692 211 Q637 211 590 185"></path>
+ <path d="M491 262v25"></path>
+ </g>
+ </svg>
+ </div>
+ <a class="point-card is-wind left-top" href="basics_wind.html">
+ <div aria-hidden="true" class="point-icon">
+ <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewBox="0 0 24 24">
+ <path d="M4 9h11a2.5 2.5 0 1 0-2.5-2.5"></path>
+ <path d="M3 14h15a2.5 2.5 0 1 1-2.5 2.5"></path>
+ <path d="M5 18h6"></path>
+ </svg>
+ </div>
+ <div class="point-copy">
+ <h3 class="point-name">風通し</h3>
+ <p class="point-phrase">空気がこもらない場所へ</p>
+ </div>
+ <span aria-hidden="true" class="point-arrow">›</span>
+ </a>
+ <a class="point-card is-light right-top" href="basics_light.html">
+ <div aria-hidden="true" class="point-icon">
+ <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewBox="0 0 24 24">
+ <circle cx="12" cy="12" r="4.2"></circle>
+ <line x1="12" x2="12" y1="2.5" y2="5"></line>
+ <line x1="12" x2="12" y1="19" y2="21.5"></line>
+ <line x1="2.5" x2="5" y1="12" y2="12"></line>
+ <line x1="19" x2="21.5" y1="12" y2="12"></line>
+ <line x1="5.3" x2="7.1" y1="5.3" y2="7.1"></line>
+ <line x1="16.9" x2="18.7" y1="16.9" y2="18.7"></line>
+ <line x1="18.7" x2="16.9" y1="5.3" y2="7.1"></line>
+ <line x1="7.1" x2="5.3" y1="16.9" y2="18.7"></line>
+ </svg>
+ </div>
+ <div class="point-copy">
+ <h3 class="point-name">日当たり</h3>
+ <p class="point-phrase">明るさを確保する</p>
+ </div>
+ <span aria-hidden="true" class="point-arrow">›</span>
+ </a>
+ <a class="point-card is-water left-bottom" href="basics_water.html">
+ <div aria-hidden="true" class="point-icon">
+ <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewBox="0 0 24 24">
+ <path d="M12 3.5C12 3.5 6 10.2 6 14.5a6 6 0 0 0 12 0C18 10.2 12 3.5 12 3.5Z"></path>
+ <path d="M9.5 15a2.5 2.5 0 0 0 2.5 2.5"></path>
+ </svg>
+ </div>
+ <div class="point-copy">
+ <h3 class="point-name">水やり</h3>
+ <p class="point-phrase">土の乾きと葉のサインで</p>
+ </div>
+ <span aria-hidden="true" class="point-arrow">›</span>
+ </a>
+ <a class="point-card is-earth right-bottom" href="basics_soil.html">
+ <div aria-hidden="true" class="point-icon">
+ <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewBox="0 0 24 24">
+ <path d="M5 9h14l-1.5 10.5a1.5 1.5 0 0 1-1.5 1.3H8a1.5 1.5 0 0 1-1.5-1.3L5 9Z"></path>
+ <path d="M4 9h16"></path>
+ <path d="M7.5 9c1-2.5 3-3.5 4.5-3.5S15.5 6.5 16.5 9"></path>
+ </svg>
+ </div>
+ <div class="point-copy">
+ <h3 class="point-name">土と鉢</h3>
+ <p class="point-phrase">環境に合う乾きやすさを</p>
+ </div>
+ <span aria-hidden="true" class="point-arrow">›</span>
+ </a>
+ <a class="point-card is-earth center-bottom" href="basics_fertilizer.html">
+ <div aria-hidden="true" class="point-icon">
+ <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewBox="0 0 24 24">
+ <path d="M12 20v-8"></path>
+ <path d="M12 12c0-4.2-3.2-6.5-7-6.5 0 3.8 2.3 6.5 7 6.5Z"></path>
+ <path d="M12 14c0-3.8 2.8-6 6.5-6 0 3.5-2 6-6.5 6Z"></path>
+ </svg>
+ </div>
+ <div class="point-copy">
+ <h3 class="point-name">肥料・活力剤</h3>
+ <p class="point-phrase">必要なときに、控えめに</p>
+ </div>
+ <span aria-hidden="true" class="point-arrow">›</span>
+ </a>
+ </div>
+ </section>
 
-        <!-- ステップ2：タイプと季節に合わせる -->
-        <div aria-hidden="true" class="rail-cell is-step2">
-          <span class="step-badge">2</span>
-        </div>
-        <section aria-label="ステップ2：タイプと季節で調整する" class="step-section">
-          <div class="step-section-head">
-            <h2 class="step-head-title">タイプと季節に合わせる</h2>
-            <span class="step-head-desc">※わからないときは、お気軽にスタッフまで</span>
-          </div>
-          <div class="season-area">
-            <div class="type-grid">
-              <a class="type-card t1" href="type_spring_autumn.html">
-                <div class="type-body">
-                  <div class="type-head">
-                    <span aria-hidden="true" class="type-dot"></span>
-                    <span class="type-name">春秋元気タイプ</span>
-                  </div>
-                  <span class="type-species">エケベリア・セダム<br />グラプトペタルム など</span>
-                </div>
-                <div aria-hidden="true" class="type-art-wrap">
-                  <img alt="" class="type-bg-photo auto-img" data-src="images/type_card_sun_main.jpg" />
-                </div>
-                <span aria-hidden="true" class="type-arrow">›</span>
-              </a>
-              <a class="type-card t2" href="type_cool.html">
-                <div class="type-body">
-                  <div class="type-head">
-                    <span aria-hidden="true" class="type-dot"></span>
-                    <span class="type-name">夏お休みタイプ</span>
-                  </div>
-                  <span class="type-species">アエオニウム など</span>
-                </div>
-                <div aria-hidden="true" class="type-art-wrap">
-                  <img alt="" class="type-bg-photo auto-img" data-src="images/type_card_sun_cool.jpg" />
-                </div>
-                <span aria-hidden="true" class="type-arrow">›</span>
-              </a>
-              <a class="type-card t3" href="type_warm.html">
-                <div class="type-body">
-                  <div class="type-head">
-                    <span aria-hidden="true" class="type-dot"></span>
-                    <span class="type-name">寒さ苦手タイプ</span>
-                  </div>
-                  <span class="type-species">カランコエ など</span>
-                </div>
-                <div aria-hidden="true" class="type-art-wrap">
-                  <img alt="" class="type-bg-photo auto-img" data-src="images/type_card_sun_warm.jpg" />
-                </div>
-                <span aria-hidden="true" class="type-arrow">›</span>
-              </a>
-              <a class="type-card t4" href="type_soft_light.html">
-                <div class="type-body">
-                  <div class="type-head">
-                    <span aria-hidden="true" class="type-dot"></span>
-                    <span class="type-name">やさしい光タイプ</span>
-                  </div>
-                  <span class="type-species">ハオルチア・ガステリア<br />ハオルチオプシス など</span>
-                </div>
-                <div aria-hidden="true" class="type-art-wrap">
-                  <img alt="" class="type-bg-photo auto-img" data-src="images/type_card_shade_main.jpg" />
-                </div>
-                <span aria-hidden="true" class="type-arrow">›</span>
-              </a>
-            </div>
-            <div class="sim-cta-wrap">
-              <a class="sim-cta" href="sim.html?from=basics" id="simCtaLink">
-                <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.9" viewBox="0 0 24 24">
-                  <path d="M4 7h16M4 12h16M4 17h16"></path>
-                  <circle cx="9" cy="7" fill="currentColor" r="2"></circle>
-                  <circle cx="15" cy="12" fill="currentColor" r="2"></circle>
-                  <circle cx="11" cy="17" fill="currentColor" r="2"></circle>
-                </svg>
-                <span>光・風・水を試してみる</span>
-                <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24">
-                  <path d="M5 12h14m-6-6 6 6-6 6"></path>
-                </svg>
-              </a>
-            </div>
-          </div>
-        </section>
-      </div>
-    </main>
-  </div>
+ <!-- ステップ2：タイプと季節に合わせる -->
+ <div aria-hidden="true" class="rail-cell is-step2">
+ <span class="step-badge">2</span>
+ </div>
+ <section aria-label="ステップ2：タイプと季節で調整する" class="step-section">
+ <div class="step-section-head">
+ <h2 class="step-head-title">タイプと季節に合わせる</h2>
+ <span class="step-head-desc">※わからないときは、お気軽にスタッフまで</span>
+ </div>
+ <div class="season-area">
+ <div class="type-grid">
+ <a class="type-card t1" href="type_spring_autumn.html">
+ <div class="type-body">
+ <div class="type-head">
+ <span aria-hidden="true" class="type-dot"></span>
+ <span class="type-name">春秋元気タイプ</span>
+ </div>
+ <span class="type-species">エケベリア・セダム<br />グラプトペタルム など</span>
+ </div>
+ <div aria-hidden="true" class="type-art-wrap">
+ <img alt="" class="type-bg-photo auto-img" data-src="images/type_card_sun_main.jpg" />
+ </div>
+ <span aria-hidden="true" class="type-arrow">›</span>
+ </a>
+ <a class="type-card t2" href="type_cool.html">
+ <div class="type-body">
+ <div class="type-head">
+ <span aria-hidden="true" class="type-dot"></span>
+ <span class="type-name">夏お休みタイプ</span>
+ </div>
+ <span class="type-species">アエオニウム など</span>
+ </div>
+ <div aria-hidden="true" class="type-art-wrap">
+ <img alt="" class="type-bg-photo auto-img" data-src="images/type_card_sun_cool.jpg" />
+ </div>
+ <span aria-hidden="true" class="type-arrow">›</span>
+ </a>
+ <a class="type-card t3" href="type_warm.html">
+ <div class="type-body">
+ <div class="type-head">
+ <span aria-hidden="true" class="type-dot"></span>
+ <span class="type-name">寒さ苦手タイプ</span>
+ </div>
+ <span class="type-species">カランコエ など</span>
+ </div>
+ <div aria-hidden="true" class="type-art-wrap">
+ <img alt="" class="type-bg-photo auto-img" data-src="images/type_card_sun_warm.jpg" />
+ </div>
+ <span aria-hidden="true" class="type-arrow">›</span>
+ </a>
+ <a class="type-card t4" href="type_soft_light.html">
+ <div class="type-body">
+ <div class="type-head">
+ <span aria-hidden="true" class="type-dot"></span>
+ <span class="type-name">やさしい光タイプ</span>
+ </div>
+ <span class="type-species">ハオルチア・ガステリア<br />ハオルチオプシス など</span>
+ </div>
+ <div aria-hidden="true" class="type-art-wrap">
+ <img alt="" class="type-bg-photo auto-img" data-src="images/type_card_shade_main.jpg" />
+ </div>
+ <span aria-hidden="true" class="type-arrow">›</span>
+ </a>
+ </div>
+ <div class="sim-cta-wrap">
+ <a class="sim-cta" href="sim.html?from=basics" id="simCtaLink">
+ <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.9" viewBox="0 0 24 24">
+ <path d="M4 7h16M4 12h16M4 17h16"></path>
+ <circle cx="9" cy="7" fill="currentColor" r="2"></circle>
+ <circle cx="15" cy="12" fill="currentColor" r="2"></circle>
+ <circle cx="11" cy="17" fill="currentColor" r="2"></circle>
+ </svg>
+ <span>光・風・水を試してみる</span>
+ <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24">
+ <path d="M5 12h14m-6-6 6 6-6 6"></path>
+ </svg>
+ </a>
+ </div>
+ </div>
+ </section>
+ </div>
+ </main>
+ </div>
 
-  <dialog class="preview-dialog" id="pointPreview">
-    <h2 id="previewTitle"></h2>
-    <p id="previewPhrase"></p>
-    <small>くわしい解説ページはただいま準備中です。<br />少しずつ書き足していく予定ですので、どうぞお楽しみに！</small>
-    <button id="previewClose" type="button">閉じる</button>
-  </dialog>
+ <dialog class="preview-dialog" id="pointPreview">
+ <h2 id="previewTitle"></h2>
+ <p id="previewPhrase"></p>
+ <small>くわしい解説ページはただいま準備中です。<br />少しずつ書き足していく予定ですので、どうぞお楽しみに！</small>
+ <button id="previewClose" type="button">閉じる</button>
+ </dialog>
 
-  <script>
-    function fitCanvas() {
-      const canvas = document.getElementById("appCanvas");
-      const scale = Math.min(window.innerWidth / 1080, window.innerHeight / 786);
-      if (window.CSS && CSS.supports && CSS.supports("zoom", "1")) {
-        canvas.style.zoom = scale;
-        canvas.style.transform = "none";
-      } else {
-        canvas.style.zoom = "";
-        canvas.style.transform = `scale(${scale})`;
-      }
-    }
-    window.addEventListener("resize", fitCanvas);
-    window.addEventListener("orientationchange", fitCanvas);
-    fitCanvas();
+ <script>
+ function fitCanvas() {
+ const canvas = document.getElementById("appCanvas");
+ const scale = Math.min(window.innerWidth / 1080, window.innerHeight / 786);
+ if (window.CSS && CSS.supports && CSS.supports("zoom", "1")) {
+ canvas.style.zoom = scale;
+ canvas.style.transform = "none";
+ } else {
+ canvas.style.zoom = "";
+ canvas.style.transform = `scale(${scale})`;
+ }
+ }
+ window.addEventListener("resize", fitCanvas);
+ window.addEventListener("orientationchange", fitCanvas);
+ fitCanvas();
 
-    // 外部画像の読み込み（version2直下・試作フォルダ・親フォルダ・version1を自動探索）
-    (function loadAutoImages() {
-      const prefixes = ["", "多肉の育て方｜操作できる試作/", "../", "../version1/"];
-      document.querySelectorAll(".auto-img[data-src]").forEach((img) => {
-        const rel = img.dataset.src;
-        let idx = 0;
-        function tryNext() {
-          if (idx >= prefixes.length) {
-            img.onerror = null;
-            img.style.display = "none";
-            return;
-          }
-          img.onerror = tryNext;
-          img.src = prefixes[idx++] + rel;
-        }
-        tryNext();
-      });
-    })();
+ // 外部画像の読み込み（version2直下・試作フォルダ・親フォルダ・version1を自動探索）
+ (function loadAutoImages() {
+ const prefixes = ["", "多肉の育て方｜操作できる試作/", "../", "../version1/"];
+ document.querySelectorAll(".auto-img[data-src]").forEach((img) => {
+ const rel = img.dataset.src;
+ let idx = 0;
+ function tryNext() {
+ if (idx >= prefixes.length) {
+ img.onerror = null;
+ img.style.display = "none";
+ return;
+ }
+ img.onerror = tryNext;
+ img.src = prefixes[idx++] + rel;
+ }
+ tryNext();
+ });
+ })();
 
-    const params = new URLSearchParams(window.location.search);
-    const qMonth = params.get("month");
+ const params = new URLSearchParams(window.location.search);
+ const qMonth = params.get("month");
 
-    document.getElementById("backBtn").addEventListener("click", () => {
-      const from = params.get("from");
-      if (from === "sim") {
-        const next = new URLSearchParams();
-        ["type", "season", "light", "wind", "water", "month"].forEach((k) => {
-          const v = params.get(k);
-          if (v) next.set(k, v);
-        });
-        const qs = next.toString();
-        window.location.href = qs ? `sim.html?${qs}` : "sim.html";
-        return;
-      }
-      if (from === "sos") {
-        const next = new URLSearchParams();
-        const qSosFrom = params.get("sosFrom");
-        if (qSosFrom) next.set("from", qSosFrom);
-        ["sym", "choice", "type", "season", "light", "wind", "water", "month"].forEach((k) => {
-          const v = params.get(k);
-          if (v) next.set(k, v);
-        });
-        const qs = next.toString();
-        window.location.href = qs ? `sos.html?${qs}` : "sos.html";
-        return;
-      }
-      window.location.href = qMonth ? `index.html?month=${encodeURIComponent(qMonth)}` : "index.html";
-    });
+ document.getElementById("backBtn").addEventListener("click", () => {
+ const from = params.get("from");
+ if (from === "sim") {
+ const next = new URLSearchParams();
+ ["type", "season", "light", "wind", "water", "month"].forEach((k) => {
+ const v = params.get(k);
+ if (v) next.set(k, v);
+ });
+ const qs = next.toString();
+ window.location.href = qs ? `sim.html?${qs}` : "sim.html";
+ return;
+ }
+ if (from === "sos") {
+ const next = new URLSearchParams();
+ const qSosFrom = params.get("sosFrom");
+ if (qSosFrom) next.set("from", qSosFrom);
+ ["sym", "choice", "type", "season", "light", "wind", "water", "month"].forEach((k) => {
+ const v = params.get(k);
+ if (v) next.set(k, v);
+ });
+ const qs = next.toString();
+ window.location.href = qs ? `sos.html?${qs}` : "sos.html";
+ return;
+ }
+ window.location.href = qMonth ? `index.html?month=${encodeURIComponent(qMonth)}` : "index.html";
+ });
 
-    document.getElementById("topHomeBtn").addEventListener("click", () => {
-      window.location.href = qMonth ? `index.html?month=${encodeURIComponent(qMonth)}` : "index.html";
-    });
+ document.getElementById("topHomeBtn").addEventListener("click", () => {
+ window.location.href = qMonth ? `index.html?month=${encodeURIComponent(qMonth)}` : "index.html";
+ });
 
-    const simCta = document.getElementById("simCtaLink");
-    if (simCta) {
-      const simParams = new URLSearchParams();
-      simParams.set("from", "basics");
-      if (qMonth) simParams.set("month", qMonth);
-      simCta.setAttribute("href", `sim.html?${simParams.toString()}`);
-    }
+ const simCta = document.getElementById("simCtaLink");
+ if (simCta) {
+ const simParams = new URLSearchParams();
+ simParams.set("from", "basics");
+ if (qMonth) simParams.set("month", qMonth);
+ simCta.setAttribute("href", `sim.html?${simParams.toString()}`);
+ }
 
-    if (qMonth) {
-      document.querySelectorAll("a[href]").forEach((a) => {
-        if (a.id === "simCtaLink") return;
-        const href = a.getAttribute("href");
-        if (href && href.endsWith(".html")) {
-          a.setAttribute("href", `${href}?month=${encodeURIComponent(qMonth)}`);
-        }
-      });
-    }
+ if (qMonth) {
+ document.querySelectorAll("a[href]").forEach((a) => {
+ if (a.id === "simCtaLink") return;
+ const href = a.getAttribute("href");
+ if (href && href.endsWith(".html")) {
+ a.setAttribute("href", `${href}?month=${encodeURIComponent(qMonth)}`);
+ }
+ });
+ }
 
-    const AUTO_RETURN_MS = 0;
-    if (AUTO_RETURN_MS) {
-      let idleTimer = null;
-      function resetIdleTimer() {
-        clearTimeout(idleTimer);
-        idleTimer = setTimeout(() => { window.location.href = "index.html"; }, AUTO_RETURN_MS);
-      }
-      ["pointerdown", "touchstart", "click", "keydown", "scroll"].forEach((ev) => {
-        window.addEventListener(ev, resetIdleTimer, { passive: true });
-      });
-      resetIdleTimer();
-    }
+ const AUTO_RETURN_MS = 300000;
+ if (AUTO_RETURN_MS) {
+ let idleTimer = null;
+ function resetIdleTimer() {
+ clearTimeout(idleTimer);
+ idleTimer = setTimeout(() => { window.location.href = "index.html"; }, AUTO_RETURN_MS);
+ }
+ ["pointerdown", "touchstart", "click", "keydown", "scroll"].forEach((ev) => {
+ window.addEventListener(ev, resetIdleTimer, { passive: true });
+ });
+ resetIdleTimer();
+ }
 
-    const d = document.getElementById("pointPreview");
-    document.querySelectorAll(".care-map .point-card.is-wip").forEach((a) => {
-      a.addEventListener("click", (e) => {
-        e.preventDefault();
-        document.getElementById("previewTitle").textContent = a.querySelector(".point-name").textContent;
-        document.getElementById("previewPhrase").textContent = a.querySelector(".point-phrase").textContent;
-        d.showModal();
-      });
-    });
-    document.getElementById("previewClose").addEventListener("click", () => d.close());
-    d.addEventListener("click", (e) => {
-      if (e.target === d) {
-        const r = d.getBoundingClientRect();
-        if (e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom) d.close();
-      }
-    });
-  </script>
+ const d = document.getElementById("pointPreview");
+ document.querySelectorAll(".care-map .point-card.is-wip").forEach((a) => {
+ a.addEventListener("click", (e) => {
+ e.preventDefault();
+ document.getElementById("previewTitle").textContent = a.querySelector(".point-name").textContent;
+ document.getElementById("previewPhrase").textContent = a.querySelector(".point-phrase").textContent;
+ d.showModal();
+ });
+ });
+ document.getElementById("previewClose").addEventListener("click", () => d.close());
+ d.addEventListener("click", (e) => {
+ if (e.target === d) {
+ const r = d.getBoundingClientRect();
+ if (e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom) d.close();
+ }
+ });
+ </script>
 </body>
 </html>

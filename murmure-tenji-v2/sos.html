@@ -5,12 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
 
   <!-- =========================================================================
-    保木平珈琲 Murmure｜展示用iPad Webアプリ「困ったときのSOS」（v2・表現＆導線改善版）
-    - basics.html / sim.html / index.html と完全統一した「温かいクリーム紙 × こげ茶インク × 明朝見出し × 淡面＋枠線」
-    - ヘッダー寸法（上14px・左右24px・ボタン高さ40px・明朝25px・下線1px）を全ページ完全一致
-    - シワシワ（乾いている側）の断定をやわらげ、根の確認を追記／害虫予防を新株チェックへ更新
-    - 関連ガイドを5つの基本ページ（basics_water / basics_light / basics_wind / basics_soil）へ直リンク化
-    - 5つの基本ページ（basics_*）からの「もどる」復帰に対応
+    保木平珈琲 Murmure｜展示用iPad Webアプリ「困ったときのSOS」（v2・縦スクロール＆引き算版）
+    - 左リスト：アイコン＋症状名のみのすっきりリスト
+    - 右紙面：1問チェック → 結論（質問と同じ明朝見出し＋1行補足）→ 行動リスト（見出しなし）→ これはNG（淡赤ゾーン）
+    - 右カード内を縦スクロール対応にし、下端で「これはNG」が見切れてスクロール可能と伝わる設計
+    - 5つの基本ページ直リンク・sim.html からの症状引き継ぎ・戻り導線を完全維持
   ========================================================================= -->
 
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -33,43 +32,29 @@
       --bg-outer: #e9dfd0;
       --bg-paper: #f6f0e4;
       --card-paper: #fffdf8;
-      --surface-muted: #faf6ed;
+      --surface-muted: #f7f1e5;
       --ink-main: #2d1f16;
-      --ink-sub: #4e3d30;
-      --ink-muted: #6e5c4d;
+      --ink-sub: #4f3f33;
+      --ink-muted: #786758;
       --line-soft: #d7c7ad;
       --line-strong: #c2ae8e;
-      --line-hair: rgba(180, 162, 134, 0.42);
+      --line-hair: rgba(168, 148, 120, 0.42);
 
       --axis: #5e4736;
       --axis-dark: #453326;
       --axis-soft: #f2eadc;
       --axis-fill: #ebe0cc;
-      --rail-color: #78604e;
 
-      --sos-color: #a6432e;
-      --sos-deep: #7d2c1b;
-      --sos-tint: #fdf4f2;
-      --sos-soft: rgba(166, 67, 46, 0.11);
-      --sos-bd: rgba(166, 67, 46, 0.34);
+      --sos-color: #a63d28;
+      --sos-deep: #7d2918;
+      --sos-tint: #fcf3f0;
+      --sos-bd: rgba(166, 61, 40, 0.28);
 
-      --ok-color: #4d6b38;
-      --ok-deep: #344d23;
-      --ok-tint: #f4f8f1;
-      --ok-soft: rgba(77, 107, 56, 0.12);
-      --ok-bd: rgba(77, 107, 56, 0.34);
+      --ok-color: #3f632d;
+      --ok-deep: #2c4a1e;
 
-      --check-color: #3f6f8a;
-      --check-deep: #294e63;
-      --check-tint: #f1f6f9;
-      --check-soft: rgba(63, 111, 138, 0.11);
-      --check-bd: rgba(63, 111, 138, 0.34);
-
-      --amber-color: #9e5612;
-      --amber-deep: #783f0a;
-      --amber-tint: #fbf6ee;
-      --amber-soft: rgba(158, 86, 18, 0.12);
-      --amber-bd: rgba(158, 86, 18, 0.34);
+      --check-color: #3a6882;
+      --check-deep: #26495e;
 
       --shadow-soft: 0 2px 10px rgba(72, 54, 38, 0.055);
       --font-serif: "Shippori Mincho", "Hiragino Mincho ProN", "Yu Mincho", serif;
@@ -132,10 +117,10 @@
       min-height: 786px;
       background: linear-gradient(135deg, #f9f5e9, #f2ead9);
       transform-origin: center center;
-      padding: 14px 24px 16px;
+      padding: 14px 24px 18px;
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 14px;
       box-shadow: 0 12px 36px rgba(59, 45, 35, 0.14);
       overflow: hidden;
     }
@@ -150,6 +135,7 @@
       opacity: 0.7;
     }
 
+    /* ================= 1. 共通ヘッダー ================= */
     .page-header {
       position: relative;
       z-index: 2;
@@ -243,15 +229,16 @@
       color: var(--ink-muted);
     }
 
+    /* ================= 2. ワークスペース ================= */
     .sos-workspace {
       position: relative;
       z-index: 2;
       flex: 1 1 auto;
       min-height: 0;
       display: grid;
-      grid-template-columns: 342px 1fr;
-      gap: 18px;
-      padding-top: 4px;
+      grid-template-columns: 312px 1fr;
+      gap: 20px;
+      padding-top: 2px;
     }
 
     .symptom-col,
@@ -266,20 +253,19 @@
     .col-lead {
       display: flex;
       align-items: center;
-      gap: 9px;
+      gap: 8px;
       padding: 0 2px;
       flex-shrink: 0;
     }
 
     .col-step-num {
-      width: 26px;
-      height: 26px;
+      width: 24px;
+      height: 24px;
       border-radius: 50%;
-      background: var(--rail-color);
-      border: 2px solid var(--bg-paper);
-      color: #ffffff;
+      background: var(--axis);
+      color: #fffdf8;
       font-family: var(--font-ui);
-      font-size: 13.5px;
+      font-size: 13px;
       font-weight: 700;
       display: inline-flex;
       align-items: center;
@@ -289,13 +275,14 @@
 
     .col-lead-title {
       font-family: var(--font-serif);
-      font-size: 18.5px;
+      font-size: 17.5px;
       font-weight: 700;
       letter-spacing: 0.04em;
       color: var(--ink-main);
-      line-height: 1.25;
+      line-height: 1.2;
     }
 
+    /* ================= 3. 左カラム：補足なしのすっきりリスト ================= */
     .symptom-list {
       flex: 1 1 auto;
       display: flex;
@@ -308,23 +295,21 @@
     .symptom-btn {
       flex: 1 1 0;
       width: 100%;
-      background: rgba(255, 253, 248, 0.94);
-      border: 1.2px solid var(--line-soft);
+      background: rgba(255, 253, 248, 0.78);
+      border: 1px solid var(--line-soft);
       border-bottom: 2px solid var(--line-strong);
-      border-radius: 13px;
-      padding: 8px 13px 8px 12px;
+      border-radius: 12px;
+      padding: 8px 14px 8px 13px;
       display: flex;
       align-items: center;
       gap: 12px;
       text-align: left;
       cursor: pointer;
-      box-shadow: var(--shadow-soft);
-      transition: transform 0.08s ease, background-color 0.14s ease, border-color 0.14s ease;
-      position: relative;
+      transition: background-color 0.14s ease, border-color 0.14s ease, transform 0.08s ease;
     }
 
     .symptom-btn:hover:not(.is-active) {
-      background: #fffdf8;
+      background: var(--card-paper);
       border-color: #b49f83;
     }
 
@@ -332,18 +317,18 @@
 
     .symptom-btn.is-active {
       background: var(--axis-fill);
-      border: 1.8px solid var(--axis);
+      border: 1.6px solid var(--axis);
       border-left: 5px solid var(--sos-color);
-      border-bottom: 2.8px solid var(--axis-dark);
-      box-shadow: 0 3px 10px rgba(59, 45, 35, 0.11);
+      border-bottom: 2.6px solid var(--axis-dark);
+      box-shadow: 0 3px 10px rgba(59, 45, 35, 0.1);
     }
 
     .sym-icon-wrap {
-      width: 44px;
-      height: 44px;
+      width: 42px;
+      height: 42px;
       border-radius: 50%;
       background: var(--surface-muted);
-      border: 1.2px solid var(--line-soft);
+      border: 1px solid var(--line-soft);
       display: inline-flex;
       align-items: center;
       justify-content: center;
@@ -352,79 +337,49 @@
 
     .symptom-btn.is-active .sym-icon-wrap {
       background: var(--card-paper);
-      border-color: rgba(166, 67, 46, 0.34);
+      border-color: var(--sos-bd);
     }
 
     .sym-icon-wrap svg {
-      width: 28px;
-      height: 28px;
-    }
-
-    .sym-btn-text {
-      display: flex;
-      flex-direction: column;
-      gap: 3px;
-      min-width: 0;
-      flex: 1;
+      width: 26px;
+      height: 26px;
     }
 
     .sym-btn-title {
+      flex: 1;
+      min-width: 0;
       font-family: var(--font-serif);
-      font-size: 16.8px;
+      font-size: 17.5px;
       font-weight: 700;
       letter-spacing: 0.02em;
       color: var(--ink-main);
-      line-height: 1.22;
+      line-height: 1.25;
       white-space: nowrap;
     }
-
-    .sym-btn-sub {
-      font-family: var(--font-ui);
-      font-size: 12px;
-      font-weight: 500;
-      color: var(--ink-muted);
-      line-height: 1.2;
-      white-space: nowrap;
-    }
-
-    .symptom-btn.is-active .sym-btn-sub { color: var(--ink-sub); }
 
     .sym-btn-arrow {
-      width: 22px;
-      height: 22px;
-      border-radius: 50%;
-      background: var(--axis-soft);
-      border: 1px solid rgba(94, 71, 54, 0.25);
-      color: var(--ink-muted);
-      font-family: var(--font-ui);
-      font-size: 15px;
+      font-size: 18px;
       font-weight: 700;
       line-height: 1;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      padding-left: 1.5px;
-      padding-bottom: 1px;
+      color: rgba(117, 100, 85, 0.5);
       flex-shrink: 0;
     }
 
     .symptom-btn.is-active .sym-btn-arrow {
-      background: var(--card-paper);
-      border-color: var(--sos-bd);
       color: var(--sos-color);
     }
 
+    /* ================= 4. 右カラム：縦スクロール対応の一本道紙面 ================= */
     .detail-card {
       flex: 1 1 auto;
-      background: rgba(255, 253, 248, 0.96);
-      border: 1.2px solid var(--line-soft);
-      border-bottom: 2.5px solid var(--line-strong);
+      background: var(--card-paper);
+      border: 1px solid var(--line-soft);
+      border-bottom: 2px solid var(--line-strong);
       border-radius: 16px;
-      padding: 18px 22px 18px;
+      padding: 20px 0 0;
       box-shadow: var(--shadow-soft);
       display: flex;
       flex-direction: column;
-      gap: 14px;
       min-height: 0;
       overflow: hidden;
     }
@@ -433,329 +388,182 @@
       display: flex;
       align-items: center;
       gap: 14px;
-      padding-bottom: 12px;
-      border-bottom: 1px dashed var(--line-hair);
+      margin: 0 28px;
+      padding-bottom: 13px;
+      border-bottom: 1px solid var(--line-hair);
       flex-shrink: 0;
     }
 
     .detail-icon-big {
-      width: 54px;
-      height: 54px;
+      width: 48px;
+      height: 48px;
       border-radius: 50%;
-      background: var(--sos-tint);
-      border: 1.5px solid var(--sos-bd);
+      background: var(--surface-muted);
+      border: 1px solid var(--line-soft);
       display: inline-flex;
       align-items: center;
       justify-content: center;
       flex-shrink: 0;
     }
 
-    .detail-icon-big svg { width: 34px; height: 34px; }
-
-    .detail-title-group {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-      min-width: 0;
-    }
+    .detail-icon-big svg { width: 29px; height: 29px; }
 
     .detail-title {
       font-family: var(--font-serif);
-      font-size: 24px;
+      font-size: 25px;
       font-weight: 700;
       letter-spacing: 0.04em;
       color: var(--ink-main);
       line-height: 1.2;
     }
 
-    .detail-term {
-      font-family: var(--font-ui);
-      font-size: 13px;
-      font-weight: 500;
-      color: var(--ink-muted);
-      line-height: 1.2;
-    }
-
-    .check-box {
-      background: var(--check-tint);
-      border: 1.2px solid var(--check-bd);
-      border-radius: 12px;
-      padding: 12px 15px;
+    .detail-scroll {
+      flex: 1 1 auto;
+      min-height: 0;
+      overflow-y: auto;
+      overflow-x: hidden;
+      padding: 18px 28px 26px;
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 20px;
+      -webkit-overflow-scrolling: touch;
+      touch-action: pan-y;
+      scrollbar-color: #c2ae8e transparent;
+      scrollbar-width: thin;
+    }
+
+    .detail-scroll::-webkit-scrollbar { width: 6px; }
+    .detail-scroll::-webkit-scrollbar-thumb { background: #cbbba6; border-radius: 6px; }
+
+    /* 1問チェック：大きい質問 → 聞く理由（1行） → 2択ボタン */
+    .check-box {
+      padding-bottom: 18px;
+      border-bottom: 1px solid var(--line-hair);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
       flex-shrink: 0;
     }
 
     .check-box.is-hidden { display: none; }
-
-    .check-q-row {
-      display: flex;
-      align-items: center;
-      gap: 9px;
-    }
-
-    .check-q-badge {
-      display: inline-flex;
-      align-items: center;
-      padding: 2.5px 10px;
-      border-radius: 999px;
-      background: var(--card-paper);
-      border: 1.2px solid var(--check-bd);
-      color: var(--check-deep);
-      font-family: var(--font-ui);
-      font-size: 11.8px;
-      font-weight: 700;
-      white-space: nowrap;
-      flex-shrink: 0;
-    }
+    .check-box.is-unanswered { border-bottom: none; padding-bottom: 0; }
 
     .check-q-text {
-      font-family: var(--font-ui);
-      font-size: 15.2px;
+      font-family: var(--font-serif);
+      font-size: 21px;
       font-weight: 700;
-      color: var(--check-deep);
-      line-height: 1.3;
+      letter-spacing: 0.02em;
+      color: var(--ink-main);
+      line-height: 1.38;
+    }
+
+    .check-reason {
+      font-family: var(--font-ui);
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--ink-muted);
+      line-height: 1.45;
+      margin-bottom: 8px;
     }
 
     .check-btn-row {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 10px;
+      gap: 12px;
     }
 
     .check-choice-btn {
-      min-height: 46px;
-      padding: 8px 12px;
+      min-height: 50px;
+      padding: 10px 14px;
       border-radius: 10px;
-      background: var(--card-paper);
-      border: 1.2px solid rgba(63, 111, 138, 0.36);
-      border-bottom: 2.2px solid rgba(63, 111, 138, 0.5);
-      font-family: var(--font-ui);
-      font-size: 14.8px;
+      background: var(--surface-muted);
+      border: 1.2px solid var(--line-strong);
+      border-bottom: 2.4px solid #b39f86;
+      font-size: 15.5px;
       font-weight: 700;
-      color: var(--check-deep);
+      color: var(--ink-main);
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
       text-align: center;
       line-height: 1.25;
-      transition: transform 0.08s ease, background-color 0.14s ease, border-color 0.14s ease;
+      transition: transform 0.08s ease, background-color 0.14s ease, border-color 0.14s ease, color 0.14s ease;
     }
 
     .check-choice-btn:hover:not(.is-selected) {
-      background: #f8fbfd;
-      border-color: var(--check-color);
+      background: #f2eadc;
+      border-color: var(--axis);
     }
 
     .check-choice-btn:active { transform: translateY(1px); }
 
     .check-choice-btn.is-selected {
       background: var(--check-color);
-      border: 1.8px solid var(--check-deep);
-      border-bottom: 2.8px solid #1b384a;
+      border: 1.6px solid var(--check-deep);
+      border-bottom: 2.6px solid #1b384a;
       color: #fffdf8;
       box-shadow: 0 2px 8px rgba(41, 78, 99, 0.18);
     }
 
-    /* 未選択時：まず確かめることパネル（上詰めで1問チェックから視線を近く） */
-    .precheck-panel {
-      flex: 1 1 auto;
-      background: var(--surface-muted);
-      border: 1.4px dashed var(--line-strong);
-      border-radius: 13px;
-      padding: 18px 22px;
+    /* 診断結果エリア：縦一本道（結論 → 行動リスト → これはNG） */
+    .result-body {
       display: flex;
       flex-direction: column;
-      align-items: flex-start;
-      justify-content: flex-start;
-      gap: 11px;
+      gap: 20px;
     }
 
-    .precheck-panel.is-hidden { display: none; }
+    .result-body.is-hidden { display: none; }
 
-    .precheck-pill {
-      display: inline-flex;
-      align-items: center;
-      padding: 3.5px 12px;
-      border-radius: 999px;
-      background: var(--amber-soft);
-      border: 1px solid var(--amber-bd);
-      color: var(--amber-deep);
-      font-family: var(--font-ui);
-      font-size: 12.6px;
-      font-weight: 700;
-      letter-spacing: 0.04em;
+    /* 結論：上の質問と同じ書き方（大きい明朝見出し＋1行補足） */
+    .cause-box {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
     }
 
-    .precheck-lead {
+    .cause-title {
       font-family: var(--font-serif);
       font-size: 21px;
       font-weight: 700;
       letter-spacing: 0.02em;
       color: var(--ink-main);
-      line-height: 1.5;
+      line-height: 1.38;
     }
 
-    .precheck-sub {
-      font-family: var(--font-ui);
-      font-size: 14.5px;
-      font-weight: 500;
-      color: var(--ink-sub);
-      line-height: 1.6;
-    }
-
-    .precheck-tap-hint {
-      margin-top: 4px;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 5.5px 13px;
-      border-radius: 999px;
-      background: var(--check-soft);
-      border: 1px solid var(--check-bd);
-      color: var(--check-deep);
-      font-family: var(--font-ui);
-      font-size: 13.2px;
-      font-weight: 700;
-    }
-
-    .result-body {
-      flex: 1 1 auto;
-      min-height: 0;
-      display: flex;
-      flex-direction: column;
-      gap: 13px;
-    }
-
-    .result-body.is-hidden { display: none; }
-
-    .cause-box {
-      --c-accent: var(--amber-color);
-      --c-deep: var(--amber-deep);
-      --c-tint: var(--amber-tint);
-      --c-bd: var(--amber-bd);
-      background: var(--c-tint);
-      border: 1.2px solid var(--c-bd);
-      border-left: 5px solid var(--c-accent);
-      border-radius: 12px;
-      padding: 11px 16px;
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-      flex-shrink: 0;
-    }
-
-    .cause-box.is-urgent {
-      --c-accent: var(--sos-color);
-      --c-deep: var(--sos-deep);
-      --c-tint: var(--sos-tint);
-      --c-bd: var(--sos-bd);
-    }
-
-    .cause-box.is-safe {
-      --c-accent: var(--ok-color);
-      --c-deep: var(--ok-deep);
-      --c-tint: var(--ok-tint);
-      --c-bd: var(--ok-bd);
-    }
-
-    .cause-label {
-      font-family: var(--font-ui);
-      font-size: 12px;
-      font-weight: 700;
-      color: var(--c-deep);
-      letter-spacing: 0.04em;
-    }
-
-    .cause-title {
-      font-family: var(--font-serif);
-      font-size: 19px;
-      font-weight: 700;
-      letter-spacing: 0.02em;
-      color: var(--ink-main);
-      line-height: 1.28;
-    }
+    .cause-box.is-urgent .cause-title { color: var(--sos-deep); }
+    .cause-box.is-safe .cause-title { color: var(--ok-deep); }
 
     .cause-desc {
       font-family: var(--font-ui);
       font-size: 14px;
       font-weight: 500;
-      color: var(--ink-sub);
+      color: var(--ink-muted);
       line-height: 1.5;
     }
 
-    .action-grid {
-      flex: 1 1 auto;
-      min-height: 0;
-      display: grid;
-      grid-template-columns: 1.4fr 0.9fr;
-      gap: 13px;
-      align-items: stretch;
-    }
-
-    .do-card {
-      background: var(--ok-tint);
-      border: 1.2px solid var(--ok-bd);
-      border-top: 3.5px solid var(--ok-color);
-      border-radius: 13px;
-      padding: 14px 16px;
-      display: flex;
-      flex-direction: column;
-      gap: 11px;
-    }
-
-    .box-head-pill {
-      align-self: flex-start;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 3px 12px;
-      border-radius: 999px;
-      font-family: var(--font-ui);
-      font-size: 12.6px;
-      font-weight: 700;
-      letter-spacing: 0.04em;
-      background: var(--card-paper);
-      border: 1.2px solid var(--ok-bd);
-      color: var(--ok-deep);
-    }
-
+    /* 行動リスト（見出しなし・全幅でゆったり） */
     .do-list {
       list-style: none;
       display: flex;
       flex-direction: column;
-      gap: 12px;
-      flex: 1;
-      justify-content: flex-start;
-      padding-top: 2px;
+      gap: 18px;
+      padding: 2px 0 4px;
     }
 
     .do-item {
       display: flex;
       align-items: flex-start;
-      gap: 10px;
-      font-family: var(--font-ui);
-      font-size: 15px;
-      font-weight: 500;
-      color: var(--ink-main);
-      line-height: 1.52;
-    }
-
-    .do-item strong {
-      font-weight: 700;
-      color: var(--ok-deep);
+      gap: 13px;
     }
 
     .do-num {
-      width: 24px;
-      height: 24px;
+      width: 28px;
+      height: 28px;
       border-radius: 50%;
-      background: var(--ok-soft);
-      border: 1.3px solid var(--ok-bd);
-      color: var(--ok-deep);
-      font-size: 13px;
+      background: var(--ok-color);
+      color: #fffdf8;
+      font-size: 14px;
       font-weight: 700;
       display: inline-flex;
       align-items: center;
@@ -764,41 +572,70 @@
       margin-top: 1px;
     }
 
-    .ng-card {
-      background: var(--sos-tint);
-      border: 1.2px solid var(--sos-bd);
-      border-top: 3.5px solid var(--sos-color);
-      border-radius: 13px;
-      padding: 14px 16px;
+    .do-text {
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 5px;
+      min-width: 0;
     }
 
-    .ng-card .box-head-pill {
-      border-color: var(--sos-bd);
-      color: var(--sos-deep);
-    }
-
-    .ng-main {
-      font-family: var(--font-serif);
-      font-size: 17px;
+    .do-head {
+      font-family: var(--font-ui);
+      font-size: 18px;
       font-weight: 700;
-      letter-spacing: 0.02em;
-      color: var(--sos-deep);
-      line-height: 1.36;
+      color: var(--ink-main);
+      line-height: 1.35;
+      letter-spacing: 0.01em;
     }
 
-    .ng-desc {
+    .do-sub {
       font-family: var(--font-ui);
       font-size: 14px;
       font-weight: 500;
-      color: #543129;
-      line-height: 1.52;
-      padding-top: 8px;
-      border-top: 1px dashed var(--sos-bd);
+      color: var(--ink-sub);
+      line-height: 1.6;
     }
 
+    /* これはNG：下に配置し、初期表示で上端が見切れてスクロールに気づく設計 */
+    .ng-card {
+      margin-top: 4px;
+      background: var(--sos-tint);
+      border: 1px solid var(--sos-bd);
+      border-top: 3px solid var(--sos-color);
+      border-radius: 12px;
+      padding: 15px 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .ng-label {
+      align-self: flex-start;
+      font-size: 12.8px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      color: var(--sos-deep);
+      padding-bottom: 3px;
+      border-bottom: 2px solid var(--sos-color);
+    }
+
+    .ng-main {
+      font-family: var(--font-ui);
+      font-size: 17.5px;
+      font-weight: 700;
+      color: var(--sos-deep);
+      line-height: 1.4;
+      margin-top: 2px;
+    }
+
+    .ng-desc {
+      font-size: 14px;
+      font-weight: 500;
+      color: #5c362e;
+      line-height: 1.6;
+    }
+
+    /* ================= 5. 下部関連リンク ================= */
     .related-bar {
       flex: 0 0 46px;
       display: grid;
@@ -811,12 +648,11 @@
       align-items: center;
       justify-content: space-between;
       gap: 10px;
-      padding: 0 14px 0 12px;
-      border-radius: 12px;
+      padding: 0 14px 0 13px;
+      border-radius: 11px;
       background: var(--card-paper);
-      border: 1.2px solid var(--line-soft);
-      border-bottom: 2.2px solid var(--line-strong);
-      font-family: var(--font-ui);
+      border: 1px solid var(--line-soft);
+      border-bottom: 2px solid var(--line-strong);
       font-size: 14.5px;
       font-weight: 700;
       color: var(--ink-main);
@@ -829,12 +665,12 @@
     .related-btn:active { transform: translateY(1px); background: var(--axis-fill); }
 
     .related-btn.is-primary {
-      background: var(--axis-fill);
-      border: 1.6px solid var(--axis);
-      border-bottom: 2.6px solid var(--axis-dark);
+      background: var(--axis-soft);
+      border: 1.2px solid #cbbba6;
+      border-bottom: 2.2px solid #b39f86;
     }
 
-    .related-btn.is-primary:hover { background: #e3d5bc; }
+    .related-btn.is-primary:hover { background: var(--axis-fill); }
 
     .rel-left {
       display: flex;
@@ -845,10 +681,9 @@
     }
 
     .rel-tag {
-      padding: 2.5px 9px;
-      border-radius: 999px;
-      background: var(--axis-soft);
-      border: 1px solid var(--line-soft);
+      padding: 2px 8px;
+      border-radius: 4px;
+      background: rgba(94, 71, 54, 0.08);
       color: var(--ink-sub);
       font-size: 11.8px;
       font-weight: 700;
@@ -856,29 +691,17 @@
     }
 
     .related-btn.is-primary .rel-tag {
-      background: rgba(255, 253, 248, 0.86);
-      border-color: rgba(94, 71, 54, 0.25);
+      background: rgba(255, 253, 248, 0.88);
       color: var(--axis-dark);
     }
 
     .rel-arrow {
-      width: 24px;
-      height: 24px;
-      border-radius: 50%;
-      background: var(--axis-soft);
-      border: 1.2px solid rgba(94, 71, 54, 0.28);
-      color: var(--axis-dark);
-      font-size: 16px;
+      font-size: 18px;
       font-weight: 700;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      padding-left: 1.5px;
-      padding-bottom: 1px;
+      color: var(--axis);
+      line-height: 1;
       flex-shrink: 0;
     }
-
-    .related-btn.is-primary .rel-arrow { background: rgba(255, 253, 248, 0.9); }
   </style>
 </head>
 <body>
@@ -919,48 +742,32 @@
         <section class="detail-col" aria-label="原因と対処法">
           <div class="col-lead">
             <span class="col-step-num" aria-hidden="true">2</span>
-            <h2 class="col-lead-title">まず確かめること・今すぐできる対処</h2>
+            <h2 class="col-lead-title">原因と、今すぐできる対処</h2>
           </div>
 
           <article class="detail-card" id="detailCard">
             <div class="detail-head">
               <div class="detail-icon-big" id="detailIcon" aria-hidden="true"></div>
-              <div class="detail-title-group">
-                <h3 class="detail-title" id="detailTitle"></h3>
-                <span class="detail-term" id="detailTerm"></span>
-              </div>
+              <h3 class="detail-title" id="detailTitle"></h3>
             </div>
 
-            <div class="check-box is-hidden" id="checkBox">
-              <div class="check-q-row">
-                <span class="check-q-badge">1問チェック</span>
+            <div class="detail-scroll" id="detailScroll">
+              <div class="check-box is-hidden" id="checkBox">
                 <p class="check-q-text" id="checkQuestion"></p>
-              </div>
-              <div class="check-btn-row" id="checkChoices"></div>
-            </div>
-
-            <div class="precheck-panel is-hidden" id="precheckPanel">
-              <span class="precheck-pill">まず確かめること</span>
-              <p class="precheck-lead" id="precheckLead"></p>
-              <p class="precheck-sub" id="precheckSub"></p>
-              <span class="precheck-tap-hint">▲ 上の2つから近いほうをタップすると対処が出ます</span>
-            </div>
-
-            <div class="result-body" id="resultBody">
-              <div class="cause-box" id="causeBox">
-                <span class="cause-label" id="causeLabel">考えられる原因</span>
-                <p class="cause-title" id="causeTitle"></p>
-                <p class="cause-desc" id="causeDesc"></p>
+                <p class="check-reason" id="checkReason"></p>
+                <div class="check-btn-row" id="checkChoices"></div>
               </div>
 
-              <div class="action-grid">
-                <div class="do-card">
-                  <span class="box-head-pill">今すぐやること</span>
-                  <ol class="do-list" id="doList"></ol>
+              <div class="result-body" id="resultBody">
+                <div class="cause-box" id="causeBox">
+                  <p class="cause-title" id="causeTitle"></p>
+                  <p class="cause-desc" id="causeDesc"></p>
                 </div>
 
+                <ol class="do-list" id="doList"></ol>
+
                 <div class="ng-card">
-                  <span class="box-head-pill">これはNG</span>
+                  <span class="ng-label">これはNG</span>
                   <p class="ng-main" id="ngMain"></p>
                   <p class="ng-desc" id="ngDesc"></p>
                 </div>
@@ -1021,38 +828,45 @@
       {
         id: "wrinkle",
         title: "葉がシワシワ・ペラペラ",
-        sub: "土の乾き具合で対処が真逆",
-        term: "水不足 ／ 根の不調",
         icon: ICONS.wrinkle,
         check: {
-          question: "鉢の中の土は乾いていますか？（竹串・鉢の重さでチェック）",
-          precheckLead: "まず確かめるのは、鉢の中がまだ湿っているか。葉のシワだけでは、水を足すか決められません。",
-          precheckSub: "水不足のときも、根が弱って水を吸えないときも、葉は同じようにしぼみます。帰ったら鉢の重さや竹串で土の中を確かめましょう。",
+          question: "鉢の中の土は乾いていますか？",
+          reason: "土の乾き具合で対処が真逆です。（竹串や鉢の重さで確かめましょう）",
           choices: [
             {
               id: "dry",
               label: "中まで乾いている",
               tone: "normal",
-              causeLabel: "考えられる原因",
               causeTitle: "水不足の可能性があります",
-              causeDesc: "葉にためていた水分を使って、しぼんでいる可能性があります。前回の水やり後も張りが戻らず、しぼみ続けるときは根の状態も確認しましょう。",
+              causeDesc: "",
               dos: [
-                "<strong>今のタイプ・季節のおすすめを確認して</strong>、「乾いたらたっぷり」の時期なら株元の土に鉢底から水が出るまであげます。",
-                "<strong>控えめ・少量の時期なら</strong>、夏は夕方・冬は暖かい午前に少量で様子を見ましょう。"
+                {
+                  head: "季節に合わせて水をあげる",
+                  sub: "たっぷりの時期は株元の土に鉢底から出るまで。控えめの時期は夏は夕方・冬は暖かい午前に少量で様子を見ます。"
+                },
+                {
+                  head: "数日たっても張りが戻らなければ、根も確かめる",
+                  sub: "水をあげてもしぼみ続けるときは、根が弱って水を吸えていないことがあります。"
+                }
               ],
-              ngMain: "暑い日中や冷え込む夜にたっぷりあげる",
-              ngDesc: "気温が厳しい時間帯に水を与えると、蒸れや凍結でかえって株が傷んでしまいます。"
+              ngMain: "暑い日中・冷える夜にたっぷりあげる",
+              ngDesc: "気温が厳しい時間帯の水やりは、蒸れや凍結でかえって株を傷めます。"
             },
             {
               id: "wet",
               label: "土が湿っている",
               tone: "urgent",
-              causeLabel: "要注意のサイン",
-              causeTitle: "まだ水やり直後か、根が水を吸えていないかも",
-              causeDesc: "水をあげた直後なら数日でハリが戻ることもあります。湿った状態が長く続くなら根の不調を考えましょう。",
+              causeTitle: "給水直後か、根が吸えていないかも",
+              causeDesc: "水をあげた直後なら数日でハリが戻ります。湿った状態が長く続くのにしぼむなら、根の不調を考えましょう。",
               dos: [
-                "<strong>今は水を足さずに</strong>、風通しのよい明るい日陰で土を乾かしながら様子を見ます。",
-                "<strong>湿ったままシワが増え、茎が柔らかいなら</strong>、元気な葉や茎の上部だけカットして仕立て直せます。"
+                {
+                  head: "水を足さず、風通しのよい日陰で乾かす",
+                  sub: ""
+                },
+                {
+                  head: "茎が柔らかくなってきたら、元気な部分をカット",
+                  sub: "湿ったままシワが増え、茎がブヨブヨしてきたら、元気な葉や茎の上部だけ切り分けて仕立て直せます。"
+                }
               ],
               ngMain: "「シワシワだから」と水を足す",
               ngDesc: "土が湿っているのに水を足すと、弱った根がさらに傷んで回復しにくくなります。"
@@ -1067,19 +881,22 @@
       {
         id: "stretch",
         title: "ひょろひょろ伸びた",
-        sub: "葉と葉の間が開いて間延び",
-        term: "いわゆる「徒長（とちょう）」",
         icon: ICONS.stretch,
         tone: "normal",
-        causeLabel: "考えられる原因",
-        causeTitle: "光が足りず、お日様を探して伸びています",
-        causeDesc: "日照不足の状態で水やりや肥料が続くと、茎が細長く伸びて葉の色も薄くなりやすくなります。",
+        causeTitle: "光が足りず、お日様を探して伸びています（徒長）",
+        causeDesc: "",
         dos: [
-          "いまより<strong>明るい窓辺や屋外の風通しがよい場所</strong>へ、数日かけて少しずつ慣らしながら移動します。",
-          "置き場所を変えたあとは、<strong>これから出る葉と葉の間隔が詰まってくるか</strong>を見てみましょう。光が弱いままなら水やり間隔を長めに。"
+          {
+            head: "数日かけて、少しずつ明るい場所へ移す",
+            sub: "いまより明るい窓辺や風通しのよい屋外へ、急に直射へ出さず慣らしながら移動します。"
+          },
+          {
+            head: "これから出る葉の間隔を見る",
+            sub: "新しい葉と葉の間隔が詰まってくればOK。光が弱いままなら水やり間隔を長めにします。"
+          }
         ],
         ngMain: "いきなり強い直射日光に出す",
-        ngDesc: "暗い場所にいた株を急に強い光へ出すと、葉焼けしてしまいます。やわらかな光から慣らしてあげましょう。",
+        ngDesc: "暗い場所にいた株を急に強い光へ出すと葉焼けします。やわらかな光から慣らしましょう。",
         related: [
           { tag: "光と風の目安", label: "光・風・水を試す", nav: "sim.html", primary: true },
           { tag: "置き場所", label: "光のきほんを見る", nav: "basics_light.html", primary: false }
@@ -1088,41 +905,48 @@
       {
         id: "jelly",
         title: "葉が急に透けて、ぶよぶよ",
-        sub: "触るとポロッと取れる",
-        term: "凍害 ／ 蒸れ・腐敗（いわゆるジュレ）",
         icon: ICONS.jelly,
         check: {
           question: "どんなタイミングで急に変わりましたか？",
-          precheckLead: "まず確かめるのは、「冷え込んだ翌朝」か「暖かい時期の蒸れ」か。最初にやる動きが変わります。",
-          precheckSub: "※ハオルチアなど生まれつき葉に透明な「窓」がある種類とは別に、昨日まで硬かった葉が急にぶよぶよになったときの対処です。",
+          reason: "冷え込みか蒸れかで、最初にやる動きが変わります。（※ハオルチアの「窓」とは別です）",
           choices: [
             {
               id: "freeze",
               label: "冷え込んだ翌朝に急に変わった",
               tone: "normal",
-              causeLabel: "考えられる原因",
-              causeTitle: "寒さで葉が傷んだ可能性があります（低温障害・凍害）",
-              causeDesc: "強い冷え込みや冷たい風に当たると、凍る手前でも葉が傷んで透けたようになります。まずは慌てて切らずに傷みの範囲を見ます。",
+              causeTitle: "寒さで葉が傷んだ可能性（低温障害・凍害）",
+              causeDesc: "強い冷え込みや冷風に当たると、凍る手前でも葉が透けることがあります。まずは慌てて切らずに傷みの範囲を見ます。",
               dos: [
-                "<strong>すぐ凍らない明るい場所（暖房の風が直接当たらない室内）</strong>へ移し、数日かけて傷みの範囲を見守ります。",
-                "<strong>溶けて崩れた葉だけ</strong>をそっと取り除き、しっかり乾くまで水やりはお休みしましょう。"
+                {
+                  head: "凍らない明るい室内へ移して見守る",
+                  sub: "暖房の風が直接当たらない場所へ置き、数日かけて傷みの範囲を確認します。"
+                },
+                {
+                  head: "崩れた葉だけ取り除き、水はお休み",
+                  sub: ""
+                }
               ],
-              ngMain: "すぐ全体を切る・暖かいお湯や直射に当てる",
-              ngDesc: "急激に温めたり慌てて切ったりすると、助かるはずの茎や成長点まで傷んでしまいます。"
+              ngMain: "すぐ全体を切る・急激に温める",
+              ngDesc: "お湯や直射に当てたり慌てて切ったりすると、助かる茎や成長点まで傷みます。"
             },
             {
               id: "rot",
               label: "暖かい時期・株元が黒く柔らかい",
               tone: "urgent",
-              causeLabel: "急いで対応",
-              causeTitle: "高温と湿気による「蒸れ・腐敗」が疑われます",
-              causeDesc: "鉢の中に熱と湿気がこもると、株元や葉が煮えたように傷んで腐りが広がりやすくなります。",
+              causeTitle: "高温と湿気による「蒸れ・腐敗」の疑い",
+              causeDesc: "",
               dos: [
-                "<strong>透けた葉はすぐ取り除き</strong>、風通しのよい涼しい日陰へ移して土をしっかり乾かします。",
-                "<strong>株元の黒く柔らかい部分が広がっているなら</strong>、緑色の元気な部分までカットして切り口を乾かしましょう。"
+                {
+                  head: "透けた葉をすぐ取り、涼しい日陰で乾かす",
+                  sub: ""
+                },
+                {
+                  head: "株元が黒く柔らかければ、緑の部分でカット",
+                  sub: "腐りが広がっているときは、元気な緑の部分まで切り分けて切り口を乾かします。"
+                }
               ],
               ngMain: "そのまま放置する・水をあげる",
-              ngDesc: "傷んだ部分をそのままにすると、元気な茎や葉まで一気に腐りが広がってしまいます。"
+              ngDesc: "元気な茎や葉まで一気に腐りが広がってしまいます。"
             }
           ]
         },
@@ -1134,19 +958,22 @@
       {
         id: "burn",
         title: "葉が茶色く焼けた",
-        sub: "日が当たる側だけカサカサ",
-        term: "葉焼け（はやけ）",
         icon: ICONS.burn,
         tone: "normal",
-        causeLabel: "考えられる原因",
-        causeTitle: "急な強い日差しや、真夏の西日に当たりました",
-        causeDesc: "室内にいた株を急に外へ出したり、強い日差しが当たり続けると、葉の表面が茶色や白っぽく焼けます。",
+        causeTitle: "急な強い日差しや、真夏の西日に当たりました（葉焼け）",
+        causeDesc: "",
         dos: [
-          "<strong>レースカーテン越しや明るい日陰</strong>など、直射日光の当たらない涼しい場所へ移します。",
-          "焼けた部分は元に戻りませんが、<strong>新しい葉が生え変われば目立たなくなる</strong>ので見守りましょう。"
+          {
+            head: "直射の当たらない涼しい場所へ移す",
+            sub: "レースカーテン越しや明るい日陰など、やわらかな光の場所へ避難します。"
+          },
+          {
+            head: "新しい葉が生え変わるのを見守る",
+            sub: "焼けた部分は元に戻りませんが、株が元気なら新しい葉が生え変わって目立たなくなります。"
+          }
         ],
         ngMain: "焼けた葉を無理に全部ちぎる",
-        ngDesc: "少し焼けた程度なら株自体は生きています。無理に葉を取ると株の体力が落ちてしまいます。",
+        ngDesc: "少し焼けた程度なら株は生きています。無理に葉を取ると体力が落ちてしまいます。",
         related: [
           { tag: "タイプ別の光", label: "光・風・水を試す", nav: "sim.html", primary: true },
           { tag: "置き場所", label: "光のきほんを見る", nav: "basics_light.html", primary: false }
@@ -1155,41 +982,48 @@
       {
         id: "drop",
         title: "下の葉が枯れる・落ちる",
-        sub: "自然な生え変わりか、蒸れか見分け",
-        term: "下葉の枯れ・落葉",
         icon: ICONS.drop,
         check: {
           question: "下の葉は、どんなふうに枯れていますか？",
-          precheckLead: "まず確かめるのは、下の葉が「カラカラ」か「水分を含んで落ちているか」。枯れ方で安心か要注意かが変わります。",
-          precheckSub: "中心の葉にハリがあるかどうかも一緒に見ておくと、株が元気かどうかすぐ判断できます。",
+          reason: "枯れ方で、自然な生え変わりか、蒸れかが見分けられます。",
           choices: [
             {
               id: "dryleaf",
               label: "カラカラに乾いて枯れる",
               tone: "safe",
-              causeLabel: "安心してください",
               causeTitle: "自然な生え変わり（新陳代謝）のことが多いです",
-              causeDesc: "下の古い葉だけが少しずつ乾き、中心の葉に張りがあれば大丈夫。古い葉から水分を使って新しい葉を育てています。",
+              causeDesc: "下の古い葉だけが少しずつ乾き、中心の葉にハリがあれば大丈夫。古い葉の水分を使って新しい葉を育てています。",
               dos: [
-                "<strong>完全にカリカリになった枯れ葉</strong>だけ、ピンセットなどでそっと取り除きます。",
-                "風通しを保つため、株元に枯れ葉がたまらないようにしておくと虫予防にもなります。"
+                {
+                  head: "カリカリになった枯れ葉だけ取る",
+                  sub: ""
+                },
+                {
+                  head: "株元の風通しをすっきり保つ",
+                  sub: "枯れ葉をためないでおくと、蒸れや害虫の予防にもなります。"
+                }
               ],
               ngMain: "慌てて毎日水をあげる",
-              ngDesc: "自然な生え変わりを水不足と勘違いして水をやりすぎると、かえって根腐れの原因になります。"
+              ngDesc: "水不足と勘違いして水をやりすぎると、かえって根腐れの原因になります。"
             },
             {
               id: "wetleaf",
               label: "緑のまま・ブヨブヨ落ちる",
               tone: "urgent",
-              causeLabel: "要注意のサイン",
               causeTitle: "水のやりすぎ・蒸れで弱っています",
-              causeDesc: "乾いていないのに葉がポロポロ落ちたり、付け根が黒っぽいときは、土が湿りすぎているサインです。",
+              causeDesc: "",
               dos: [
-                "<strong>すぐ水やりを止めて</strong>、風通しのよい明るい日陰でしっかり土を乾かします。",
-                "鉢底の穴がふさがっていないか、受け皿に水がたまっていないかも確認しましょう。"
+                {
+                  head: "水やりを止めて、明るい日陰で乾かす",
+                  sub: ""
+                },
+                {
+                  head: "鉢底穴と受け皿をチェックする",
+                  sub: "鉢底の穴がふさがっていないか、受け皿に水がたまっていないか確認します。"
+                }
               ],
               ngMain: "受け皿に水をためたままにする",
-              ngDesc: "鉢の中がずっと湿った状態になり、根が窒息して株全体が傷んでしまいます。"
+              ngDesc: "鉢の中がずっと湿り続け、根が窒息して株全体が傷んでしまいます。"
             }
           ]
         },
@@ -1201,19 +1035,22 @@
       {
         id: "bug",
         title: "白い綿・小さな虫がついた",
-        sub: "葉の付け根にフワフワや粒",
-        term: "カイガラムシ・アブラムシなど",
         icon: ICONS.bug,
         tone: "urgent",
-        causeLabel: "考えられる原因",
-        causeTitle: "風通しが弱い場所や、枯れ葉の陰につきやすい虫です",
+        causeTitle: "カイガラムシ・アブラムシなどの虫がついています",
         causeDesc: "葉全体に均一な白い粉がつく品種もありますが、葉の付け根に「白い綿のかたまり」があればカイガラムシなどのサインです。",
         dos: [
-          "<strong>ほかの鉢から少し離し</strong>、<strong>葉の付け根に白い綿のかたまりがないか</strong>よく見て、綿棒やピンセットでやさしく取り除きます。",
-          "くり返し出るときは、<strong>その植物と虫に使えることをラベルで確認</strong>した市販スプレーを使い、風通しを良くしましょう。"
+          {
+            head: "ほかの鉢から離し、綿棒などで取り除く",
+            sub: "葉の付け根をよく見て、白い綿や虫を綿棒やピンセットでやさしく拭き取ります。"
+          },
+          {
+            head: "くり返すときは適合スプレー＋風通し改善",
+            sub: "その植物と虫に使えることをラベルで確認したスプレーを使い、風通しを良くします。"
+          }
         ],
         ngMain: "ほかの鉢と密着させたまま放置する",
-        ngDesc: "気づかないうちに隣の鉢へどんどん広がります。新しく迎えた鉢は、並べる前に葉の付け根を見てみましょう。",
+        ngDesc: "隣の鉢へどんどん広がります。新しく迎えた鉢は、並べる前に葉の付け根を見てみましょう。",
         related: [
           { tag: "風通しのコツ", label: "風通しのきほんを見る", nav: "basics_wind.html", primary: true },
           { tag: "環境の見直し", label: "光・風・水を試す", nav: "sim.html", primary: false }
@@ -1226,17 +1063,14 @@
 
     const symptomListEl = document.getElementById("symptomList");
     const detailIconEl = document.getElementById("detailIcon");
-    const detailTermEl = document.getElementById("detailTerm");
     const detailTitleEl = document.getElementById("detailTitle");
+    const detailScrollEl = document.getElementById("detailScroll");
     const checkBoxEl = document.getElementById("checkBox");
     const checkQuestionEl = document.getElementById("checkQuestion");
+    const checkReasonEl = document.getElementById("checkReason");
     const checkChoicesEl = document.getElementById("checkChoices");
-    const precheckPanelEl = document.getElementById("precheckPanel");
-    const precheckLeadEl = document.getElementById("precheckLead");
-    const precheckSubEl = document.getElementById("precheckSub");
     const resultBodyEl = document.getElementById("resultBody");
     const causeBoxEl = document.getElementById("causeBox");
-    const causeLabelEl = document.getElementById("causeLabel");
     const causeTitleEl = document.getElementById("causeTitle");
     const causeDescEl = document.getElementById("causeDesc");
     const doListEl = document.getElementById("doList");
@@ -1248,10 +1082,7 @@
       symptomListEl.innerHTML = SYMPTOMS.map((s) => `
         <button class="symptom-btn ${s.id === currentSymId ? "is-active" : ""}" type="button" data-sym="${s.id}">
           <span class="sym-icon-wrap" aria-hidden="true">${s.icon}</span>
-          <span class="sym-btn-text">
-            <span class="sym-btn-title">${s.title}</span>
-            <span class="sym-btn-sub">${s.sub}</span>
-          </span>
+          <span class="sym-btn-title">${s.title}</span>
           <span class="sym-btn-arrow" aria-hidden="true">›</span>
         </button>
       `).join("");
@@ -1260,12 +1091,13 @@
     function renderDetail() {
       const s = SYMPTOMS.find((x) => x.id === currentSymId) || SYMPTOMS[0];
       detailIconEl.innerHTML = s.icon;
-      detailTermEl.textContent = s.term;
       detailTitleEl.textContent = s.title;
+      detailScrollEl.scrollTop = 0;
 
       checkBoxEl.classList.toggle("is-hidden", !s.check);
       if (s.check) {
         checkQuestionEl.textContent = s.check.question;
+        checkReasonEl.textContent = s.check.reason;
         checkChoicesEl.innerHTML = s.check.choices.map((c) => `
           <button class="check-choice-btn" type="button" data-choice="${c.id}">
             <span>${c.label}</span>
@@ -1293,27 +1125,26 @@
           button.classList.toggle("is-selected", button.dataset.choice === selectedId);
         }
         activeData = s.check.choices.find((choice) => choice.id === selectedId);
+        checkBoxEl.classList.toggle("is-unanswered", !activeData);
       }
-      precheckPanelEl.classList.toggle("is-hidden", Boolean(activeData));
       resultBodyEl.classList.toggle("is-hidden", !activeData);
-      if (!activeData) {
-        precheckLeadEl.textContent = s.check.precheckLead;
-        precheckSubEl.textContent = s.check.precheckSub;
-        return;
-      }
+      if (!activeData) return;
 
       causeBoxEl.classList.remove("is-urgent", "is-safe");
       if (activeData.tone === "urgent") causeBoxEl.classList.add("is-urgent");
       if (activeData.tone === "safe") causeBoxEl.classList.add("is-safe");
 
-      causeLabelEl.textContent = activeData.causeLabel;
       causeTitleEl.textContent = activeData.causeTitle;
-      causeDescEl.textContent = activeData.causeDesc;
+      causeDescEl.textContent = activeData.causeDesc || "";
+      causeDescEl.style.display = activeData.causeDesc ? "" : "none";
 
       doListEl.innerHTML = activeData.dos.map((d, idx) => `
         <li class="do-item">
           <span class="do-num" aria-hidden="true">${idx + 1}</span>
-          <span>${d}</span>
+          <div class="do-text">
+            <p class="do-head">${d.head}</p>
+            ${d.sub ? `<p class="do-sub">${d.sub}</p>` : ""}
+          </div>
         </li>
       `).join("");
 
@@ -1448,14 +1279,14 @@
       if (e.target && e.target.closest) handleInteractiveTarget(e.target);
     });
 
-    const AUTO_RETURN_MS = 0;
+    const AUTO_RETURN_MS = 300000;
     if (AUTO_RETURN_MS) {
       let idleTimer = null;
       function resetIdleTimer() {
         clearTimeout(idleTimer);
         idleTimer = setTimeout(() => { window.location.href = "index.html"; }, AUTO_RETURN_MS);
       }
-      ["pointerdown", "touchstart", "click", "keydown"].forEach((ev) => {
+      ["pointerdown", "touchstart", "click", "keydown", "scroll"].forEach((ev) => {
         window.addEventListener(ev, resetIdleTimer, { passive: true });
       });
       resetIdleTimer();
